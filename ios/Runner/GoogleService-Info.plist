@@ -3,23 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>740236615990-tcqfvkim87ifemv5e0iuh4h91qd9u7gk.apps.googleusercontent.com</string>
+	<string>301855838376-o4vo90n4aksrfnt0amr2lq8v2bhplb2s.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.740236615990-tcqfvkim87ifemv5e0iuh4h91qd9u7gk</string>
+	<string>com.googleusercontent.apps.301855838376-o4vo90n4aksrfnt0amr2lq8v2bhplb2s</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>740236615990-3veaab4u84oqdkimbc0n644od0bdmauo.apps.googleusercontent.com</string>
+	<string>301855838376-29aakpakh4uuub3j5npl1lb3hler2kr3.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyB89EB7i_DuoHEYWJP_mnvQpLv4if-aMLA</string>
+	<string>AIzaSyAHuDwEPx-IdSHygoF4t_aU-Tv6uWc75xI</string>
 	<key>GCM_SENDER_ID</key>
-	<string>740236615990</string>
+	<string>301855838376</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.sim.cleanerdev</string>
+	<string>com.tamrevi</string>
 	<key>PROJECT_ID</key>
-	<string>sigesit-143f5</string>
+	<string>com-tam-revi</string>
 	<key>STORAGE_BUCKET</key>
-	<string>sigesit-143f5.appspot.com</string>
+	<string>com-tam-revi.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:740236615990:ios:c55b101328c0ac538dd397</string>
+	<string>1:301855838376:ios:707451cd2680d0c3a6329d</string>
 </dict>
 </plist>

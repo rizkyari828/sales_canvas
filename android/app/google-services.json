@@ -1,48 +1,48 @@
 {
   "project_info": {
-    "project_number": "740236615990",
-    "project_id": "sigesit-143f5",
-    "storage_bucket": "sigesit-143f5.appspot.com"
+    "project_number": "301855838376",
+    "project_id": "com-tam-revi",
+    "storage_bucket": "com-tam-revi.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:740236615990:android:5c7ee6e55ca7b3e48dd397",
+        "mobilesdk_app_id": "1:301855838376:android:da8fd40ee0c58dcea6329d",
         "android_client_info": {
-          "package_name": "com.sim.cleaner"
+          "package_name": "com.tam.revi"
         }
       },
       "oauth_client": [
         {
-          "client_id": "740236615990-3veaab4u84oqdkimbc0n644od0bdmauo.apps.googleusercontent.com",
+          "client_id": "301855838376-29aakpakh4uuub3j5npl1lb3hler2kr3.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.sim.cleaner",
+            "package_name": "com.tam.revi",
             "certificate_hash": "a59750396730747fe7cd2068cc22f2e3f4dcaecf"
           }
         },
         {
-          "client_id": "740236615990-0d5atar3uadrvgom64ff6hpc4kq1sc9a.apps.googleusercontent.com",
+          "client_id": "301855838376-vbgjnep17l7er6jil7i7vshi47q2bc13.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAaAfIgbmnrSHHJNQ0MtIjR7vrDOPYAkmE"
+          "current_key": "AIzaSyCfyGHxXijDMLys7gzVYJ2DA5J1T80sw-k"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "740236615990-0d5atar3uadrvgom64ff6hpc4kq1sc9a.apps.googleusercontent.com",
+              "client_id": "301855838376-vbgjnep17l7er6jil7i7vshi47q2bc13.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "740236615990-tcqfvkim87ifemv5e0iuh4h91qd9u7gk.apps.googleusercontent.com",
+              "client_id": "301855838376-nrkk6jkv0ite3qqionuncfp3tjqdg9c6.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.sim.cleanerdev"
+                "bundle_id": "com-tam-revi"
               }
             }
           ]

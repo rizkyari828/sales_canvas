@@ -1,4 +1,4 @@
-import 'package:cleaner/modules/home/attendance/attendance_controller.dart';
+import 'package:sales/modules/home/attendance/attendance_controller.dart';
 import 'package:get/get.dart';
 
 class AttendanceBinding implements Bindings {

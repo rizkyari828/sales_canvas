@@ -5,15 +5,11 @@
 import 'dart:convert';
 
 class UpdateApprovalOvertimeRequest {
-  UpdateApprovalOvertimeRequest({
-    this.action,
-    this.actualTime,
-    this.noteApproval,
-  });
+  UpdateApprovalOvertimeRequest(
+      {this.noTrans, this.status, this.action, this.kunci, this.note, this.type});
 
-  String? action;
-  double? actualTime;
-  String? noteApproval;
+  String? noTrans, kunci, note;
+  int? action, status, type;
 
   factory UpdateApprovalOvertimeRequest.fromRawJson(String str) =>
       UpdateApprovalOvertimeRequest.fromJson(json.decode(str));
@@ -23,13 +19,19 @@ class UpdateApprovalOvertimeRequest {
   factory UpdateApprovalOvertimeRequest.fromJson(Map<String, dynamic> json) =>
       UpdateApprovalOvertimeRequest(
         action: json["action"],
-        actualTime: json["actual_time"],
-        noteApproval: json["note_approval"],
+        noTrans: json["noTrans"],
+        status: json["status"],
+        kunci: json["kunci"],
+        note: json["note"],
+        type: json["tipe"],
       );
 
   Map<String, dynamic> toJson() => {
         "action": action,
-        "actual_time": actualTime,
-        "note_approval": noteApproval,
+        "noTrans": noTrans,
+        "status": status,
+        "kunci": kunci,
+        "note": note,
+        "tipe": type
       };
 }

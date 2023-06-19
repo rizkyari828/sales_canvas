@@ -1,5 +1,5 @@
-import 'package:cleaner/routes/routes.dart';
-import 'package:cleaner/shared/shared.dart';
+import 'package:sales/routes/routes.dart';
+import 'package:sales/shared/shared.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

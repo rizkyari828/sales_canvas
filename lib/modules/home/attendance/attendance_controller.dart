@@ -1,18 +1,24 @@
 import 'dart:async';
+import 'dart:io';
 
-import 'package:cleaner/models/request/attendance/submit_attendance.dart';
-import 'package:cleaner/models/response/user/user_schedule.dart';
+import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter/foundation.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:sales/models/request/attendance/submit_attendance.dart';
+import 'package:sales/models/request/attendance/validate_attenance.dart';
+import 'package:sales/models/response/attendance/attendance_validate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:cleaner/api/api.dart';
-import 'package:cleaner/models/response/user/users_response.dart';
-import 'package:cleaner/modules/home/home.dart';
-import 'package:cleaner/routes/app_pages.dart';
-import 'package:cleaner/shared/shared.dart';
+import 'package:sales/api/api.dart';
+import 'package:sales/models/response/user/users_response.dart';
+import 'package:sales/modules/home/home.dart';
+import 'package:sales/routes/app_pages.dart';
+import 'package:sales/shared/shared.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:sales/shared/widgets/button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AttendanceController extends GetxController {
@@ -26,16 +32,14 @@ class AttendanceController extends GetxController {
   var users = Rxn<UsersResponse>();
   var user = Rxn<Datum>();
   var markers = <Marker>[].obs;
-  var circles = <Circle>[].obs;
+  var circles = Set<Circle>().obs;
   // List<Marker> markers = <Marker>[];
-  // Set<Circle> circles = <Circle>{};
 
   late MainTab mainTab;
   late DiscoverTab discoverTab;
-  late TaskListTab taskListTab;
   late MeTab meTab;
   late LatLng myLocation = LatLng(0, 0);
-  late UserScheduleResponse userSchedule;
+  late ValidateData userSchedule;
 
   String? namaLokasi;
   RxBool isClockIn = false.obs;
@@ -43,15 +47,38 @@ class AttendanceController extends GetxController {
   RxString timeIn = '--:--'.obs;
   RxString timeOut = '--:--'.obs;
   RxString duration = '--:--'.obs;
+  RxBool isPhoto = false.obs;
 
   final String currentTime = getSystemTime();
 
-  String name = "";
-  String simId = "";
+  RxString name = "".obs;
+  RxString userId = "".obs;
+  RxString token = "".obs;
+
+  var imageFileList = <XFile>[].obs;
+
+  set _imageFile(XFile? value) {
+    imageFileList.addAll((value == null ? null : <XFile>[value])!);
+  }
+
+  dynamic pickImageError;
+  RxString? retrieveDataError;
+
+  final ImagePicker _picker = ImagePicker();
+  final TextEditingController maxWidthController = TextEditingController();
+  final TextEditingController maxHeightController = TextEditingController();
+  final TextEditingController qualityController = TextEditingController();
+
+  late BuildContext context;
 
   static String getSystemTime() {
     var now = new DateTime.now();
     return new DateFormat("H:m:s").format(now);
+  }
+
+  void submitPhoto() {
+    isPhoto.value = true;
+    Get.back();
   }
 
   void submitIn() async {
@@ -59,29 +86,40 @@ class AttendanceController extends GetxController {
       AttendanceSubmitRequest(
         latitude: myLocation.latitude.toString(),
         longitude: myLocation.longitude.toString(),
+        idUser: userId.value,
+        token: token.value,
+        photo: MultipartFile(await imageFileList.first.readAsBytes(),
+            filename: imageFileList.first.name),
       ),
     );
-    if (res!.data != null) {
+    if (res!.message == "berhasil absen masuk") {
       EasyLoading.showSuccess('Berhasil Clock In');
       var now = new DateTime.now();
       timeIn.value = DateFormat("HH:mm:ss").format(now);
+      Get.back();
     } else {
       EasyLoading.showError('Gagal Clock In');
     }
   }
 
   void submitOut() async {
-    final res = await apiRepository.submitAttendance(
+    // attendanceSheetBar();
+    final res = await apiRepository.submitAttendanceOut(
       AttendanceSubmitRequest(
         latitude: myLocation.latitude.toString(),
         longitude: myLocation.longitude.toString(),
+        idUser: userId.value,
+        token: token.value,
+        photo: MultipartFile(await imageFileList.first.readAsBytes(),
+            filename: imageFileList.first.name),
       ),
     );
     print(res);
-    if (res!.data != null) {
+    if (res!.message == "berhasil absen keluar") {
       EasyLoading.showSuccess('Berhasil Clock Out');
       var now = new DateTime.now();
       timeOut.value = DateFormat("HH:mm:ss").format(now);
+      Get.back();
     } else {
       EasyLoading.showError('Gagal Clock Out');
     }
@@ -176,12 +214,175 @@ class AttendanceController extends GetxController {
     super.onInit();
     loadUsersLatLang();
     determinePosition();
+    loadUsers();
+    // attendanceSheetBar();
     mainTab = MainTab();
     discoverTab = DiscoverTab();
-    taskListTab = TaskListTab();
     meTab = MeTab();
-    getSchedule();
+    // getSchedule();
     validateAttandance();
+  }
+
+  loadUsers() async {
+    var prefs = Get.find<SharedPreferences>();
+    name.value = prefs.getString('name') ?? "";
+    userId.value = prefs.getString('userId') ?? "";
+    token.value = prefs.getString('token') ?? "";
+  }
+
+  Future<void> onImageButtonPressed(ImageSource source,
+      {BuildContext? context, bool isMultiImage = false}) async {
+    imageFileList.clear();
+    if (isMultiImage) {
+      await _displayPickImageDialog(context!,
+          (double? maxWidth, double? maxHeight, int? quality) async {
+        try {
+          final List<XFile>? pickedFileList = await _picker.pickMultiImage(
+            maxWidth: maxWidth,
+            maxHeight: maxHeight,
+            imageQuality: quality,
+          );
+
+          imageFileList.addAll(pickedFileList!);
+        } catch (e) {
+          pickImageError = e;
+        }
+      });
+    } else {
+      await _displayPickImageDialog(context!,
+          (double? maxWidth, double? maxHeight, int? quality) async {
+        try {
+          final XFile? pickedFile = await _picker.pickImage(
+            source: source,
+            maxWidth: maxWidth,
+            maxHeight: maxHeight,
+            imageQuality: quality,
+          );
+
+          _imageFile = pickedFile;
+        } catch (e) {
+          pickImageError = e;
+        }
+      });
+    }
+  }
+
+  Future<void> _displayPickImageDialog(BuildContext context, onPick) async {
+    return onPick(200.0, 200.0, 50);
+  }
+
+  void attendanceSheetBar(String type) {
+    imageFileList.clear();
+    final sw = SizeConfig().screenWidth;
+    // WidgetsBinding.instance.addPostFrameCallback((_) async {
+    Get.bottomSheet(
+        Container(
+          child: Column(
+            children: [
+              Padding(
+                  padding: const EdgeInsets.all(25.0),
+                  child: Column(
+                    children: [
+                      CommonWidget.rowHeight(),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 10.0),
+                          child: CommonWidget.minHeadText(
+                              text: 'Unggah Foto Anda'),
+                        ),
+                      ),
+                      CommonWidget.rowHeight(),
+                      Obx(() => Container(
+                            decoration: BoxDecoration(
+                              borderRadius: new BorderRadius.circular(10.0),
+                            ),
+                            height: sw * .4,
+                            width: sw * .4,
+                            child: imageFileList.isNotEmpty
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(
+                                        20), // Image border
+                                    child: Image.file(
+                                        File(imageFileList.first.path)),
+                                  )
+                                : Center(
+                                    child: CommonWidget.bodyText(
+                                        text: "Anda belum memilih foto",
+                                        color: Colors.grey),
+                                  ),
+                          )),
+                      CommonWidget.rowHeight(),
+                      InkWell(
+                        onTap: () {
+                          onImageButtonPressed(ImageSource.camera,
+                              context: Get.context);
+                        },
+                        child: DottedBorder(
+                          radius: Radius.circular(100.0),
+                          color: Colors.grey,
+                          dashPattern: [8, 4],
+                          strokeWidth: 1,
+                          child: Container(
+                            height: 50,
+                            width: sw,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.camera_alt,
+                                  color: Colors.grey,
+                                  size: 30,
+                                ),
+                                SizedBox(width: 10.0),
+                                CommonWidget.bodyText(
+                                    text: "Ambil Photo", color: Colors.grey),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      CommonWidget.rowHeight(),
+                      CustomButton(
+                        buttonColor: ColorConstants.mainColor,
+                        buttonText: 'SIMPAN',
+                        width: sw,
+                        onPressed: () {
+                          type == 'Clock In' ? submitIn() : submitOut();
+                          // submitPhoto();
+                          // controller.approval(action: 'approve');
+                        },
+                      ),
+                    ],
+                  )),
+            ],
+          ),
+        ),
+        elevation: 20.0,
+        enableDrag: false,
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(30.0),
+          topRight: Radius.circular(30.0),
+        )));
+    // });
+  }
+
+  Widget previewImages() {
+    if (imageFileList.isNotEmpty) {
+      return Semantics(
+        label: 'image_picker_example_picked_image',
+        child: kIsWeb
+            ? Image.network(imageFileList.first.path)
+            : Image.file(File(imageFileList.first.path)),
+      );
+    } else if (pickImageError != null) {
+      return CommonWidget.bodyText(text: "Loading", color: Colors.grey);
+    } else {
+      return CommonWidget.bodyText(
+          text: "Anda belum memilih foto", color: Colors.grey);
+    }
   }
 
   loadUsersLatLang() async {
@@ -203,37 +404,37 @@ class AttendanceController extends GetxController {
   }
 
   void getSchedule() async {
-    final res = await apiRepository.getUserSchedule();
-    if (res!.data != null) {
-      userSchedule = res;
-      if (userSchedule.data?.schedule?.dataUserAttandance?.checkIn != null) {
-        DateTime parseDateIn = DateTime.parse(userSchedule
-            .data!.schedule!.dataUserAttandance!.checkIn
-            .toString());
-        timeIn.value = DateFormat("HH:mm:ss", "id_ID").format(parseDateIn);
-      }
-      if (userSchedule.data?.schedule?.dataUserAttandance?.checkOut != null) {
-        DateTime parseDateOut = DateTime.parse(userSchedule
-            .data!.schedule!.dataUserAttandance!.checkOut
-            .toString());
-        DateTime parseDateIn = DateTime.parse(userSchedule
-            .data!.schedule!.dataUserAttandance!.checkIn
-            .toString());
-        timeOut.value = timeOut.value =
-            DateFormat("HH:mm:ss", "id_ID").format(parseDateOut);
-        duration.value = _printDuration(parseDateOut.difference(parseDateIn));
-        // parseDateOut.difference(parseDateIn).inMinutes.toString();
+    // final res = await apiRepository.getUserSchedule();
+    // if (res!.data != null) {
+    //   print(res.data);
+    //   userSchedule = res;
+    //   if (userSchedule.data?.schedule?.dataUserAttandance?.checkIn != null) {
+    //     DateTime parseDateIn = DateTime.parse(userSchedule
+    //         .data!.schedule!.dataUserAttandance!.checkIn
+    //         .toString());
+    //     timeIn.value = DateFormat("HH:mm:ss", "id_ID").format(parseDateIn);
+    //   }
+    //   if (userSchedule.data?.schedule?.dataUserAttandance?.checkOut != null) {
+    //     DateTime parseDateOut = DateTime.parse(userSchedule
+    //         .data!.schedule!.dataUserAttandance!.checkOut
+    //         .toString());
+    //     DateTime parseDateIn = DateTime.parse(userSchedule
+    //         .data!.schedule!.dataUserAttandance!.checkIn
+    //         .toString());
+    //     timeOut.value = timeOut.value =
+    //         DateFormat("HH:mm:ss", "id_ID").format(parseDateOut);
+    //     duration.value = _printDuration(parseDateOut.difference(parseDateIn));
+    //     // parseDateOut.difference(parseDateIn).inMinutes.toString();
 
-        // duration.value = Duration(minutes: (betweenHour * 60)).toString();
+    //     // duration.value = Duration(minutes: (betweenHour * 60)).toString();
 
-      }
-
-      markers.add(Marker(
-          markerId: MarkerId('branch'),
-          position: LatLng(userSchedule.data?.branch?.latitude ?? 0.0,
-              userSchedule.data?.branch?.longitude ?? 0.0),
-          infoWindow: InfoWindow(title: userSchedule.data?.branch?.name)));
-    }
+    //   }
+    // }
+    // markers.add(Marker(
+    //     markerId: MarkerId('branch'),
+    //     position: LatLng(userSchedule.data?.branch?.latitude ?? 0.0,
+    //         userSchedule.data?.branch?.longitude ?? 0.0),
+    //     infoWindow: InfoWindow(title: userSchedule.data?.branch?.name)));
   }
 
   String _printDuration(Duration duration) {
@@ -246,10 +447,40 @@ class AttendanceController extends GetxController {
   void validateAttandance() async {
     try {
       final res = await apiRepository.validateAttendance(
-          myLocation.latitude, myLocation.longitude);
+          AttendanceValidateRequest(
+              latitude: myLocation.latitude.toString(),
+              longitude: myLocation.longitude.toString(),
+              id: userId.value.toString(),
+              token: token.value.toString()));
       print(res);
-      if (res?.error == false) {
+      userSchedule = res?.data?.first ?? userSchedule;
+
+      LatLng _myOffice = LatLng(
+          res?.data?.first.latitude ?? 0.0, res?.data?.first.longitude ?? 0.0);
+
+      circles.add(Circle(
+          circleId: CircleId('A1'),
+          center: _myOffice,
+          radius: 150,
+          fillColor: Colors.blueAccent.withOpacity(0.10),
+          strokeWidth: 3,
+          strokeColor: Colors.blueAccent.withOpacity(0.10)));
+
+      if (res?.data?.first.flag == "1") {
         isClockIn.value = true;
+        if (res?.data?.first.absenIn != '') {
+          // DateTime parseDateIn =
+          //     DateTime.parse(res?.data?.first.absenIn.toString() ?? '');
+          timeIn.value = res?.data?.first.absenIn.toString() ?? '';
+        }
+        if (res?.data?.first.absenOut != '') {
+          // DateTime parseDateOut =
+          //     DateTime.parse(res?.data?.first.absenOut.toString() ?? '');
+          // DateTime parseDateIn =
+          //     DateTime.parse(res?.data?.first.absenIn.toString() ?? '');
+          timeOut.value = res?.data?.first.absenOut.toString() ?? '';
+          // duration.value = _printDuration(parseDateOut.difference(parseDateIn));
+        }
       } else {
         isClockIn.value = false;
       }
@@ -297,27 +528,22 @@ class AttendanceController extends GetxController {
     Get.toNamed(Routes.LOGIN);
   }
 
-  void goToCnCPages() {
-    Get.toNamed(Routes.CN_C);
-  }
-
   void goToIzinPages() {
-    Get.toNamed(Routes.IZIN);
+    Get.toNamed(Routes.LEAVE);
   }
 
   void goToLemburPages() {
-    Get.toNamed(Routes.LEMBUR);
+    Get.toNamed(Routes.PROSPEK);
   }
 
   void goToCutiPages() {
-    Get.toNamed(Routes.CUTI);
-  }
-
-  void goToInformationPages() {
-    Get.toNamed(Routes.INFORMATION);
+    Get.toNamed(Routes.BENEFIT);
   }
 
   void goToRecapPages() {
     Get.toNamed(Routes.RECAP);
   }
+
+  @override
+  void onClose() {}
 }

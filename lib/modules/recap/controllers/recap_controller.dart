@@ -1,7 +1,9 @@
-import 'package:cleaner/api/api_repository.dart';
-import 'package:cleaner/models/response/recap_history.dart';
+import 'package:sales/api/api_repository.dart';
+import 'package:sales/models/request/id_request.dart';
+import 'package:sales/models/response/recap_history.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RecapController extends GetxController
     with StateMixin<List<RecapHistoryResponse>> {
@@ -18,6 +20,8 @@ class RecapController extends GetxController
   // RxList<DataHistory> historyData = (List<DataHistory>.of([])).obs;
   // get historyData => this._historyData;
   // List<TableRow> priceTableRows = [];
+  RxString idUser = "".obs;
+  RxString token = "".obs;
 
   final count = 0.obs;
   @override
@@ -29,7 +33,14 @@ class RecapController extends GetxController
   @override
   void onReady() {
     super.onReady();
+    loadUsers();
     getData();
+  }
+
+  loadUsers() async {
+    var prefs = Get.find<SharedPreferences>();
+    token.value = prefs.getString('token') ?? "";
+    idUser.value = prefs.getString('userId') ?? "";
   }
 
   @override
@@ -42,7 +53,9 @@ class RecapController extends GetxController
     monthSubmit.value = DateFormat("MM", "id_ID")
         .format(selectedDate ?? DateTime.now())
         .toString();
-    final res = await apiRepository.getRecapHistory(monthSubmit);
+    final res = await apiRepository.getRecapHistory(
+        IdRequest(id: idUser.value, token: token.value, month: monthSubmit.value));
+    print(res);
     for (var data in res!.data ?? []) {
       historyData.add(data);
     }

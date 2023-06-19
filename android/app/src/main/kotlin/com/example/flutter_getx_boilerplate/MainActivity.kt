@@ -1,4 +1,4 @@
-package com.sim.cleaner
+package com.tam.revi
 
 import io.flutter.embedding.android.FlutterActivity
 

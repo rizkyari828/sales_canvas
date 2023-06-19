@@ -1,10 +1,9 @@
-import 'package:cleaner/models/request/update_fcm_profile_request.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:cleaner/api/api.dart';
-import 'package:cleaner/models/models.dart';
-import 'package:cleaner/routes/app_pages.dart';
-import 'package:cleaner/shared/shared.dart';
+import 'package:sales/api/api.dart';
+import 'package:sales/models/models.dart';
+import 'package:sales/routes/app_pages.dart';
+import 'package:sales/shared/shared.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -38,6 +37,8 @@ class AuthController extends GetxController {
     AppFocus.unfocus(context);
     if (formKey.currentState!.validate()) {
       final res = await apiRepository.login(
+        loginEmailController.text,
+        loginPasswordController.text,
         LoginRequest(
           username: loginEmailController.text,
           password: loginPasswordController.text,
@@ -46,23 +47,26 @@ class AuthController extends GetxController {
 
       print(res);
 
-      print("Bearer " + res!.token);
+      // print("Bearer " + res!.token.toString());
 
       final prefs = Get.find<SharedPreferences>();
       prefs.clear();
-      if (res.token.isNotEmpty) {
-        prefs.setString(StorageConstants.token, res.token);
-        prefs.setString(StorageConstants.name, res.data?.name ?? "");
-        prefs.setString(StorageConstants.simId, res.data?.simid ?? "");
-        prefs.setString(
-            StorageConstants.profilePhoto, res.data?.profilePhotoPath ?? "");
-        prefs.setString(
-            StorageConstants.groupId, res.data?.userType?.id.toString() ?? "");
-        prefs.setString(
-            StorageConstants.groupName, res.data?.userType?.name ?? "");
-        prefs.setString(
-            StorageConstants.placement, res.data?.branch?.first.name ?? "");
-        Get.toNamed(Routes.HOME);
+      if (res?.error == false) {
+        if (res?.data?.first.token != '' || res?.data?.first.token != null) {
+          prefs.setString(StorageConstants.token, res?.data?.first.token ?? '');
+          prefs.setString(StorageConstants.name, res?.data?.first.nama ?? '');
+          prefs.setString(StorageConstants.userId,
+              res?.data?.first.userId.toString() ?? "");
+          prefs.setString(StorageConstants.idPegawai,
+              res?.data?.first.idPegawai.toString() ?? "");
+          prefs.setString(StorageConstants.username,
+              res?.data?.first.username.toString() ?? "");
+          prefs.setString(
+              StorageConstants.profilePhoto, res?.data?.first.foto ?? "");
+          prefs.setString(StorageConstants.groupId,
+              res?.data?.first.groupUser.toString() ?? "");
+          Get.toNamed(Routes.HOME);
+        }
       }
     }
 
@@ -75,13 +79,13 @@ class AuthController extends GetxController {
   }
 
   void submitToken(token) async {
-    final res = await apiRepository
-        .updateFcmProfile(UpdateFcmProfileRequest(fcmToken: token));
-    if (res!.error == false) {
-      print('Token updated');
-    } else {
-      print('Token update failed');
-    }
+    // final res = await apiRepository
+    //     .updateFcmProfile(UpdateFcmProfileRequest(fcmToken: token));
+    // if (res!.error == false) {
+    //   print('Token updated');
+    // } else {
+    //   print('Token update failed');
+    // }
     // listType.addAll(res?.data ?? []);
   }
 

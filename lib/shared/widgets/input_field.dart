@@ -1,7 +1,7 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
-import 'package:cleaner/shared/constants/colors.dart';
-import 'package:cleaner/shared/constants/common.dart';
+import 'package:sales/shared/constants/colors.dart';
+import 'package:sales/shared/constants/common.dart';
 
 class InputField extends StatelessWidget {
   final TextEditingController controller;
@@ -153,49 +153,55 @@ class InputInputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-        readOnly: isDisabled,
-        enableInteractiveSelection: isDisabled,
-        keyboardType: this.keyboardType,
-        autocorrect: false,
-        controller: this.controller,
-        onChanged: (text) {
-          onChanged;
-        },
-        decoration: InputDecoration(
-          labelStyle: TextStyle(
-              fontWeight: FontWeight.normal,
-              fontSize: 14,
-              letterSpacing: 0.5,
-              fontFamily: 'Poppins'),
-          prefixStyle: TextStyle(
-              color: Colors.black87,
-              fontWeight: FontWeight.normal,
-              fontSize: 14,
-              letterSpacing: 0.5,
-              fontFamily: 'Poppins'),
-          suffixStyle: TextStyle(
-              color: Colors.black87,
-              fontWeight: FontWeight.normal,
-              fontSize: 14,
-              letterSpacing: 0.5,
-              fontFamily: 'Poppins'),
-          labelText: labelText,
-          hintText: placeholder,
-          fillColor: Colors.white,
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15.0),
-            borderSide: BorderSide(
-              color: Colors.blue,
+    return Padding(
+      padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+      child: TextField(
+          readOnly: isDisabled,
+          enableInteractiveSelection: isDisabled,
+          keyboardType: this.keyboardType,
+          autocorrect: false,
+          controller: this.controller,
+          onChanged: (text) {
+            onChanged;
+          },
+          decoration: InputDecoration(
+            labelStyle: TextStyle(
+                fontWeight: FontWeight.normal,
+                fontSize: 14,
+                letterSpacing: 0.5,
+                color: Colors.black87,
+                fontFamily: 'Poppins'),
+            prefixStyle: TextStyle(
+                color: Colors.black87,
+                fontWeight: FontWeight.normal,
+                fontSize: 14,
+                letterSpacing: 0.5,
+                fontFamily: 'Poppins'),
+            suffixStyle: TextStyle(
+                color: Colors.black87,
+                fontWeight: FontWeight.normal,
+                fontSize: 14,
+                letterSpacing: 0.5,
+                fontFamily: 'Poppins'),
+            labelText: labelText,
+            hintText: placeholder,
+            filled: true,
+            fillColor: isDisabled ? Colors.grey[200] : Colors.white,
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15.0),
+              borderSide: BorderSide(
+                color: ColorConstants.mainColor,
+              ),
             ),
-          ),
-          suffixIcon: _suffixIcon(),
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(
-              color: ColorConstants.mainColor,
+            suffixIcon: _suffixIcon(),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15.0),
+              borderSide: BorderSide(
+                color: ColorConstants.mainColor,
+              ),
             ),
-          ),
-        ));
+          )),
+    );
   }
 
   Widget? _suffixIcon() {
@@ -211,22 +217,23 @@ class InputInputField extends StatelessWidget {
 
 class TextAreaField extends StatelessWidget {
   final TextEditingController controller;
+  final isDisabled;
 
-  TextAreaField({
-    required this.controller,
-  });
+  TextAreaField({required this.controller, this.isDisabled = false});
 
   @override
   Widget build(BuildContext context) {
     return Card(
         elevation: 0.1,
-        color: Colors.white,
+        color: isDisabled ? Colors.grey[200] : Colors.white,
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
+            borderRadius: BorderRadius.circular(15.0),
             side: BorderSide(color: ColorConstants.mainColor, width: 1)),
         child: Padding(
           padding: EdgeInsets.all(8.0),
           child: TextField(
+            readOnly: isDisabled,
+            enableInteractiveSelection: isDisabled,
             style: TextStyle(
                 color: Colors.black87,
                 fontWeight: FontWeight.normal,
@@ -235,8 +242,18 @@ class TextAreaField extends StatelessWidget {
                 fontFamily: 'Poppins'),
             controller: controller,
             maxLines: 8,
-            decoration:
-                InputDecoration.collapsed(hintText: "Enter your text here"),
+            decoration: InputDecoration.collapsed(
+              hintText: "Enter your text here",
+              hintStyle: TextStyle(
+                  color: Colors.black87,
+                  fontWeight: FontWeight.normal,
+                  fontSize: 14,
+                  letterSpacing: 0.5,
+                  fontFamily: 'Poppins'),
+              filled: true,
+              fillColor: isDisabled ? Colors.grey[200] : Colors.white,
+              focusColor: isDisabled ? Colors.grey[200] : Colors.white,
+            ),
           ),
         ));
   }
@@ -264,65 +281,15 @@ class CustomDropDownSearch extends StatelessWidget {
       // width: MediaQuery.of(context).size.width,
       // height: MediaQuery.of(context).size.height / 11,
       child: DropdownSearch<dynamic>(
-        mode: Mode.MENU,
-        enabled: enabled,
-        selectedItem: selectedItem,
-        searchFieldProps: TextFieldProps(
-          decoration: InputDecoration(
-            labelStyle: TextStyle(
-                color: Colors.black87,
-                fontWeight: FontWeight.normal,
-                fontSize: 14,
-                letterSpacing: 0.5,
-                fontFamily: 'Poppins'),
-            hintStyle: TextStyle(
-                color: Colors.black87,
-                fontWeight: FontWeight.normal,
-                fontSize: 14,
-                letterSpacing: 0.5,
-                fontFamily: 'Poppins'),
-            border: OutlineInputBorder(),
-            contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
-            labelText: "Cari $labelText",
-          ),
-        ),
-        dropdownSearchBaseStyle: TextStyle(
-            color: Colors.black87,
-            fontWeight: FontWeight.normal,
-            fontSize: 14,
-            letterSpacing: 0.5,
-            fontFamily: 'Poppins'),
-        dropdownSearchDecoration: InputDecoration(
-          contentPadding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: ColorConstants.mainColor),
-          ),
-          labelText: labelText,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+            dropdownSearchDecoration: InputDecoration(
           labelStyle: TextStyle(
-              color: Colors.black87,
               fontWeight: FontWeight.normal,
               fontSize: 14,
               letterSpacing: 0.5,
-              fontFamily: 'Poppins'),
-          hintStyle: TextStyle(
               color: Colors.black87,
-              fontWeight: FontWeight.normal,
-              fontSize: 14,
-              letterSpacing: 0.5,
-              fontFamily: 'Poppins'),
-          helperStyle: TextStyle(
-              color: Colors.black87,
-              fontWeight: FontWeight.normal,
-              fontSize: 14,
-              letterSpacing: 0.5,
               fontFamily: 'Poppins'),
           prefixStyle: TextStyle(
-              color: Colors.black87,
-              fontWeight: FontWeight.normal,
-              fontSize: 14,
-              letterSpacing: 0.5,
-              fontFamily: 'Poppins'),
-          counterStyle: TextStyle(
               color: Colors.black87,
               fontWeight: FontWeight.normal,
               fontSize: 14,
@@ -334,10 +301,33 @@ class CustomDropDownSearch extends StatelessWidget {
               fontSize: 14,
               letterSpacing: 0.5,
               fontFamily: 'Poppins'),
-        ),
+          labelText: labelText,
+          filled: true,
+          fillColor: enabled ? Colors.white : Colors.grey[200],
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15.0),
+            borderSide: BorderSide(
+              color: ColorConstants.mainColor,
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15.0),
+            borderSide: BorderSide(
+              color: ColorConstants.mainColor,
+            ),
+          ),
+          disabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15.0),
+            borderSide: BorderSide(
+              color: ColorConstants.mainColor,
+            ),
+          ),
+        )),
+        enabled: enabled,
+        selectedItem: selectedItem,
         items: listItem,
         onChanged: onChanged,
-        showSearchBox: true,
+        // showSearchBox: true,
       ),
     );
   }

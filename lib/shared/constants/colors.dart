@@ -11,7 +11,8 @@ class ColorConstants {
   static Color black = Color(0xFF000000);
   static Color white = Color(0xFFFFFFFF);
 
-  static const Color mainColor = Color(0xFF4470B4);
+  static const Color mainColor = Color(0xFF263990);
+  static const Color secondaryColor = Color(0xFF061367);
   static const Color disableButton = Color.fromRGBO(200, 200, 200, 1.0);
   static Color backgroundTextField = hexToColor('#EDF0F4');
 

@@ -1,30 +1,32 @@
-import 'package:cleaner/api/base_provider.dart';
-import 'package:cleaner/models/models.dart';
-import 'package:cleaner/models/request/attendance/submit_attendance.dart';
-import 'package:cleaner/models/request/cnc/approval_cnc.dart';
-import 'package:cleaner/models/request/cnc/submit_cnc.dart';
-import 'package:cleaner/models/request/cuti/submit_cuti_request.dart';
-import 'package:cleaner/models/request/cuti/update_approval_request.dart';
-import 'package:cleaner/models/request/izin/submit_izin_request.dart';
-import 'package:cleaner/models/request/izin/update_approval_request.dart';
-import 'package:cleaner/models/request/logout_request.dart';
-import 'package:cleaner/models/request/overtime/set_done_overtime_request.dart';
-import 'package:cleaner/models/request/overtime/submit_overtime_client_request.dart';
-import 'package:cleaner/models/request/overtime/submit_request_overtime.dart';
-import 'package:cleaner/models/request/overtime/update_approval_overtime_request.dart';
-import 'package:cleaner/models/request/rate/submit_rate_request.dart';
-import 'package:cleaner/models/request/reliver/approve_reliver_request.dart';
-import 'package:cleaner/models/request/reliver/create_reliver_request.dart';
-import 'package:cleaner/models/request/taskList/create_task_list_general_khusus.dart';
-import 'package:cleaner/models/request/taskList/create_task_list_khusus.dart';
-import 'package:cleaner/models/request/taskList/update_task_list_tad_before_request.dart';
-import 'package:cleaner/models/request/taskList/update_task_tad.dart';
-import 'package:cleaner/models/request/update_fcm_profile_request.dart';
-import 'package:cleaner/models/request/update_photo_profile_request.dart';
+import 'package:sales/api/base_provider.dart';
+import 'package:sales/models/models.dart';
+import 'package:sales/models/request/attendance/submit_attendance.dart';
+import 'package:sales/models/request/attendance/validate_attenance.dart';
+import 'package:sales/models/request/benefit_request.dart';
+import 'package:sales/models/request/cuti/submit_cuti_request.dart';
+import 'package:sales/models/request/cuti/update_approval_request.dart';
+import 'package:sales/models/request/detail_request.dart';
+import 'package:sales/models/request/detail_request_leave.dart';
+import 'package:sales/models/request/id_request.dart';
+import 'package:sales/models/request/input_request.dart';
+import 'package:sales/models/request/izin/submit_izin_request.dart';
+import 'package:sales/models/request/izin/update_approval_request.dart';
+import 'package:sales/models/request/logout_request.dart';
+import 'package:sales/models/request/overtime/get_list.dart';
+import 'package:sales/models/request/overtime/set_done_overtime_request.dart';
+import 'package:sales/models/request/overtime/submit_overtime_client_request.dart';
+import 'package:sales/models/request/overtime/submit_request_overtime.dart';
+import 'package:sales/models/request/overtime/update_approval_overtime_request.dart';
+import 'package:sales/models/request/rate/submit_rate_request.dart';
+import 'package:sales/models/request/reliver/approve_reliver_request.dart';
+import 'package:sales/models/request/reliver/create_reliver_request.dart';
+import 'package:sales/models/request/update_fcm_profile_request.dart';
+import 'package:sales/models/request/update_photo_profile_request.dart';
 import 'package:get/get.dart';
 
 class ApiProvider extends BaseProvider {
   Future<Response> login(String path, LoginRequest data) {
+    // print(path);
     return post(path, data.toJson());
   }
 
@@ -44,63 +46,39 @@ class ApiProvider extends BaseProvider {
     return get(path);
   }
 
-  Future<Response> getRecapHistory(String path) {
-    return get(path);
+  Future<Response> getRecapHistory(String path, IdRequest data) {
+    return post(path, data.toJson());
   }
 
   Future<Response> submitAttendance(String path, AttendanceSubmitRequest data) {
-    return post(path, data.toJson());
+    print(data.toFormData().fields);
+    return post(path, data.toFormData(), contentType: "multipart/form-data");
   }
 
-  Future<Response> validateAttendance(String path) {
-    return get(path);
+  Future<Response> validateAttendance(
+      String path, AttendanceValidateRequest request) {
+    return post(path, request.toJson());
   }
-
-  //START CNC
-  Future<Response> getCnCItem(String path) {
-    return get(path);
-  }
-
-  Future<Response> getCnCCategory(String path) {
-    return get(path);
-  }
-
-  Future<Response> getCnC(String path) {
-    return get(path);
-  }
-
-  Future<Response> getShowCnC(String path) {
-    return get(path);
-  }
-
-  Future<Response> submitCnC(String path, SubmitCnCRequest data) {
-    print(data.toJson());
-    return post(path, data.toJson());
-  }
-
-  Future<Response> updateApprovalCnC(String path, ApprovalCnCRequest data) {
-    print(data.toJson());
-    return patch(path, data.toJson());
-  }
-  //END CNC
 
   //START OVERTIME
-  Future<Response> getOvertime(String path) {
-    return get(path);
+  Future<Response> getOvertime(String path, GetListRequest data) {
+    print(data.toJson());
+    return post(path, data.toJson());
   }
 
-  Future<Response> getShowOvertime(String path) {
-    return get(path);
+  Future<Response> getShowProspek(String path, GetListRequest data) {
+    return post(path, data.toJson());
   }
 
   Future<Response> submitOvertime(String path, SubmitOvertimeRequest data) {
+    print(data.toJson());
     return post(path, data.toJson());
   }
 
-  Future<Response> submitOvertimeClient(String path, SubmitOvertimeClientRequest data) {
+  Future<Response> submitOvertimeClient(
+      String path, SubmitOvertimeClientRequest data) {
     return post(path, data.toJson());
   }
-
 
   Future<Response> setDoneOvertime(String path, SetDoneOvertimeRequest data) {
     return patch(path, data.toJson());
@@ -108,13 +86,22 @@ class ApiProvider extends BaseProvider {
 
   Future<Response> updateApprovalOvertime(
       String path, UpdateApprovalOvertimeRequest data) {
-    return patch(path, data.toJson());
+    print(data.toJson());
+    return post(path, data.toJson());
+  }
+
+  Future<Response> getMasterData(String path) {
+    return get(path);
   }
   //END OVERTIME
 
-  //START CUTI
-  Future<Response> getCuti(String path) {
-    return get(path);
+  //START BENEFIT
+  Future<Response> getBenefit(String path, BenefitRequest data) {
+    return post(path, data.toJson());
+  }
+
+  Future<Response> getBenefitDashboard(String path, IdRequest data) {
+    return post(path, data.toJson());
   }
 
   Future<Response> getTypeCuti(String path) {
@@ -138,19 +125,19 @@ class ApiProvider extends BaseProvider {
       String path, UpdateApprovalCutiRequest data) {
     return patch(path, data.toJson());
   }
-  //END CUTI
+  //END BENEFIT
 
   //START IZIN
-  Future<Response> getIzin(String path) {
-    return get(path);
+  Future<Response> getIzin(String path, IdRequest data) {
+    return post(path, data.toJson());
   }
 
   Future<Response> getTypeIzin(String path) {
     return get(path);
   }
 
-  Future<Response> getShowIzin(String path) {
-    return get(path);
+  Future<Response> getShowIzin(String path, ShowLeaveRequest data) {
+    return post(path, data.toJson());
   }
 
   Future<Response> submitIzin(String path, SubmitIzinRequest data) {
@@ -172,8 +159,8 @@ class ApiProvider extends BaseProvider {
     return get(path);
   }
 
-  Future<Response> getShowReliver(String path) {
-    return get(path);
+  Future<Response> getShowReliver(String path, ShowEventRequest data) {
+    return post(path, data.toJson());
   }
 
   Future<Response> submitReliver(String path, CreateReliverRequest data) {
@@ -198,40 +185,6 @@ class ApiProvider extends BaseProvider {
 
   Future<Response> deleteTaskList(String path) {
     return delete(path);
-  }
-
-  Future<Response> updateTaskList(String path, UpdateTaskListTadRequest data) {
-    print(data.toJson());
-    return patch(path, data.toJson());
-  }
-
-  Future<Response> updateTaskListBefore(
-      String path, UpdateTaskListTadBeforeRequest data) {
-    print(data.toJson());
-    return patch(path, data.toJson());
-  }
-
-  Future<Response> submitTaskListKhusus(
-      String path, CreateTaskListKhususRequest data) {
-    return post(path, data.toJson());
-  }
-
-  Future<Response> submitTaskListGeneral(
-      String path, CreateTaskListGeneralRequest data) {
-    return post(path, data.toJson());
-  }
-
-  Future<Response> editTaskListKhusus(
-      String path, CreateTaskListKhususRequest data) {
-    print('Test Check');
-    print(path);
-    print(data.toJson());
-    return patch(path, data.toJson());
-  }
-
-  Future<Response> editTaskListGeneral(
-      String path, CreateTaskListGeneralRequest data) {
-    return patch(path, data.toJson());
   }
 
   Future<Response> getType(String path) {
@@ -272,5 +225,10 @@ class ApiProvider extends BaseProvider {
   Future<Response> submitRate(String path, SubmitRate data) {
     print(data.toJson());
     return patch(path, data.toJson());
+  }
+
+  Future<Response> submitInput(String path, SubmitInputRequest data) {
+    print(data.toJson());
+    return post(path, data.toJson());
   }
 }

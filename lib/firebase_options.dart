@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     // ignore: missing_enum_constant_in_switch
     switch (defaultTargetPlatform) {
@@ -37,32 +40,22 @@ class DefaultFirebaseOptions {
     );
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCNoPyt_XXx-uebMIkdWZZHxC1cZFJlOzc',
-    appId: '1:740236615990:web:6fc6228bc78faa868dd397',
-    messagingSenderId: '740236615990',
-    projectId: 'sigesit-143f5',
-    authDomain: 'sigesit-143f5.firebaseapp.com',
-    storageBucket: 'sigesit-143f5.appspot.com',
-    measurementId: 'G-EEKE102J6E',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAaAfIgbmnrSHHJNQ0MtIjR7vrDOPYAkmE',
-    appId: '1:740236615990:android:5c7ee6e55ca7b3e48dd397',
-    messagingSenderId: '740236615990',
-    projectId: 'sigesit-143f5',
-    storageBucket: 'sigesit-143f5.appspot.com',
+    apiKey: 'AIzaSyCfyGHxXijDMLys7gzVYJ2DA5J1T80sw-k',
+    appId: '1:301855838376:android:da8fd40ee0c58dcea6329d',
+    messagingSenderId: '301855838376',
+    projectId: 'com-tam-revi',
+    storageBucket: 'com-tam-revi.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyB89EB7i_DuoHEYWJP_mnvQpLv4if-aMLA',
-    appId: '1:740236615990:ios:c55b101328c0ac538dd397',
-    messagingSenderId: '740236615990',
-    projectId: 'sigesit-143f5',
-    storageBucket: 'sigesit-143f5.appspot.com',
-    androidClientId: '740236615990-3veaab4u84oqdkimbc0n644od0bdmauo.apps.googleusercontent.com',
-    iosClientId: '740236615990-tcqfvkim87ifemv5e0iuh4h91qd9u7gk.apps.googleusercontent.com',
-    iosBundleId: 'com.sim.cleanerdev',
+    apiKey: 'AIzaSyAHuDwEPx-IdSHygoF4t_aU-Tv6uWc75xI',
+    appId: '1:301855838376:ios:707451cd2680d0c3a6329d',
+    messagingSenderId: '301855838376',
+    projectId: 'com-tam-revi',
+    storageBucket: 'com-tam-revi.appspot.com',
+    androidClientId: '301855838376-29aakpakh4uuub3j5npl1lb3hler2kr3.apps.googleusercontent.com',
+    iosClientId: '301855838376-o4vo90n4aksrfnt0amr2lq8v2bhplb2s.apps.googleusercontent.com',
+    iosBundleId: 'com.tamrevi',
   );
 }

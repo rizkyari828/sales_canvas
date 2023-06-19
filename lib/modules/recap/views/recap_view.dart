@@ -1,8 +1,8 @@
-import 'package:cleaner/shared/utils/size_config.dart';
+import 'package:sales/shared/utils/size_config.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:cleaner/shared/constants/colors.dart';
-import 'package:cleaner/shared/utils/common_widget.dart';
+import 'package:sales/shared/constants/colors.dart';
+import 'package:sales/shared/utils/common_widget.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../controllers/recap_controller.dart';
@@ -15,17 +15,19 @@ class RecapView extends GetView<RecapController> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.black87 //change your color here
+            ),
         title: Text(
           'Rekap',
           style: TextStyle(
-            color: Colors.white,
+            color: Colors.black87,
             fontWeight: FontWeight.w600,
             fontSize: 20,
             fontFamily: 'Poppins',
           ),
         ),
         elevation: 0,
-        backgroundColor: ColorConstants.mainColor,
+        backgroundColor: ColorConstants.lightScaffoldBackgroundColor,
       ),
       body: Column(
         children: [
@@ -155,14 +157,22 @@ class RecapView extends GetView<RecapController> {
                                 child: CommonWidget.minSubtitleText(
                                     text: 'Pulang',
                                     fontWeight: FontWeight.bold)),
+                            // SizedBox(
+                            //   width: sw * .01,
+                            // ),
+                            // Container(
+                            //     width: sw * .13,
+                            //     child: CommonWidget.minSubtitleText(
+                            //         text: 'Terlambat',
+                            //         fontWeight: FontWeight.bold)),
                             SizedBox(
                               width: sw * .01,
-                            ),
-                            Container(
-                                width: sw * .12,
-                                child: CommonWidget.minSubtitleText(
-                                    text: 'Durasi',
-                                    fontWeight: FontWeight.bold)),
+                            )
+                            // Container(
+                            //     width: sw * .12,
+                            //     child: CommonWidget.minSubtitleText(
+                            //         text: 'Durasi',
+                            //         fontWeight: FontWeight.bold)),
                           ],
                         ),
                       ),
@@ -191,7 +201,7 @@ class RecapView extends GetView<RecapController> {
                                                     DateFormat("EEEE", "id_ID")
                                                         .format(controller
                                                                 .historyData[i]
-                                                                .dateCheckIn ??
+                                                                .tanggal ??
                                                             DateTime.now())
                                                         .toString()),
                                           ),
@@ -205,7 +215,7 @@ class RecapView extends GetView<RecapController> {
                                                         "dd/MM/yyyy", "id_ID")
                                                     .format(controller
                                                             .historyData[i]
-                                                            .dateCheckIn ??
+                                                            .tanggal ??
                                                         DateTime.now())
                                                     .toString()),
                                           ),
@@ -215,19 +225,12 @@ class RecapView extends GetView<RecapController> {
                                           Container(
                                             width: sw * .12,
                                             child: CommonWidget.minSubtitleText(
-                                                text: controller
-                                                            .historyData[i]
-                                                            .dataUserAttandance
-                                                            ?.checkIn ==
+                                                text: controller.historyData[i]
+                                                            .absenIn ==
                                                         null
                                                     ? "--:--"
-                                                    : DateFormat(
-                                                            "HH:mm", "id_ID")
-                                                        .format(controller
-                                                                .historyData[i]
-                                                                .dataUserAttandance
-                                                                ?.checkIn ??
-                                                            DateTime.now())
+                                                    : controller
+                                                        .historyData[i].absenIn
                                                         .toString()),
                                           ),
                                           SizedBox(
@@ -236,38 +239,29 @@ class RecapView extends GetView<RecapController> {
                                           Container(
                                             width: sw * .12,
                                             child: CommonWidget.minSubtitleText(
-                                                text: controller
-                                                            .historyData[i]
-                                                            .dataUserAttandance
-                                                            ?.checkOut ==
+                                                text: controller.historyData[i]
+                                                            .absenOut ==
                                                         null
                                                     ? "--:--"
-                                                    : DateFormat(
-                                                            "HH:mm", "id_ID")
-                                                        .format(controller
-                                                                .historyData[i]
-                                                                .dataUserAttandance
-                                                                ?.checkOut ??
-                                                            DateTime.now())
+                                                    : controller
+                                                        .historyData[i].absenOut
                                                         .toString()),
                                           ),
                                           SizedBox(
                                             width: sw * .01,
                                           ),
-                                          Container(
-                                            width: sw * .12,
-                                            child: CommonWidget.minSubtitleText(
-                                                text: _printDuration((controller
-                                                            .historyData[i]
-                                                            .dataUserAttandance
-                                                            ?.checkOut ??
-                                                        DateTime.now())
-                                                    .difference(controller
-                                                            .historyData[i]
-                                                            .dataUserAttandance
-                                                            ?.checkIn ??
-                                                        DateTime.now()))),
-                                          ),
+                                          // Container(
+                                          //   width: sw * .12,
+                                          //   child: CommonWidget.minSubtitleText(
+                                          //       text: controller.historyData[i]
+                                          //                   .sts ==
+                                          //               1
+                                          //           ? "Ya"
+                                          //           : "Tidak"),
+                                          // ),
+                                          // SizedBox(
+                                          //   width: sw * .01,
+                                          // ),
                                         ],
                                       ),
                                       SizedBox(

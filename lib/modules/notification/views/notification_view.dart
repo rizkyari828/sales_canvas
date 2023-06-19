@@ -1,6 +1,5 @@
-import 'package:cleaner/modules/notification/controllers/notification_controller.dart';
-import 'package:cleaner/shared/constants/constants.dart';
-import 'package:cleaner/shared/widgets/approval.dart';
+import 'package:sales/modules/notification/controllers/notification_controller.dart';
+import 'package:sales/shared/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -11,22 +10,21 @@ class NotificationView extends GetView<NotificationController> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          iconTheme:
+              IconThemeData(color: Colors.black87 //change your color here
+                  ),
           centerTitle: false,
           title: Text(
             'Notifikasi',
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.black87,
               fontWeight: FontWeight.w600,
               fontSize: 20,
               fontFamily: 'Poppins',
             ),
           ),
-          backgroundColor: ColorConstants.mainColor,
+          backgroundColor: ColorConstants.lightScaffoldBackgroundColor,
           elevation: 0.0,
-          actions: [
-            Obx(() => ApprovalFlow.addButtonApproval(
-                controller: controller, onPressed: controller.goToAddCutiPages))
-          ],
         ),
         body: Obx(() => _getItems(controller)));
   }
@@ -65,9 +63,9 @@ class NotificationView extends GetView<NotificationController> {
               ],
             ),
             child: ListTile(
-              title: Text(controller.listCuti[i].code ?? ''),
+              title: Text(controller.listCuti[i].noTrans ?? ''),
               subtitle: Text(
-                  '${DateFormat("EEEE, d MMMM yyyy", "id_ID").format(controller.listCuti[i].dateRequest ?? DateTime.now())}'),
+                  '${DateFormat("EEEE, d MMMM yyyy", "id_ID").format(controller.listCuti[i].dateBoking ?? DateTime.now())}'),
             ),
           ),
         ),

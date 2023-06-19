@@ -12,45 +12,61 @@ String attendanceValidateResponseToJson(AttendanceValidateResponse data) =>
 
 class AttendanceValidateResponse {
   AttendanceValidateResponse({
-    this.error,
+    this.status,
     this.message,
-    // this.data,
+    this.data,
   });
 
-  bool? error;
+  String? status;
   String? message;
-  // Data? data;
+  List<ValidateData>? data;
 
   factory AttendanceValidateResponse.fromJson(Map<String, dynamic> json) =>
       AttendanceValidateResponse(
-        error: json["error"] == null ? null : json["error"],
-        message: json["message"] == null ? null : json["message"],
-        // data: json["data"] == [] ? null : Data.fromJson(json["data"]),
+        status: json["status"],
+        message: json["message"],
+        data: List<ValidateData>.from(
+            json["Data"].map((x) => ValidateData.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
-        "error": error == null ? null : error,
-        "message": message == null ? null : message,
-        // "data": data == null ? null : data?.toJson(),
+        "status": status,
+        "message": message,
+        "Data": List<dynamic>.from(data!.map((x) => x.toJson())),
       };
 }
 
-class Data {
-  Data({
-    this.distance,
-    this.radius,
+class ValidateData {
+  ValidateData({
+    this.flag,
+    this.absenIn,
+    this.absenOut,
+    this.jarak,
+    this.latitude,
+    this.longitude,
   });
 
-  double? distance;
-  int? radius;
+  String? flag;
+  String? absenIn;
+  String? absenOut;
+  String? jarak;
+  double? latitude, longitude;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-        distance: json["distance"] == null ? null : json["distance"].toDouble(),
-        radius: json["radius"] == null ? null : json["radius"],
+  factory ValidateData.fromJson(Map<String, dynamic> json) => ValidateData(
+        flag: json["flag"] == null ? null : json["flag"],
+        absenIn: json["absen_in"] == null ? "" : json["absen_in"],
+        absenOut: json["absen_out"] == null ? "" : json["absen_out"],
+        jarak: json["jarak"] == null ? null : json["jarak"],
+        latitude: json["lat"] == null ? null : json["lat"],
+        longitude: json["long"] == null ? null : json["long"],
       );
 
   Map<String, dynamic> toJson() => {
-        "distance": distance == null ? null : distance,
-        "radius": radius == null ? null : radius,
+        "flag": flag == null ? null : flag,
+        "absen_in": absenIn == null ? "" : absenIn,
+        "absen_out": absenOut == null ? "" : absenOut,
+        "jarak": jarak == null ? null : jarak,
+        "lat": latitude == null ? null : latitude,
+        "long": longitude == null ? null : longitude
       };
 }

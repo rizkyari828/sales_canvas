@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>SALES</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -11,11 +13,11 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>cleaner</string>
+	<string>SALES</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(FLUTTER_BUILD_NAME)</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
@@ -23,18 +25,18 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Requires access to the camera</string>
+	<string>"SALES" need access the camera to change your profile photo</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>This app needs access to location when in the background.</string>
+	<string>"SALES" need access the device' location to use attendance feature.</string>
 	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
 	<dict>
 		<key>YourPurposeKey</key>
-		<string>The example App requires temporary access to the device's precise location.</string>
+		<string>"SALES" need access the device's precise location to use attendance feature.</string>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app needs access to location when open.</string>
+	<string>"SALES" need access the device's location to use attendance feature.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Requires access to the gallery</string>
+	<string>"SALES" need access the gallery to change your profile photo.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
@@ -59,5 +61,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
 </dict>
 </plist>

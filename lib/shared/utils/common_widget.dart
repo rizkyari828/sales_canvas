@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cleaner/shared/shared.dart';
+import 'package:sales/shared/shared.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
@@ -12,19 +12,21 @@ class CommonWidget {
       bool actionIcon = false,
       VoidCallback? onPressedActionIcon}) {
     return AppBar(
+      iconTheme: IconThemeData(color: Colors.black87 //change your color here
+          ),
       // toolbarHeight: 50,
       automaticallyImplyLeading: backIcon,
       centerTitle: centerTextAlign,
       title: Text(
         title,
         style: TextStyle(
-          color: Colors.white,
+          color: Colors.black87,
           fontWeight: FontWeight.w600,
           fontSize: 20,
           fontFamily: 'Poppins',
         ),
       ),
-      backgroundColor: ColorConstants.mainColor,
+      backgroundColor: Colors.white,
       elevation: 0.0,
       actions: [
         actionIcon == true
@@ -79,9 +81,11 @@ class CommonWidget {
   static Text subtitleText(
       {String text = "",
       Color color = Colors.black87,
-      FontWeight fontWeight = FontWeight.normal}) {
+      FontWeight fontWeight = FontWeight.normal,
+      textAlign: TextAlign.start}) {
     return Text(
       text,
+      textAlign: textAlign,
       style: TextStyle(
           color: color,
           fontWeight: fontWeight,
@@ -131,7 +135,11 @@ class CommonWidget {
   }
 
   static Row labelExpanded(
-      {String label = "", value = "", Color color = Colors.black87}) {
+      {String label = "",
+      value = "",
+      Color color = Colors.black87,
+      fontWeight2 = FontWeight.w600,
+      fontSize = 14.0}) {
     return Row(
       children: <Widget>[
         Expanded(
@@ -140,7 +148,7 @@ class CommonWidget {
             style: TextStyle(
                 color: color,
                 fontWeight: FontWeight.normal,
-                fontSize: 14,
+                fontSize: fontSize,
                 letterSpacing: 0.5,
                 fontFamily: 'Poppins'),
           ),
@@ -149,11 +157,25 @@ class CommonWidget {
           child: Text(value,
               style: TextStyle(
                   color: color,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
+                  fontWeight: fontWeight2,
+                  fontSize: fontSize,
                   letterSpacing: 0.5,
                   fontFamily: 'Poppins')),
         ),
+      ],
+    );
+  }
+
+  static Row labelRowIcon({icon, widget}) {
+    return Row(
+      children: [
+        Icon(
+          icon,
+          color: ColorConstants.mainColor,
+          size: 13,
+        ),
+        SizedBox(width: 5.0),
+        widget,
       ],
     );
   }
@@ -225,5 +247,24 @@ class CommonWidget {
         child: child,
       ),
     );
+  }
+
+  static String convertStatus(status) {
+    switch (status) {
+      case '1':
+        return 'Prospek';
+      case '2':
+        return 'Order';
+      case '3':
+        return 'Booking';
+      case '4':
+        return 'Cancle';
+      case '5':
+        return 'Reject';
+      case '6':
+        return 'TBC';
+      default:
+        return '';
+    }
   }
 }

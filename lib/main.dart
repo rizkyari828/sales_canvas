@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:cleaner/shared/shared.dart';
+import 'package:sales/shared/shared.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'app_binding.dart';
@@ -70,6 +70,7 @@ void main() async {
   }
   await initializeDateFormatting('id_ID', "").then((_) => runApp(App()));
   configLoading();
+  
 }
 
 class App extends StatelessWidget {
@@ -87,7 +88,7 @@ class App extends StatelessWidget {
       getPages: AppPages.routes,
       initialBinding: AppBinding(),
       smartManagement: SmartManagement.keepFactory,
-      title: 'SIGESIT',
+      title: 'SALES',
       theme: ThemeConfig.lightTheme,
       locale: TranslationService.locale,
       fallbackLocale: TranslationService.fallbackLocale,
@@ -171,11 +172,11 @@ void initFCM() async {
   //     if (message.data['type'] == 'cnc') {
   //       Get.toNamed(Routes.CN_C);
   //     } else if (message.data['type'] == 'izin') {
-  //       Get.toNamed(Routes.IZIN);
+  //       Get.toNamed(Routes.LEAVE);
   //     } else if (message.data['type'] == 'cuti') {
-  //       Get.toNamed(Routes.CUTI);
+  //       Get.toNamed(Routes.BENEFIT);
   //     } else if (message.data['type'] == 'overtime') {
-  //       Get.toNamed(Routes.LEMBUR);
+  //       Get.toNamed(Routes.PROSPEK);
   //     } else if (message.data['type'] == 'task') {
   //       Get.toNamed(Routes.HOME);
   //     } else {

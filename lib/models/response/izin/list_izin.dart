@@ -1,97 +1,87 @@
 // To parse this JSON data, do
 //
-//     final izinRespons = izinResponsFromJson(jsonString);
+//     final izinResponse = izinResponseFromJson(jsonString);
 
 import 'dart:convert';
 
-IzinResponse izinResponsFromJson(String str) => IzinResponse.fromJson(json.decode(str));
+IzinResponse izinResponseFromJson(String str) =>
+    IzinResponse.fromJson(json.decode(str));
 
-String izinResponsToJson(IzinResponse data) => json.encode(data.toJson());
+String izinResponseToJson(IzinResponse data) => json.encode(data.toJson());
 
 class IzinResponse {
-    IzinResponse({
-        this.error,
-        this.message,
-        this.data,
-    });
+  IzinResponse({
+    this.status,
+    this.message,
+    this.error,
+    this.data,
+  });
 
-    bool? error;
-    String? message;
-    List<DataIzin>? data;
+  String? status;
+  String? message;
+  bool? error;
+  List<DataIzin>? data;
 
-    factory IzinResponse.fromJson(Map<String, dynamic> json) => IzinResponse(
-        error: json["error"] == null ? null : json["error"],
+  factory IzinResponse.fromJson(Map<String, dynamic> json) => IzinResponse(
+        status: json["status"] == null ? null : json["status"],
         message: json["message"] == null ? null : json["message"],
-        data: json["data"] == null ? null : List<DataIzin>.from(json["data"].map((x) => DataIzin.fromJson(x))),
-    );
+        error: json["error"] == null ? null : json["error"],
+        data: json["Data"] == null
+            ? null
+            : List<DataIzin>.from(
+                json["Data"].map((x) => DataIzin.fromJson(x))),
+      );
 
-    Map<String, dynamic> toJson() => {
-        "error": error == null ? null : error,
+  Map<String, dynamic> toJson() => {
+        "status": status == null ? null : status,
         "message": message == null ? null : message,
-        "data": data == null ? null : List<dynamic>.from(data!.map((x) => x.toJson())),
-    };
+        "error": error == null ? null : error,
+        "Data": data == null
+            ? null
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
+      };
 }
 
 class DataIzin {
-    DataIzin({
-        this.id,
-        this.leaveTypeId,
-        this.code,
-        this.documents,
-        this.dateRequest,
-        this.dateStart,
-        this.dateEnd,
-        this.note,
-        this.noteApproval,
-        this.status,
-        this.statusLabel,
-        this.branchName,
-        this.leaveTypeName,
-    });
+  DataIzin({
+    this.id,
+    this.kodeIjin,
+    this.dateIn,
+    this.dateOut,
+    this.keterangan,
+    this.cDate,
+  });
 
-    int? id;
-    int? leaveTypeId;
-    String? code;
-    List<String>? documents;
-    DateTime? dateRequest;
-    DateTime? dateStart;
-    DateTime? dateEnd;
-    String? note;
-    String? noteApproval;
-    String? status;
-    String? statusLabel;
-    String? branchName;
-    String? leaveTypeName;
+  int? id;
+  String? kodeIjin;
+  DateTime? dateIn;
+  DateTime? dateOut;
+  DateTime? cDate;
+  String? keterangan;
 
-    factory DataIzin.fromJson(Map<String, dynamic> json) => DataIzin(
+  factory DataIzin.fromJson(Map<String, dynamic> json) => DataIzin(
         id: json["id"] == null ? null : json["id"],
-        leaveTypeId: json["leave_type_id"] == null ? null : json["leave_type_id"],
-        code: json["code"] == null ? null : json["code"],
-        documents: json["documents"] == null ? null : List<String>.from(json["documents"].map((x) => x)),
-        dateRequest: json["date_request"] == null ? null : DateTime.parse(json["date_request"]),
-        dateStart: json["date_start"] == null ? null : DateTime.parse(json["date_start"]),
-        dateEnd: json["date_end"] == null ? null : DateTime.parse(json["date_end"]),
-        note: json["note"] == null ? null : json["note"],
-        noteApproval: json["note_approval"] == null ? null : json["note_approval"],
-        status: json["status"] == null ? null : json["status"],
-        statusLabel: json["status_label"] == null ? null : json["status_label"],
-        branchName: json["branch_name"] == null ? null : json["branch_name"],
-        leaveTypeName: json["leave_type_name"] == null ? null : json["leave_type_name"],
-    );
+        kodeIjin: json["kode_ijin"] == null ? null : json["kode_ijin"],
+        dateIn:
+            json["date_in"] == null ? null : DateTime.parse(json["date_in"]),
+        dateOut:
+            json["date_out"] == null ? null : DateTime.parse(json["date_out"]),
+        cDate: json["c_date"] == null ? null : DateTime.parse(json["c_date"]),
+        keterangan: json["keterangan"] == null ? null : json["keterangan"],
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "id": id == null ? null : id,
-        "leave_type_id": leaveTypeId == null ? null : leaveTypeId,
-        "code": code == null ? null : code,
-        "documents": documents == null ? null : List<dynamic>.from(documents!.map((x) => x)),
-        "date_request": dateRequest == null ? null : dateRequest?.toIso8601String(),
-        "date_start": dateStart == null ? null : dateStart?.toIso8601String(),
-        "date_end": dateEnd == null ? null : dateEnd?.toIso8601String(),
-        "note": note == null ? null : note,
-        "note_approval": noteApproval == null ? null : noteApproval,
-        "status": status == null ? null : status,
-        "status_label": statusLabel == null ? null : statusLabel,
-        "branch_name": branchName == null ? null : branchName,
-        "leave_type_name": leaveTypeName == null ? null : leaveTypeName,
-    };
+        "kode_ijin": kodeIjin == null ? null : kodeIjin,
+        "date_in": dateIn == null
+            ? null
+            : "${dateIn?.year.toString().padLeft(4, '0')}-${dateIn?.month.toString().padLeft(2, '0')}-${dateIn?.day.toString().padLeft(2, '0')}",
+        "date_out": dateOut == null
+            ? null
+            : "${dateOut?.year.toString().padLeft(4, '0')}-${dateOut?.month.toString().padLeft(2, '0')}-${dateOut?.day.toString().padLeft(2, '0')}",
+        "c_date": cDate == null
+            ? null
+            : "${cDate?.year.toString().padLeft(4, '0')}-${cDate?.month.toString().padLeft(2, '0')}-${cDate?.day.toString().padLeft(2, '0')}",
+        "keterangan": keterangan == null ? null : keterangan,
+      };
 }

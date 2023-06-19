@@ -1,20 +1,22 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:cleaner/models/request/logout_request.dart';
-import 'package:cleaner/models/request/rate/submit_rate_request.dart';
-import 'package:cleaner/models/request/update_fcm_profile_request.dart';
-import 'package:cleaner/models/request/update_photo_profile_request.dart';
-import 'package:cleaner/models/response/rate/show_rate_review_response.dart';
+import 'package:sales/models/request/id_request.dart';
+import 'package:sales/models/request/rate/submit_rate_request.dart';
+import 'package:sales/models/request/update_fcm_profile_request.dart';
+import 'package:sales/models/request/update_photo_profile_request.dart';
+import 'package:sales/models/response/benefit/benefit_dashboard_response.dart';
+import 'package:sales/models/response/rate/show_rate_review_response.dart';
 import 'dart:io' as Io;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:cleaner/api/api.dart';
-import 'package:cleaner/models/response/user/users_response.dart';
-import 'package:cleaner/modules/home/home.dart';
-import 'package:cleaner/routes/app_pages.dart';
-import 'package:cleaner/shared/shared.dart';
+import 'package:sales/api/api.dart';
+import 'package:sales/models/response/reliver/list_reliver_response.dart';
+import 'package:sales/models/response/user/users_response.dart';
+import 'package:sales/modules/home/home.dart';
+import 'package:sales/routes/app_pages.dart';
+import 'package:sales/shared/shared.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -34,26 +36,39 @@ class HomeController extends GetxController {
   var currentTab = MainTabs.home.obs;
   var users = Rxn<UsersResponse>();
   var user = Rxn<Datum>();
+  var benefitDashboard = Rxn<DataBenefitDashboard>();
   List<Marker> markers = <Marker>[];
   Set<Circle> circles = <Circle>{};
+  var listEvent = <EventList>[].obs;
 
   late MainTab mainTab;
   late DiscoverTab discoverTab;
-  late TaskListTab taskListTab;
   late MeTab meTab;
   DateTime? selectedDate;
   RxString month =
       DateFormat("MMMM yyyy", "id_ID").format(DateTime.now()).toString().obs;
+  RxString previousMonth = DateFormat("MMMM yyyy", "id_ID")
+      .format(DateTime(
+          DateTime.now().year, DateTime.now().month - 1, DateTime.now().day))
+      .toString()
+      .obs;
+  String monthInt = DateFormat("MM", "id_ID").format(DateTime.now()).toString();
+  String previousMonthInt = DateFormat("MM", "id_ID")
+      .format(DateTime(
+          DateTime.now().year, DateTime.now().month - 1, DateTime.now().day))
+      .toString();
+  RxString dateNow =
+      DateFormat("dd MMMM yyyy", "id_ID").format(DateTime.now()).toString().obs;
 
   RxString name = "".obs;
-  RxString simId = "".obs;
+  RxString idPegawai = "".obs;
+  RxString userId = "".obs;
   RxString profilePhoto = "".obs;
-  RxString placement = "".obs;
-  RxString location = "".obs;
-  RxString building = "".obs;
-  RxString groupName = "".obs;
-  RxString groupId = "".obs;
+  RxString username = "".obs;
+  RxString token = "".obs;
   RxBool showRateDialog = false.obs;
+
+  ScrollController scrollController = ScrollController();
 
   var showRate = ShowReviewRateData().obs;
 
@@ -73,16 +88,19 @@ class HomeController extends GetxController {
 
   late BuildContext context;
 
+  double position = 0;
+
   @override
   void onInit() async {
     super.onInit();
-    getReviewRate();
+    // getReviewRate();
     mainTab = MainTab();
     loadUsers();
     discoverTab = DiscoverTab();
-    taskListTab = TaskListTab();
     meTab = MeTab();
     determinePosition();
+    getDataEvent(1);
+    getDataBenefit();
     // FirebaseMessaging messaging = FirebaseMessaging.instance;
 
     // messaging.getToken().then((value) {
@@ -92,22 +110,22 @@ class HomeController extends GetxController {
 
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
       if (message.data.containsKey('type')) {
-        if (message.data['type'] == 'cnc') {
-          Get.toNamed(Routes.CN_C);
-        } else if (message.data['type'] == 'izin') {
-          Get.toNamed(Routes.IZIN);
+        if (message.data['type'] == 'izin') {
+          Get.toNamed(Routes.LEAVE);
         } else if (message.data['type'] == 'cuti') {
-          Get.toNamed(Routes.CUTI);
+          Get.toNamed(Routes.BENEFIT);
         } else if (message.data['type'] == 'overtime') {
-          Get.toNamed(Routes.LEMBUR);
+          Get.toNamed(Routes.PROSPEK);
         } else if (message.data['type'] == 'task') {
           Get.toNamed(Routes.HOME);
           // getCurrentIndex(MainTabs.inbox);
-          if (groupId.value == '3' || groupId.value == '4') {
-            switchTab(1);
-          } else {
-            switchTab(2);
-          }
+          // if (groupId.value == '3' ||
+          //     groupId.value == '4' ||
+          //     groupId.value == '2') {
+          //   switchTab(1);
+          // } else {
+          //   switchTab(2);
+          // }
           // return 1;
         } else {
           Get.toNamed(Routes.HOME);
@@ -117,7 +135,7 @@ class HomeController extends GetxController {
   }
 
   void callDialog() {
-    WidgetsBinding.instance?.addPostFrameCallback((_) async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       await showDialog<String>(
           context: context,
           builder: (BuildContext context) => new RatingDialog(
@@ -157,15 +175,12 @@ class HomeController extends GetxController {
   loadUsers() async {
     var prefs = Get.find<SharedPreferences>();
     name.value = prefs.getString('name') ?? "";
-    simId.value = prefs.getString('simId') ?? "";
+    idPegawai.value = prefs.getString('idPegawai') ?? "";
+    userId.value = prefs.getString('userId') ?? "";
     profilePhoto.value = prefs.getString('profilePhoto') ?? "";
-    placement.value = prefs.getString('placement') ?? "";
-    location.value = prefs.getString('location') ?? "";
-    building.value = prefs.getString('building') ?? "";
-    groupName.value = prefs.getString('groupName') ?? "";
-    groupId.value = prefs.getString('groupId') ?? "";
-
-    // Get.defaultDialog(title: "Alert", content: _dialog);
+    username.value = prefs.getString('username') ?? "";
+    token.value = prefs.getString('token') ?? "";
+    userId.value = prefs.getString('userId') ?? "";
   }
 
   void signout() async {
@@ -174,32 +189,36 @@ class HomeController extends GetxController {
     var storage = Get.find<SharedPreferences>();
     try {
       if (storage.getString(StorageConstants.token) != null) {
-        final res = await apiRepository.logout(LogoutRequest(
-          username: storage.getString('simId'),
-        ));
-        if (res?.message == "Logout Success") {
-          storage.clear();
+        //   final res = await apiRepository.logout(LogoutRequest(
+        //     username: storage.getString('simId'),
+        //   ));
+        //   if (res?.message == "Logout Success") {
+        //     storage.clear();
 
-          // NavigatorHelper.popLastScreens(popCount: 1);
-          goToLoginPages();
-          EasyLoading.dismiss();
-        } else {
-          Get.snackbar(
-            "Error",
-            "Logout Failed",
-            icon: Icon(Icons.person, color: Colors.white),
-            snackPosition: SnackPosition.TOP,
-            backgroundColor: Colors.red,
-            borderRadius: 20,
-            margin: EdgeInsets.all(15),
-            colorText: Colors.white,
-            duration: Duration(seconds: 4),
-            isDismissible: true,
-            //dismissDirection: SnackDismissDirection.HORIZONTAL,
-            forwardAnimationCurve: Curves.easeOutBack,
-          );
-          EasyLoading.dismiss();
-        }
+        //     // NavigatorHelper.popLastScreens(popCount: 1);
+        //     goToLoginPages();
+        //     EasyLoading.dismiss();
+        //   } else {
+        //     Get.snackbar(
+        //       "Error",
+        //       "Logout Failed",
+        //       icon: Icon(Icons.person, color: Colors.white),
+        //       snackPosition: SnackPosition.TOP,
+        //       backgroundColor: Colors.red,
+        //       borderRadius: 20,
+        //       margin: EdgeInsets.all(15),
+        //       colorText: Colors.white,
+        //       duration: Duration(seconds: 4),
+        //       isDismissible: true,
+        //       //dismissDirection: SnackDismissDirection.HORIZONTAL,
+        //       forwardAnimationCurve: Curves.easeOutBack,
+        //     );
+        //     EasyLoading.dismiss();
+        //   }
+        storage.clear();
+        // NavigatorHelper.popLastScreens(popCount: 1);
+        goToLoginPages();
+        EasyLoading.dismiss();
       } else {
         storage.clear();
         // NavigatorHelper.popLastScreens(popCount: 1);
@@ -261,58 +280,28 @@ class HomeController extends GetxController {
   }
 
   int getCurrentIndex(MainTabs tab) {
-    if (groupId.value == '3' || groupId.value == '4') {
-      switch (tab) {
-        case MainTabs.home:
-          return 0;
-        case MainTabs.inbox:
-          return 1;
-        case MainTabs.me:
-          return 2;
-        default:
-          return 0;
-      }
-    } else {
-      switch (tab) {
-        case MainTabs.home:
-          return 0;
-        case MainTabs.discover:
-          return 1;
-        case MainTabs.inbox:
-          return 2;
-        case MainTabs.me:
-          return 3;
-        default:
-          return 0;
-      }
+    switch (tab) {
+      case MainTabs.home:
+        return 0;
+      case MainTabs.discover:
+        return 1;
+      case MainTabs.me:
+        return 2;
+      default:
+        return 0;
     }
   }
 
   MainTabs _getCurrentTab(int index) {
-    if (groupId.value == '3' || groupId.value == '4') {
-      switch (index) {
-        case 0:
-          return MainTabs.home;
-        case 1:
-          return MainTabs.inbox;
-        case 2:
-          return MainTabs.me;
-        default:
-          return MainTabs.home;
-      }
-    } else {
-      switch (index) {
-        case 0:
-          return MainTabs.home;
-        case 1:
-          return MainTabs.discover;
-        case 2:
-          return MainTabs.inbox;
-        case 3:
-          return MainTabs.me;
-        default:
-          return MainTabs.home;
-      }
+    switch (index) {
+      case 0:
+        return MainTabs.home;
+      case 1:
+        return MainTabs.discover;
+      case 2:
+        return MainTabs.me;
+      default:
+        return MainTabs.home;
     }
   }
 
@@ -403,11 +392,11 @@ class HomeController extends GetxController {
   void submitToken(token) async {
     final res = await apiRepository
         .updateFcmProfile(UpdateFcmProfileRequest(fcmToken: token));
-    if (res!.error == false) {
-      print('Token updated');
-    } else {
-      print('Token update failed');
-    }
+    // if (res!.error == false) {
+    //   print('Token updated');
+    // } else {
+    //   print('Token update failed');
+    // }
   }
 
   void getReviewRate() async {
@@ -467,40 +456,246 @@ class HomeController extends GetxController {
     Get.offAllNamed(Routes.SPLASH);
   }
 
-  void goToCnCPages() {
-    Get.toNamed(Routes.CN_C);
+  void goToLeavePages() {
+    Get.toNamed(Routes.LEAVE);
   }
 
-  void goToIzinPages() {
-    Get.toNamed(Routes.IZIN);
+  void goToLemburPages(String month, String type, String status,
+      {bool needBack = true}) {
+    if (needBack) {
+      Get.back();
+    }
+    Get.toNamed(Routes.PROSPEK,
+        arguments: {'month': month, 'type': type, 'status': status});
   }
 
-  void goToLemburPages() {
-    Get.toNamed(Routes.LEMBUR);
+  void goToBenefitPages() {
+    Get.toNamed(Routes.BENEFIT);
   }
 
-  void goToCutiPages() {
-    Get.toNamed(Routes.CUTI);
+  void goToInputPages() {
+    Get.toNamed(Routes.INPUT);
   }
 
-  void goToInformationPages() {
-    Get.toNamed(Routes.INFORMATION);
+  void goToProspekDialogPages() {
+    Get.bottomSheet(
+        Container(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(25.0),
+                child: Column(
+                  children: [
+                    CommonWidget.rowHeight(),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: CommonWidget.minHeadText(text: 'Detail Prospek'),
+                      ),
+                    ),
+                    CommonWidget.rowHeight(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        InkWell(
+                          onTap: () =>
+                              goToLemburPages(previousMonthInt, "old", ''),
+                          child: _monthMenu(
+                              monthText: 'Bulan Lalu',
+                              day: '${benefitDashboard.value?.jumlahBulanLalu}',
+                              month: previousMonth.value),
+                        ),
+                        InkWell(
+                          onTap: () => goToLemburPages(monthInt, "now", ''),
+                          child: _monthMenu(
+                              monthText: 'Bulan Ini',
+                              day: '${benefitDashboard.value?.jumlahBulanIni}',
+                              month: month.value),
+                        ),
+                      ],
+                    ),
+                    CommonWidget.rowHeight(),
+                    _statusTaskBar(),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        elevation: 20.0,
+        enableDrag: false,
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(30.0),
+          topRight: Radius.circular(30.0),
+        )));
+  }
+
+  Widget _monthMenu({monthText, day, month}) {
+    final sw = SizeConfig().screenWidth;
+    return Container(
+        width: sw / 2.5,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              blurRadius: 20.0,
+              spreadRadius: 4.0,
+              offset: Offset(
+                -10.0,
+                10.0,
+              ),
+            ),
+          ],
+        ),
+        child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Column(children: [
+              CommonWidget.bodyText(text: monthText),
+              CommonWidget.rowHeight(),
+              Container(
+                decoration: new BoxDecoration(
+                  color: Colors.green,
+                  shape: BoxShape.circle,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: CommonWidget.headText(text: day, color: Colors.white),
+                ),
+              ),
+              CommonWidget.rowHeight(height: 8.0),
+              CommonWidget.bodyText(text: month),
+              CommonWidget.rowHeight(),
+            ])));
+  }
+
+  Widget _statusTaskBar() {
+    return InkWell(
+      onTap: () => goToLemburPages(monthInt, "now", '3'),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              blurRadius: 20.0,
+              spreadRadius: 4.0,
+              offset: Offset(
+                -10.0,
+                10.0,
+              ),
+            ),
+          ],
+        ),
+        height: SizeConfig().screenHeight / 9,
+        width: SizeConfig().screenWidth,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CommonWidget.rowHeight(height: 8.0),
+            Padding(
+              padding: const EdgeInsets.only(left: 25.0),
+              child: CommonWidget.bodyText(text: 'Data Booking'),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 5.0),
+              child: ListTile(
+                leading: Container(
+                  decoration: new BoxDecoration(
+                    color: ColorConstants.mainColor,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.library_books_rounded,
+                      color: Colors.white,
+                      size: SizeConfig().screenWidth * .06,
+                    ),
+                  ),
+                ),
+                title: Row(
+                  children: [
+                    CommonWidget.headText(
+                        text: "${benefitDashboard.value?.jumlahBoking} ",
+                        color: ColorConstants.mainColor),
+                    CommonWidget.subtitleText(
+                        text: "Dari bulan kemarin", color: Colors.black87),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   void goToRecapPages() {
     Get.toNamed(Routes.RECAP);
   }
 
-  void goToReliverPages() {
-    Get.toNamed(Routes.RELIVER);
-  }
-
-  void goToListTadKorlapPages() {
-    Get.toNamed(Routes.TASK_LIST_TAD_KORLAP_LIST);
+  void goToEventPages() {
+    Get.toNamed(Routes.EVENT);
   }
 
   void goToNotificationPages() {
     Get.toNamed(Routes.NOTIFICATION);
+  }
+
+  void goToTaskListPages() {
+    Get.toNamed(Routes.HOME);
+    // getCurrentIndex(MainTabs.inbox);
+    // if (groupId.value == '3' || groupId.value == '4' || groupId.value == '2') {
+    //   switchTab(1);
+    // } else {
+    //   switchTab(2);
+    // }
+  }
+
+  void goToDetailEventPages({String id = ""}) {
+    Get.toNamed(Routes.DETAIL_EVENT, arguments: id);
+  }
+
+  // void jumpTo() {
+  //   print(position);
+  //   scrollController.jumpTo(position);
+  //   scrollController.animateTo(position,
+  //       duration: Duration(seconds: 3), curve: Curves.easeInOut);
+  //   // assert(_positions.isNotEmpty,
+  //   //     'ScrollController not attached to any scroll views.');
+  //   // for (final ScrollPosition position in List<ScrollPosition>.from(_positions))
+  //   //   position.jumpTo(value);
+  //   position = position + 1;
+  // }
+
+  // Future<void> animateTo(
+  //   double offset, {
+  //   required Duration duration,
+  //   required Curve curve,
+  // }) async {
+  //   assert(_positions.isNotEmpty,
+  //       'ScrollController not attached to any scroll views.');
+  //   await Future.wait<void>(<Future<void>>[
+  //     for (int i = 0; i < _positions.length; i += 1)
+  //       _positions[i].animateTo(offset, duration: duration, curve: curve),
+  //   ]);
+  // }
+
+  void getDataEvent(page) async {
+    final res = await apiRepository.listEvent(page: page);
+    listEvent.addAll(res?.data ?? []);
+  }
+
+  void getDataBenefit() async {
+    final res = await apiRepository
+        .listBenefitDashboard(IdRequest(id: userId.value, token: token.value));
+    benefitDashboard.value = res?.data!.first;
   }
 
   @override

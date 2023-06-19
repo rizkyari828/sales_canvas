@@ -1,6 +1,6 @@
-import 'package:cleaner/api/api_repository.dart';
-import 'package:cleaner/models/response/cuti/list_cuti.dart';
-import 'package:cleaner/routes/app_pages.dart';
+import 'package:sales/api/api_repository.dart';
+import 'package:sales/models/response/benefit/list_benefit.dart';
+import 'package:sales/routes/app_pages.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,7 +9,7 @@ class NotificationController extends GetxController {
   final ApiRepository apiRepository;
   NotificationController({required this.apiRepository});
 
-  var listCuti = <DataCuti>[].obs;
+  var listCuti = <ListBenefit>[].obs;
   RxString groupName = "".obs;
   RxString groupId = "".obs;
 
@@ -50,8 +50,8 @@ class NotificationController extends GetxController {
   }
 
   void getCuti(page) async {
-    final res = await apiRepository.listCuti(page: page);
-    listCuti.addAll(res?.data ?? []);
+    // final res = await apiRepository.listBenefit(page: page);
+    // listCuti.addAll(res?.data ?? []);
   }
 
   Future<void> onRefresh() async {

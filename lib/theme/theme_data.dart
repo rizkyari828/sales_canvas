@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:cleaner/shared/shared.dart';
+import 'package:sales/shared/shared.dart';
 
 class ThemeConfig {
   static ThemeData createTheme({
@@ -22,7 +22,6 @@ class ThemeConfig {
 
     return ThemeData(
       brightness: brightness,
-      buttonColor: buttonBackground,
       canvasColor: background,
       cardColor: background,
       dividerColor: divider,
@@ -38,7 +37,6 @@ class ThemeConfig {
       ),
       backgroundColor: background,
       primaryColor: accentColor,
-      accentColor: accentColor,
       // textSelectionColor: accentColor,
       // textSelectionHandleColor: accentColor,
       // cursorColor: accentColor,
@@ -49,17 +47,22 @@ class ThemeConfig {
       ),
       toggleableActiveColor: accentColor,
       appBarTheme: AppBarTheme(
-        brightness: brightness,
         color: cardBackground,
-        textTheme: TextTheme(
+        iconTheme: IconThemeData(
+          color: secondaryText,
+        ),
+        toolbarTextStyle: TextTheme(
           bodyText1: baseTextTheme.bodyText1!.copyWith(
             color: secondaryText,
             fontSize: 18,
           ),
-        ),
-        iconTheme: IconThemeData(
-          color: secondaryText,
-        ),
+        ).bodyText2,
+        titleTextStyle: TextTheme(
+          bodyText1: baseTextTheme.bodyText1!.copyWith(
+            color: secondaryText,
+            fontSize: 18,
+          ),
+        ).headline6,
       ),
       iconTheme: IconThemeData(
         color: secondaryText,
@@ -71,9 +74,7 @@ class ThemeConfig {
         colorScheme: ColorScheme(
           brightness: brightness,
           primary: accentColor,
-          primaryVariant: accentColor,
           secondary: accentColor,
-          secondaryVariant: accentColor,
           surface: background,
           background: background,
           error: error,
@@ -171,6 +172,7 @@ class ThemeConfig {
           fontWeight: FontWeight.w500,
         ),
       ),
+      colorScheme: ColorScheme.fromSwatch().copyWith(secondary: accentColor),
     );
   }
 

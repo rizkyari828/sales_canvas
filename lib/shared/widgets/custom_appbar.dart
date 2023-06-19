@@ -1,5 +1,5 @@
-import 'package:cleaner/shared/constants/colors.dart';
-import 'package:cleaner/shared/utils/size_config.dart';
+import 'package:sales/shared/constants/colors.dart';
+import 'package:sales/shared/utils/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

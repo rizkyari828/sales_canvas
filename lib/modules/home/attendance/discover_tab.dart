@@ -1,8 +1,8 @@
-import 'package:cleaner/modules/home/attendance/attendance_controller.dart';
-import 'package:cleaner/shared/constants/colors.dart';
-import 'package:cleaner/shared/utils/common_widget.dart';
-import 'package:cleaner/shared/utils/size_config.dart';
-import 'package:cleaner/shared/widgets/button.dart';
+import 'package:sales/modules/home/attendance/attendance_controller.dart';
+import 'package:sales/shared/constants/colors.dart';
+import 'package:sales/shared/utils/common_widget.dart';
+import 'package:sales/shared/utils/size_config.dart';
+import 'package:sales/shared/widgets/button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -22,10 +22,11 @@ class DiscoverTab extends GetView<AttendanceController> {
               myLocationEnabled: true,
               myLocationButtonEnabled: true,
               markers: Set<Marker>.of(controller.markers),
+              circles: controller.circles,
             )),
         floatingActionButton: Container(
             margin: EdgeInsets.only(left: sw * .08),
-            height: 200,
+            height: sh * .23,
             width: sw,
             // color: Colors.white,
             decoration: BoxDecoration(
@@ -68,30 +69,29 @@ class DiscoverTab extends GetView<AttendanceController> {
                           ),
                         ],
                       ),
-
-                      Row(
-                        children: [
-                          SizedBox(width: 25),
-                          Icon(Icons.alarm_rounded,
-                              size: 20, color: ColorConstants.mainColor),
-                          SizedBox(width: 5),
-                          CommonWidget.captionText(
-                            text:
-                                "Durasi Bekerja, " + controller.duration.value,
-                          ),
-                        ],
-                      ),
+                      // Row(
+                      //   children: [
+                      //     SizedBox(width: 25),
+                      //     Icon(Icons.alarm_rounded,
+                      //         size: 20, color: ColorConstants.mainColor),
+                      //     SizedBox(width: 5),
+                      //     CommonWidget.captionText(
+                      //       text:
+                      //           "Durasi Bekerja, " + controller.duration.value,
+                      //     ),
+                      //   ],
+                      // ),
                       // SizedBox(height: 5),
                       Padding(
-                        padding: const EdgeInsets.only(
-                            top: 8.0, right: 25, left: 25),
+                        padding: EdgeInsets.only(
+                            top: sw * .01, right: sw * .06, left: sw * .06),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Column(
                               children: [
                                 CommonWidget.subtitleText(
-                                  text: "Absen Masuk",
+                                  text: "Datang",
                                 ),
                                 SizedBox(height: 8),
                                 controller.timeIn.value == "--:--"
@@ -114,7 +114,9 @@ class DiscoverTab extends GetView<AttendanceController> {
                                                 DateFormat("HH:mm:ss", "id_ID")
                                                     .format(DateTime.now()),
                                             width: sw * .3,
-                                            onPressed: controller.submitIn);
+                                            onPressed: () =>
+                                                controller.attendanceSheetBar(
+                                                    'Clock In'));
                                       })
                                     : CommonWidget.bodyText(
                                         text: controller.timeIn.value,
@@ -122,10 +124,11 @@ class DiscoverTab extends GetView<AttendanceController> {
                                       ),
                               ],
                             ),
+                            SizedBox(width: sw * .04),
                             Column(
                               children: [
                                 CommonWidget.subtitleText(
-                                  text: "Absen Keluar",
+                                  text: "Pulang",
                                 ),
                                 SizedBox(height: 8),
                                 controller.timeOut.value == "--:--"
@@ -148,7 +151,9 @@ class DiscoverTab extends GetView<AttendanceController> {
                                                 DateFormat("HH:mm:ss", "id_ID")
                                                     .format(DateTime.now()),
                                             width: sw * .3,
-                                            onPressed: controller.submitOut);
+                                            onPressed: () =>
+                                                controller.attendanceSheetBar(
+                                                    'Clock Out'));
                                       })
                                     : CommonWidget.bodyText(
                                         text: controller.timeOut.value,
@@ -184,15 +189,16 @@ class DiscoverTab extends GetView<AttendanceController> {
                       //             ],
                       //           )),
                       //     )),
+                      // SizedBox(height: sw * .1),
                       Padding(
-                        padding: const EdgeInsets.only(
-                            top: 20.0, right: 25, left: 25),
+                        padding: EdgeInsets.only(
+                            top: sw * .04, right: sw * .06, left: sw * .06),
                         child: CustomButton(
                             borderColor: ColorConstants.mainColor,
                             buttonColor: Colors.white,
                             buttonTextColor: ColorConstants.mainColor,
                             height: sh * .04,
-                            buttonText: 'Riwayat Absen',
+                            buttonText: 'Riwayat Kedatangan',
                             width: sw,
                             onPressed: controller.goToRecapPages),
                       ),

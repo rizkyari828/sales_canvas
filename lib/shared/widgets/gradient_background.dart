@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cleaner/shared/shared.dart';
+import 'package:sales/shared/shared.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 
@@ -22,7 +22,7 @@ class GradientBackground extends StatelessWidget {
   Widget build(BuildContext context) {
     return needTopSafeArea
         ? Container(
-            color: Theme.of(context).colorScheme.primaryVariant,
+            color: Theme.of(context).colorScheme.primaryContainer,
             child: SafeArea(
               child: _buildBackground(context),
             ),
