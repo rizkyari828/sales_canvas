@@ -64,6 +64,9 @@ class ApiRepository {
           .timeout(Duration(seconds: timeout));
       if (res.statusCode == 200 || res.statusCode == 401) {
         return LoginRespons.fromJson(res.body);
+      } else {
+        EasyLoading.showError('Connection Timeout. Please try again later');
+        EasyLoading.dismiss();
       }
     } on TimeoutException catch (_) {
       EasyLoading.showError('Connection Timeout. Please try again later');

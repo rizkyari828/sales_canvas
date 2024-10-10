@@ -15,12 +15,13 @@ class MeTab extends GetView<HomeController> {
     return Scaffold(
       backgroundColor: ColorConstants.lightScaffoldBackgroundColor,
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.black87 //change your color here
-            ),
+        iconTheme:
+            IconThemeData(color: ColorConstants.black //change your color here
+                ),
         title: Text(
           'Profile',
           style: TextStyle(
-            color: Colors.black87,
+            color: ColorConstants.black,
             fontWeight: FontWeight.w600,
             fontSize: 20,
             fontFamily: 'Poppins',

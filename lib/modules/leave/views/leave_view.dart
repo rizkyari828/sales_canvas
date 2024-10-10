@@ -14,13 +14,13 @@ class LeaveView extends GetView<LeaveListController> {
     return Scaffold(
         appBar: AppBar(
           iconTheme:
-              IconThemeData(color: Colors.black87 //change your color here
+              IconThemeData(color: ColorConstants.black //change your color here
                   ),
           centerTitle: false,
           title: Text(
             'Info Leave',
             style: TextStyle(
-              color: Colors.black87,
+              color: ColorConstants.black,
               fontWeight: FontWeight.w600,
               fontSize: 20,
               fontFamily: 'Poppins',

@@ -20,13 +20,13 @@ class ProspekView extends GetView<ProspekController> {
     return Scaffold(
         appBar: AppBar(
           iconTheme:
-              IconThemeData(color: Colors.black87 //change your color here
+              IconThemeData(color: ColorConstants.black //change your color here
                   ),
           centerTitle: false,
           title: Text(
             'List Prospek',
             style: TextStyle(
-              color: Colors.black87,
+              color: ColorConstants.black,
               fontWeight: FontWeight.w600,
               fontSize: 20,
               fontFamily: 'Poppins',
@@ -88,7 +88,7 @@ class ProspekView extends GetView<ProspekController> {
                 children: [
                   CommonWidget.minHeadText(
                     text: controller.monthLabel.value,
-                    color: Colors.black87,
+                    color: ColorConstants.black,
                   ),
                   SizedBox(height: 20.0),
                   controller.type.value == "now"
@@ -130,7 +130,7 @@ class ProspekView extends GetView<ProspekController> {
                               children: [
                                 CommonWidget.minHeadText(
                                   text: controller.monthLabel.value,
-                                  color: Colors.black87,
+                                  color: ColorConstants.black,
                                 ),
                                 controller.type.value == "now"
                                     ? Column(

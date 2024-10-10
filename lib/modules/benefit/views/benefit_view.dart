@@ -14,7 +14,7 @@ class BenefitView extends GetView<BenefitController> {
     return Scaffold(
         appBar: AppBar(
           centerTitle: false,
-          iconTheme: IconThemeData(color: Colors.black87),
+          iconTheme: IconThemeData(color: ColorConstants.black),
           title: Obx(() => controller.isSearch.value
               ? Container(
                   width: double.infinity,
@@ -56,7 +56,7 @@ class BenefitView extends GetView<BenefitController> {
               : Text(
                   'Benefit',
                   style: TextStyle(
-                    color: Colors.black87,
+                    color: ColorConstants.black,
                     fontWeight: FontWeight.w600,
                     fontSize: 20,
                     fontFamily: 'Poppins',
@@ -124,7 +124,7 @@ class BenefitView extends GetView<BenefitController> {
                         SizedBox(height: 10.0),
                         CommonWidget.minHeadText(
                           text: controller.month.value,
-                          color: Colors.black87,
+                          color: ColorConstants.black,
                         ),
                       ],
                     ))

@@ -8,10 +8,10 @@ class ColorConstants {
   static Color tipColor = hexToColor('#B6B6B6');
   static Color lightGray = Color(0xFFF6F6F6);
   static Color darkGray = Color(0xFF9F9F9F);
-  static Color black = Color(0xFF000000);
+  static const Color black = Color(0xFF324958);
   static Color white = Color(0xFFFFFFFF);
 
-  static const Color mainColor = Color(0xFF263990);
+  static const Color mainColor = Color(0xFF434792);
   static const Color secondaryColor = Color(0xFF061367);
   static const Color disableButton = Color.fromRGBO(200, 200, 200, 1.0);
   static Color backgroundTextField = hexToColor('#EDF0F4');

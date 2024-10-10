@@ -44,7 +44,7 @@ class InputField extends StatelessWidget {
     return Card(
       color: ColorConstants.backgroundTextField,
       elevation: 0.1,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       child: TextFormField(
         decoration: InputDecoration(
           prefixIcon: prefixIcon,
@@ -169,16 +169,16 @@ class InputInputField extends StatelessWidget {
                 fontWeight: FontWeight.normal,
                 fontSize: 14,
                 letterSpacing: 0.5,
-                color: Colors.black87,
+                color: ColorConstants.black,
                 fontFamily: 'Poppins'),
             prefixStyle: TextStyle(
-                color: Colors.black87,
+                color: ColorConstants.black,
                 fontWeight: FontWeight.normal,
                 fontSize: 14,
                 letterSpacing: 0.5,
                 fontFamily: 'Poppins'),
             suffixStyle: TextStyle(
-                color: Colors.black87,
+                color: ColorConstants.black,
                 fontWeight: FontWeight.normal,
                 fontSize: 14,
                 letterSpacing: 0.5,
@@ -188,14 +188,14 @@ class InputInputField extends StatelessWidget {
             filled: true,
             fillColor: isDisabled ? Colors.grey[200] : Colors.white,
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15.0),
+              borderRadius: BorderRadius.circular(10.0),
               borderSide: BorderSide(
                 color: ColorConstants.mainColor,
               ),
             ),
             suffixIcon: _suffixIcon(),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15.0),
+              borderRadius: BorderRadius.circular(10.0),
               borderSide: BorderSide(
                 color: ColorConstants.mainColor,
               ),
@@ -227,7 +227,7 @@ class TextAreaField extends StatelessWidget {
         elevation: 0.1,
         color: isDisabled ? Colors.grey[200] : Colors.white,
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
+            borderRadius: BorderRadius.circular(10.0),
             side: BorderSide(color: ColorConstants.mainColor, width: 1)),
         child: Padding(
           padding: EdgeInsets.all(8.0),
@@ -235,7 +235,7 @@ class TextAreaField extends StatelessWidget {
             readOnly: isDisabled,
             enableInteractiveSelection: isDisabled,
             style: TextStyle(
-                color: Colors.black87,
+                color: ColorConstants.black,
                 fontWeight: FontWeight.normal,
                 fontSize: 14,
                 letterSpacing: 0.5,
@@ -245,7 +245,7 @@ class TextAreaField extends StatelessWidget {
             decoration: InputDecoration.collapsed(
               hintText: "Enter your text here",
               hintStyle: TextStyle(
-                  color: Colors.black87,
+                  color: ColorConstants.black,
                   fontWeight: FontWeight.normal,
                   fontSize: 14,
                   letterSpacing: 0.5,
@@ -287,16 +287,16 @@ class CustomDropDownSearch extends StatelessWidget {
               fontWeight: FontWeight.normal,
               fontSize: 14,
               letterSpacing: 0.5,
-              color: Colors.black87,
+              color: ColorConstants.black,
               fontFamily: 'Poppins'),
           prefixStyle: TextStyle(
-              color: Colors.black87,
+              color: ColorConstants.black,
               fontWeight: FontWeight.normal,
               fontSize: 14,
               letterSpacing: 0.5,
               fontFamily: 'Poppins'),
           suffixStyle: TextStyle(
-              color: Colors.black87,
+              color: ColorConstants.black,
               fontWeight: FontWeight.normal,
               fontSize: 14,
               letterSpacing: 0.5,
@@ -305,19 +305,19 @@ class CustomDropDownSearch extends StatelessWidget {
           filled: true,
           fillColor: enabled ? Colors.white : Colors.grey[200],
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15.0),
+            borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
               color: ColorConstants.mainColor,
             ),
           ),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15.0),
+            borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
               color: ColorConstants.mainColor,
             ),
           ),
           disabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15.0),
+            borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
               color: ColorConstants.mainColor,
             ),

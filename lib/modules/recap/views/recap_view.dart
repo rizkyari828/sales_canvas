@@ -15,12 +15,13 @@ class RecapView extends GetView<RecapController> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.black87 //change your color here
-            ),
+        iconTheme:
+            IconThemeData(color: ColorConstants.black //change your color here
+                ),
         title: Text(
           'Rekap',
           style: TextStyle(
-            color: Colors.black87,
+            color: ColorConstants.black,
             fontWeight: FontWeight.w600,
             fontSize: 20,
             fontFamily: 'Poppins',

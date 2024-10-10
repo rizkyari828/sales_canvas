@@ -12,15 +12,16 @@ class CommonWidget {
       bool actionIcon = false,
       VoidCallback? onPressedActionIcon}) {
     return AppBar(
-      iconTheme: IconThemeData(color: Colors.black87 //change your color here
-          ),
+      iconTheme:
+          IconThemeData(color: ColorConstants.black //change your color here
+              ),
       // toolbarHeight: 50,
       automaticallyImplyLeading: backIcon,
       centerTitle: centerTextAlign,
       title: Text(
         title,
         style: TextStyle(
-          color: Colors.black87,
+          color: ColorConstants.black,
           fontWeight: FontWeight.w600,
           fontSize: 20,
           fontFamily: 'Poppins',
@@ -48,9 +49,24 @@ class CommonWidget {
     return SizedBox(width: width);
   }
 
+  static Text bigText(
+      {String text = "",
+      Color color = ColorConstants.black,
+      TextAlign align: TextAlign.start}) {
+    return Text(
+      text,
+      textAlign: align,
+      style: TextStyle(
+          color: color,
+          fontWeight: FontWeight.w500,
+          fontSize: 33,
+          fontFamily: 'Poppins'),
+    );
+  }
+
   static Text headText(
       {String text = "",
-      Color color = Colors.black87,
+      Color color = ColorConstants.black,
       TextAlign align: TextAlign.start}) {
     return Text(
       text,
@@ -63,16 +79,18 @@ class CommonWidget {
     );
   }
 
-  static Text minHeadText(
-      {String text = "",
-      Color color = Colors.black87,
-      TextAlign align: TextAlign.start}) {
+  static Text minHeadText({
+    String text = "",
+    Color color = ColorConstants.black,
+    TextAlign align = TextAlign.start,
+    FontWeight fontWeight = FontWeight.w600,
+  }) {
     return Text(
       text,
       textAlign: align,
       style: TextStyle(
           color: color,
-          fontWeight: FontWeight.w600,
+          fontWeight: fontWeight,
           fontSize: 18,
           fontFamily: 'Poppins'),
     );
@@ -80,7 +98,7 @@ class CommonWidget {
 
   static Text subtitleText(
       {String text = "",
-      Color color = Colors.black87,
+      Color color = ColorConstants.black,
       FontWeight fontWeight = FontWeight.normal,
       textAlign: TextAlign.start}) {
     return Text(
@@ -97,7 +115,7 @@ class CommonWidget {
 
   static Text minSubtitleText(
       {String text = "",
-      Color color = Colors.black87,
+      Color color = ColorConstants.black,
       FontWeight fontWeight = FontWeight.normal}) {
     return Text(
       text,
@@ -110,19 +128,20 @@ class CommonWidget {
     );
   }
 
-  static Text bodyText({String text = "", Color color = Colors.black87}) {
+  static Text bodyText({String text = "", Color color = ColorConstants.black}) {
     return Text(
       text,
       style: TextStyle(
           color: color,
-          fontWeight: FontWeight.normal,
+          fontWeight: FontWeight.w600,
           fontSize: 14,
           letterSpacing: 0.5,
           fontFamily: 'Poppins'),
     );
   }
 
-  static Text captionText({String text = "", Color color = Colors.black87}) {
+  static Text captionText(
+      {String text = "", Color color = ColorConstants.black}) {
     return Text(
       text,
       style: TextStyle(
@@ -137,7 +156,7 @@ class CommonWidget {
   static Row labelExpanded(
       {String label = "",
       value = "",
-      Color color = Colors.black87,
+      Color color = ColorConstants.black,
       fontWeight2 = FontWeight.w600,
       fontSize = 14.0}) {
     return Row(
@@ -166,6 +185,32 @@ class CommonWidget {
     );
   }
 
+  static Row labelIconExpanded(
+      {Icon icon = const Icon(
+        Icons.person,
+        size: 30,
+        color: Colors.orangeAccent,
+      ),
+      text = "",
+      Color color = ColorConstants.black,
+      fontWeight2 = FontWeight.w600,
+      fontSize = 14.0,
+      isSubtitle = true}) {
+    return Row(
+      children: <Widget>[
+        icon,
+        SizedBox(
+          width: 10,
+        ),
+        Expanded(
+            child: isSubtitle
+                ? subtitleText(
+                    text: text, color: color, fontWeight: fontWeight2)
+                : captionText(text: text, color: color)),
+      ],
+    );
+  }
+
   static Row labelRowIcon({icon, widget}) {
     return Row(
       children: [
@@ -181,7 +226,7 @@ class CommonWidget {
   }
 
   static Row widgetExpanded(
-      {Widget? left, Widget? right, Color color = Colors.black87}) {
+      {Widget? left, Widget? right, Color color = ColorConstants.black}) {
     return Row(
       children: <Widget>[
         Expanded(

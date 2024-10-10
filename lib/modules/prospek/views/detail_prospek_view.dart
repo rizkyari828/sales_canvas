@@ -29,7 +29,7 @@ class ProspekDetailView extends GetView<ProspekDetailController> {
                 SizedBox(height: 20.0),
                 CommonWidget.bodyText(
                   text: 'Data Pribadi',
-                  color: Colors.black87,
+                  color: ColorConstants.black,
                 ),
                 SizedBox(height: 10.0),
                 InputInputField(
@@ -66,7 +66,7 @@ class ProspekDetailView extends GetView<ProspekDetailController> {
                 SizedBox(height: 20.0),
                 CommonWidget.bodyText(
                   text: 'Data Prospek',
-                  color: Colors.black87,
+                  color: ColorConstants.black,
                 ),
                 SizedBox(height: 20.0),
                 CustomDropDownSearch(

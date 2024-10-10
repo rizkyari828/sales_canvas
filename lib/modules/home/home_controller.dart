@@ -460,6 +460,10 @@ class HomeController extends GetxController {
     Get.toNamed(Routes.LEAVE);
   }
 
+  void goToStorePages() {
+    Get.toNamed(Routes.STORE);
+  }
+
   void goToLemburPages(String month, String type, String status,
       {bool needBack = true}) {
     if (needBack) {
@@ -502,15 +506,17 @@ class HomeController extends GetxController {
                           onTap: () =>
                               goToLemburPages(previousMonthInt, "old", ''),
                           child: _monthMenu(
-                              monthText: 'Bulan Lalu',
-                              day: '${benefitDashboard.value?.jumlahBulanLalu}',
+                              monthText: 'Bulan Lalu'.toUpperCase(),
+                              day:
+                                  '${benefitDashboard.value?.jumlahBulanLalu ?? '0'}',
                               month: previousMonth.value),
                         ),
                         InkWell(
                           onTap: () => goToLemburPages(monthInt, "now", ''),
                           child: _monthMenu(
-                              monthText: 'Bulan Ini',
-                              day: '${benefitDashboard.value?.jumlahBulanIni}',
+                              monthText: 'Bulan Ini'.toUpperCase(),
+                              day:
+                                  '${benefitDashboard.value?.jumlahBulanIni ?? '0'}',
                               month: month.value),
                         ),
                       ],
@@ -596,11 +602,12 @@ class HomeController extends GetxController {
         width: SizeConfig().screenWidth,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CommonWidget.rowHeight(height: 8.0),
             Padding(
               padding: const EdgeInsets.only(left: 25.0),
-              child: CommonWidget.bodyText(text: 'Data Booking'),
+              child: CommonWidget.bodyText(text: 'Data Booking'.toUpperCase()),
             ),
             Padding(
               padding: const EdgeInsets.only(left: 5.0),
@@ -622,10 +629,11 @@ class HomeController extends GetxController {
                 title: Row(
                   children: [
                     CommonWidget.headText(
-                        text: "${benefitDashboard.value?.jumlahBoking} ",
+                        text: "${benefitDashboard.value?.jumlahBoking ?? 0} ",
                         color: ColorConstants.mainColor),
                     CommonWidget.subtitleText(
-                        text: "Dari bulan kemarin", color: Colors.black87),
+                        text: "Dari bulan kemarin",
+                        color: ColorConstants.black),
                   ],
                 ),
               ),
@@ -646,6 +654,10 @@ class HomeController extends GetxController {
 
   void goToNotificationPages() {
     Get.toNamed(Routes.NOTIFICATION);
+  }
+
+  void goToKuisionerPages() {
+    Get.toNamed(Routes.KUISIONER);
   }
 
   void goToTaskListPages() {

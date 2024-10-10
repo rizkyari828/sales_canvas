@@ -5,6 +5,8 @@ import 'package:sales/modules/benefit/views/benefit_detail_view.dart';
 import 'package:sales/modules/benefit/views/benefit_view.dart';
 import 'package:sales/modules/input/bindings/input_binding.dart';
 import 'package:sales/modules/input/views/add_input_view.dart';
+import 'package:sales/modules/kuisioner/bindings/kuisioner_binding.dart';
+import 'package:sales/modules/kuisioner/views/add_kuisioner_view.dart';
 import 'package:sales/modules/leave/bindings/leave_binding.dart';
 import 'package:sales/modules/leave/views/add_leave_view.dart';
 import 'package:sales/modules/leave/views/detail_leave_view.dart';
@@ -13,6 +15,10 @@ import 'package:sales/modules/prospek/bindings/prospek_binding.dart';
 import 'package:sales/modules/prospek/views/add_prospek_view.dart';
 import 'package:sales/modules/prospek/views/detail_prospek_view.dart';
 import 'package:sales/modules/prospek/views/prospek_view.dart';
+import 'package:sales/modules/store/bindings/store_binding.dart';
+import 'package:sales/modules/store/views/add_store_view.dart';
+import 'package:sales/modules/store/views/detail_store_view.dart';
+import 'package:sales/modules/store/views/store_view.dart';
 
 import '../modules/notification/bindings/notification_binding.dart';
 import '../modules/notification/views/notification_view.dart';
@@ -137,6 +143,26 @@ class AppPages {
       name: Routes.INPUT,
       page: () => AddInputView(),
       binding: InputBinding(),
+    ),
+    GetPage(
+      name: Routes.STORE,
+      page: () => StoreView(),
+      binding: StoreBinding(),
+    ),
+    GetPage(
+      name: Routes.ADD_STORE,
+      page: () => AddStoreView(),
+      binding: StoreBinding(),
+    ),
+    GetPage(
+      name: Routes.DETAIL_STORE,
+      page: () => StoreDetailView(),
+      binding: StoreBinding(),
+    ),
+    GetPage(
+      name: Routes.KUISIONER,
+      page: () => AddKuisionerView(),
+      binding: KusionerBinding(),
     ),
   ];
 }

@@ -23,4 +23,8 @@ abstract class Routes {
   static const EVENT = '/event';
   static const DETAIL_EVENT = '/detail-event';
   static const NOTIFICATION = '/notification';
+  static const STORE = '/store';
+  static const ADD_STORE = '/add-store';
+  static const DETAIL_STORE = '/detail-store';
+  static const KUISIONER = '/add-kuisioner';
 }

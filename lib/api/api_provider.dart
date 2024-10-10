@@ -26,7 +26,6 @@ import 'package:get/get.dart';
 
 class ApiProvider extends BaseProvider {
   Future<Response> login(String path, LoginRequest data) {
-    // print(path);
     return post(path, data.toJson());
   }
 

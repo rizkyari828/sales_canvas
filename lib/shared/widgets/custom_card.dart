@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:sales/shared/shared.dart';
 
 class CustomCardView extends StatelessWidget {
@@ -392,6 +393,128 @@ class CustomExpandedImageCardView extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class CustomStockExpandedCardView extends StatelessWidget {
+  final String name;
+  final String type;
+  final String price;
+  final String stock;
+  final VoidCallback? onPressedAdd;
+  final VoidCallback? onPressedRemove;
+
+  CustomStockExpandedCardView({
+    this.name = '',
+    this.type = '',
+    this.price = '',
+    this.stock = '',
+    this.onPressedAdd,
+    this.onPressedRemove,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // final sw = SizeConfig().screenWidth;
+    final sh = SizeConfig().screenHeight;
+    return Container(
+      margin: const EdgeInsets.only(left: 15.0, right: 15.0, top: 15.0),
+      height: name == '' ? sh * .15 : sh * .16,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            blurRadius: 20.0,
+            spreadRadius: 4.0,
+            offset: Offset(
+              -10.0,
+              10.0,
+            ),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  name == ''
+                      ? SizedBox(height: 0)
+                      : Row(
+                          children: [
+                            stock != '0'
+                                ? Icon(
+                                    Icons.timelapse,
+                                    color: Colors.orange,
+                                    size: 20,
+                                  )
+                                : Icon(
+                                    Icons.check_circle_rounded,
+                                    color: Colors.green,
+                                    size: 20,
+                                  ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            CommonWidget.minHeadText(
+                                text: name,
+                                // fontWeight: FontWeight.bold,
+                                color: ColorConstants.mainColor),
+                          ],
+                        ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  CommonWidget.subtitleText(text: type),
+                  Row(
+                    children: [
+                      CommonWidget.subtitleText(text: 'Rp. '),
+                      CommonWidget.minHeadText(
+                          text: price,
+                          // fontWeight: FontWeight.bold,
+                          color: ColorConstants.mainColor),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Row(
+              children: [
+                IconButton(
+                  icon: Icon(
+                    Icons.remove_circle_rounded,
+                    color: Colors.red,
+                    size: 20,
+                  ),
+                  onPressed: onPressedRemove,
+                ),
+                Obx(() => Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        CommonWidget.subtitleText(text: 'Stok'),
+                        CommonWidget.bigText(
+                            text: stock, color: ColorConstants.mainColor),
+                      ],
+                    )),
+                IconButton(
+                  icon: Icon(Icons.add_circle_rounded,
+                      color: Colors.green, size: 20),
+                  onPressed: onPressedAdd,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
