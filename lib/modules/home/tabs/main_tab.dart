@@ -136,7 +136,7 @@ class MainTab extends GetView<HomeController> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     _cardMenu(Icons.store, "Store", controller.goToStorePages,
-                        Colors.redAccent),
+                        Colors.red),
                     CommonWidget.rowWidth(width: sw * .03),
                     _cardMenu(Icons.assignment, "Kuisioner",
                         controller.goToKuisionerPages, Colors.blueGrey),

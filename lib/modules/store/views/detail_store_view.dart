@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:sales/modules/store/controllers/store_detail_controller.dart';
 import 'package:sales/shared/shared.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +26,8 @@ class StoreDetailView extends GetView<StoreDetailController> {
                   buttonColor: Colors.white,
                   borderColor: ColorConstants.mainColor,
                   buttonTextColor: ColorConstants.mainColor,
+                  // isDisabled: !controller.canAbsent.value ||
+                  //         controller.isAbsentOut.value
                   isDisabled: controller.isAbsentOut.value ? true : false,
                   buttonText: controller.isAbsent.value
                       ? 'ABSEN KELUAR'
@@ -44,215 +44,204 @@ class StoreDetailView extends GetView<StoreDetailController> {
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(25.0),
-            child: controller.detail.value.kodeIjin == null
-                ? CircularProgressIndicator(
-                    backgroundColor: ColorConstants.mainColor,
-                  )
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // SizedBox(height: 10.0),
-                      !controller.isShowMaps.value && controller.isAbsent.value
-                          ? Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                InkWell(
-                                    onTap: () => controller.showMaps(),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.green,
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.grey.withOpacity(0.3),
-                                            blurRadius: 20.0,
-                                            spreadRadius: 4.0,
-                                            offset: Offset(
-                                              -10.0,
-                                              10.0,
-                                            ),
-                                          ),
-                                        ],
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // SizedBox(height: 10.0),
+                !controller.isShowMaps.value && controller.isAbsent.value
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          InkWell(
+                              onTap: () => controller.showMaps(),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.green,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.3),
+                                      blurRadius: 20.0,
+                                      spreadRadius: 4.0,
+                                      offset: Offset(
+                                        -10.0,
+                                        10.0,
                                       ),
-                                      height: sw * .12,
-                                      width: sw * .5,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(5.0),
-                                        child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Container(
-                                                  width: 40,
-                                                  height: 40,
-                                                  color: Colors.transparent,
-                                                  child: Image(
-                                                      image: AssetImage(
-                                                          'assets/icons/gm.png'))),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  CommonWidget.subtitleText(
-                                                      text: 'Klik',
-                                                      color:
-                                                          ColorConstants.white,
-                                                      fontWeight:
-                                                          FontWeight.w500),
-                                                  CommonWidget.captionText(
-                                                      text:
-                                                          'Untuk membuka Maps',
-                                                      color: Colors.white70),
-                                                ],
-                                              ),
-                                            ]),
-                                      ),
-                                    )),
-                                SizedBox(
-                                  height: 30,
-                                ),
-                                Row(
-                                  children: [
-                                    CommonWidget.subtitleText(text: 'Hai, '),
-                                    CommonWidget.minHeadText(
-                                        text: controller.name.value,
-                                        color: ColorConstants.mainColor,
-                                        fontWeight: FontWeight.w500),
+                                    ),
                                   ],
                                 ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                textIcon(
-                                    Icon(Icons.login_rounded,
-                                        color: ColorConstants.mainColor),
-                                    'Anda sudah absen masuk di jam ',
-                                    controller.absentTime.value),
-                                controller.isAbsentOut.value
-                                    ? textIcon(
-                                        Icon(Icons.logout_rounded,
-                                            color: ColorConstants.mainColor),
-                                        'Anda sudah absen keluar di jam ',
-                                        controller.absentTimeOut.value)
-                                    : SizedBox(
-                                        height: 0,
-                                      ),
-                                SizedBox(height: 20.0),
-                              ],
-                            )
-                          : Column(
-                              children: [
-                                Container(
-                                    width: sw,
-                                    height: sw * .8,
-                                    child: Stack(
+                                height: sw * .12,
+                                width: sw * .5,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          child: GoogleMap(
-                                            initialCameraPosition:
-                                                CameraPosition(
-                                                    target:
-                                                        controller.myLocation,
-                                                    zoom: 18.0),
-                                            mapType: MapType.terrain,
-                                            myLocationEnabled: true,
-                                            myLocationButtonEnabled: true,
-                                            markers: Set<Marker>.of(
-                                                controller.markers),
-                                            circles: controller.circles,
-                                          ),
+                                        Container(
+                                            width: 40,
+                                            height: 40,
+                                            color: Colors.transparent,
+                                            child: Image(
+                                                image: AssetImage(
+                                                    'assets/icons/gm.png'))),
+                                        SizedBox(
+                                          width: 10,
                                         ),
-                                        Positioned(
-                                          top: sw * .02,
-                                          left: sw * .02,
-                                          child: InkWell(
-                                            onTap: () => controller.hideMaps(),
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                    BorderRadius.circular(15.0),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.grey
-                                                        .withOpacity(0.3),
-                                                    blurRadius: 20.0,
-                                                    spreadRadius: 4.0,
-                                                    offset: Offset(
-                                                      -10.0,
-                                                      10.0,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              height: sw * .1,
-                                              width: sw * .1,
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Icon(Icons.close,
-                                                      color: Colors.redAccent,
-                                                      size: 30),
-                                                ],
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            CommonWidget.subtitleText(
+                                                text: 'Klik',
+                                                color: ColorConstants.white,
+                                                fontWeight: FontWeight.w500),
+                                            CommonWidget.captionText(
+                                                text: 'Untuk membuka Maps',
+                                                color: Colors.white70),
+                                          ],
+                                        ),
+                                      ]),
+                                ),
+                              )),
+                          SizedBox(
+                            height: 30,
+                          ),
+                          Row(
+                            children: [
+                              CommonWidget.subtitleText(text: 'Hai, '),
+                              CommonWidget.minHeadText(
+                                  text: controller.name.value,
+                                  color: ColorConstants.mainColor,
+                                  fontWeight: FontWeight.w500),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          textIcon(
+                              Icon(Icons.login_rounded,
+                                  color: ColorConstants.mainColor),
+                              'Anda sudah absen masuk di jam ',
+                              controller.absentTime.value),
+                          controller.isAbsentOut.value
+                              ? textIcon(
+                                  Icon(Icons.logout_rounded,
+                                      color: ColorConstants.mainColor),
+                                  'Anda sudah absen keluar di jam ',
+                                  controller.absentTimeOut.value)
+                              : SizedBox(
+                                  height: 0,
+                                ),
+                          SizedBox(height: 20.0),
+                        ],
+                      )
+                    : Column(
+                        children: [
+                          Container(
+                              width: sw,
+                              height: sw * .8,
+                              child: Stack(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: GoogleMap(
+                                      initialCameraPosition: CameraPosition(
+                                          target: controller.myLocation,
+                                          zoom: 18.0),
+                                      mapType: MapType.terrain,
+                                      myLocationEnabled: true,
+                                      myLocationButtonEnabled: true,
+                                      markers:
+                                          Set<Marker>.of(controller.markers),
+                                      circles: controller.circles,
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: sw * .02,
+                                    left: sw * .02,
+                                    child: InkWell(
+                                      onTap: () => controller.hideMaps(),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(15.0),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  Colors.grey.withOpacity(0.3),
+                                              blurRadius: 20.0,
+                                              spreadRadius: 4.0,
+                                              offset: Offset(
+                                                -10.0,
+                                                10.0,
                                               ),
                                             ),
-                                          ),
+                                          ],
                                         ),
-                                      ],
-                                    )),
-                                SizedBox(height: 30.0),
-                              ],
-                            ),
-                      CommonWidget.labelIconExpanded(
-                          color: Colors.redAccent,
-                          text: 'Toko Rakyat',
-                          fontWeight2: FontWeight.w500,
-                          icon: Icon(
-                            Icons.store,
-                            size: 30,
-                            color: Colors.redAccent,
-                          )),
-                      CommonWidget.labelIconExpanded(
-                          text: controller.locationDetail.value,
-                          icon: Icon(
-                            Icons.location_pin,
-                            size: 30,
-                            color: Colors.orangeAccent,
-                          ),
-                          isSubtitle: false),
-                      SizedBox(height: 30.0),
-                      _cardMenu(Icons.production_quantity_limits, "Product",
-                          controller.goToAddPages, Colors.white, Colors.teal),
-                      SizedBox(height: 10.0),
-                      _cardMenu(Icons.card_giftcard, "Promo",
-                          controller.goToAddPages, Colors.white, Colors.cyan),
-                      SizedBox(height: 10.0),
-                      _cardMenu(
-                          Icons.analytics,
-                          "Data Analytic",
-                          controller.goToAddPages,
-                          Colors.white,
-                          Colors.lightBlue),
-                      // SizedBox(height: 10.0),
-                      // _cardMenu(Icons.label, "Promo", {}, Colors.white,
-                      //     Colors.blueGrey),
-                      SizedBox(height: 50.0),
-                    ],
-                  ),
+                                        height: sw * .1,
+                                        width: sw * .1,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Icon(Icons.close,
+                                                color: Colors.redAccent,
+                                                size: 30),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )),
+                          SizedBox(height: 30.0),
+                        ],
+                      ),
+                CommonWidget.labelIconExpanded(
+                    color: Colors.green,
+                    text: controller.storeName.value,
+                    fontWeight2: FontWeight.w500,
+                    icon: Icon(
+                      Icons.store,
+                      size: 30,
+                      color: Colors.green,
+                    )),
+                CommonWidget.labelIconExpanded(
+                    text: controller.locationDetail.value,
+                    icon: Icon(
+                      Icons.location_pin,
+                      size: 30,
+                      color: Colors.orangeAccent,
+                    ),
+                    isSubtitle: false),
+                SizedBox(height: 30.0),
+                _cardMenu(Icons.production_quantity_limits, "Product",
+                    controller.goToAddPages, Colors.white, Colors.teal),
+                // SizedBox(height: 10.0),
+                // _cardMenu(Icons.card_giftcard, "Promo",
+                //     controller.goToAddPages, Colors.white, Colors.cyan),
+                // SizedBox(height: 10.0),
+                // _cardMenu(
+                //     Icons.analytics,
+                //     "Data Analytic",
+                //     controller.goToAddPages,
+                //     Colors.white,
+                //     Colors.lightBlue),
+                // SizedBox(height: 10.0),
+                // _cardMenu(Icons.label, "Promo", {}, Colors.white,
+                //     Colors.blueGrey),
+                SizedBox(height: 50.0),
+              ],
+            ),
           ),
         )));
   }

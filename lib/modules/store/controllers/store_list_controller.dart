@@ -1,5 +1,6 @@
 import 'package:sales/api/api_repository.dart';
 import 'package:sales/models/request/id_request.dart';
+import 'package:sales/models/request/user_id_request.dart';
 import 'package:sales/models/response/izin/list_izin.dart';
 import 'package:sales/models/response/store/list_store.dart';
 import 'package:sales/routes/app_pages.dart';
@@ -33,18 +34,6 @@ class StoreListController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    listStore.add(DataStore(
-        id: 3,
-        name: 'Toko Rakyat',
-        address: 'Jakarta Selatan',
-        type: 'Kelontongan'));
-    listStore.add(DataStore(
-        id: 3,
-        name: 'Toko Sejahtera',
-        address: 'Jakarta Utara',
-        type: 'Retail',
-        photo:
-            'https://media.istockphoto.com/id/1314210006/photo/grocery-store-shop-in-vintage-style-with-fruit-and-vegetables-crates-on-the-street.jpg?s=612x612&w=0&k=20&c=UFL3bRQkWH7dt6EMLswvM4u8-1sPQU9T5IFHXuBbClU='));
   }
 
   @override
@@ -68,9 +57,9 @@ class StoreListController extends GetxController {
   }
 
   void getStore(page) async {
-    // final res = await apiRepository.listIzin(
-    //     page: page, data: IdRequest(id: userId.value, token: token.value));
-    // listStore.addAll(res?.data ?? []);
+    final res = await apiRepository.listStore(
+        page: page, data: UserIdRequest(id: userId.value));
+    listStore.addAll(res?.data ?? []);
   }
 
   Future<void> onRefresh() async {
@@ -81,8 +70,9 @@ class StoreListController extends GetxController {
     refreshController.refreshCompleted();
   }
 
-  void goToDetailPages({String id = ""}) {
-    Get.toNamed(Routes.DETAIL_STORE, arguments: id);
+  void goToDetailPages({String id = "", String storeName = ''}) {
+    Get.toNamed(Routes.DETAIL_STORE,
+        arguments: {'id': id, 'storeName': storeName});
   }
 
   void goToAddPages() {

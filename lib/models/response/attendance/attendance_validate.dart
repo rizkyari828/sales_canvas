@@ -24,14 +24,14 @@ class AttendanceValidateResponse {
   factory AttendanceValidateResponse.fromJson(Map<String, dynamic> json) =>
       AttendanceValidateResponse(
         status: json["status"],
-        message: json["message"],
+        message: json["message"].toString(),
         data: List<ValidateData>.from(
             json["Data"].map((x) => ValidateData.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
-        "message": message,
+        "message": message.toString(),
         "Data": List<dynamic>.from(data!.map((x) => x.toJson())),
       };
 }
@@ -57,8 +57,9 @@ class ValidateData {
         absenIn: json["absen_in"] == null ? "" : json["absen_in"],
         absenOut: json["absen_out"] == null ? "" : json["absen_out"],
         jarak: json["jarak"] == null ? null : json["jarak"],
-        latitude: json["lat"] == null ? null : json["lat"],
-        longitude: json["long"] == null ? null : json["long"],
+        latitude: json["lat"] == null || json["lat"] == '' ? null : json["lat"],
+        longitude:
+            json["long"] == null || json["long"] == '' ? null : json["long"],
       );
 
   Map<String, dynamic> toJson() => {

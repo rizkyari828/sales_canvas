@@ -23,15 +23,15 @@ class ErrorResponse {
   // List<Data>? data;
 
   factory ErrorResponse.fromJson(Map<String, dynamic> json) => ErrorResponse(
-        status: json["status"],
-        message: json["message"],
+        status: json["status"].toString(),
+        message: json["message"].toString(),
         error: json["error"],
         // data: List<Data>.from(json["Data"].map((x) => Data.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
-        "status": status,
-        "message": message,
+        "status": status.toString(),
+        "message": message.toString(),
         "error": error
         // "Data": List<dynamic>.from(data!.map((x) => x.toJson())),
       };

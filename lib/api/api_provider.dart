@@ -20,9 +20,11 @@ import 'package:sales/models/request/overtime/update_approval_overtime_request.d
 import 'package:sales/models/request/rate/submit_rate_request.dart';
 import 'package:sales/models/request/reliver/approve_reliver_request.dart';
 import 'package:sales/models/request/reliver/create_reliver_request.dart';
+import 'package:sales/models/request/store/update_qty_request.dart';
 import 'package:sales/models/request/update_fcm_profile_request.dart';
 import 'package:sales/models/request/update_photo_profile_request.dart';
 import 'package:get/get.dart';
+import 'package:sales/models/request/user_id_request.dart';
 
 class ApiProvider extends BaseProvider {
   Future<Response> login(String path, LoginRequest data) {
@@ -51,6 +53,7 @@ class ApiProvider extends BaseProvider {
 
   Future<Response> submitAttendance(String path, AttendanceSubmitRequest data) {
     print(data.toFormData().fields);
+    print(data.toJson());
     return post(path, data.toFormData(), contentType: "multipart/form-data");
   }
 
@@ -227,6 +230,19 @@ class ApiProvider extends BaseProvider {
   }
 
   Future<Response> submitInput(String path, SubmitInputRequest data) {
+    print(data.toJson());
+    return post(path, data.toJson());
+  }
+
+  // Future<Response> getStore(String path, UserIdRequest data) {
+  //   return post(path, data.toJson());
+  // }
+
+  Future<Response> getStore(String path) {
+    return get(path);
+  }
+
+  Future<Response> submitQtyInput(String path, QtyUpdateRequest data) {
     print(data.toJson());
     return post(path, data.toJson());
   }

@@ -8,8 +8,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:sales/api/api_repository.dart';
-import 'package:sales/models/request/detail_request_leave.dart';
-import 'package:sales/models/request/izin/update_approval_request.dart';
+import 'package:sales/models/request/attendance/submit_attendance.dart';
+import 'package:sales/models/request/attendance/validate_attenance.dart';
 import 'package:sales/models/response/izin/show_izin.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -42,6 +42,9 @@ class StoreDetailController extends GetxController {
   RxString groupName = "".obs;
   RxString groupId = "".obs;
   RxString name = "".obs;
+  RxString userId = "".obs;
+  RxString token = "".obs;
+  RxString storeName = "".obs;
 
   late LatLng myLocation = LatLng(0, 0);
   var markers = <Marker>[].obs;
@@ -52,6 +55,7 @@ class StoreDetailController extends GetxController {
 
   RxBool isAbsent = false.obs;
   RxBool isAbsentOut = false.obs;
+  RxBool canAbsent = false.obs;
   RxString absentTime = '00:00'.obs;
   RxString absentTimeOut = '00:00'.obs;
   RxBool isShowMaps = true.obs;
@@ -83,19 +87,22 @@ class StoreDetailController extends GetxController {
     name.value = prefs.getString('name') ?? "";
     groupName.value = prefs.getString('groupName') ?? "";
     groupId.value = prefs.getString('groupId') ?? "";
+    userId.value = prefs.getString('userId') ?? "";
+    token.value = prefs.getString('token') ?? "";
   }
 
   @override
   void onInit() {
     super.onInit();
     determinePosition();
+    validateAttandance();
   }
 
   @override
   void onReady() {
     super.onReady();
-    getDetailIzin();
     loadUsers();
+    storeName.value = argm['storeName'];
   }
 
   @override
@@ -103,8 +110,62 @@ class StoreDetailController extends GetxController {
     super.onClose();
   }
 
+  Future<void> onRefresh() async {
+    isAbsent.value = false;
+    absentTime.value = '--:--';
+    isShowMaps.value = true;
+    isAbsentOut.value = false;
+    absentTimeOut.value = '--:--';
+    determinePosition();
+    validateAttandance();
+    loadUsers();
+  }
+
+  void validateAttandance() async {
+    try {
+      final res = await apiRepository.validateAttendance(
+          AttendanceValidateRequest(
+              idToko: argm['id'].toString(),
+              latitude: myLocation.latitude.toString(),
+              longitude: myLocation.longitude.toString(),
+              id: userId.value.toString(),
+              token: token.value.toString()));
+      print(res);
+
+      LatLng _myOffice = LatLng(
+          res?.data?.first.latitude ?? 0.0, res?.data?.first.longitude ?? 0.0);
+
+      circles.add(Circle(
+          circleId: CircleId('A1'),
+          center: _myOffice,
+          radius: 150,
+          fillColor: Colors.blueAccent.withOpacity(0.10),
+          strokeWidth: 3,
+          strokeColor: Colors.blueAccent.withOpacity(0.10)));
+
+      if (res?.data?.first.flag == "1") {
+        canAbsent.value = true;
+        if (res?.data?.first.absenIn != '') {
+          absentTime.value = res?.data?.first.absenIn.toString() ?? '';
+        }
+        if (res?.data?.first.absenOut != '') {
+          absentTimeOut.value = res?.data?.first.absenOut.toString() ?? '';
+        }
+      } else {
+        canAbsent.value = false;
+      }
+      EasyLoading.dismiss();
+    } catch (e) {
+      canAbsent.value = false;
+      EasyLoading.dismiss();
+    }
+  }
+
   void goToAddPages() {
-    Get.toNamed(Routes.ADD_STORE);
+    Get.toNamed(
+      Routes.ADD_STORE,
+      arguments: argm['id'].toString(),
+    );
   }
 
   void attendanceSheetBar(String type) {
@@ -222,55 +283,53 @@ class StoreDetailController extends GetxController {
   }
 
   void submitIn() async {
-    isAbsent.value = true;
-    absentTime.value = dateNow.value;
-    isShowMaps.value = false;
-    Get.back();
-    // final res = await apiRepository.submitAttendance(
-    //   AttendanceSubmitRequest(
-    //     latitude: myLocation.latitude.toString(),
-    //     longitude: myLocation.longitude.toString(),
-    //     idUser: userId.value,
-    //     token: token.value,
-    //     photo: MultipartFile(await imageFileList.first.readAsBytes(),
-    //         filename: imageFileList.first.name),
-    //   ),
-    // );
-    // if (res!.message == "berhasil absen masuk") {
-    //   EasyLoading.showSuccess('Berhasil Clock In');
-    //   var now = new DateTime.now();
-    //   timeIn.value = DateFormat("HH:mm:ss").format(now);
-    //   Get.back();
-    // } else {
-    //   EasyLoading.showError('Gagal Clock In');
-    // }
+    final res = await apiRepository.submitAttendanceStore(
+      AttendanceSubmitRequest(
+        idToko: argm['id'].toString(),
+        latitude: myLocation.latitude.toString(),
+        longitude: myLocation.longitude.toString(),
+        idUser: userId.value,
+        token: token.value,
+        photo: MultipartFile(await imageFileList.first.readAsBytes(),
+            filename: imageFileList.first.name),
+      ),
+    );
+    if (res!.message == "sukses") {
+      EasyLoading.showSuccess('Berhasil Clock In');
+      isAbsent.value = true;
+      absentTime.value = dateNow.value;
+      isShowMaps.value = false;
+      Get.back();
+    } else {
+      EasyLoading.showError('Gagal Clock In');
+    }
   }
 
   void submitOut() async {
-    isAbsentOut.value = true;
-    absentTimeOut.value = dateNow.value;
-    isShowMaps.value = false;
-    Get.back();
     // attendanceSheetBar();
-    // final res = await apiRepository.submitAttendanceOut(
-    //   AttendanceSubmitRequest(
-    //     latitude: myLocation.latitude.toString(),
-    //     longitude: myLocation.longitude.toString(),
-    //     idUser: userId.value,
-    //     token: token.value,
-    //     photo: MultipartFile(await imageFileList.first.readAsBytes(),
-    //         filename: imageFileList.first.name),
-    //   ),
-    // );
-    // print(res);
-    // if (res!.message == "berhasil absen keluar") {
-    //   EasyLoading.showSuccess('Berhasil Clock Out');
-    //   var now = new DateTime.now();
-    //   timeOut.value = DateFormat("HH:mm:ss").format(now);
-    //   Get.back();
-    // } else {
-    //   EasyLoading.showError('Gagal Clock Out');
-    // }
+    final res = await apiRepository.submitAttendanceOutStore(
+      AttendanceSubmitRequest(
+        idToko: argm['id'].toString(),
+        latitude: myLocation.latitude.toString(),
+        longitude: myLocation.longitude.toString(),
+        idUser: userId.value,
+        token: token.value,
+        photo: MultipartFile(
+          await imageFileList.first.readAsBytes(),
+          filename: imageFileList.first.name,
+        ),
+      ),
+    );
+    print(res);
+    if (res!.message == "sukses") {
+      EasyLoading.showSuccess('Berhasil Clock Out');
+      isAbsentOut.value = true;
+      absentTimeOut.value = dateNow.value;
+      isShowMaps.value = false;
+      Get.back();
+    } else {
+      EasyLoading.showError('Gagal Clock Out');
+    }
   }
 
   Future<void> onImageButtonPressed(ImageSource source,
@@ -390,11 +449,6 @@ class StoreDetailController extends GetxController {
 
     locationDetail.value =
         "${placemarks[2].street}, ${placemarks[2].subLocality}, ${placemarks[2].locality}, ${placemarks[2].administrativeArea}";
-    // print(placemarks);
-    // markers.add(Marker(
-    //     markerId: MarkerId('SomeId'),
-    //     position: LatLng(position.latitude, position.longitude),
-    //     infoWindow: InfoWindow(title: 'The title of the marker')));
 
     final prefs = Get.find<SharedPreferences>();
     if (prefs.getString('token') != null) {
@@ -403,37 +457,6 @@ class StoreDetailController extends GetxController {
     }
 
     EasyLoading.dismiss();
-  }
-
-  Future<void> onRefresh() async {
-    getDetailIzin();
-    // getItemCnC();
-    loadUsers();
-  }
-
-  void getDetailIzin() async {
-    final res =
-        await apiRepository.showIzin(ShowLeaveRequest(id: argm.toString()));
-    print(res!.data!);
-    detail.value = res.data!.first;
-  }
-
-  void approval({
-    action = "reject",
-  }) async {
-    final res = await apiRepository.updateApprovalIzin(
-        detail.value.id.toString(),
-        UpdateApprovalIzinRequest(
-          action: action,
-          noteApproval: noteApprovalController.text,
-        ));
-    // if (res!.error == false) {
-    //   EasyLoading.showSuccess('Berhasil disimpan');
-    //   getDetailIzin();
-    //   loadUsers();
-    // } else {
-    //   EasyLoading.showError('Gagal disimpan');
-    // }
   }
 
   selectDate(BuildContext context) async {
@@ -446,15 +469,4 @@ class StoreDetailController extends GetxController {
     if (selected != null && selected != selectedDate) selectedDate = selected;
     dateCnC.value = selectedDate.toString();
   }
-
-  void dateSubmit() {
-    dateCnC.value = dateCnCController.text;
-  }
-
-  void updateGoods({name}) {
-    // goods.removeWhere((e) => e.id == id);
-    // goods[goods.indexWhere((element) => element.name == name)] = singleGoods;
-  }
-
-  void deleteGoods({name}) {}
 }

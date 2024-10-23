@@ -204,8 +204,7 @@ class CommonWidget {
         ),
         Expanded(
             child: isSubtitle
-                ? subtitleText(
-                    text: text, color: color, fontWeight: fontWeight2)
+                ? minHeadText(text: text, color: color, fontWeight: fontWeight2)
                 : captionText(text: text, color: color)),
       ],
     );

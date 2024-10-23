@@ -72,8 +72,8 @@ class MeTab extends GetView<HomeController> {
                 changePhoto(context, controller);
               },
               child: Obx(() => Container(
-                    height: SizeConfig().screenWidth * 0.4,
-                    width: SizeConfig().screenWidth * 0.4,
+                    height: SizeConfig().screenWidth * 0.3,
+                    width: SizeConfig().screenWidth * 0.3,
                     child: _buildAvatar(),
                   )),
             ),
@@ -102,15 +102,55 @@ class MeTab extends GetView<HomeController> {
 
   Widget _buildAvatar() {
     return ClipOval(
-        // borderRadius: BorderRadius.circular(10.0),
-        child: CachedNetworkImage(
-      fit: BoxFit.fill,
-      imageUrl: controller.profilePhoto.value,
-      placeholder: (context, url) => Image(
-        image: AssetImage('assets/images/icon_success.png'),
-      ),
-      errorWidget: (context, url, error) => Icon(Icons.error),
-    ));
+      // borderRadius: BorderRadius.circular(10.0),
+      child: controller.profilePhoto.value.isNotEmpty
+          ? CachedNetworkImage(
+              fit: BoxFit.fill,
+              imageUrl: controller.profilePhoto.value,
+              placeholder: (context, url) => Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  color: ColorConstants.mainColor,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(3.0),
+                  child: Icon(
+                    Icons.person,
+                    color: Colors.white,
+                    size: 80,
+                  ),
+                ),
+              ),
+              errorWidget: (context, url, error) => Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  color: ColorConstants.mainColor,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(3.0),
+                  child: Icon(
+                    Icons.person,
+                    color: Colors.white,
+                    size: 80,
+                  ),
+                ),
+              ),
+            )
+          : Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                color: ColorConstants.mainColor,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(3.0),
+                child: Icon(
+                  Icons.person,
+                  color: Colors.white,
+                  size: 80,
+                ),
+              ),
+            ),
+    );
   }
 
   Widget _buildListData() {
@@ -121,10 +161,9 @@ class MeTab extends GetView<HomeController> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              listCard(Icons.add_circle_rounded, 'Username',
-                  controller.username.value),
+              listCard(Icons.person, 'Username', controller.username.value),
               SizedBox(height: 20),
-              listCard(Icons.person, 'Name', controller.name.value),
+              listCard(Icons.text_fields, 'Name', controller.name.value),
               SizedBox(height: 20),
               listCard(Icons.verified_user_rounded, 'ID',
                   controller.idPegawai.value),
@@ -164,6 +203,7 @@ class MeTab extends GetView<HomeController> {
           Icon(
             icon,
             color: ColorConstants.mainColor,
+            size: 25,
           ),
           SizedBox(
             width: 10,

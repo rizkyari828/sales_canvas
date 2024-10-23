@@ -20,8 +20,10 @@ import 'package:sales/models/request/overtime/update_approval_overtime_request.d
 import 'package:sales/models/request/rate/submit_rate_request.dart';
 import 'package:sales/models/request/reliver/approve_reliver_request.dart';
 import 'package:sales/models/request/reliver/create_reliver_request.dart';
+import 'package:sales/models/request/store/update_qty_request.dart';
 import 'package:sales/models/request/update_fcm_profile_request.dart';
 import 'package:sales/models/request/update_photo_profile_request.dart';
+import 'package:sales/models/request/user_id_request.dart';
 import 'package:sales/models/response/attendance/attendance_submit.dart';
 import 'package:sales/models/response/attendance/attendance_validate.dart';
 import 'package:sales/models/response/benefit/benefit_dashboard_response.dart';
@@ -42,6 +44,8 @@ import 'package:sales/models/response/rate/show_rate_review_response.dart';
 import 'package:sales/models/response/recap_history.dart';
 import 'package:sales/models/response/reliver/list_reliver_response.dart';
 import 'package:sales/models/response/reliver/show_reliver_response.dart';
+import 'package:sales/models/response/store/list_items.dart';
+import 'package:sales/models/response/store/list_store.dart';
 import 'package:sales/models/response/update_profile_response.dart';
 import 'package:sales/models/response/user/logout_response.dart';
 import 'package:sales/models/response/user/user_schedule.dart';
@@ -787,6 +791,114 @@ class ApiRepository {
           .timeout(Duration(seconds: timeout));
       if (res.statusCode == 200 || res.statusCode == 401) {
         return ErrorResponse.fromJson(res.body);
+      }
+    } on TimeoutException catch (_) {
+      EasyLoading.showError('Connection Timeout. Please try again later');
+      EasyLoading.dismiss();
+    } catch (exception) {
+      print(exception);
+    }
+    return null;
+  }
+
+  Future<AttendanceValidateResponse?> validateAttendanceStore(
+      AttendanceValidateRequest request) async {
+    final link = '/api/beforeAbsenKampas';
+    try {
+      final res = await apiProvider
+          .validateAttendance(link, request)
+          .timeout(Duration(seconds: timeout));
+      if (res.statusCode == 200 || res.statusCode == 401) {
+        return AttendanceValidateResponse.fromJson(res.body);
+      }
+    } on TimeoutException catch (_) {
+      EasyLoading.showError('Connection Timeout. Please try again later');
+      EasyLoading.dismiss();
+    } catch (exception) {
+      print(exception);
+    }
+    return null;
+  }
+
+  Future<AttendanceSubmitResponse?> submitAttendanceStore(
+      AttendanceSubmitRequest data) async {
+    try {
+      final res = await apiProvider
+          .submitAttendance('/api/chekInkampas', data)
+          .timeout(Duration(seconds: timeout));
+      if (res.statusCode == 200 || res.statusCode == 401) {
+        return AttendanceSubmitResponse.fromJson(res.body);
+      }
+    } on TimeoutException catch (_) {
+      EasyLoading.showError('Connection Timeout. Please try again later');
+      EasyLoading.dismiss();
+    } catch (exception) {
+      print(exception);
+    }
+    return null;
+  }
+
+  Future<AttendanceSubmitResponse?> submitAttendanceOutStore(
+      AttendanceSubmitRequest data) async {
+    try {
+      final res = await apiProvider
+          .submitAttendance('/api/chekOutkampas', data)
+          .timeout(Duration(seconds: timeout));
+      if (res.statusCode == 200 || res.statusCode == 401) {
+        return AttendanceSubmitResponse.fromJson(res.body);
+      }
+    } on TimeoutException catch (_) {
+      EasyLoading.showError('Connection Timeout. Please try again later');
+      EasyLoading.dismiss();
+    } catch (exception) {
+      print(exception);
+    }
+    return null;
+  }
+
+  Future<KanvasResponse?> listStore(
+      {int page = 1, int limit = 10, required UserIdRequest data}) async {
+    try {
+      final res = await apiProvider
+          .getStore('/api/ListKampas?user_id=' + data.id)
+          .timeout(Duration(seconds: timeout));
+      if (res.statusCode == 200 || res.statusCode == 401) {
+        return KanvasResponse.fromJson(res.body);
+      }
+    } on TimeoutException catch (_) {
+      EasyLoading.showError('Connection Timeout. Please try again later');
+      EasyLoading.dismiss();
+    } catch (exception) {
+      print(exception);
+    }
+    return null;
+  }
+
+  Future<ErrorResponse?> decreaseQtyItems(QtyUpdateRequest data) async {
+    try {
+      final res = await apiProvider
+          .submitQtyInput('/api/qtyKurang', data)
+          .timeout(Duration(seconds: timeout));
+      if (res.statusCode == 200 || res.statusCode == 401) {
+        return ErrorResponse.fromJson(res.body);
+      }
+    } on TimeoutException catch (_) {
+      EasyLoading.showError('Connection Timeout. Please try again later');
+      EasyLoading.dismiss();
+    } catch (exception) {
+      print(exception);
+    }
+    return null;
+  }
+
+  Future<ListItemsResponse?> listItems(
+      {int page = 1, int limit = 10, required UserIdRequest data}) async {
+    try {
+      final res = await apiProvider
+          .getStore('/api/ListBarangKanvas?user_id=' + data.id)
+          .timeout(Duration(seconds: timeout));
+      if (res.statusCode == 200 || res.statusCode == 401) {
+        return ListItemsResponse.fromJson(res.body);
       }
     } on TimeoutException catch (_) {
       EasyLoading.showError('Connection Timeout. Please try again later');

@@ -2,12 +2,8 @@ import 'package:sales/modules/store/controllers/store_list_controller.dart';
 import 'package:sales/shared/constants/constants.dart';
 import 'package:sales/shared/utils/common_widget.dart';
 import 'package:sales/shared/utils/size_config.dart';
-import 'package:sales/shared/widgets/approval.dart';
-import 'package:sales/shared/widgets/custom_card.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class StoreView extends GetView<StoreListController> {
@@ -47,13 +43,14 @@ class StoreView extends GetView<StoreListController> {
         itemBuilder: (context, i) => InkWell(
           onTap: () {
             controller.goToDetailPages(
-                id: controller.listStore[i].id.toString());
+                id: controller.listStore[i].tokoId.toString(),
+                storeName: controller.listStore[i].namaToko ?? '');
           },
           child: customStockExpandedCard(
-            name: controller.listStore[i].name ?? '',
-            photo: controller.listStore[i].photo ?? '',
-            type: controller.listStore[i].type ?? '',
-            address: controller.listStore[i].address ?? '',
+            name: controller.listStore[i].namaToko ?? '',
+            photo: controller.listStore[i].pathToko ?? '',
+            type: '',
+            address: controller.listStore[i].alamatToko ?? '',
           ),
         ),
       ),
@@ -103,10 +100,20 @@ class StoreView extends GetView<StoreListController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         photo == ''
-                            ? Icon(
-                                Icons.store_rounded,
-                                color: Colors.redAccent,
-                                size: 80,
+                            ? Container(
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10)),
+                                  color: Colors.red,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(3.0),
+                                  child: Icon(
+                                    Icons.store_rounded,
+                                    color: Colors.white,
+                                    size: 60,
+                                  ),
+                                ),
                               )
                             : Container(
                                 height: 80,
@@ -127,11 +134,11 @@ class StoreView extends GetView<StoreListController> {
                           width: 20,
                         ),
                         Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             CommonWidget.minHeadText(text: name),
-                            CommonWidget.subtitleText(text: type),
+                            // CommonWidget.subtitleText(text: type),
                             Row(
                               children: [
                                 CommonWidget.subtitleText(text: 'alamat : '),

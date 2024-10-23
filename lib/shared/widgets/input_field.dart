@@ -169,7 +169,7 @@ class InputInputField extends StatelessWidget {
                 fontWeight: FontWeight.normal,
                 fontSize: 14,
                 letterSpacing: 0.5,
-                color: ColorConstants.black,
+                color: const Color.fromARGB(255, 20, 22, 24),
                 fontFamily: 'Poppins'),
             prefixStyle: TextStyle(
                 color: ColorConstants.black,
@@ -186,7 +186,9 @@ class InputInputField extends StatelessWidget {
             labelText: labelText,
             hintText: placeholder,
             filled: true,
-            fillColor: isDisabled ? Colors.grey[200] : Colors.white,
+            fillColor: isDisabled
+                ? Colors.grey[200]
+                : ColorConstants.backgroundTextField,
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
               borderSide: BorderSide(
@@ -197,7 +199,7 @@ class InputInputField extends StatelessWidget {
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
               borderSide: BorderSide(
-                color: ColorConstants.mainColor,
+                color: Colors.grey[200] ?? Colors.grey,
               ),
             ),
           )),
