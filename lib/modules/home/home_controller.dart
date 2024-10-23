@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:sales/models/request/id_request.dart';
 import 'package:sales/models/request/rate/submit_rate_request.dart';
@@ -14,6 +15,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:sales/api/api.dart';
 import 'package:sales/models/response/reliver/list_reliver_response.dart';
 import 'package:sales/models/response/user/users_response.dart';
+import 'package:sales/modules/home/base_controller.dart';
 import 'package:sales/modules/home/home.dart';
 import 'package:sales/routes/app_pages.dart';
 import 'package:sales/shared/shared.dart';
@@ -25,8 +27,9 @@ import 'package:intl/intl.dart';
 import 'package:mime/mime.dart';
 import 'package:rating_dialog/rating_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
-class HomeController extends GetxController {
+class HomeController extends BaseController {
   final ApiRepository apiRepository;
   HomeController({required this.apiRepository});
 
@@ -67,6 +70,8 @@ class HomeController extends GetxController {
   RxString username = "".obs;
   RxString token = "".obs;
   RxBool showRateDialog = false.obs;
+  RxBool isConnectedToInternet = true.obs;
+  RxBool isConnectedToInternetWidget = false.obs;
 
   ScrollController scrollController = ScrollController();
 
@@ -107,6 +112,9 @@ class HomeController extends GetxController {
     //   print("token FCM Home ${value}");
     //   submitToken(value);
     // });
+    // Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+    //   _handleCheckConnectivity(result);
+    // });
 
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
       if (message.data.containsKey('type')) {
@@ -132,6 +140,24 @@ class HomeController extends GetxController {
         }
       }
     });
+  }
+
+  void _handleCheckConnectivity(ConnectivityResult result) async {
+    try {
+      if (result == ConnectivityResult.none) {
+        isConnectedToInternet.value = false;
+        isConnectedToInternetWidget.value = true;
+      } else {
+        final connection = await InternetAddress.lookup('google.com');
+        if (connection.isNotEmpty && connection[0].rawAddress.isNotEmpty) {
+          isConnectedToInternet.value = true;
+          isConnectedToInternetWidget.value = true;
+        }
+      }
+    } on SocketException catch (_) {
+      isConnectedToInternet.value = false;
+      isConnectedToInternetWidget.value = true;
+    }
   }
 
   void callDialog() {
@@ -462,6 +488,10 @@ class HomeController extends GetxController {
 
   void goToStorePages() {
     Get.toNamed(Routes.STORE);
+  }
+
+  void closeWidget() {
+    isConnectedToInternetWidget.value = false;
   }
 
   void goToLemburPages(String month, String type, String status,

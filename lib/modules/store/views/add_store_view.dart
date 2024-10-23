@@ -182,7 +182,7 @@ class AddStoreView extends GetView<StoreController> {
                             CommonWidget.minHeadText(
                                 text: price,
                                 // fontWeight: FontWeight.bold,
-                                color: ColorConstants.mainColor),
+                                color: Colors.deepOrange),
                           ],
                         ),
                       ],

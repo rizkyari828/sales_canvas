@@ -55,6 +55,7 @@ dependencies:
   rating_dialog: ^2.0.4
   carousel_slider: ^4.1.1
   geocoding: ^3.0.0
+  connectivity_plus: ^5.0.2
 
 dev_dependencies:
   flutter_launcher_icons: "^0.9.2"

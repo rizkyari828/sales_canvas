@@ -1,17 +1,11 @@
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sales/api/api_repository.dart';
-import 'package:sales/models/request/id_request.dart';
-import 'package:sales/models/request/izin/submit_izin_request.dart';
 import 'package:sales/models/request/store/update_qty_request.dart';
 import 'package:sales/models/request/user_id_request.dart';
-import 'package:sales/models/response/izin/type_izin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:sales/models/response/store/list_items.dart';
-import 'package:sales/models/response/store/list_product.dart';
 import 'package:sales/shared/utils/common_widget.dart';
 import 'package:sales/shared/widgets/button.dart';
 import 'package:sales/shared/widgets/input_field.dart';

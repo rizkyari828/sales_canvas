@@ -13,9 +13,16 @@ class MainTab extends GetView<HomeController> {
   Widget build(BuildContext context) {
     double scaleWidth = MediaQuery.of(context).size.width / 360;
     controller.context = context;
-    return Scaffold(
-      backgroundColor: ColorConstants.lightScaffoldBackgroundColor,
-      body: Obx(() => RefreshIndicator(
+    return Obx(
+      () => Scaffold(
+          floatingActionButton: controller.isConnectedToInternetWidget.value
+              ? Padding(
+                  padding: EdgeInsets.only(left: scaleWidth * 30),
+                  child: internetConnection(),
+                )
+              : SizedBox(),
+          backgroundColor: ColorConstants.lightScaffoldBackgroundColor,
+          body: RefreshIndicator(
             child: _buildGridView(scaleWidth, context),
             onRefresh: () => controller.onRefresh(),
           )),
@@ -51,59 +58,12 @@ class MainTab extends GetView<HomeController> {
           //   ),
           // ),
           // CommonWidget.rowHeight(),
+
           Container(
             margin: EdgeInsets.only(left: sw * .04, right: sw * .04, top: 0),
             child: Column(
               children: [
-                Container(
-                  margin: EdgeInsets.only(
-                    top: sh / 20,
-                    left: 10.0,
-                    right: 10.0,
-                  ),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage:
-                          NetworkImage(controller.profilePhoto.value),
-                    ),
-                    title: Text(
-                      controller.name.value,
-                      style: TextStyle(
-                        color: ColorConstants.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 25,
-                        fontFamily: 'Poppins',
-                      ),
-                    ),
-                    subtitle: CommonWidget.subtitleText(
-                        text: controller.idPegawai.value,
-                        color: ColorConstants.black),
-                    trailing: InkWell(
-                        onTap: controller.goToNotificationPages,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: ColorConstants.mainColor,
-                            borderRadius: BorderRadius.circular(10.0),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.3),
-                                blurRadius: 15.0,
-                                spreadRadius: 1.0,
-                                offset: Offset(
-                                  -10.0,
-                                  10.0,
-                                ),
-                              ),
-                            ],
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Icon(Icons.notifications,
-                                color: ColorConstants.white, size: 27),
-                          ),
-                        )),
-                  ),
-                ),
+                header(),
                 CommonWidget.rowHeight(),
                 Container(height: sh * .28, child: _getSlideImage(controller)),
                 // CommonWidget.rowHeight(height: sh * 0.03),
@@ -165,6 +125,230 @@ class MainTab extends GetView<HomeController> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget header() {
+    final sw = SizeConfig().screenWidth;
+    final sh = SizeConfig().screenHeight;
+
+    return Container(
+      margin: EdgeInsets.only(
+        top: sh / 20,
+        left: 10.0,
+        right: 10.0,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Row(
+          children: [
+            Expanded(
+              flex: 5,
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 10,
+                  ),
+                  CircleAvatar(
+                    backgroundImage:
+                        NetworkImage(controller.profilePhoto.value),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        controller.name.value,
+                        style: TextStyle(
+                          color: ColorConstants.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25,
+                          fontFamily: 'Poppins',
+                        ),
+                      ),
+                      CommonWidget.subtitleText(
+                          text: controller.idPegawai.value,
+                          color: ColorConstants.black),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Row(
+              children: [
+                InkWell(
+                    onTap: controller.goToNotificationPages,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: ColorConstants.mainColor,
+                        borderRadius: BorderRadius.circular(10.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.3),
+                            blurRadius: 15.0,
+                            spreadRadius: 1.0,
+                            offset: Offset(
+                              -10.0,
+                              10.0,
+                            ),
+                          ),
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(Icons.notifications,
+                            color: ColorConstants.white, size: 27),
+                      ),
+                    )),
+                SizedBox(
+                  width: 10,
+                ),
+                InkWell(
+                    onTap: controller.goToNotificationPages,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(10.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.3),
+                            blurRadius: 15.0,
+                            spreadRadius: 1.0,
+                            offset: Offset(
+                              -10.0,
+                              10.0,
+                            ),
+                          ),
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(Icons.sync,
+                            color: ColorConstants.white, size: 27),
+                      ),
+                    )),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget internetConnection() {
+    final sw = SizeConfig().screenWidth;
+    final sh = SizeConfig().screenHeight;
+    return Container(
+      width: sw,
+      height: sw * .18,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10.0),
+        border: Border.all(
+          color: Colors.grey[300] ?? ColorConstants.white, // Border color
+          width: 1, // Border width
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            blurRadius: 20.0,
+            spreadRadius: 4.0,
+            offset: Offset(
+              -10.0,
+              10.0,
+            ),
+          ),
+        ],
+      ),
+      margin: EdgeInsets.only(
+        top: sh / 20,
+        left: 10.0,
+        right: 10.0,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Row(
+          children: [
+            Expanded(
+              flex: 5,
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Container(
+                    width: 40, // Diameter lingkaran
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: controller.isConnectedToInternet.value == false
+                          ? Colors.grey[400]
+                          : Colors.green, // Warna latar lingkaran
+                      shape: BoxShape.circle, // Membuat bentuk lingkaran
+                    ),
+                    child: controller.isConnectedToInternet.value == false
+                        ? Icon(
+                            Icons.wifi_off,
+                            size: 25.0, // Ukuran ikon
+                            color: Colors.white, // Warna ikon
+                          )
+                        : Icon(
+                            Icons.wifi,
+                            size: 25.0, // Ukuran ikon
+                            color: Colors.white,
+                          ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      controller.isConnectedToInternet.value == false
+                          ? CommonWidget.subtitleText(
+                              text: "You're Offline Now",
+                              color: ColorConstants.black,
+                              fontWeight: FontWeight.bold)
+                          : CommonWidget.subtitleText(
+                              text: "You're Online Now",
+                              color: ColorConstants.black,
+                              fontWeight: FontWeight.bold),
+                      controller.isConnectedToInternet.value == false
+                          ? CommonWidget.subtitleText(
+                              text: "Oops! Internet is Disconnected",
+                              color: ColorConstants.black)
+                          : CommonWidget.subtitleText(
+                              text: "Hurray! Internet is Connected",
+                              color: ColorConstants.black),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            InkWell(
+              onTap: () => controller.closeWidget(),
+              child: Expanded(
+                flex: 1,
+                child: Container(
+                    width: 30, // Diameter lingkaran
+                    height: 30,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[400],
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.close,
+                      size: 20.0, // Ukuran ikon
+                      color: Colors.white, // Warna ikon
+                    )),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
