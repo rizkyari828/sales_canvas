@@ -29,17 +29,33 @@ class AddKuisionerView extends GetView<KusionerController> {
                   InputInputField(
                     keyboardType: TextInputType.text,
                     controller: controller.nipAdira,
-                    labelText: "Pertanyaan 1",
+                    labelText: "Nama",
                   ),
                   InputInputField(
                     keyboardType: TextInputType.text,
                     controller: controller.nipAdira,
-                    labelText: "Pertanyaan 2",
+                    labelText: "No Telepon",
                   ),
                   InputInputField(
                     keyboardType: TextInputType.text,
                     controller: controller.nipAdira,
-                    labelText: "Pertanyaan 3",
+                    labelText: "Alamat",
+                  ),
+                  InputInputField(
+                    keyboardType: TextInputType.text,
+                    controller: controller.nipAdira,
+                    labelText: "Seberapa sering Anda menggunakan produk kami?",
+                  ),
+                  InputInputField(
+                    keyboardType: TextInputType.text,
+                    controller: controller.nipAdira,
+                    labelText: "Seberapa mudah Anda menggunakan produk kami?",
+                  ),
+                  InputInputField(
+                    keyboardType: TextInputType.text,
+                    controller: controller.nipAdira,
+                    labelText:
+                        "Seberapa besar kemungkinan Anda merekomendasikan produk ini kepada orang lain?",
                   ),
                   SizedBox(height: 30.0),
                   CustomButton(

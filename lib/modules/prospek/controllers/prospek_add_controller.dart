@@ -51,17 +51,16 @@ class ProspekAddController extends GetxController {
   void submitProspek() async {
     final res = await apiRepository.submitOvertime(
       SubmitOvertimeRequest(
-        userId: int.parse(userId.value),
-        name: nickname.text,
-        sourceId: idSource.value,
-        token: token.value,
-        latitude: latitude.value.toString(),
-        longitude: longitude.value.toString(),
-        note: noteController.text
-      ),
+          userId: int.parse(userId.value),
+          name: nickname.text,
+          sourceId: idSource.value,
+          token: token.value,
+          latitude: latitude.value.toString(),
+          longitude: longitude.value.toString(),
+          note: noteController.text),
     );
 
-    if (res!.error == false) {
+    if (res?.error == false) {
       EasyLoading.showSuccess('Berhasil disimpan');
       Get.back();
     } else {

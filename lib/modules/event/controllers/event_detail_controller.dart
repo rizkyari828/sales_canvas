@@ -70,7 +70,7 @@ class ReliverDetailController extends GetxController {
           dateStartWorkEmployee: dateStartWorkController.text,
           noteApproval: noteApprovalController.text,
         ));
-    // if (res!.error == false) {
+    // if (res?.error == false) {
     //   EasyLoading.showSuccess('Berhasil disimpan');
     //   getDetail();
     //   loadUsers();

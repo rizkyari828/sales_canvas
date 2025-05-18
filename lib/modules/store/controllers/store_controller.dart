@@ -1,3 +1,4 @@
+import 'package:get_storage/get_storage.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sales/api/api_repository.dart';
 import 'package:sales/models/request/store/update_qty_request.dart';
@@ -6,12 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:sales/models/response/store/list_items.dart';
+import 'package:sales/modules/home/base_controller.dart';
 import 'package:sales/shared/utils/common_widget.dart';
 import 'package:sales/shared/widgets/button.dart';
 import 'package:sales/shared/widgets/input_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class StoreController extends GetxController {
+class StoreController extends BaseController {
   final ApiRepository apiRepository;
   StoreController({required this.apiRepository});
 
@@ -30,6 +32,7 @@ class StoreController extends GetxController {
   RxInt page = 1.obs;
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
+  final box = GetStorage();
 
   void getItems(page) async {
     final res = await apiRepository.listItems(
@@ -46,26 +49,53 @@ class StoreController extends GetxController {
   }
 
   void onLoading() async {
-    page.value = page.value + 1;
+    // page.value = page.value + 1;
 
-    // monitor network fetch
-    await Future.delayed(Duration(milliseconds: 1000));
-    getItems(page.value);
-    refreshController.loadComplete();
+    // // monitor network fetch
+    // await Future.delayed(Duration(milliseconds: 1000));
+    // getItems(page.value);
+    // refreshController.loadComplete();
   }
 
   void submitData(String idBarang, String qty) async {
+    if (!isConnectedToInternet.value) {
+      box.write(
+        'barang',
+        QtyUpdateRequest(
+            userId: idUser.value, barangId: idBarang, tokoId: argm, qty: qty),
+      );
+
+      print(box.read('barang'));
+    }
+
     final res = await apiRepository.decreaseQtyItems(
       QtyUpdateRequest(
           userId: idUser.value, barangId: idBarang, tokoId: argm, qty: qty),
     );
-    if (res!.error == false) {
+
+    if (res?.error == false) {
       EasyLoading.showSuccess('Berhasil disimpan');
       EasyLoading.dismiss();
       Get.back();
     } else {
-      EasyLoading.showError('Gagal disimpan');
+      // Get.back();
+      // Get.defaultDialog(
+      //     title: "DATA GAGAL DIKIRIM",
+      //     content: CommonWidget.subtitleText(
+      //         text: "Gagal dikirim namun tersimpan di local memory",
+      //         textAlign: TextAlign.center),
+      //     textConfirm: 'OK',
+      //     textCancel: 'CANCLE',
+      //     onConfirm: () {
+      //       Get.back();
+      //       // Get.toNamed(Routes.STORE);
+      //     },
+      //     onCancel: () {
+      //       Get.back();
+      //     });
+      EasyLoading.showError('Gagal dikirim namun tersimpan di local memory');
       EasyLoading.dismiss();
+      Get.back();
     }
   }
 
@@ -74,21 +104,6 @@ class StoreController extends GetxController {
     super.onInit();
     loadUsers();
     getItems(page.value);
-    // listProduct.add(DataProduct(
-    //   id: 3,
-    //   name: 'IPhone 15 Pro Max',
-    //   stock: 50,
-    //   price: 20000000,
-    //   type: 'Smart Phone',
-    // ));
-    // listProduct.add(DataProduct(
-    //     id: 3,
-    //     name: 'Samsung S24',
-    //     stock: 0,
-    //     price: 21000000,
-    //     type: 'Smart Phone',
-    //     photo:
-    //         'https://cdsassets.apple.com/live/7WUAS350/images/iphone/fall-2023-iphone-colors-iphone-15-pro-max.png'));
   }
 
   @override

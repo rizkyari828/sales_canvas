@@ -13,6 +13,7 @@ import 'theme/theme.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'firebase_options.dart';
+import 'package:get_storage/get_storage.dart';
 
 Future<void> _messageHandler(RemoteMessage message) async {
   print('background message ${message.notification!.body}');
@@ -29,6 +30,7 @@ void main() async {
   await DenpendencyInjection.init();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging.onBackgroundMessage(_messageHandler);
+  
   // await Firebase.initializeApp(
   //   options: const FirebaseOptions(
   //     apiKey: 'AIzaSyAHAsf51D0A407EklG1bs-5wA7EbyfNFg0',
@@ -68,6 +70,7 @@ void main() async {
       sound: true,
     );
   }
+  GetStorage.init();
   await initializeDateFormatting('id_ID', "").then((_) => runApp(App()));
   configLoading();
   

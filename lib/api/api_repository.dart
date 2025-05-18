@@ -58,7 +58,7 @@ class ApiRepository {
   ApiRepository({required this.apiProvider});
 
   final ApiProvider apiProvider;
-  final int timeout = 60;
+  final int timeout = 10;
 
   Future<LoginRespons?> login(
       String username, String password, LoginRequest data) async {

@@ -18,7 +18,7 @@ class MainTab extends GetView<HomeController> {
           floatingActionButton: controller.isConnectedToInternetWidget.value
               ? Padding(
                   padding: EdgeInsets.only(left: scaleWidth * 30),
-                  child: internetConnection(),
+                  child: controller.internetConnection(),
                 )
               : SizedBox(),
           backgroundColor: ColorConstants.lightScaffoldBackgroundColor,
@@ -35,30 +35,6 @@ class MainTab extends GetView<HomeController> {
     return SingleChildScrollView(
       child: Stack(
         children: [
-          // Container(
-          //   width: sw,
-          //   height: sh,
-          //   decoration: BoxDecoration(
-          //     // borderRadius: BorderRadius.only(
-          //     //   topRight: Radius.circular(20),
-          //     //   topLeft: Radius.circular(20),
-          //     // ),
-          //     boxShadow: [
-          //       BoxShadow(
-          //         color: Colors.grey.withOpacity(0.3),
-          //         blurRadius: 20.0,
-          //         spreadRadius: 4.0,
-          //         offset: Offset(
-          //           -10.0,
-          //           10.0,
-          //         ),
-          //       ),
-          //     ],
-          //     color: ColorConstants.lightScaffoldBackgroundColor,
-          //   ),
-          // ),
-          // CommonWidget.rowHeight(),
-
           Container(
             margin: EdgeInsets.only(left: sw * .04, right: sw * .04, top: 0),
             child: Column(
@@ -208,10 +184,12 @@ class MainTab extends GetView<HomeController> {
                   width: 10,
                 ),
                 InkWell(
-                    onTap: controller.goToNotificationPages,
+                    onTap: controller.dialogConfirmation,
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.green,
+                        color: controller.isConnectedToInternet.value
+                            ? Colors.green
+                            : Colors.grey,
                         borderRadius: BorderRadius.circular(10.0),
                         boxShadow: [
                           BoxShadow(
@@ -232,120 +210,6 @@ class MainTab extends GetView<HomeController> {
                       ),
                     )),
               ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget internetConnection() {
-    final sw = SizeConfig().screenWidth;
-    final sh = SizeConfig().screenHeight;
-    return Container(
-      width: sw,
-      height: sw * .18,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10.0),
-        border: Border.all(
-          color: Colors.grey[300] ?? ColorConstants.white, // Border color
-          width: 1, // Border width
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
-            blurRadius: 20.0,
-            spreadRadius: 4.0,
-            offset: Offset(
-              -10.0,
-              10.0,
-            ),
-          ),
-        ],
-      ),
-      margin: EdgeInsets.only(
-        top: sh / 20,
-        left: 10.0,
-        right: 10.0,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Row(
-          children: [
-            Expanded(
-              flex: 5,
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Container(
-                    width: 40, // Diameter lingkaran
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: controller.isConnectedToInternet.value == false
-                          ? Colors.grey[400]
-                          : Colors.green, // Warna latar lingkaran
-                      shape: BoxShape.circle, // Membuat bentuk lingkaran
-                    ),
-                    child: controller.isConnectedToInternet.value == false
-                        ? Icon(
-                            Icons.wifi_off,
-                            size: 25.0, // Ukuran ikon
-                            color: Colors.white, // Warna ikon
-                          )
-                        : Icon(
-                            Icons.wifi,
-                            size: 25.0, // Ukuran ikon
-                            color: Colors.white,
-                          ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      controller.isConnectedToInternet.value == false
-                          ? CommonWidget.subtitleText(
-                              text: "You're Offline Now",
-                              color: ColorConstants.black,
-                              fontWeight: FontWeight.bold)
-                          : CommonWidget.subtitleText(
-                              text: "You're Online Now",
-                              color: ColorConstants.black,
-                              fontWeight: FontWeight.bold),
-                      controller.isConnectedToInternet.value == false
-                          ? CommonWidget.subtitleText(
-                              text: "Oops! Internet is Disconnected",
-                              color: ColorConstants.black)
-                          : CommonWidget.subtitleText(
-                              text: "Hurray! Internet is Connected",
-                              color: ColorConstants.black),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            InkWell(
-              onTap: () => controller.closeWidget(),
-              child: Expanded(
-                flex: 1,
-                child: Container(
-                    width: 30, // Diameter lingkaran
-                    height: 30,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[400],
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.close,
-                      size: 20.0, // Ukuran ikon
-                      color: Colors.white, // Warna ikon
-                    )),
-              ),
             ),
           ],
         ),

@@ -27,4 +27,5 @@ abstract class Routes {
   static const ADD_STORE = '/add-store';
   static const DETAIL_STORE = '/detail-store';
   static const KUISIONER = '/add-kuisioner';
+  static const RESULT_KUNJUNGAN = '/result-kunjungan';
 }

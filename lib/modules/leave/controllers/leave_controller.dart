@@ -100,7 +100,7 @@ class LeaveController extends GetxController {
           leaveTypeId: idType.value,
           token: token.value),
     );
-    if (res!.error == false) {
+    if (res?.error == false) {
       EasyLoading.showSuccess('Berhasil disimpan');
       EasyLoading.dismiss();
       Get.back();

@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
+import 'package:get_storage/get_storage.dart';
 import 'package:sales/models/request/id_request.dart';
 import 'package:sales/models/request/rate/submit_rate_request.dart';
+import 'package:sales/models/request/store/update_qty_request.dart';
 import 'package:sales/models/request/update_fcm_profile_request.dart';
 import 'package:sales/models/request/update_photo_profile_request.dart';
 import 'package:sales/models/response/benefit/benefit_dashboard_response.dart';
@@ -27,7 +28,6 @@ import 'package:intl/intl.dart';
 import 'package:mime/mime.dart';
 import 'package:rating_dialog/rating_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 
 class HomeController extends BaseController {
   final ApiRepository apiRepository;
@@ -92,6 +92,7 @@ class HomeController extends BaseController {
   final TextEditingController qualityController = TextEditingController();
 
   late BuildContext context;
+  final box = GetStorage();
 
   double position = 0;
 
@@ -106,6 +107,7 @@ class HomeController extends BaseController {
     determinePosition();
     getDataEvent(1);
     getDataBenefit();
+
     // FirebaseMessaging messaging = FirebaseMessaging.instance;
 
     // messaging.getToken().then((value) {
@@ -140,24 +142,6 @@ class HomeController extends BaseController {
         }
       }
     });
-  }
-
-  void _handleCheckConnectivity(ConnectivityResult result) async {
-    try {
-      if (result == ConnectivityResult.none) {
-        isConnectedToInternet.value = false;
-        isConnectedToInternetWidget.value = true;
-      } else {
-        final connection = await InternetAddress.lookup('google.com');
-        if (connection.isNotEmpty && connection[0].rawAddress.isNotEmpty) {
-          isConnectedToInternet.value = true;
-          isConnectedToInternetWidget.value = true;
-        }
-      }
-    } on SocketException catch (_) {
-      isConnectedToInternet.value = false;
-      isConnectedToInternetWidget.value = true;
-    }
   }
 
   void callDialog() {
@@ -686,6 +670,68 @@ class HomeController extends BaseController {
     Get.toNamed(Routes.NOTIFICATION);
   }
 
+  void dialogConfirmation() {
+    if (isConnectedToInternet.value) {
+      if (box.read('barang') != null) {
+        Get.defaultDialog(
+            title: "SIMPAN PRODUCT",
+            content: CommonWidget.subtitleText(
+                text: "Simpan data product yang belum/gagal tersimpan?",
+                textAlign: TextAlign.center),
+            textConfirm: 'OK',
+            textCancel: 'CANCLE',
+            onConfirm: () {
+              Get.back();
+              submitBarang();
+              // Get.toNamed(Routes.STORE);
+            },
+            onCancel: () {
+              Get.back();
+            });
+      } else {
+        Get.defaultDialog(
+            title: "PRODUK KOSONG",
+            content: CommonWidget.subtitleText(
+                text:
+                    "Semua product sudah tersimpan, tidak ada data yang belum/gagal dikirim",
+                textAlign: TextAlign.center),
+            textConfirm: 'OK',
+            onConfirm: () {
+              Get.back();
+            });
+      }
+    } else {
+      Get.defaultDialog(
+          title: "INTERNET TERPUTUS",
+          content: CommonWidget.subtitleText(
+              text:
+                  "Koneksi anda masih belum terhubung, silahkan periksa kembali",
+              textAlign: TextAlign.center),
+          textConfirm: 'OK',
+          onConfirm: () {
+            Get.back();
+          });
+    }
+  }
+
+  Future<void> submitBarang() async {
+    print(box.read('barang'));
+    QtyUpdateRequest qty = box.read('barang');
+    final res = await apiRepository.decreaseQtyItems(
+      qty,
+    );
+
+    if (res!.error == false) {
+      EasyLoading.showSuccess('Berhasil disimpan');
+      EasyLoading.dismiss();
+      Get.back();
+    } else {
+      EasyLoading.showError('Gagal disimpan');
+      EasyLoading.dismiss();
+    }
+    // print(box.read('barang4'));
+  }
+
   void goToKuisionerPages() {
     Get.toNamed(Routes.KUISIONER);
   }
@@ -703,31 +749,6 @@ class HomeController extends BaseController {
   void goToDetailEventPages({String id = ""}) {
     Get.toNamed(Routes.DETAIL_EVENT, arguments: id);
   }
-
-  // void jumpTo() {
-  //   print(position);
-  //   scrollController.jumpTo(position);
-  //   scrollController.animateTo(position,
-  //       duration: Duration(seconds: 3), curve: Curves.easeInOut);
-  //   // assert(_positions.isNotEmpty,
-  //   //     'ScrollController not attached to any scroll views.');
-  //   // for (final ScrollPosition position in List<ScrollPosition>.from(_positions))
-  //   //   position.jumpTo(value);
-  //   position = position + 1;
-  // }
-
-  // Future<void> animateTo(
-  //   double offset, {
-  //   required Duration duration,
-  //   required Curve curve,
-  // }) async {
-  //   assert(_positions.isNotEmpty,
-  //       'ScrollController not attached to any scroll views.');
-  //   await Future.wait<void>(<Future<void>>[
-  //     for (int i = 0; i < _positions.length; i += 1)
-  //       _positions[i].animateTo(offset, duration: duration, curve: curve),
-  //   ]);
-  // }
 
   void getDataEvent(page) async {
     final res = await apiRepository.listEvent(page: page);

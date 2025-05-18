@@ -153,6 +153,23 @@ class CommonWidget {
     );
   }
 
+  static Text captionMultilineText(
+      {String text = "",
+      Color color = ColorConstants.black,
+      TextAlign textAlign = TextAlign.start}) {
+    return Text(
+      text,
+      maxLines: 2,
+      textAlign: textAlign,
+      style: TextStyle(
+          color: color,
+          fontWeight: FontWeight.normal,
+          fontSize: 10,
+          letterSpacing: 0.4,
+          fontFamily: 'Poppins'),
+    );
+  }
+
   static Row labelExpanded(
       {String label = "",
       value = "",

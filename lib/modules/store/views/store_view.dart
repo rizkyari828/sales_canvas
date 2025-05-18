@@ -46,14 +46,126 @@ class StoreView extends GetView<StoreListController> {
                 id: controller.listStore[i].tokoId.toString(),
                 storeName: controller.listStore[i].namaToko ?? '');
           },
-          child: customStockExpandedCard(
-            name: controller.listStore[i].namaToko ?? '',
-            photo: controller.listStore[i].pathToko ?? '',
-            type: '',
-            address: controller.listStore[i].alamatToko ?? '',
+          child: Column(
+            children: [
+              i == 0
+                  ? Column(
+                      children: [hasilCard(), pendingTask()],
+                    )
+                  : SizedBox(),
+              customStockExpandedCard(
+                name: controller.listStore[i].namaToko ?? '',
+                photo: controller.listStore[i].pathToko ?? '',
+                type: '',
+                address: controller.listStore[i].alamatToko ?? '',
+              ),
+            ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget hasilCard() {
+    return Padding(
+      padding:
+          const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10, top: 10),
+      child: InkWell(
+          onTap: () => controller.goToKunjunganPages(),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.green,
+              borderRadius: BorderRadius.circular(10.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.3),
+                  blurRadius: 20.0,
+                  spreadRadius: 4.0,
+                  offset: Offset(
+                    -10.0,
+                    10.0,
+                  ),
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    decoration: new BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Icon(
+                        Icons.summarize,
+                        color: Colors.green,
+                        size: SizeConfig().screenWidth * .05,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  CommonWidget.minHeadText(
+                      text: ' Hasil Kunjungan', color: Colors.white),
+                ],
+              ),
+            ),
+          )),
+    );
+  }
+
+  Widget pendingTask() {
+    return Padding(
+      padding:
+          const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10, top: 10),
+      child: InkWell(
+          onTap: () => controller.goToKunjunganPages(),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.3),
+                  blurRadius: 20.0,
+                  spreadRadius: 4.0,
+                  offset: Offset(
+                    -10.0,
+                    10.0,
+                  ),
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    decoration: new BoxDecoration(
+                      color: Colors.grey[400],
+                      shape: BoxShape.circle,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Icon(
+                        Icons.hourglass_empty,
+                        color: Colors.white,
+                        size: SizeConfig().screenWidth * .05,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 5),
+                  CommonWidget.subtitleText(
+                      text: ' Kunjungan', color: Colors.black),
+                  CommonWidget.minHeadText(text: ' 0/6', color: Colors.black),
+                ],
+              ),
+            ),
+          )),
     );
   }
 

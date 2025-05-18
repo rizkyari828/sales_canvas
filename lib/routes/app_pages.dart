@@ -18,6 +18,7 @@ import 'package:sales/modules/prospek/views/prospek_view.dart';
 import 'package:sales/modules/store/bindings/store_binding.dart';
 import 'package:sales/modules/store/views/add_store_view.dart';
 import 'package:sales/modules/store/views/detail_store_view.dart';
+import 'package:sales/modules/store/views/result_kunjungan.dart';
 import 'package:sales/modules/store/views/store_view.dart';
 
 import '../modules/notification/bindings/notification_binding.dart';
@@ -163,6 +164,11 @@ class AppPages {
       name: Routes.KUISIONER,
       page: () => AddKuisionerView(),
       binding: KusionerBinding(),
+    ),
+    GetPage(
+      name: Routes.RESULT_KUNJUNGAN,
+      page: () => ResultKunjunganView(),
+      binding: StoreBinding(),
     ),
   ];
 }

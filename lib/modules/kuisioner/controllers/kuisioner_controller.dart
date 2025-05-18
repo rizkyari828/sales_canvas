@@ -78,7 +78,7 @@ class KusionerController extends GetxController {
         totalCAR: int.parse(totalCAR.text),
       ),
     );
-    if (res!.error == false) {
+    if (res?.error == false) {
       EasyLoading.showSuccess('Berhasil disimpan');
       EasyLoading.dismiss();
       Get.back();

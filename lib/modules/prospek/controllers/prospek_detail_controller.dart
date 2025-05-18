@@ -152,7 +152,7 @@ class ProspekDetailController extends GetxController {
 
     // final res = await apiRepository.setDoneOvertime(argm,
     //     setdone.SetDoneOvertimeRequest(overtimeRoomPhotos: dokumentRoom.value));
-    // if (res!.error == false) {
+    // if (res?.error == false) {
     //   EasyLoading.showSuccess('Berhasil disimpan');
     //   Get.back();
     //   EasyLoading.dismiss();
@@ -214,7 +214,7 @@ class ProspekDetailController extends GetxController {
           type: _typeId),
     );
 
-    if (res!.error == false) {
+    if (res?.error == false) {
       getDetailProspek();
       loadUsers();
       actionStatus.value = '';

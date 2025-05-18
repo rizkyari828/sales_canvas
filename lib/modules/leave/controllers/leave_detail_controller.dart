@@ -71,7 +71,7 @@ class LeaveDetailController extends GetxController {
           action: action,
           noteApproval: noteApprovalController.text,
         ));
-    // if (res!.error == false) {
+    // if (res?.error == false) {
     //   EasyLoading.showSuccess('Berhasil disimpan');
     //   getDetailIzin();
     //   loadUsers();

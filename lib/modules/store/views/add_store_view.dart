@@ -14,7 +14,14 @@ class AddStoreView extends GetView<StoreController> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Pastikan UI update terjadi setelah build selesai
     });
-    return Scaffold(
+    double scaleWidth = MediaQuery.of(context).size.width / 360;
+    return Obx(() => Scaffold(
+        floatingActionButton: controller.isConnectedToInternetWidget.value
+            ? Padding(
+                padding: EdgeInsets.only(left: scaleWidth * 30),
+                child: controller.internetConnection(),
+              )
+            : SizedBox(),
         appBar: AppBar(
           iconTheme:
               IconThemeData(color: ColorConstants.black //change your color here
@@ -32,7 +39,7 @@ class AddStoreView extends GetView<StoreController> {
           backgroundColor: ColorConstants.lightScaffoldBackgroundColor,
           elevation: 0.0,
         ),
-        body: Obx(() => _getItems(controller)));
+        body: _getItems(controller)));
   }
 
   SmartRefresher _getItems(StoreController controller) {

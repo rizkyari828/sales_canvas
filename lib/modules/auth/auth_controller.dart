@@ -65,7 +65,7 @@ class AuthController extends GetxController {
               StorageConstants.profilePhoto, res?.data?.first.foto ?? "");
           prefs.setString(StorageConstants.groupId,
               res?.data?.first.groupUser.toString() ?? "");
-          Get.toNamed(Routes.HOME);
+          Get.offAllNamed(Routes.HOME);
         }
       }
     }
@@ -81,7 +81,7 @@ class AuthController extends GetxController {
   void submitToken(token) async {
     // final res = await apiRepository
     //     .updateFcmProfile(UpdateFcmProfileRequest(fcmToken: token));
-    // if (res!.error == false) {
+    // if (res?.error == false) {
     //   print('Token updated');
     // } else {
     //   print('Token update failed');

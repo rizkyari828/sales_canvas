@@ -6,9 +6,9 @@ import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class StoreListController extends GetxController {
+class ResultKunjunganController extends GetxController {
   final ApiRepository apiRepository;
-  StoreListController({required this.apiRepository});
+  ResultKunjunganController({required this.apiRepository});
 
   var listStore = <DataStore>[].obs;
   RxString groupName = "".obs;
