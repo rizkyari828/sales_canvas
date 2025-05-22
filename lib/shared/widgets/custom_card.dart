@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sales/shared/shared.dart';
@@ -34,7 +36,7 @@ class CustomCardView extends StatelessWidget {
         // BorderSide(color: ColorConstants.borderColor, width: 1)
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
+            color: CommonWidget.setOpacity(Colors.black, 0.3),
             blurRadius: 20.0,
             spreadRadius: 4.0,
             offset: Offset(
@@ -176,7 +178,7 @@ class CustomExpandedCardView extends StatelessWidget {
         borderRadius: BorderRadius.circular(10.0),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
+            color: CommonWidget.setOpacity(Colors.black, 0.3),
             blurRadius: 20.0,
             spreadRadius: 4.0,
             offset: Offset(
@@ -330,7 +332,7 @@ class CustomExpandedImageCardView extends StatelessWidget {
         borderRadius: BorderRadius.circular(10.0),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
+            color: CommonWidget.setOpacity(Colors.black, 0.3),
             blurRadius: 20.0,
             spreadRadius: 4.0,
             offset: Offset(
@@ -427,7 +429,7 @@ class CustomStockExpandedCardView extends StatelessWidget {
         borderRadius: BorderRadius.circular(10.0),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
+            color: CommonWidget.setOpacity(Colors.black, 0.3),
             blurRadius: 20.0,
             spreadRadius: 4.0,
             offset: Offset(

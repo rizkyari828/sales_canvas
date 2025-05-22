@@ -1,3 +1,4 @@
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:sales/api/api_repository.dart';
 import 'package:sales/models/request/cuti/update_approval_request.dart';
 import 'package:sales/models/response/benefit/show_benefit.dart';
@@ -74,13 +75,13 @@ class BenefitDetailController extends GetxController {
           action: action,
           noteApproval: noteApprovalController.text,
         ));
-    // if (res?.error == false) {
-    //   EasyLoading.showSuccess('Berhasil disimpan');
-    //   getDetailCuti();
-    //   loadUsers();
-    // } else {
-    //   EasyLoading.showError('Gagal disimpan');
-    // }
+    if (res?.error == false) {
+      EasyLoading.showSuccess('Berhasil disimpan');
+      getDetailCuti();
+      loadUsers();
+    } else {
+      EasyLoading.showError('Gagal disimpan');
+    }
   }
 
   selectDate(BuildContext context) async {

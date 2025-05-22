@@ -16,8 +16,8 @@ class BaseController extends GetxController {
   void onInit() async {
     super.onInit();
 
-    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      _handleCheckConnectivity(result);
+    Connectivity().onConnectivityChanged.listen((result) {
+      _handleCheckConnectivity(result.first);
     });
   }
 
@@ -55,7 +55,7 @@ class BaseController extends GetxController {
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.3),
+                  color: CommonWidget.setOpacity(Colors.black, 0.3),
                   blurRadius: 20.0,
                   spreadRadius: 4.0,
                   offset: Offset(

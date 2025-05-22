@@ -96,10 +96,11 @@ class CustomImagePicker {
                 context: context);
           },
           child: DottedBorder(
-            radius: Radius.circular(100.0),
-            color: Colors.grey,
-            dashPattern: [8, 4],
-            strokeWidth: 1,
+            options: RectDottedBorderOptions(
+              color: Colors.grey,
+              dashPattern: [8, 4],
+              strokeWidth: 1,
+            ),
             child: Container(
               height: 50,
               width: sw,

@@ -45,7 +45,7 @@ class MeTab extends GetView<HomeController> {
                     borderRadius: BorderRadius.circular(10.0),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
+                        color: CommonWidget.setOpacity(Colors.black, 0.3),
                         blurRadius: 15.0,
                         spreadRadius: 1.0,
                       ),
@@ -181,7 +181,7 @@ class MeTab extends GetView<HomeController> {
         borderRadius: BorderRadius.circular(10.0),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
+            color: CommonWidget.setOpacity(Colors.black, 0.3),
             blurRadius: 20.0,
             spreadRadius: 4.0,
             offset: Offset(
@@ -245,7 +245,7 @@ class MeTab extends GetView<HomeController> {
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey.withOpacity(0.3),
+                              color: CommonWidget.setOpacity(Colors.black, 0.3),
                               blurRadius: 20.0,
                               spreadRadius: 4.0,
                               offset: Offset(
@@ -278,7 +278,7 @@ class MeTab extends GetView<HomeController> {
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey.withOpacity(0.3),
+                              color: CommonWidget.setOpacity(Colors.black, 0.3),
                               blurRadius: 20.0,
                               spreadRadius: 4.0,
                               offset: Offset(

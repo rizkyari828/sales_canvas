@@ -181,7 +181,7 @@ class ApiRepository {
 
   //START PROSPEK
   Future<ProspekResponse?> listProspek(GetListRequest data,
-      {int page: 1, int limit: 10}) async {
+      {int page = 1, int limit = 10}) async {
     try {
       final res = await apiProvider
           .getOvertime(
@@ -348,7 +348,7 @@ class ApiRepository {
 
   //START BENEFIT
   Future<BenefitResponse?> listBenefit(BenefitRequest data,
-      {int page: 1, int limit: 10}) async {
+      {int page = 1, int limit = 10}) async {
     try {
       final res = await apiProvider
           .getBenefit(
@@ -370,7 +370,7 @@ class ApiRepository {
     return null;
   }
 
-  Future<TypeCutiResponse?> typeCuti({int page: 1, int limit: 10}) async {
+  Future<TypeCutiResponse?> typeCuti({int page = 1, int limit = 10}) async {
     try {
       final res = await apiProvider
           .getTypeCuti('/api/v1/cuti/type')
@@ -480,7 +480,7 @@ class ApiRepository {
 
   //START IZIN
   Future<IzinResponse?> listIzin(
-      {int page: 1, int limit: 10, required IdRequest data}) async {
+      {int page = 1, int limit = 10, required IdRequest data}) async {
     try {
       final res = await apiProvider
           .getIzin('/api/listIjin?page=' + page.toString(), data)
@@ -586,7 +586,7 @@ class ApiRepository {
   }
 
   //RELIVER
-  Future<EventResponse?> listEvent({int page: 1, int limit: 10}) async {
+  Future<EventResponse?> listEvent({int page = 1, int limit = 10}) async {
     try {
       final res = await apiProvider
           .getReliver('/api/listEvent')
@@ -674,7 +674,7 @@ class ApiRepository {
     return null;
   }
 
-  Future<BranchListResponse?> branchList({int page: 1, int limit: 100}) async {
+  Future<BranchListResponse?> branchList({int page = 1, int limit = 100}) async {
     try {
       final res = await apiProvider
           .getBranchList('/api/v1/branch?limit=' + limit.toString())

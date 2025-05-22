@@ -23,16 +23,15 @@ class DefaultFirebaseOptions {
       );
     }
     // ignore: missing_enum_constant_in_switch
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.android:
-        return android;
-      case TargetPlatform.iOS:
-        return ios;
-      case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+    if (defaultTargetPlatform case TargetPlatform.android) {
+      return android;
+    } else if (defaultTargetPlatform case TargetPlatform.iOS) {
+      return ios;
+    } else if (defaultTargetPlatform case TargetPlatform.macOS) {
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for macos - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
 
     throw UnsupportedError(
@@ -54,8 +53,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '301855838376',
     projectId: 'com-tam-revi',
     storageBucket: 'com-tam-revi.appspot.com',
-    androidClientId: '301855838376-29aakpakh4uuub3j5npl1lb3hler2kr3.apps.googleusercontent.com',
-    iosClientId: '301855838376-o4vo90n4aksrfnt0amr2lq8v2bhplb2s.apps.googleusercontent.com',
+    androidClientId:
+        '301855838376-29aakpakh4uuub3j5npl1lb3hler2kr3.apps.googleusercontent.com',
+    iosClientId:
+        '301855838376-o4vo90n4aksrfnt0amr2lq8v2bhplb2s.apps.googleusercontent.com',
     iosBundleId: 'com.tamrevi',
   );
 }

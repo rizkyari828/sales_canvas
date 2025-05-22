@@ -136,12 +136,13 @@ class StoreDetailController extends GetxController {
           res?.data?.first.latitude ?? 0.0, res?.data?.first.longitude ?? 0.0);
 
       circles.add(Circle(
-          circleId: CircleId('A1'),
-          center: _myOffice,
-          radius: 150,
-          fillColor: Colors.blueAccent.withOpacity(0.10),
-          strokeWidth: 3,
-          strokeColor: Colors.blueAccent.withOpacity(0.10)));
+        circleId: CircleId('A1'),
+        center: _myOffice,
+        radius: 150,
+        fillColor: CommonWidget.setOpacity(Colors.blueAccent, 0.9),
+        strokeWidth: 3,
+        strokeColor: CommonWidget.setOpacity(Colors.blueAccent, 0.9),
+      ));
 
       if (res?.data?.first.flag == "1") {
         canAbsent.value = true;
@@ -216,10 +217,11 @@ class StoreDetailController extends GetxController {
                               context: Get.context);
                         },
                         child: DottedBorder(
-                          radius: Radius.circular(100.0),
-                          color: Colors.grey,
-                          dashPattern: [8, 4],
-                          strokeWidth: 1,
+                          options: RectDottedBorderOptions(
+                            color: Colors.grey,
+                            dashPattern: [8, 4],
+                            strokeWidth: 1,
+                          ),
                           child: Container(
                             height: 50,
                             width: sw,

@@ -319,10 +319,11 @@ class AttendanceController extends GetxController {
                               context: Get.context);
                         },
                         child: DottedBorder(
-                          radius: Radius.circular(100.0),
-                          color: Colors.grey,
-                          dashPattern: [8, 4],
-                          strokeWidth: 1,
+                          options: RectDottedBorderOptions(
+                            color: Colors.grey,
+                            dashPattern: [8, 4],
+                            strokeWidth: 1,
+                          ),
                           child: Container(
                             height: 50,
                             width: sw,
@@ -462,9 +463,9 @@ class AttendanceController extends GetxController {
           circleId: CircleId('A1'),
           center: _myOffice,
           radius: 150,
-          fillColor: Colors.blueAccent.withOpacity(0.10),
+          fillColor: CommonWidget.setOpacity(Colors.blueAccent, 0.9),
           strokeWidth: 3,
-          strokeColor: Colors.blueAccent.withOpacity(0.10)));
+          strokeColor: CommonWidget.setOpacity(Colors.blueAccent, 0.9),));
 
       if (res?.data?.first.flag == "1") {
         isClockIn.value = true;

@@ -402,11 +402,11 @@ class HomeController extends BaseController {
   void submitToken(token) async {
     final res = await apiRepository
         .updateFcmProfile(UpdateFcmProfileRequest(fcmToken: token));
-    // if (res!.error == false) {
-    //   print('Token updated');
-    // } else {
-    //   print('Token update failed');
-    // }
+    if (res!.error == false) {
+      print('Token updated');
+    } else {
+      print('Token update failed');
+    }
   }
 
   void getReviewRate() async {
@@ -562,7 +562,7 @@ class HomeController extends BaseController {
           borderRadius: BorderRadius.circular(10.0),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
+              color: CommonWidget.setOpacity(Colors.black, 0.3),
               blurRadius: 20.0,
               spreadRadius: 4.0,
               offset: Offset(
@@ -602,7 +602,7 @@ class HomeController extends BaseController {
           borderRadius: BorderRadius.circular(10.0),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
+              color: CommonWidget.setOpacity(Colors.black, 0.3),
               blurRadius: 20.0,
               spreadRadius: 4.0,
               offset: Offset(

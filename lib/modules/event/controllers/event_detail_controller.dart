@@ -1,6 +1,5 @@
 import 'package:sales/api/api_repository.dart';
 import 'package:sales/models/request/detail_request.dart';
-import 'package:sales/models/request/reliver/approve_reliver_request.dart';
 import 'package:sales/models/response/reliver/show_reliver_response.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -62,14 +61,14 @@ class ReliverDetailController extends GetxController {
   void approval({
     action = "reject",
   }) async {
-    final res = await apiRepository.updateApprovalReliver(
-        detail.value.id.toString(),
-        ApproveReliverRequest(
-          action: action,
-          needAprroveEmployee: int.parse(numberReliver.text),
-          dateStartWorkEmployee: dateStartWorkController.text,
-          noteApproval: noteApprovalController.text,
-        ));
+    // final res = await apiRepository.updateApprovalReliver(
+    //     detail.value.id.toString(),
+    //     ApproveReliverRequest(
+    //       action: action,
+    //       needAprroveEmployee: int.parse(numberReliver.text),
+    //       dateStartWorkEmployee: dateStartWorkController.text,
+    //       noteApproval: noteApprovalController.text,
+    //     ));
     // if (res?.error == false) {
     //   EasyLoading.showSuccess('Berhasil disimpan');
     //   getDetail();

@@ -38,21 +38,22 @@ class CustomButton extends StatelessWidget {
       height: height,
       child: ElevatedButton(
         style: ButtonStyle(
-            elevation: MaterialStateProperty.all(elevation),
-            shape: MaterialStateProperty.all(
+            elevation: WidgetStateProperty.all(elevation),
+            shape: WidgetStateProperty.all(
               RoundedRectangleBorder(
                 borderRadius: new BorderRadius.circular(10),
                 side: BorderSide(color: borderColor),
               ),
             ),
-            backgroundColor: MaterialStateProperty.resolveWith((states) {
-              if (states.contains(MaterialState.disabled)) {
-                return ColorConstants.disableButton.withOpacity(0.7);
+            backgroundColor: WidgetStateProperty.resolveWith((states) {
+              if (states.contains(WidgetState.disabled)) {
+                return CommonWidget.setOpacity(
+                    ColorConstants.disableButton, 0.7);
               } else {
                 return buttonColor;
               }
             }),
-            textStyle: MaterialStateProperty.all(TextStyle(
+            textStyle: WidgetStateProperty.all(TextStyle(
               color: buttonTextColor,
               letterSpacing: 1.25,
             ))),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:sales/shared/utils/common_widget.dart';
 
 class NotificationView extends GetView<NotificationController> {
   @override
@@ -52,7 +53,7 @@ class NotificationView extends GetView<NotificationController> {
               borderRadius: BorderRadius.circular(10.0),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.3),
+                  color: CommonWidget.setOpacity(Colors.black, 0.3),
                   blurRadius: 20.0,
                   spreadRadius: 4.0,
                   offset: Offset(

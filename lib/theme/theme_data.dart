@@ -35,7 +35,6 @@ class ThemeConfig {
         margin: EdgeInsets.zero,
         clipBehavior: Clip.antiAliasWithSaveLayer,
       ),
-      backgroundColor: background,
       primaryColor: accentColor,
       // textSelectionColor: accentColor,
       // textSelectionHandleColor: accentColor,
@@ -45,30 +44,28 @@ class ThemeConfig {
         selectionHandleColor: accentColor,
         cursorColor: accentColor,
       ),
-      toggleableActiveColor: accentColor,
       appBarTheme: AppBarTheme(
         color: cardBackground,
         iconTheme: IconThemeData(
           color: secondaryText,
         ),
         toolbarTextStyle: TextTheme(
-          bodyText1: baseTextTheme.bodyText1!.copyWith(
+          bodyLarge: baseTextTheme.bodyLarge!.copyWith(
             color: secondaryText,
             fontSize: 18,
           ),
-        ).bodyText2,
+        ).bodyMedium,
         titleTextStyle: TextTheme(
-          bodyText1: baseTextTheme.bodyText1!.copyWith(
+          bodyLarge: baseTextTheme.bodyLarge!.copyWith(
             color: secondaryText,
             fontSize: 18,
           ),
-        ).headline6,
+        ).titleLarge,
       ),
       iconTheme: IconThemeData(
         color: secondaryText,
         size: 16.0,
       ),
-      errorColor: error,
       buttonTheme: ButtonThemeData(
         textTheme: ButtonTextTheme.primary,
         colorScheme: ColorScheme(
@@ -76,12 +73,10 @@ class ThemeConfig {
           primary: accentColor,
           secondary: accentColor,
           surface: background,
-          background: background,
           error: error,
           onPrimary: buttonText,
           onSecondary: buttonText,
           onSurface: buttonText,
-          onBackground: buttonText,
           onError: buttonText,
         ),
         padding: const EdgeInsets.all(16.0),
@@ -96,7 +91,7 @@ class ThemeConfig {
           fontFamily: 'Rubik',
           fontWeight: FontWeight.w600,
           fontSize: 16.0,
-          color: primaryText.withOpacity(0.5),
+          color: CommonWidget.setOpacity(primaryText, 0.5),
         ),
         hintStyle: TextStyle(
           color: secondaryText,
@@ -107,72 +102,82 @@ class ThemeConfig {
       fontFamily: 'Rubik',
       unselectedWidgetColor: hexToColor('#DADCDD'),
       textTheme: TextTheme(
-        headline1: baseTextTheme.headline1!.copyWith(
+        displayLarge: baseTextTheme.displayLarge!.copyWith(
           color: primaryText,
           fontSize: 34.0,
           fontWeight: FontWeight.bold,
         ),
-        headline2: baseTextTheme.headline2!.copyWith(
+        displayMedium: baseTextTheme.displayMedium!.copyWith(
           color: primaryText,
           fontSize: 22,
           fontWeight: FontWeight.bold,
         ),
-        headline3: baseTextTheme.headline3!.copyWith(
+        displaySmall: baseTextTheme.displaySmall!.copyWith(
           color: secondaryText,
           fontSize: 20,
           fontWeight: FontWeight.w600,
         ),
-        headline4: baseTextTheme.headline4!.copyWith(
+        headlineMedium: baseTextTheme.headlineMedium!.copyWith(
           color: primaryText,
           fontSize: 18,
           fontWeight: FontWeight.w600,
         ),
-        headline5: baseTextTheme.headline5!.copyWith(
+        headlineSmall: baseTextTheme.headlineSmall!.copyWith(
           color: primaryText,
           fontSize: 16,
           fontWeight: FontWeight.w700,
         ),
-        headline6: baseTextTheme.headline6!.copyWith(
-          color: primaryText,
-          fontSize: 14,
-          fontWeight: FontWeight.w700,
-        ),
-        bodyText1: baseTextTheme.bodyText1!.copyWith(
-          color: secondaryText,
-          fontSize: 15,
-        ),
-        bodyText2: baseTextTheme.bodyText2!.copyWith(
-          color: primaryText,
-          fontSize: 12,
-          fontWeight: FontWeight.w400,
-        ),
-        button: baseTextTheme.button!.copyWith(
-          color: primaryText,
-          fontSize: 12.0,
-          fontWeight: FontWeight.w700,
-        ),
-        caption: baseTextTheme.caption!.copyWith(
-          color: primaryText,
-          fontSize: 11.0,
-          fontWeight: FontWeight.w300,
-        ),
-        overline: baseTextTheme.overline!.copyWith(
-          color: secondaryText,
-          fontSize: 11.0,
-          fontWeight: FontWeight.w500,
-        ),
-        subtitle1: baseTextTheme.subtitle1!.copyWith(
-          color: primaryText,
-          fontSize: 16.0,
-          fontWeight: FontWeight.w700,
-        ),
-        subtitle2: baseTextTheme.subtitle2!.copyWith(
-          color: secondaryText,
-          fontSize: 11.0,
-          fontWeight: FontWeight.w500,
-        ),
       ),
-      colorScheme: ColorScheme.fromSwatch().copyWith(secondary: accentColor),
+      checkboxTheme: CheckboxThemeData(
+        fillColor:
+            WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
+          if (states.contains(WidgetState.disabled)) {
+            return null;
+          }
+          if (states.contains(WidgetState.selected)) {
+            return accentColor;
+          }
+          return null;
+        }),
+      ),
+      radioTheme: RadioThemeData(
+        fillColor:
+            WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
+          if (states.contains(WidgetState.disabled)) {
+            return null;
+          }
+          if (states.contains(WidgetState.selected)) {
+            return accentColor;
+          }
+          return null;
+        }),
+      ),
+      switchTheme: SwitchThemeData(
+        thumbColor:
+            WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
+          if (states.contains(WidgetState.disabled)) {
+            return null;
+          }
+          if (states.contains(WidgetState.selected)) {
+            return accentColor;
+          }
+          return null;
+        }),
+        trackColor:
+            WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
+          if (states.contains(WidgetState.disabled)) {
+            return null;
+          }
+          if (states.contains(WidgetState.selected)) {
+            return accentColor;
+          }
+          return null;
+        }),
+      ),
+      colorScheme: ColorScheme.fromSwatch()
+          .copyWith(secondary: accentColor)
+          .copyWith(surface: background)
+          .copyWith(error: error),
     );
   }
 

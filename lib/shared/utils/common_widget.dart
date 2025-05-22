@@ -52,7 +52,7 @@ class CommonWidget {
   static Text bigText(
       {String text = "",
       Color color = ColorConstants.black,
-      TextAlign align: TextAlign.start}) {
+      TextAlign align = TextAlign.start}) {
     return Text(
       text,
       textAlign: align,
@@ -67,7 +67,7 @@ class CommonWidget {
   static Text headText(
       {String text = "",
       Color color = ColorConstants.black,
-      TextAlign align: TextAlign.start}) {
+      TextAlign align = TextAlign.start}) {
     return Text(
       text,
       textAlign: align,
@@ -100,7 +100,7 @@ class CommonWidget {
       {String text = "",
       Color color = ColorConstants.black,
       FontWeight fontWeight = FontWeight.normal,
-      textAlign: TextAlign.start}) {
+      textAlign = TextAlign.start}) {
     return Text(
       text,
       textAlign: textAlign,
@@ -293,7 +293,7 @@ class CommonWidget {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
+            color: CommonWidget.setOpacity(Colors.black, 0.3),
             blurRadius: 20.0,
             spreadRadius: 4.0,
             offset: Offset(
@@ -327,5 +327,9 @@ class CommonWidget {
       default:
         return '';
     }
+  }
+
+  static Color setOpacity(Color color, double opacity) {
+    return color.withAlpha((opacity * 255).round());
   }
 }

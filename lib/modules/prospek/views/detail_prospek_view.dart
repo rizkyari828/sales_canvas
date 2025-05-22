@@ -10,8 +10,6 @@ class ProspekDetailView extends GetView<ProspekDetailController> {
 
   @override
   Widget build(BuildContext context) {
-    final sw = SizeConfig().screenWidth;
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CommonWidget.appBar(title: 'Detail Prospek'),
@@ -271,7 +269,7 @@ class ProspekDetailView extends GetView<ProspekDetailController> {
         boxShadow: [
           active
               ? BoxShadow(
-                  color: Colors.grey.withOpacity(0.3),
+                  color: CommonWidget.setOpacity(Colors.black, 0.3),
                   blurRadius: 20.0,
                   spreadRadius: 4.0,
                   offset: Offset(
@@ -280,7 +278,7 @@ class ProspekDetailView extends GetView<ProspekDetailController> {
                   ),
                 )
               : BoxShadow(
-                  color: Colors.grey.withOpacity(0.0),
+                  color: CommonWidget.setOpacity(Colors.grey, 0.0),
                 ),
         ],
       ),

@@ -283,8 +283,8 @@ class CustomDropDownSearch extends StatelessWidget {
       // width: MediaQuery.of(context).size.width,
       // height: MediaQuery.of(context).size.height / 11,
       child: DropdownSearch<dynamic>(
-        dropdownDecoratorProps: DropDownDecoratorProps(
-            dropdownSearchDecoration: InputDecoration(
+        decoratorProps: DropDownDecoratorProps(
+            decoration: InputDecoration(
           labelStyle: TextStyle(
               fontWeight: FontWeight.normal,
               fontSize: 14,

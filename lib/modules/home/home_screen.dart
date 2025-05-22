@@ -3,10 +3,12 @@ import 'package:sales/modules/home/home.dart';
 import 'package:sales/shared/shared.dart';
 import 'package:get/get.dart';
 
+import '../../shared/utils/custom_pop_scope.dart';
+
 class HomeScreen extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
+    return CustomPopScope(
       onWillPop: () async => false,
       child: Obx(() => _buildWidget()),
     );

@@ -106,7 +106,6 @@ class MainTab extends GetView<HomeController> {
   }
 
   Widget header() {
-    final sw = SizeConfig().screenWidth;
     final sh = SizeConfig().screenHeight;
 
     return Container(
@@ -164,7 +163,7 @@ class MainTab extends GetView<HomeController> {
                         borderRadius: BorderRadius.circular(10.0),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey.withOpacity(0.3),
+                            color: CommonWidget.setOpacity(Colors.black, 0.3),
                             blurRadius: 15.0,
                             spreadRadius: 1.0,
                             offset: Offset(
@@ -193,7 +192,7 @@ class MainTab extends GetView<HomeController> {
                         borderRadius: BorderRadius.circular(10.0),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey.withOpacity(0.3),
+                            color: CommonWidget.setOpacity(Colors.black, 0.3),
                             blurRadius: 15.0,
                             spreadRadius: 1.0,
                             offset: Offset(
@@ -228,7 +227,7 @@ class MainTab extends GetView<HomeController> {
             borderRadius: BorderRadius.circular(10.0),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.3),
+                color: CommonWidget.setOpacity(Colors.black, 0.3),
                 blurRadius: 20.0,
                 spreadRadius: 4.0,
                 offset: Offset(
@@ -275,7 +274,7 @@ class MainTab extends GetView<HomeController> {
             borderRadius: BorderRadius.circular(10.0),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.3),
+                color: CommonWidget.setOpacity(Colors.black, 0.3),
                 blurRadius: 20.0,
                 spreadRadius: 4.0,
                 offset: Offset(
@@ -322,7 +321,7 @@ class MainTab extends GetView<HomeController> {
           borderRadius: BorderRadius.circular(10.0),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
+              color: CommonWidget.setOpacity(Colors.black, 0.3),
               blurRadius: 20.0,
               spreadRadius: 4.0,
               offset: Offset(
@@ -384,11 +383,11 @@ class MainTab extends GetView<HomeController> {
     return Expanded(
       child: Container(
         decoration: BoxDecoration(
-          color: colorCircle.withOpacity(0.9),
+          color: CommonWidget.setOpacity(colorCircle, 0.9),
           borderRadius: BorderRadius.circular(10.0),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
+              color: CommonWidget.setOpacity(Colors.black, 0.3),
               blurRadius: 20.0,
               spreadRadius: 4.0,
               offset: Offset(
@@ -484,7 +483,7 @@ class MainTab extends GetView<HomeController> {
                               image: new DecorationImage(
                                 fit: BoxFit.cover,
                                 colorFilter: ColorFilter.mode(
-                                    Colors.black.withOpacity(0.4),
+                                    CommonWidget.setOpacity(Colors.black, 0.4),
                                     BlendMode.dstATop),
                                 image: new NetworkImage(
                                   i.foto ?? '',
@@ -547,7 +546,8 @@ class MainTab extends GetView<HomeController> {
                       image: new DecorationImage(
                         fit: BoxFit.cover,
                         colorFilter: ColorFilter.mode(
-                            Colors.black.withOpacity(0.4), BlendMode.dstATop),
+                            CommonWidget.setOpacity(Colors.black, 0.4),
+                            BlendMode.dstATop),
                         image: new NetworkImage(
                           'https://www.ilmubahasainggris.com/wp-content/uploads/2017/03/NGC.jpg',
                         ),

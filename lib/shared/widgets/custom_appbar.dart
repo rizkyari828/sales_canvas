@@ -155,9 +155,8 @@ class CustomHeaderHome extends StatelessWidget {
               onPressed: () {},
               child: Icon(Icons.person_rounded, color: Colors.grey, size: 50),
               style: ElevatedButton.styleFrom(
-                elevation: 0.1,
+                elevation: 0.1, backgroundColor: Colors.white,
                 shape: CircleBorder(),
-                primary: Colors.white,
               ),
             ),
           ),

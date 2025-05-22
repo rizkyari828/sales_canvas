@@ -61,7 +61,8 @@ class StoreDetailView extends GetView<StoreDetailController> {
                                   borderRadius: BorderRadius.circular(10.0),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.grey.withOpacity(0.3),
+                                      color: CommonWidget.setOpacity(
+                                          Colors.black, 0.3),
                                       blurRadius: 20.0,
                                       spreadRadius: 4.0,
                                       offset: Offset(
@@ -174,8 +175,8 @@ class StoreDetailView extends GetView<StoreDetailController> {
                                               BorderRadius.circular(15.0),
                                           boxShadow: [
                                             BoxShadow(
-                                              color:
-                                                  Colors.grey.withOpacity(0.3),
+                                              color: CommonWidget.setOpacity(
+                                                  Colors.black, 0.3),
                                               blurRadius: 20.0,
                                               spreadRadius: 4.0,
                                               offset: Offset(
@@ -277,7 +278,7 @@ class StoreDetailView extends GetView<StoreDetailController> {
         borderRadius: BorderRadius.circular(10.0),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
+            color: CommonWidget.setOpacity(Colors.black, 0.3),
             blurRadius: 20.0,
             spreadRadius: 4.0,
             offset: Offset(
