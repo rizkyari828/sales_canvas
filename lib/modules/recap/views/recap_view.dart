@@ -40,17 +40,19 @@ class RecapView extends GetView<RecapController> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: CommonWidget.setOpacity(Colors.black, 0.3),
-                    blurRadius: 20.0,
-                    spreadRadius: 4.0,
-                    offset: Offset(
-                      -10.0,
-                      10.0,
-                    ),
-                  ),
-                ],
+                border:
+                    Border.all(width: 2.0, color: ColorConstants.borderColor),
+                // boxShadow: [
+                //   BoxShadow(
+                //     color: CommonWidget.setOpacity(Colors.black, 0.3),
+                //     blurRadius: 20.0,
+                //     spreadRadius: 4.0,
+                //     offset: Offset(
+                //       -10.0,
+                //       10.0,
+                //     ),
+                //   ),
+                // ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,18 +97,19 @@ class RecapView extends GetView<RecapController> {
                                   decoration: new BoxDecoration(
                                     color: ColorConstants.mainColor,
                                     shape: BoxShape.circle,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: CommonWidget.setOpacity(
-                                            Colors.black, 0.3),
-                                        blurRadius: 20.0,
-                                        spreadRadius: 4.0,
-                                        offset: Offset(
-                                          -10.0,
-                                          10.0,
-                                        ),
-                                      ),
-                                    ],
+                                    border: Border.all(width: 2.0, color: ColorConstants.borderColor),
+                                    // boxShadow: [
+                                    //   BoxShadow(
+                                    //     color: CommonWidget.setOpacity(
+                                    //         Colors.black, 0.3),
+                                    //     blurRadius: 20.0,
+                                    //     spreadRadius: 4.0,
+                                    //     offset: Offset(
+                                    //       -10.0,
+                                    //       10.0,
+                                    //     ),
+                                    //   ),
+                                    // ],
                                   ),
                                   child: Padding(
                                     padding: const EdgeInsets.all(10.0),

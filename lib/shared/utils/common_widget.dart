@@ -291,17 +291,18 @@ class CommonWidget {
       width: sw,
       decoration: BoxDecoration(
         color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: CommonWidget.setOpacity(Colors.black, 0.3),
-            blurRadius: 20.0,
-            spreadRadius: 4.0,
-            offset: Offset(
-              -10.0,
-              10.0,
-            ),
-          ),
-        ],
+        border: Border.all(width: 2.0, color: ColorConstants.borderColor),
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: CommonWidget.setOpacity(Colors.black, 0.3),
+        //     blurRadius: 20.0,
+        //     spreadRadius: 4.0,
+        //     offset: Offset(
+        //       -10.0,
+        //       10.0,
+        //     ),
+        //   ),
+        // ],
       ),
       child: Padding(
         padding: const EdgeInsets.all(20.0),

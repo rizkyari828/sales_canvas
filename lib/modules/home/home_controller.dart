@@ -69,6 +69,7 @@ class HomeController extends BaseController {
   RxString profilePhoto = "".obs;
   RxString username = "".obs;
   RxString token = "".obs;
+  RxString tipe = "".obs;
   RxBool showRateDialog = false.obs;
   RxBool isConnectedToInternet = true.obs;
   RxBool isConnectedToInternetWidget = false.obs;
@@ -191,6 +192,7 @@ class HomeController extends BaseController {
     username.value = prefs.getString('username') ?? "";
     token.value = prefs.getString('token') ?? "";
     userId.value = prefs.getString('userId') ?? "";
+    tipe.value = prefs.getString('tipe') ?? "";
   }
 
   void signout() async {
@@ -560,17 +562,18 @@ class HomeController extends BaseController {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10.0),
-          boxShadow: [
-            BoxShadow(
-              color: CommonWidget.setOpacity(Colors.black, 0.3),
-              blurRadius: 20.0,
-              spreadRadius: 4.0,
-              offset: Offset(
-                -10.0,
-                10.0,
-              ),
-            ),
-          ],
+          border: Border.all(width: 2.0, color: ColorConstants.borderColor),
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: CommonWidget.setOpacity(Colors.black, 0.3),
+          //     blurRadius: 20.0,
+          //     spreadRadius: 4.0,
+          //     offset: Offset(
+          //       -10.0,
+          //       10.0,
+          //     ),
+          //   ),
+          // ],
         ),
         child: Padding(
             padding: const EdgeInsets.all(15.0),
@@ -600,17 +603,18 @@ class HomeController extends BaseController {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10.0),
-          boxShadow: [
-            BoxShadow(
-              color: CommonWidget.setOpacity(Colors.black, 0.3),
-              blurRadius: 20.0,
-              spreadRadius: 4.0,
-              offset: Offset(
-                -10.0,
-                10.0,
-              ),
-            ),
-          ],
+          border: Border.all(width: 2.0, color: ColorConstants.borderColor),
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: CommonWidget.setOpacity(Colors.black, 0.3),
+          //     blurRadius: 20.0,
+          //     spreadRadius: 4.0,
+          //     offset: Offset(
+          //       -10.0,
+          //       10.0,
+          //     ),
+          //   ),
+          // ],
         ),
         height: SizeConfig().screenHeight / 9,
         width: SizeConfig().screenWidth,

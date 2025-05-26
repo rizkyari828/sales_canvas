@@ -9,4 +9,5 @@ class StorageConstants {
   static final String username = 'username';
   static final String userId = 'userId';
   static final String groupId = 'groupId';
+  static final String tipe = 'tipe';
 }
