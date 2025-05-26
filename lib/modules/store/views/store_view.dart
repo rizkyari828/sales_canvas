@@ -1,6 +1,7 @@
 import 'package:sales/modules/store/controllers/store_list_controller.dart';
 import 'package:sales/shared/constants/constants.dart';
 import 'package:sales/shared/utils/common_widget.dart';
+import 'package:sales/shared/utils/network_checker.dart';
 import 'package:sales/shared/utils/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,6 +27,14 @@ class StoreView extends GetView<StoreListController> {
           ),
           backgroundColor: ColorConstants.lightScaffoldBackgroundColor,
           elevation: 0.0,
+          actions: [
+            Obx(() => Padding(
+                  padding: const EdgeInsets.only(right: 20.0),
+                  child: NetworkChecker(
+                    value: controller.qualityNetwork.value,
+                  ),
+                ))
+          ],
         ),
         body: Obx(() => _getItems(controller)));
   }

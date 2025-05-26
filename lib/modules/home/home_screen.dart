@@ -17,7 +17,9 @@ class HomeScreen extends GetView<HomeController> {
   Widget _buildWidget() {
     return Scaffold(
       body: Center(
-        child: _buildContent(controller.currentTab.value),
+        child: controller.tipe.value == "1"
+            ? _buildContent(controller.currentTab.value)
+            : _buildContentTipe2(controller.currentTab.value),
       ),
       bottomNavigationBar: _navBar(),
     );
@@ -68,6 +70,17 @@ class HomeScreen extends GetView<HomeController> {
         return controller.mainTab;
       case MainTabs.discover:
         return controller.discoverTab;
+      case MainTabs.me:
+        return controller.meTab;
+      default:
+        return controller.mainTab;
+    }
+  }
+
+  Widget _buildContentTipe2(MainTabs tab) {
+    switch (tab) {
+      case MainTabs.home:
+        return controller.mainTab;
       case MainTabs.me:
         return controller.meTab;
       default:

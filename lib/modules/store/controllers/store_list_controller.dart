@@ -1,12 +1,13 @@
 import 'package:sales/api/api_repository.dart';
 import 'package:sales/models/request/user_id_request.dart';
 import 'package:sales/models/response/store/list_store.dart';
+import 'package:sales/modules/home/base_controller.dart';
 import 'package:sales/routes/app_pages.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class StoreListController extends GetxController {
+class StoreListController extends BaseController {
   final ApiRepository apiRepository;
   StoreListController({required this.apiRepository});
 

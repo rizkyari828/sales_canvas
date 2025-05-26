@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:sales/shared/utils/common_widget.dart';
 
 class NotificationView extends GetView<NotificationController> {
   @override

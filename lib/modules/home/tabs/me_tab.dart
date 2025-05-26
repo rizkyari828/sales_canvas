@@ -170,6 +170,9 @@ class MeTab extends GetView<HomeController> {
               listCard(Icons.verified_user_rounded, 'ID',
                   controller.idPegawai.value),
               SizedBox(height: 20),
+              listCard(
+                  Icons.type_specimen_rounded, 'Tipe', controller.tipe.value),
+              SizedBox(height: 20),
             ],
           )),
     );
@@ -282,7 +285,7 @@ class MeTab extends GetView<HomeController> {
                           color: ColorConstants.mainColor,
                           shape: BoxShape.circle,
                           border: Border.all(
-                            width: 2.0, color: ColorConstants.borderColor),
+                              width: 2.0, color: ColorConstants.borderColor),
                           // boxShadow: [
                           //   BoxShadow(
                           //     color: CommonWidget.setOpacity(Colors.black, 0.3),

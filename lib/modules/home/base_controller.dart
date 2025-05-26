@@ -28,29 +28,36 @@ class BaseController extends GetxController {
       _handleCheckConnectivity(result.first);
     });
 
-    checkDownloadSpeed();
+    _checkDownloadSpeed();
   }
 
   @override
   void onReady() {
     super.onReady();
-
-    Timer.periodic(Duration(minutes: 2), (timer) {
-      checkDownloadSpeed();
-    });
+    if (isConnectedToInternet.value == false) {
+      qualityNetwork.value = 'no internet';
+    } else {
+      Timer.periodic(Duration(minutes: 2), (timer) {
+        _checkDownloadSpeed();
+      });
+    }
   }
 
   final speedTest = SpeedTest();
 
-  void checkDownloadSpeed() async {
-    double speed = await speedTest.testDownloadSpeed();
-    print('Download Speed: ${speed.toStringAsFixed(2)} Mbps');
+  void _checkDownloadSpeed() async {
+    try {
+      double speed = await speedTest.testDownloadSpeed();
+      print('Download Speed: ${speed.toStringAsFixed(2)} Mbps');
 
-    quality = ConnectionQualityDeterminer.determineQuality(speed);
-    qualityNetwork.value = quality.name;
+      quality = ConnectionQualityDeterminer.determineQuality(speed);
+      qualityNetwork.value = quality.name;
 
-    print(
-        'Connection Quality: ${ConnectionQualityDeterminer.getQualityString(quality)}');
+      print(
+          'Connection Quality: ${ConnectionQualityDeterminer.getQualityString(quality)}');
+    } catch (e) {
+      qualityNetwork.value = 'no internet';
+    }
   }
 
   void _handleCheckConnectivity(ConnectivityResult result) async {

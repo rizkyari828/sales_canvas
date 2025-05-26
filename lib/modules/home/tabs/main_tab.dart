@@ -1,9 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sales/models/response/user/users_response.dart';
 import 'package:sales/modules/home/home.dart';
 import 'package:sales/shared/constants/colors.dart';
 import 'package:sales/shared/utils/common_widget.dart';
+import 'package:sales/shared/utils/network_checker.dart';
 import 'package:sales/shared/utils/size_config.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -13,23 +16,25 @@ class MainTab extends GetView<HomeController> {
   Widget build(BuildContext context) {
     double scaleWidth = MediaQuery.of(context).size.width / 360;
     controller.context = context;
-    return Obx(
-      () => Scaffold(
-          floatingActionButton: controller.isConnectedToInternetWidget.value
-              ? Padding(
-                  padding: EdgeInsets.only(left: scaleWidth * 30),
-                  child: controller.internetConnection(),
-                )
-              : SizedBox(),
-          backgroundColor: ColorConstants.lightScaffoldBackgroundColor,
-          body: RefreshIndicator(
-            child: _buildGridView(scaleWidth, context),
-            onRefresh: () => controller.onRefresh(),
-          )),
-    );
+    return Obx(() => Scaffold(
+            floatingActionButton: controller.isConnectedToInternetWidget.value
+                ? Padding(
+                    padding: EdgeInsets.only(left: scaleWidth * 30),
+                    child: controller.internetConnection(),
+                  )
+                : SizedBox(),
+            backgroundColor: ColorConstants.lightScaffoldBackgroundColor,
+            body: controller.tipe.value == '1'
+                ? _buildGridView(scaleWidth, context, controller)
+                : _getItems(controller, context))
+        // RefreshIndicator(
+        //   child: _buildGridView(scaleWidth, context),
+        //   onRefresh: () => controller.onRefresh(),
+        // )),
+        );
   }
 
-  Widget _buildGridView(scaleWidth, context) {
+  Widget _buildGridView(scaleWidth, context, controller) {
     final sw = SizeConfig().screenWidth;
     final sh = SizeConfig().screenHeight;
     return SingleChildScrollView(
@@ -41,20 +46,10 @@ class MainTab extends GetView<HomeController> {
                       EdgeInsets.only(left: sw * .04, right: sw * .04, top: 0),
                   child: Column(
                     children: [
+                      CommonWidget.rowHeight(),
                       header(),
-                      // CommonWidget.rowHeight(),
                       Container(
                           height: sh * .26, child: _getSlideImage(controller)),
-                      // CommonWidget.rowHeight(height: sh * 0.01),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding:
-                              const EdgeInsets.only(bottom: 15.0, left: 10),
-                          child: CommonWidget.minHeadText(
-                              text: 'Menu', color: ColorConstants.black),
-                        ),
-                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -99,26 +94,11 @@ class MainTab extends GetView<HomeController> {
                       EdgeInsets.only(left: sw * .04, right: sw * .04, top: 0),
                   child: Column(
                     children: [
+                      CommonWidget.rowHeight(),
                       header(),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding:
-                              const EdgeInsets.only(bottom: 15.0, left: 10),
-                          child: CommonWidget.minHeadText(
-                              text: controller.qualityNetwork.value,
-                              color: ColorConstants.black),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding:
-                              const EdgeInsets.only(bottom: 15.0, left: 10),
-                          child: CommonWidget.minHeadText(
-                              text: 'Menu', color: ColorConstants.black),
-                        ),
-                      ),
+                      CommonWidget.rowHeight(),
+                      pendingTask(),
+                      CommonWidget.rowHeight(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -140,15 +120,13 @@ class MainTab extends GetView<HomeController> {
 
   Widget header() {
     final sh = SizeConfig().screenHeight;
-
+    final sw = SizeConfig().screenWidth;
     return Container(
       margin: EdgeInsets.only(
         top: sh / 20,
-        left: 10.0,
-        right: 10.0,
       ),
       child: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.only(top: 10, bottom: 10),
         child: Row(
           children: [
             Expanded(
@@ -165,23 +143,29 @@ class MainTab extends GetView<HomeController> {
                   SizedBox(
                     width: 10,
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        controller.name.value,
-                        style: TextStyle(
-                          color: ColorConstants.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 25,
-                          fontFamily: 'Poppins',
+                  Container(
+                    width: sw / 3,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          controller.name.value,
+                          style: TextStyle(
+                            color: ColorConstants.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            fontFamily: 'Poppins',
+                          ),
+                          maxLines: 2, // maksimal 3 baris
+                          overflow: TextOverflow
+                              .ellipsis, // tambahkan "..." jika teks terlalu panjang
                         ),
-                      ),
-                      CommonWidget.subtitleText(
-                          text: controller.idPegawai.value,
-                          color: ColorConstants.black),
-                    ],
+                        CommonWidget.subtitleText(
+                            text: controller.idPegawai.value,
+                            color: ColorConstants.black),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -196,17 +180,6 @@ class MainTab extends GetView<HomeController> {
                         borderRadius: BorderRadius.circular(10.0),
                         border: Border.all(
                             width: 2.0, color: ColorConstants.borderColor),
-                        // boxShadow: [
-                        //   BoxShadow(
-                        //     color: CommonWidget.setOpacity(Colors.black, 0.3),
-                        //     blurRadius: 15.0,
-                        //     spreadRadius: 1.0,
-                        //     offset: Offset(
-                        //       -10.0,
-                        //       10.0,
-                        //     ),
-                        //   ),
-                        // ],
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -215,7 +188,7 @@ class MainTab extends GetView<HomeController> {
                       ),
                     )),
                 SizedBox(
-                  width: 10,
+                  width: 3,
                 ),
                 InkWell(
                     onTap: controller.dialogConfirmation,
@@ -227,17 +200,6 @@ class MainTab extends GetView<HomeController> {
                         borderRadius: BorderRadius.circular(10.0),
                         border: Border.all(
                             width: 2.0, color: ColorConstants.borderColor),
-                        // boxShadow: [
-                        //   BoxShadow(
-                        //     color: CommonWidget.setOpacity(Colors.black, 0.3),
-                        //     blurRadius: 15.0,
-                        //     spreadRadius: 1.0,
-                        //     offset: Offset(
-                        //       -10.0,
-                        //       10.0,
-                        //     ),
-                        //   ),
-                        // ],
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -245,6 +207,12 @@ class MainTab extends GetView<HomeController> {
                             color: ColorConstants.white, size: 27),
                       ),
                     )),
+                SizedBox(
+                  width: 3,
+                ),
+                NetworkChecker(
+                  value: controller.qualityNetwork.value,
+                )
               ],
             ),
           ],
@@ -311,17 +279,6 @@ class MainTab extends GetView<HomeController> {
             color: Colors.white,
             borderRadius: BorderRadius.circular(10.0),
             border: Border.all(width: 2.0, color: ColorConstants.borderColor),
-            // boxShadow: [
-            //   BoxShadow(
-            //     color: CommonWidget.setOpacity(Colors.black, 0.3),
-            //     blurRadius: 20.0,
-            //     spreadRadius: 4.0,
-            //     offset: Offset(
-            //       -10.0,
-            //       10.0,
-            //     ),
-            //   ),
-            // ],
           ),
           child: Padding(
               padding: const EdgeInsets.all(15.0),
@@ -359,17 +316,6 @@ class MainTab extends GetView<HomeController> {
           color: Colors.white,
           borderRadius: BorderRadius.circular(10.0),
           border: Border.all(width: 2.0, color: ColorConstants.borderColor),
-          // boxShadow: [
-          //   BoxShadow(
-          //     color: CommonWidget.setOpacity(Colors.black, 0.3),
-          //     blurRadius: 20.0,
-          //     spreadRadius: 4.0,
-          //     offset: Offset(
-          //       -10.0,
-          //       10.0,
-          //     ),
-          //   ),
-          // ],
         ),
         height: SizeConfig().screenHeight / 9,
         child: Column(
@@ -426,17 +372,6 @@ class MainTab extends GetView<HomeController> {
           color: CommonWidget.setOpacity(ColorConstants.cardColor, 0.9),
           borderRadius: BorderRadius.circular(10.0),
           border: Border.all(width: 2.0, color: ColorConstants.borderColor),
-          // boxShadow: [
-          // BoxShadow(
-          //   color: CommonWidget.setOpacity(Colors.black, 0.3),
-          //   blurRadius: 20.0,
-          //   spreadRadius: 4.0,
-          //   offset: Offset(
-          //     -10.0,
-          //     10.0,
-          //   ),
-          // ),
-          // ],
         ),
         width: SizeConfig().screenWidth * .20,
         height: SizeConfig().screenHeight * .13,
@@ -565,61 +500,362 @@ class MainTab extends GetView<HomeController> {
     );
   }
 
-  Widget _getSlideImage_(HomeController controller) {
-    final sw = SizeConfig().screenWidth;
-    return ListView.builder(
-      controller: controller.scrollController,
-      scrollDirection: Axis.horizontal,
-      itemCount: 3,
-      itemBuilder: (context, i) => InkWell(
-        onTap: () {
-          controller.goToDetailEventPages(id: '1');
-        },
-        child: Container(
-          width: sw,
-          // margin: const EdgeInsets.only(left: 15.0, right: 15.0),
-          child: Stack(
-            children: [
-              Container(
-                width: sw,
-                height: sw * .7,
-                child: ClipRRect(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      image: new DecorationImage(
-                        fit: BoxFit.cover,
-                        colorFilter: ColorFilter.mode(
-                            CommonWidget.setOpacity(Colors.black, 0.4),
-                            BlendMode.dstATop),
-                        image: new NetworkImage(
-                          'https://www.ilmubahasainggris.com/wp-content/uploads/2017/03/NGC.jpg',
+  SmartRefresher _getItems(HomeController controller, context) {
+    double scaleWidth = MediaQuery.of(context).size.width / 360;
+    return SmartRefresher(
+      enablePullDown: true,
+      enablePullUp: true,
+      header: WaterDropHeader(),
+      controller: controller.refreshController,
+      onRefresh: controller.onRefresh,
+      onLoading: controller.onLoading,
+      child: ListView.builder(
+        itemCount: controller.listStore.length,
+        itemBuilder: (context, i) => Column(
+          children: [
+            i == 0
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildGridView(scaleWidth, context, controller),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15.0, right: 15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            _cardMenuFilter(
+                                "Hari Ini", () {}, ColorConstants.mainColor),
+                            _cardMenuFilter("Minggu Ini", () {}, Colors.grey),
+                            _cardMenuFilter("Bulan Ini", () {}, Colors.grey),
+                          ],
                         ),
                       ),
-                    ),
-                  ),
-                ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      summaryCard(),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20.0, top: 20.0),
+                        child: Row(
+                          children: [
+                            CommonWidget.subtitleText(
+                                text: 'Jadwal ', color: ColorConstants.black),
+                            CommonWidget.minHeadText(
+                                text: 'Kunjungan', color: ColorConstants.black),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )
+                : SizedBox(),
+            InkWell(
+              onTap: () {
+                controller.goToDetailPages(
+                    id: controller.listStore[i].tokoId.toString(),
+                    storeName: controller.listStore[i].namaToko ?? '');
+              },
+              child: customKunjungankExpandedCard(
+                name: controller.listStore[i].namaToko ?? '',
+                photo: controller.listStore[i].pathToko ?? '',
+                type: '',
+                address: controller.listStore[i].alamatToko ?? '',
               ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 40.0, left: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    CommonWidget.bodyText(text: 'Title', color: Colors.white),
-                    CommonWidget.bodyText(
-                        text: DateFormat("MMMM dd, yyyy", "en_EN")
-                            .format(DateTime.now())
-                            .toString(),
-                        color: Colors.white),
-                  ],
-                ),
-              ),
-            ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _cardMenuFilter(String title, onPressed, Color colorCircle) {
+    return Container(
+      decoration: BoxDecoration(
+        color: CommonWidget.setOpacity(colorCircle, 0.9),
+        borderRadius: BorderRadius.circular(10.0),
+        border: Border.all(width: 2.0, color: ColorConstants.borderColor),
+      ),
+      width: SizeConfig().screenWidth * .24,
+      child: InkWell(
+        onTap: () {
+          onPressed();
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Center(
+            child: CommonWidget.subtitleText(
+                text: title.toUpperCase(),
+                color: Colors.white,
+                fontWeight: FontWeight.w500),
           ),
         ),
       ),
+    );
+  }
+
+  Widget summaryCard() {
+    final sh = SizeConfig().screenHeight;
+    return Container(
+      margin: const EdgeInsets.only(left: 15.0, right: 15.0, top: 15.0),
+      height: sh * .18,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10.0),
+        border: Border.all(width: 2.0, color: ColorConstants.borderColor),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            headerTextSummary('Total Kunjungan', '0', Colors.grey),
+            Divider(
+              color: ColorConstants.backgroundTextField,
+            ),
+            textSummary('Berhasil', '0', Colors.green),
+            textSummary('Gagal', '0', Colors.orange),
+            textSummary('Tidak Dikunjungi', '0', Colors.red)
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget headerTextSummary(String title, String value, Color color) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            Icon(
+              Icons.data_usage,
+              color: color,
+              size: 20,
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            CommonWidget.subtitleText(
+                text: title,
+                fontWeight: FontWeight.bold,
+                color: ColorConstants.mainColor),
+          ],
+        ),
+        CommonWidget.minHeadText(text: value, color: ColorConstants.mainColor),
+      ],
+    );
+  }
+
+  Widget textSummary(String title, String value, Color color) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            Icon(
+              Icons.circle,
+              color: color,
+              size: 10,
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            CommonWidget.subtitleText(
+                text: title, color: ColorConstants.mainColor),
+          ],
+        ),
+        CommonWidget.minHeadText(text: value, color: ColorConstants.mainColor),
+      ],
+    );
+  }
+
+  Widget customKunjungankExpandedCard({
+    String photo = '',
+    String name = '',
+    String type = '',
+    String address = '',
+    VoidCallback? onPressed,
+  }) {
+    final sh = SizeConfig().screenHeight;
+    return Container(
+      margin: const EdgeInsets.only(left: 15.0, right: 15.0, top: 15.0),
+      height: name == '' ? sh * .10 : sh * .11,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10.0),
+        border: Border.all(width: 2.0, color: ColorConstants.borderColor),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              flex: 5,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  photo == ''
+                      ? Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            color: Colors.red,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(3.0),
+                            child: Icon(
+                              Icons.store_rounded,
+                              color: Colors.white,
+                              size: 30,
+                            ),
+                          ),
+                        )
+                      : Container(
+                          height: 30,
+                          width: 30,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            color: Colors.black,
+                            image: new DecorationImage(
+                              fit: BoxFit.cover,
+                              image: new NetworkImage(
+                                photo,
+                              ),
+                            ),
+                          ),
+                        ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CommonWidget.minHeadText(text: name),
+                      // CommonWidget.subtitleText(text: type),
+                      Row(
+                        children: [
+                          CommonWidget.subtitleText(text: 'alamat : '),
+                          CommonWidget.subtitleText(
+                              text: address,
+                              // fontWeight: FontWeight.bold,
+                              color: ColorConstants.mainColor),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Card(
+                    color: Colors.grey,
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          bottom: 3.0, top: 3, right: 5, left: 5),
+                      child: CommonWidget.captionMultilineText(
+                          text: 'Belum dikunjungi',
+                          color: Colors.white,
+                          textAlign: TextAlign.center),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget pendingTask() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10, top: 10),
+      child: InkWell(
+          onTap: () => controller.goToKunjunganPages(),
+          child: Container(
+            height: 150,
+            decoration: BoxDecoration(
+              color: ColorConstants.blueBackground,
+              borderRadius: BorderRadius.circular(10.0),
+              // border: Border.all(width: 2.0, color: ColorConstants.borderColor),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            decoration: new BoxDecoration(
+                              color: ColorConstants.mainColor,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Icon(
+                                Icons.hourglass_empty,
+                                color: Colors.white,
+                                size: SizeConfig().screenWidth * .05,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          CommonWidget.subtitlePlusText(
+                              text: 'Progress  Harian',
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold),
+                        ],
+                      ),
+                      CommonWidget.rowHeight(),
+                      Row(
+                        children: [
+                          CommonWidget.bigText(
+                              text: ' 2 / 5', color: Colors.black),
+                          SizedBox(width: 10),
+                          CommonWidget.subtitleText(
+                            text: 'Kunjungan',
+                            color: Colors.black,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  CircularPercentIndicator(
+                      progressColor: ColorConstants.mainColor,
+                      radius: 50.0,
+                      lineWidth: 13.0,
+                      animation: true,
+                      percent: 0.7,
+                      center: CommonWidget.subtitleText(
+                        text: '70%',
+                        color: Colors.black,
+                      ))
+                ],
+              ),
+            ),
+          )),
     );
   }
 }
