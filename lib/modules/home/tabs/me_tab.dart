@@ -43,13 +43,15 @@ class MeTab extends GetView<HomeController> {
                   decoration: BoxDecoration(
                     color: ColorConstants.mainColor,
                     borderRadius: BorderRadius.circular(10.0),
-                    boxShadow: [
-                      BoxShadow(
-                        color: CommonWidget.setOpacity(Colors.black, 0.3),
-                        blurRadius: 15.0,
-                        spreadRadius: 1.0,
-                      ),
-                    ],
+                    border: Border.all(
+                        width: 2.0, color: ColorConstants.borderColor),
+                    // boxShadow: [
+                    //   BoxShadow(
+                    //     color: CommonWidget.setOpacity(Colors.black, 0.3),
+                    //     blurRadius: 15.0,
+                    //     spreadRadius: 1.0,
+                    //   ),
+                    // ],
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(5.0),
@@ -179,17 +181,18 @@ class MeTab extends GetView<HomeController> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10.0),
-        boxShadow: [
-          BoxShadow(
-            color: CommonWidget.setOpacity(Colors.black, 0.3),
-            blurRadius: 20.0,
-            spreadRadius: 4.0,
-            offset: Offset(
-              -10.0,
-              10.0,
-            ),
-          ),
-        ],
+        border: Border.all(width: 2.0, color: ColorConstants.borderColor),
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: CommonWidget.setOpacity(Colors.black, 0.3),
+        //     blurRadius: 20.0,
+        //     spreadRadius: 4.0,
+        //     offset: Offset(
+        //       -10.0,
+        //       10.0,
+        //     ),
+        //   ),
+        // ],
       ),
       width: SizeConfig().screenWidth,
       height: sw * .13,
@@ -243,17 +246,19 @@ class MeTab extends GetView<HomeController> {
                         decoration: new BoxDecoration(
                           color: ColorConstants.mainColor,
                           shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: CommonWidget.setOpacity(Colors.black, 0.3),
-                              blurRadius: 20.0,
-                              spreadRadius: 4.0,
-                              offset: Offset(
-                                -10.0,
-                                10.0,
-                              ),
-                            ),
-                          ],
+                          border: Border.all(
+                              width: 2.0, color: ColorConstants.borderColor),
+                          // boxShadow: [
+                          //   BoxShadow(
+                          //     color: CommonWidget.setOpacity(Colors.black, 0.3),
+                          //     blurRadius: 20.0,
+                          //     spreadRadius: 4.0,
+                          //     offset: Offset(
+                          //       -10.0,
+                          //       10.0,
+                          //     ),
+                          //   ),
+                          // ],
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(10.0),
@@ -276,17 +281,19 @@ class MeTab extends GetView<HomeController> {
                         decoration: new BoxDecoration(
                           color: ColorConstants.mainColor,
                           shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: CommonWidget.setOpacity(Colors.black, 0.3),
-                              blurRadius: 20.0,
-                              spreadRadius: 4.0,
-                              offset: Offset(
-                                -10.0,
-                                10.0,
-                              ),
-                            ),
-                          ],
+                          border: Border.all(
+                            width: 2.0, color: ColorConstants.borderColor),
+                          // boxShadow: [
+                          //   BoxShadow(
+                          //     color: CommonWidget.setOpacity(Colors.black, 0.3),
+                          //     blurRadius: 20.0,
+                          //     spreadRadius: 4.0,
+                          //     offset: Offset(
+                          //       -10.0,
+                          //       10.0,
+                          //     ),
+                          //   ),
+                          // ],
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(10.0),

@@ -76,17 +76,17 @@ class StoreView extends GetView<StoreListController> {
             decoration: BoxDecoration(
               color: Colors.green,
               borderRadius: BorderRadius.circular(10.0),
-              boxShadow: [
-                BoxShadow(
-                  color: CommonWidget.setOpacity(Colors.black, 0.3),
-                  blurRadius: 20.0,
-                  spreadRadius: 4.0,
-                  offset: Offset(
-                    -10.0,
-                    10.0,
-                  ),
-                ),
-              ],
+              // boxShadow: [
+              //   BoxShadow(
+              //     color: CommonWidget.setOpacity(Colors.black, 0.3),
+              //     blurRadius: 20.0,
+              //     spreadRadius: 4.0,
+              //     offset: Offset(
+              //       -10.0,
+              //       10.0,
+              //     ),
+              //   ),
+              // ],
             ),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -127,17 +127,18 @@ class StoreView extends GetView<StoreListController> {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(10.0),
-              boxShadow: [
-                BoxShadow(
-                  color: CommonWidget.setOpacity(Colors.black, 0.3),
-                  blurRadius: 20.0,
-                  spreadRadius: 4.0,
-                  offset: Offset(
-                    -10.0,
-                    10.0,
-                  ),
-                ),
-              ],
+              border: Border.all(width: 2.0, color: ColorConstants.borderColor),
+              // boxShadow: [
+              //   BoxShadow(
+              //     color: CommonWidget.setOpacity(Colors.black, 0.3),
+              //     blurRadius: 20.0,
+              //     spreadRadius: 4.0,
+              //     offset: Offset(
+              //       -10.0,
+              //       10.0,
+              //     ),
+              //   ),
+              // ],
             ),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -183,17 +184,18 @@ class StoreView extends GetView<StoreListController> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10.0),
-        boxShadow: [
-          BoxShadow(
-            color: CommonWidget.setOpacity(Colors.black, 0.3),
-            blurRadius: 20.0,
-            spreadRadius: 4.0,
-            offset: Offset(
-              -10.0,
-              10.0,
-            ),
-          ),
-        ],
+        border: Border.all(width: 2.0, color: ColorConstants.borderColor),
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: CommonWidget.setOpacity(Colors.black, 0.3),
+        //     blurRadius: 20.0,
+        //     spreadRadius: 4.0,
+        //     offset: Offset(
+        //       -10.0,
+        //       10.0,
+        //     ),
+        //   ),
+        // ],
       ),
       child: InkWell(
         onTap: onPressed,

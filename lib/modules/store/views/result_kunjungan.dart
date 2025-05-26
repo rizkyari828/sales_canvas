@@ -96,17 +96,18 @@ class ResultKunjunganView extends GetView<ResultKunjunganController> {
       decoration: BoxDecoration(
         color: CommonWidget.setOpacity(colorCircle, 0.9),
         borderRadius: BorderRadius.circular(10.0),
-        boxShadow: [
-          BoxShadow(
-            color: CommonWidget.setOpacity(Colors.black, 0.3),
-            blurRadius: 20.0,
-            spreadRadius: 4.0,
-            offset: Offset(
-              -10.0,
-              10.0,
-            ),
-          ),
-        ],
+        border: Border.all(width: 2.0, color: ColorConstants.borderColor),
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: CommonWidget.setOpacity(Colors.black, 0.3),
+        //     blurRadius: 20.0,
+        //     spreadRadius: 4.0,
+        //     offset: Offset(
+        //       -10.0,
+        //       10.0,
+        //     ),
+        //   ),
+        // ],
       ),
       width: SizeConfig().screenWidth * .24,
       child: InkWell(
@@ -134,17 +135,18 @@ class ResultKunjunganView extends GetView<ResultKunjunganController> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10.0),
-        boxShadow: [
-          BoxShadow(
-            color: CommonWidget.setOpacity(Colors.black, 0.3),
-            blurRadius: 20.0,
-            spreadRadius: 4.0,
-            offset: Offset(
-              -10.0,
-              10.0,
-            ),
-          ),
-        ],
+        border: Border.all(width: 2.0, color: ColorConstants.borderColor),
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: CommonWidget.setOpacity(Colors.black, 0.3),
+        //     blurRadius: 20.0,
+        //     spreadRadius: 4.0,
+        //     offset: Offset(
+        //       -10.0,
+        //       10.0,
+        //     ),
+        //   ),
+        // ],
       ),
       child: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -227,17 +229,18 @@ class ResultKunjunganView extends GetView<ResultKunjunganController> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10.0),
-        boxShadow: [
-          BoxShadow(
-            color: CommonWidget.setOpacity(Colors.black, 0.3),
-            blurRadius: 20.0,
-            spreadRadius: 4.0,
-            offset: Offset(
-              -10.0,
-              10.0,
-            ),
-          ),
-        ],
+        border: Border.all(width: 2.0, color: ColorConstants.borderColor),
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: CommonWidget.setOpacity(Colors.black, 0.3),
+        //     blurRadius: 20.0,
+        //     spreadRadius: 4.0,
+        //     offset: Offset(
+        //       -10.0,
+        //       10.0,
+        //     ),
+        //   ),
+        // ],
       ),
       child: Padding(
         padding: const EdgeInsets.all(15.0),

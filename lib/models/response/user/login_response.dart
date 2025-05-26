@@ -41,7 +41,8 @@ class DataLogin {
       this.idPegawai,
       this.username,
       this.foto,
-      this.groupUser});
+      this.groupUser,
+      this.tipe});
 
   int? userId;
   String? token;
@@ -50,6 +51,7 @@ class DataLogin {
   String? username;
   String? foto;
   int? groupUser;
+  String? tipe;
 
   factory DataLogin.fromJson(Map<String, dynamic> json) => DataLogin(
         userId: json["user_id"],
@@ -59,6 +61,7 @@ class DataLogin {
         username: json["username"],
         foto: json["foto"],
         groupUser: json["stsUser"],
+        tipe: json["tipe"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -67,6 +70,7 @@ class DataLogin {
         "nama": nama,
         "idPegawai": idPegawai,
         "foto": foto,
-        "stsUser": groupUser
+        "stsUser": groupUser,
+        "tipe": tipe
       };
 }

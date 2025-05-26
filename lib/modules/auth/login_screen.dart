@@ -6,41 +6,46 @@ import 'package:get/get.dart';
 import 'auth_controller.dart';
 
 class LoginScreen extends GetView<AuthController> {
-  // final AuthController controller = Get.arguments;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: ColorConstants.mainColor,
-      body: Container(
-        alignment: Alignment.center,
-        decoration: BoxDecoration(color: Color.fromRGBO(0, 0, 0, 200)),
-        child: SingleChildScrollView(
-          child: Stack(
-            children: [
-              Align(
-                alignment: Alignment.center,
-                child: Container(
-                  child: Image.asset(
-                    'assets/images/logo.png',
-                    height: MediaQuery.of(context).size.height * .30,
-                    width: MediaQuery.of(context).size.width * .70,
-                    fit: BoxFit.fill,
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+            image: AssetImage('assets/images/login.png'), fit: BoxFit.cover),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Container(
+          alignment: Alignment.center,
+          // decoration: BoxDecoration(color: Color.fromRGBO(0, 0, 0, 200)),
+          child: SingleChildScrollView(
+            child: Stack(
+              children: [
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    child: Image.asset(
+                      'assets/images/logo.png',
+                      height: MediaQuery.of(context).size.height * .30,
+                      width: MediaQuery.of(context).size.width * .70,
+                      fit: BoxFit.fill,
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height * .25),
-                alignment: Alignment.center,
-                padding: EdgeInsets.symmetric(horizontal: 35.0),
-                child: _buildForms(context),
-              ),
-              CommonWidget.rowHeight(),
-              // Container(
-              //     child: Align(
-              //         alignment: Alignment.bottomCenter,
-              //         child: Container(child: helpLabel))),
-            ],
+                Container(
+                  margin: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height * .25),
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.symmetric(horizontal: 35.0),
+                  child: _buildForms(context),
+                ),
+                CommonWidget.rowHeight(),
+                // Container(
+                //     child: Align(
+                //         alignment: Alignment.bottomCenter,
+                //         child: Container(child: helpLabel))),
+              ],
+            ),
           ),
         ),
       ),

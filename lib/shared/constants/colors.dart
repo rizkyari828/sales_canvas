@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ColorConstants {
-  static const Color lightScaffoldBackgroundColor = Color(0xFFF5F8FE);
+  static const Color lightScaffoldBackgroundColor = Color(0xFFFFFFFF);
   static Color darkScaffoldBackgroundColor = hexToColor('#2F2E2E');
   static Color secondaryAppColor = Color(0xFF4470B4);
   static Color secondaryDarkAppColor = Colors.white;
@@ -16,8 +16,8 @@ class ColorConstants {
   static const Color disableButton = Color.fromRGBO(200, 200, 200, 1.0);
   static Color backgroundTextField = hexToColor('#EDF0F4');
 
-  static const Color borderColor = Color(0xFFf2f2f2);
-  static const Color cardColor = Color(0xFFF9F9F9);
+  static const Color borderColor = Color(0xFFf4f4f4);
+  static const Color cardColor = Color(0xFFFf5f7f9);
 }
 
 Color hexToColor(String hex) {

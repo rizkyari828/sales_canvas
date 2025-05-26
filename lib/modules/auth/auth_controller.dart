@@ -65,6 +65,8 @@ class AuthController extends GetxController {
               StorageConstants.profilePhoto, res?.data?.first.foto ?? "");
           prefs.setString(StorageConstants.groupId,
               res?.data?.first.groupUser.toString() ?? "");
+          prefs.setString(
+              StorageConstants.tipe, res?.data?.first.tipe.toString() ?? "");
           Get.offAllNamed(Routes.HOME);
         }
       }

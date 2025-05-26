@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -5,12 +6,19 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:sales/shared/constants/colors.dart';
 import 'package:sales/shared/utils/common_widget.dart';
 import 'package:sales/shared/utils/size_config.dart';
+import 'package:flutter_network_monitor/flutter_network_monitor.dart';
 
 class BaseController extends GetxController {
   BaseController();
 
   RxBool isConnectedToInternet = true.obs;
   RxBool isConnectedToInternetWidget = false.obs;
+
+  final connectionMonitor = ConnectionTypeMonitor();
+
+  ConnectionQuality quality = ConnectionQuality.moderate;
+
+  RxString qualityNetwork = "".obs;
 
   @override
   void onInit() async {
@@ -19,6 +27,30 @@ class BaseController extends GetxController {
     Connectivity().onConnectivityChanged.listen((result) {
       _handleCheckConnectivity(result.first);
     });
+
+    checkDownloadSpeed();
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+
+    Timer.periodic(Duration(minutes: 2), (timer) {
+      checkDownloadSpeed();
+    });
+  }
+
+  final speedTest = SpeedTest();
+
+  void checkDownloadSpeed() async {
+    double speed = await speedTest.testDownloadSpeed();
+    print('Download Speed: ${speed.toStringAsFixed(2)} Mbps');
+
+    quality = ConnectionQualityDeterminer.determineQuality(speed);
+    qualityNetwork.value = quality.name;
+
+    print(
+        'Connection Quality: ${ConnectionQualityDeterminer.getQualityString(quality)}');
   }
 
   void _handleCheckConnectivity(ConnectivityResult result) async {

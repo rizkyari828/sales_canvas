@@ -35,71 +35,104 @@ class MainTab extends GetView<HomeController> {
     return SingleChildScrollView(
       child: Stack(
         children: [
-          Container(
-            margin: EdgeInsets.only(left: sw * .04, right: sw * .04, top: 0),
-            child: Column(
-              children: [
-                header(),
-                CommonWidget.rowHeight(),
-                Container(height: sh * .28, child: _getSlideImage(controller)),
-                // CommonWidget.rowHeight(height: sh * 0.03),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 15.0, left: 10),
-                    child: CommonWidget.minHeadText(
-                        text: 'Menu', color: ColorConstants.black),
+          controller.tipe.value == "1"
+              ? Container(
+                  margin:
+                      EdgeInsets.only(left: sw * .04, right: sw * .04, top: 0),
+                  child: Column(
+                    children: [
+                      header(),
+                      // CommonWidget.rowHeight(),
+                      Container(
+                          height: sh * .26, child: _getSlideImage(controller)),
+                      // CommonWidget.rowHeight(height: sh * 0.01),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding:
+                              const EdgeInsets.only(bottom: 15.0, left: 10),
+                          child: CommonWidget.minHeadText(
+                              text: 'Menu', color: ColorConstants.black),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          _cardMenu(Icons.airplane_ticket_rounded, "Leave",
+                              controller.goToLeavePages, Colors.blue),
+                          CommonWidget.rowWidth(width: sw * .03),
+                          _cardMenu(Icons.handshake_rounded, "Prospek",
+                              controller.goToProspekDialogPages, Colors.indigo),
+                          CommonWidget.rowWidth(width: sw * .03),
+                          _cardMenu(Icons.edit, "Input",
+                              controller.goToInputPages, Colors.green),
+                          CommonWidget.rowWidth(width: sw * .03),
+                          _cardMenu(Icons.attach_money_rounded, "Benefit",
+                              controller.goToBenefitPages, Colors.orange),
+                        ],
+                      ),
+                      CommonWidget.rowHeight(height: sh * 0.02),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding:
+                              const EdgeInsets.only(bottom: 15.0, left: 10),
+                          child: CommonWidget.minHeadText(
+                              text: 'Ringkasan', color: ColorConstants.black),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          _benefitMenu(context),
+                          _eventMenu(context),
+                        ],
+                      ),
+                      CommonWidget.rowHeight(height: sh * 0.01),
+                      _statusTaskBar(),
+                      CommonWidget.rowHeight(),
+                    ],
+                  ),
+                )
+              : Container(
+                  margin:
+                      EdgeInsets.only(left: sw * .04, right: sw * .04, top: 0),
+                  child: Column(
+                    children: [
+                      header(),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding:
+                              const EdgeInsets.only(bottom: 15.0, left: 10),
+                          child: CommonWidget.minHeadText(
+                              text: controller.qualityNetwork.value,
+                              color: ColorConstants.black),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding:
+                              const EdgeInsets.only(bottom: 15.0, left: 10),
+                          child: CommonWidget.minHeadText(
+                              text: 'Menu', color: ColorConstants.black),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          _cardMenu(Icons.store, "Store",
+                              controller.goToStorePages, Colors.red),
+                          CommonWidget.rowWidth(width: sw * .03),
+                          _cardMenu(Icons.assignment, "Kuisioner",
+                              controller.goToKuisionerPages, Colors.blueGrey),
+                        ],
+                      ),
+                      CommonWidget.rowHeight(),
+                    ],
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _cardMenu(Icons.airplane_ticket_rounded, "Leave",
-                        controller.goToLeavePages, Colors.blue),
-                    CommonWidget.rowWidth(width: sw * .03),
-                    _cardMenu(Icons.handshake_rounded, "Prospek",
-                        controller.goToProspekDialogPages, Colors.indigo),
-                    CommonWidget.rowWidth(width: sw * .03),
-                    _cardMenu(Icons.edit, "Input", controller.goToInputPages,
-                        Colors.green),
-                    CommonWidget.rowWidth(width: sw * .03),
-                    _cardMenu(Icons.attach_money_rounded, "Benefit",
-                        controller.goToBenefitPages, Colors.orange),
-                  ],
-                ),
-                CommonWidget.rowHeight(height: sh * 0.03),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _cardMenu(Icons.store, "Store", controller.goToStorePages,
-                        Colors.red),
-                    CommonWidget.rowWidth(width: sw * .03),
-                    _cardMenu(Icons.assignment, "Kuisioner",
-                        controller.goToKuisionerPages, Colors.blueGrey),
-                  ],
-                ),
-                CommonWidget.rowHeight(height: sh * 0.03),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 15.0, left: 10),
-                    child: CommonWidget.minHeadText(
-                        text: 'Ringkasan', color: ColorConstants.black),
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _benefitMenu(context),
-                    _eventMenu(context),
-                  ],
-                ),
-                CommonWidget.rowHeight(height: sh * 0.03),
-                _statusTaskBar(),
-                CommonWidget.rowHeight(),
-              ],
-            ),
-          ),
         ],
       ),
     );
@@ -161,17 +194,19 @@ class MainTab extends GetView<HomeController> {
                       decoration: BoxDecoration(
                         color: ColorConstants.mainColor,
                         borderRadius: BorderRadius.circular(10.0),
-                        boxShadow: [
-                          BoxShadow(
-                            color: CommonWidget.setOpacity(Colors.black, 0.3),
-                            blurRadius: 15.0,
-                            spreadRadius: 1.0,
-                            offset: Offset(
-                              -10.0,
-                              10.0,
-                            ),
-                          ),
-                        ],
+                        border: Border.all(
+                            width: 2.0, color: ColorConstants.borderColor),
+                        // boxShadow: [
+                        //   BoxShadow(
+                        //     color: CommonWidget.setOpacity(Colors.black, 0.3),
+                        //     blurRadius: 15.0,
+                        //     spreadRadius: 1.0,
+                        //     offset: Offset(
+                        //       -10.0,
+                        //       10.0,
+                        //     ),
+                        //   ),
+                        // ],
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -190,17 +225,19 @@ class MainTab extends GetView<HomeController> {
                             ? Colors.green
                             : Colors.grey,
                         borderRadius: BorderRadius.circular(10.0),
-                        boxShadow: [
-                          BoxShadow(
-                            color: CommonWidget.setOpacity(Colors.black, 0.3),
-                            blurRadius: 15.0,
-                            spreadRadius: 1.0,
-                            offset: Offset(
-                              -10.0,
-                              10.0,
-                            ),
-                          ),
-                        ],
+                        border: Border.all(
+                            width: 2.0, color: ColorConstants.borderColor),
+                        // boxShadow: [
+                        //   BoxShadow(
+                        //     color: CommonWidget.setOpacity(Colors.black, 0.3),
+                        //     blurRadius: 15.0,
+                        //     spreadRadius: 1.0,
+                        //     offset: Offset(
+                        //       -10.0,
+                        //       10.0,
+                        //     ),
+                        //   ),
+                        // ],
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -225,17 +262,18 @@ class MainTab extends GetView<HomeController> {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10.0),
-            boxShadow: [
-              BoxShadow(
-                color: CommonWidget.setOpacity(Colors.black, 0.3),
-                blurRadius: 20.0,
-                spreadRadius: 4.0,
-                offset: Offset(
-                  -10.0,
-                  10.0,
-                ),
-              ),
-            ],
+            border: Border.all(width: 2.0, color: ColorConstants.borderColor),
+            // boxShadow: [
+            //   BoxShadow(
+            //     color: CommonWidget.setOpacity(Colors.black, 0.3),
+            //     blurRadius: 20.0,
+            //     spreadRadius: 4.0,
+            //     offset: Offset(
+            //       -10.0,
+            //       10.0,
+            //     ),
+            //   ),
+            // ],
           ),
           child: Padding(
               padding: const EdgeInsets.all(15.0),
@@ -272,17 +310,18 @@ class MainTab extends GetView<HomeController> {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10.0),
-            boxShadow: [
-              BoxShadow(
-                color: CommonWidget.setOpacity(Colors.black, 0.3),
-                blurRadius: 20.0,
-                spreadRadius: 4.0,
-                offset: Offset(
-                  -10.0,
-                  10.0,
-                ),
-              ),
-            ],
+            border: Border.all(width: 2.0, color: ColorConstants.borderColor),
+            // boxShadow: [
+            //   BoxShadow(
+            //     color: CommonWidget.setOpacity(Colors.black, 0.3),
+            //     blurRadius: 20.0,
+            //     spreadRadius: 4.0,
+            //     offset: Offset(
+            //       -10.0,
+            //       10.0,
+            //     ),
+            //   ),
+            // ],
           ),
           child: Padding(
               padding: const EdgeInsets.all(15.0),
@@ -319,17 +358,18 @@ class MainTab extends GetView<HomeController> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10.0),
-          boxShadow: [
-            BoxShadow(
-              color: CommonWidget.setOpacity(Colors.black, 0.3),
-              blurRadius: 20.0,
-              spreadRadius: 4.0,
-              offset: Offset(
-                -10.0,
-                10.0,
-              ),
-            ),
-          ],
+          border: Border.all(width: 2.0, color: ColorConstants.borderColor),
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: CommonWidget.setOpacity(Colors.black, 0.3),
+          //     blurRadius: 20.0,
+          //     spreadRadius: 4.0,
+          //     offset: Offset(
+          //       -10.0,
+          //       10.0,
+          //     ),
+          //   ),
+          // ],
         ),
         height: SizeConfig().screenHeight / 9,
         child: Column(
@@ -383,19 +423,20 @@ class MainTab extends GetView<HomeController> {
     return Expanded(
       child: Container(
         decoration: BoxDecoration(
-          color: CommonWidget.setOpacity(colorCircle, 0.9),
+          color: CommonWidget.setOpacity(ColorConstants.cardColor, 0.9),
           borderRadius: BorderRadius.circular(10.0),
-          boxShadow: [
-            BoxShadow(
-              color: CommonWidget.setOpacity(Colors.black, 0.3),
-              blurRadius: 20.0,
-              spreadRadius: 4.0,
-              offset: Offset(
-                -10.0,
-                10.0,
-              ),
-            ),
-          ],
+          border: Border.all(width: 2.0, color: ColorConstants.borderColor),
+          // boxShadow: [
+          // BoxShadow(
+          //   color: CommonWidget.setOpacity(Colors.black, 0.3),
+          //   blurRadius: 20.0,
+          //   spreadRadius: 4.0,
+          //   offset: Offset(
+          //     -10.0,
+          //     10.0,
+          //   ),
+          // ),
+          // ],
         ),
         width: SizeConfig().screenWidth * .20,
         height: SizeConfig().screenHeight * .13,
@@ -412,14 +453,14 @@ class MainTab extends GetView<HomeController> {
                 children: [
                   Container(
                     decoration: new BoxDecoration(
-                      color: Colors.white,
+                      color: colorCircle,
                       shape: BoxShape.circle,
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Icon(
                         icon,
-                        color: colorCircle,
+                        color: Colors.white,
                         size: SizeConfig().screenWidth * .06,
                       ),
                     ),
@@ -427,7 +468,7 @@ class MainTab extends GetView<HomeController> {
                   SizedBox(height: SizeConfig().screenHeight * .01),
                   CommonWidget.subtitleText(
                       text: title.toUpperCase(),
-                      color: Colors.white,
+                      color: colorCircle,
                       fontWeight: FontWeight.w500),
                 ],
               ),
@@ -476,15 +517,18 @@ class MainTab extends GetView<HomeController> {
                         child: ClipRRect(
                           child: Container(
                             decoration: BoxDecoration(
+                              border: Border.all(
+                                  width: 2.0,
+                                  color: ColorConstants.borderColor),
                               borderRadius: BorderRadius.all(
-                                Radius.circular(20),
+                                Radius.circular(10),
                               ),
                               color: Colors.black,
                               image: new DecorationImage(
                                 fit: BoxFit.cover,
-                                colorFilter: ColorFilter.mode(
-                                    CommonWidget.setOpacity(Colors.black, 0.4),
-                                    BlendMode.dstATop),
+                                // colorFilter: ColorFilter.mode(
+                                //     CommonWidget.setOpacity(Colors.black, 0.4),
+                                //     BlendMode.dstATop),
                                 image: new NetworkImage(
                                   i.foto ?? '',
                                 ),
@@ -494,23 +538,23 @@ class MainTab extends GetView<HomeController> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 40.0, left: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          CommonWidget.bodyText(
-                              text: i.namaEvent ?? '', color: Colors.white),
-                          CommonWidget.bodyText(
-                              text: DateFormat("MMMM dd, yyyy", "en_EN")
-                                  .format(i.tanggalAcara ?? DateTime.now())
-                                  .toString(),
-                              color: Colors.white),
-                        ],
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.only(bottom: 40.0, left: 20),
+                    //   child: Column(
+                    //     crossAxisAlignment: CrossAxisAlignment.start,
+                    //     mainAxisSize: MainAxisSize.max,
+                    //     mainAxisAlignment: MainAxisAlignment.end,
+                    //     children: [
+                    //       CommonWidget.bodyText(
+                    //           text: i.namaEvent ?? '', color: Colors.white),
+                    //       CommonWidget.bodyText(
+                    //           text: DateFormat("MMMM dd, yyyy", "en_EN")
+                    //               .format(i.tanggalAcara ?? DateTime.now())
+                    //               .toString(),
+                    //           color: Colors.white),
+                    //     ],
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
