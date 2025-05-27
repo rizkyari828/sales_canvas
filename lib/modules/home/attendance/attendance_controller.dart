@@ -13,6 +13,7 @@ import 'package:sales/api/api.dart';
 import 'package:sales/models/response/user/users_response.dart';
 import 'package:sales/modules/home/home.dart';
 import 'package:sales/routes/app_pages.dart';
+import 'package:sales/shared/services/face_recognition/face_recognition_controller.dart';
 import 'package:sales/shared/shared.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -20,8 +21,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:sales/shared/widgets/button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:face_camera/face_camera.dart';
 
-class AttendanceController extends GetxController {
+class AttendanceController extends FaceRecognitionController {
   final ApiRepository apiRepository;
 
   AttendanceController({required this.apiRepository});
@@ -82,6 +84,13 @@ class AttendanceController extends GetxController {
   }
 
   void submitIn() async {
+    // var mimeType = lookupMimeType(faceCameraCapture?.value.path ?? '');
+    // var bytesBefore =
+    //     await Io.File(faceCameraCapture?.value.path ?? '').readAsBytes();
+    // String img64 =
+    //     'data:' + mimeType.toString() + ';base64,' + base64Encode(bytesBefore);
+    // _afterBase64.add(img64);
+
     final res = await apiRepository.submitAttendance(
       AttendanceSubmitRequest(
         latitude: myLocation.latitude.toString(),
@@ -96,8 +105,10 @@ class AttendanceController extends GetxController {
       EasyLoading.showSuccess('Berhasil Clock In');
       var now = new DateTime.now();
       timeIn.value = DateFormat("HH:mm:ss").format(now);
+      faceCameraCapture?.value = File('');
       Get.back();
     } else {
+      faceCameraCapture?.value = File('');
       EasyLoading.showError('Gagal Clock In');
     }
   }
@@ -221,6 +232,16 @@ class AttendanceController extends GetxController {
     meTab = MeTab();
     // getSchedule();
     validateAttandance();
+    faceCameraController = FaceCameraController(
+      autoCapture: false,
+      defaultCameraLens: CameraLens.front,
+      onCapture: (File? image) {
+        faceCameraCapture?.value = image ?? File('');
+      },
+      onFaceDetected: (Face? face) {
+        //Do something
+      },
+    );
   }
 
   loadUsers() async {
@@ -460,12 +481,13 @@ class AttendanceController extends GetxController {
           res?.data?.first.latitude ?? 0.0, res?.data?.first.longitude ?? 0.0);
 
       circles.add(Circle(
-          circleId: CircleId('A1'),
-          center: _myOffice,
-          radius: 150,
-          fillColor: CommonWidget.setOpacity(Colors.blueAccent, 0.9),
-          strokeWidth: 3,
-          strokeColor: CommonWidget.setOpacity(Colors.blueAccent, 0.9),));
+        circleId: CircleId('A1'),
+        center: _myOffice,
+        radius: 150,
+        fillColor: CommonWidget.setOpacity(Colors.blueAccent, 0.9),
+        strokeWidth: 3,
+        strokeColor: CommonWidget.setOpacity(Colors.blueAccent, 0.9),
+      ));
 
       if (res?.data?.first.flag == "1") {
         isClockIn.value = true;

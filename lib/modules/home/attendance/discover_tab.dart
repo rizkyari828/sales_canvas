@@ -1,5 +1,6 @@
 import 'package:sales/modules/home/attendance/attendance_controller.dart';
 import 'package:sales/shared/constants/colors.dart';
+import 'package:sales/shared/services/face_recognition/face_recognition_wiget.dart';
 import 'package:sales/shared/utils/common_widget.dart';
 import 'package:sales/shared/utils/size_config.dart';
 import 'package:sales/shared/widgets/button.dart';
@@ -70,19 +71,6 @@ class DiscoverTab extends GetView<AttendanceController> {
                             ),
                           ],
                         ),
-                        // Row(
-                        //   children: [
-                        //     SizedBox(width: 25),
-                        //     Icon(Icons.alarm_rounded,
-                        //         size: 20, color: ColorConstants.mainColor),
-                        //     SizedBox(width: 5),
-                        //     CommonWidget.captionText(
-                        //       text:
-                        //           "Durasi Bekerja, " + controller.duration.value,
-                        //     ),
-                        //   ],
-                        // ),
-                        // SizedBox(height: 5),
                         Padding(
                           padding: EdgeInsets.only(
                               top: sw * .01, right: sw * .06, left: sw * .06),
@@ -110,14 +98,19 @@ class DiscoverTab extends GetView<AttendanceController> {
                                               buttonColor: Colors.white,
                                               buttonTextColor:
                                                   ColorConstants.mainColor,
-                                              // height: sh * .04,
+                                              height: sh * .04,
                                               buttonText: DateFormat(
                                                       "HH:mm:ss", "id_ID")
                                                   .format(DateTime.now()),
                                               width: sw * .3,
-                                              onPressed: () =>
-                                                  controller.attendanceSheetBar(
-                                                      'Clock In'));
+                                              onPressed: () => Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          FaceRecognitionWiget
+                                                              .faceCameraRecognizer(
+                                                                  controller,
+                                                                  'Clock Out'))));
                                         })
                                       : CommonWidget.bodyText(
                                           text: controller.timeIn.value,
@@ -147,14 +140,20 @@ class DiscoverTab extends GetView<AttendanceController> {
                                               buttonColor: Colors.white,
                                               buttonTextColor:
                                                   ColorConstants.mainColor,
-                                              // height: sh * .04,
+                                              height: sh * .04,
                                               buttonText: DateFormat(
                                                       "HH:mm:ss", "id_ID")
                                                   .format(DateTime.now()),
                                               width: sw * .3,
-                                              onPressed: () =>
-                                                  controller.attendanceSheetBar(
-                                                      'Clock Out'));
+                                              onPressed: () => Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            FaceRecognitionWiget
+                                                                .faceCameraRecognizer(
+                                                                    controller,
+                                                                    'Clock Out')),
+                                                  ));
                                         })
                                       : CommonWidget.bodyText(
                                           text: controller.timeOut.value,
@@ -165,32 +164,6 @@ class DiscoverTab extends GetView<AttendanceController> {
                             ],
                           ),
                         ),
-                        // Obx(() => Padding(
-                        //       padding: const EdgeInsets.only(
-                        //           top: 15.0, left: 25.0, bottom: 10.0, right: 25),
-                        //       child: GestureDetector(
-                        //           onHorizontalDragUpdate: (event) async {
-                        //             if (event.primaryDelta! > 10) {
-                        //               controller.incTansXVal();
-                        //             }
-                        //           },
-                        //           child: Row(
-                        //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //             children: [
-                        //               _slider(),
-                        //               controller.myWidth.value == 0.0
-                        //                   ? Expanded(
-                        //                       child: Center(
-                        //                         child: CommonWidget.subtitleText(
-                        //                           text: "Geser untuk absen masuk",
-                        //                         ),
-                        //                       ),
-                        //                     )
-                        //                   : SizedBox(),
-                        //             ],
-                        //           )),
-                        //     )),
-                        // SizedBox(height: sw * .1),
                         Padding(
                           padding: EdgeInsets.only(
                               top: sw * .04,

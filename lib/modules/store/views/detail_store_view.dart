@@ -1,4 +1,5 @@
 import 'package:sales/modules/store/controllers/store_detail_controller.dart';
+import 'package:sales/shared/services/face_recognition/face_recognition_wiget.dart';
 import 'package:sales/shared/shared.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -34,8 +35,18 @@ class StoreDetailView extends GetView<StoreDetailController> {
                       : 'ABSEN MASUK',
                   width: MediaQuery.of(context).size.width / 1.13,
                   onPressed: () => !controller.isAbsent.value
-                      ? controller.attendanceSheetBar('Clock In')
-                      : controller.attendanceSheetBar('Clock Out')),
+                      ? Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  FaceRecognitionWiget.faceCameraRecognizer(
+                                      controller, 'Clock In')))
+                      : Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  FaceRecognitionWiget.faceCameraRecognizer(
+                                      controller, 'Clock Out')))),
             ),
           ],
         ),
@@ -177,18 +188,6 @@ class StoreDetailView extends GetView<StoreDetailController> {
                                               width: 2.0,
                                               color:
                                                   ColorConstants.borderColor),
-                                          // boxShadow: [
-                                          //   BoxShadow(
-                                          //     color: CommonWidget.setOpacity(
-                                          //         Colors.black, 0.3),
-                                          //     blurRadius: 20.0,
-                                          //     spreadRadius: 4.0,
-                                          //     offset: Offset(
-                                          //       -10.0,
-                                          //       10.0,
-                                          //     ),
-                                          //   ),
-                                          // ],
                                         ),
                                         height: sw * .1,
                                         width: sw * .1,
@@ -231,19 +230,6 @@ class StoreDetailView extends GetView<StoreDetailController> {
                 SizedBox(height: 30.0),
                 _cardMenu(Icons.production_quantity_limits, "Product",
                     controller.goToAddPages, Colors.white, Colors.teal),
-                // SizedBox(height: 10.0),
-                // _cardMenu(Icons.card_giftcard, "Promo",
-                //     controller.goToAddPages, Colors.white, Colors.cyan),
-                // SizedBox(height: 10.0),
-                // _cardMenu(
-                //     Icons.analytics,
-                //     "Data Analytic",
-                //     controller.goToAddPages,
-                //     Colors.white,
-                //     Colors.lightBlue),
-                // SizedBox(height: 10.0),
-                // _cardMenu(Icons.label, "Promo", {}, Colors.white,
-                //     Colors.blueGrey),
                 SizedBox(height: 50.0),
               ],
             ),

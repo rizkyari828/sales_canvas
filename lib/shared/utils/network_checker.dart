@@ -1,16 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sales/shared/constants/colors.dart';
 
-class NetworkChecker extends StatelessWidget {
-  const NetworkChecker({
-    required this.value,
-    super.key,
-  });
-
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
+class NetworkChecker {
+  static networkMeter(String value) {
     return Container(
       decoration: BoxDecoration(
         color: ColorConstants.white,
@@ -24,7 +16,7 @@ class NetworkChecker extends StatelessWidget {
     );
   }
 
-  Widget _buildNetworkIcon(String quality) {
+  static Widget _buildNetworkIcon(String quality) {
     switch (quality) {
       case "excellent":
         return Icon(Icons.signal_cellular_alt_rounded,

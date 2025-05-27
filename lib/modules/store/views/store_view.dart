@@ -1,41 +1,18 @@
 import 'package:sales/modules/store/controllers/store_list_controller.dart';
 import 'package:sales/shared/constants/constants.dart';
 import 'package:sales/shared/utils/common_widget.dart';
-import 'package:sales/shared/utils/network_checker.dart';
 import 'package:sales/shared/utils/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:sales/shared/widgets/custom_appbar.dart';
 
 class StoreView extends GetView<StoreListController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          iconTheme:
-              IconThemeData(color: ColorConstants.black //change your color here
-                  ),
-          centerTitle: false,
-          title: Text(
-            'List Store',
-            style: TextStyle(
-              color: ColorConstants.black,
-              fontWeight: FontWeight.w600,
-              fontSize: 20,
-              fontFamily: 'Poppins',
-            ),
-          ),
-          backgroundColor: ColorConstants.lightScaffoldBackgroundColor,
-          elevation: 0.0,
-          actions: [
-            Obx(() => Padding(
-                  padding: const EdgeInsets.only(right: 20.0),
-                  child: NetworkChecker(
-                    value: controller.qualityNetwork.value,
-                  ),
-                ))
-          ],
-        ),
+        appBar:
+            CustomAppBar.appBar('List Store', controller.qualityNetwork.value),
         body: Obx(() => _getItems(controller)));
   }
 
@@ -194,17 +171,6 @@ class StoreView extends GetView<StoreListController> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(10.0),
         border: Border.all(width: 2.0, color: ColorConstants.borderColor),
-        // boxShadow: [
-        //   BoxShadow(
-        //     color: CommonWidget.setOpacity(Colors.black, 0.3),
-        //     blurRadius: 20.0,
-        //     spreadRadius: 4.0,
-        //     offset: Offset(
-        //       -10.0,
-        //       10.0,
-        //     ),
-        //   ),
-        // ],
       ),
       child: InkWell(
         onTap: onPressed,

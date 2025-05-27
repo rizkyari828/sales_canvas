@@ -16,13 +16,14 @@ import 'package:get/get.dart';
 import 'package:sales/routes/app_pages.dart';
 import 'package:sales/shared/constants/colors.dart';
 import 'package:sales/shared/constants/storage.dart';
+import 'package:sales/shared/services/face_recognition/face_recognition_controller.dart';
 import 'package:sales/shared/utils/common_widget.dart';
 import 'package:sales/shared/utils/size_config.dart';
 import 'package:sales/shared/widgets/button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:geocoding/geocoding.dart';
 
-class StoreDetailController extends GetxController {
+class StoreDetailController extends FaceRecognitionController {
   final ApiRepository apiRepository;
   StoreDetailController({required this.apiRepository});
 
@@ -301,8 +302,10 @@ class StoreDetailController extends GetxController {
       isAbsent.value = true;
       absentTime.value = dateNow.value;
       isShowMaps.value = false;
+      faceCameraCapture?.value = File('');
       Get.back();
     } else {
+      faceCameraCapture?.value = File('');
       EasyLoading.showError('Gagal Clock In');
     }
   }
@@ -328,8 +331,10 @@ class StoreDetailController extends GetxController {
       isAbsentOut.value = true;
       absentTimeOut.value = dateNow.value;
       isShowMaps.value = false;
+      faceCameraCapture?.value = File('');
       Get.back();
     } else {
+      faceCameraCapture?.value = File('');
       EasyLoading.showError('Gagal Clock Out');
     }
   }

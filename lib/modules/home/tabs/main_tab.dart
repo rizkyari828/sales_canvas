@@ -210,8 +210,8 @@ class MainTab extends GetView<HomeController> {
                 SizedBox(
                   width: 3,
                 ),
-                NetworkChecker(
-                  value: controller.qualityNetwork.value,
+                NetworkChecker.networkMeter(
+                  controller.qualityNetwork.value,
                 )
               ],
             ),
