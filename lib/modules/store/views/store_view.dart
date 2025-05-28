@@ -1,6 +1,7 @@
 import 'package:sales/modules/store/controllers/store_list_controller.dart';
 import 'package:sales/shared/constants/constants.dart';
 import 'package:sales/shared/utils/common_widget.dart';
+import 'package:sales/shared/utils/network_checker.dart';
 import 'package:sales/shared/utils/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,10 +11,19 @@ import 'package:sales/shared/widgets/custom_appbar.dart';
 class StoreView extends GetView<StoreListController> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar:
-            CustomAppBar.appBar('List Store', controller.qualityNetwork.value),
-        body: Obx(() => _getItems(controller)));
+    double scaleWidth = MediaQuery.of(context).size.width / 360;
+    return Obx(() => Scaffold(
+        appBar: CustomAppBarWithNetwork(
+          title: 'List Store',
+          networkStatus: controller.qualityNetwork,
+        ),
+        floatingActionButton: controller.isConnectedToInternetWidget.value
+            ? Padding(
+                padding: EdgeInsets.only(left: scaleWidth * 30),
+                child: controller.internetConnection(),
+              )
+            : SizedBox(),
+        body: _getItems(controller)));
   }
 
   SmartRefresher _getItems(StoreListController controller) {
@@ -60,19 +70,8 @@ class StoreView extends GetView<StoreListController> {
           onTap: () => controller.goToKunjunganPages(),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.green,
+              color: ColorConstants.greenBackground,
               borderRadius: BorderRadius.circular(10.0),
-              // boxShadow: [
-              //   BoxShadow(
-              //     color: CommonWidget.setOpacity(Colors.black, 0.3),
-              //     blurRadius: 20.0,
-              //     spreadRadius: 4.0,
-              //     offset: Offset(
-              //       -10.0,
-              //       10.0,
-              //     ),
-              //   ),
-              // ],
             ),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -81,21 +80,20 @@ class StoreView extends GetView<StoreListController> {
                 children: [
                   Container(
                     decoration: new BoxDecoration(
-                      color: Colors.white,
+                      color: Colors.green,
                       shape: BoxShape.circle,
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(5.0),
                       child: Icon(
                         Icons.summarize,
-                        color: Colors.green,
+                        color: Colors.white,
                         size: SizeConfig().screenWidth * .05,
                       ),
                     ),
                   ),
                   SizedBox(width: 10),
-                  CommonWidget.minHeadText(
-                      text: ' Hasil Kunjungan', color: Colors.white),
+                  CommonWidget.minHeadText(text: ' Hasil Kunjungan'),
                 ],
               ),
             ),
@@ -205,17 +203,23 @@ class StoreView extends GetView<StoreListController> {
                                 ),
                               )
                             : Container(
-                                height: 80,
-                                width: 80,
+                                height: 70,
+                                width: 70,
                                 decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                  color: Colors.black,
-                                  image: new DecorationImage(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.blueAccent,
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.network(
+                                    photo,
                                     fit: BoxFit.cover,
-                                    image: new NetworkImage(
-                                      photo,
-                                    ),
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Center(
+                                        child: Icon(Icons.store_rounded,
+                                            color: Colors.white, size: 65),
+                                      );
+                                    },
                                   ),
                                 ),
                               ),

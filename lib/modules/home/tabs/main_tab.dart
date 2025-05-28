@@ -47,7 +47,7 @@ class MainTab extends GetView<HomeController> {
                   child: Column(
                     children: [
                       CommonWidget.rowHeight(),
-                      header(),
+                      header(controller),
                       Container(
                           height: sh * .26, child: _getSlideImage(controller)),
                       Row(
@@ -95,7 +95,7 @@ class MainTab extends GetView<HomeController> {
                   child: Column(
                     children: [
                       CommonWidget.rowHeight(),
-                      header(),
+                      header(controller),
                       CommonWidget.rowHeight(),
                       pendingTask(),
                       CommonWidget.rowHeight(),
@@ -118,7 +118,7 @@ class MainTab extends GetView<HomeController> {
     );
   }
 
-  Widget header() {
+  Widget header(HomeController controller) {
     final sh = SizeConfig().screenHeight;
     final sw = SizeConfig().screenWidth;
     return Container(
@@ -137,8 +137,22 @@ class MainTab extends GetView<HomeController> {
                     width: 10,
                   ),
                   CircleAvatar(
-                    backgroundImage:
-                        NetworkImage(controller.profilePhoto.value),
+                    radius: 22,
+                    backgroundColor: ColorConstants.mainColor,
+                    child: ClipOval(
+                      child: Image.network(
+                        controller.profilePhoto.value,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Center(
+                              child: Icon(
+                            Icons.person,
+                            size: 32,
+                            color: ColorConstants.white,
+                          ));
+                        },
+                      ),
+                    ),
                   ),
                   SizedBox(
                     width: 10,
@@ -211,7 +225,7 @@ class MainTab extends GetView<HomeController> {
                   width: 3,
                 ),
                 NetworkChecker.networkMeter(
-                  controller.qualityNetwork.value,
+                  controller.qualityNetwork,
                 )
               ],
             ),
@@ -231,17 +245,6 @@ class MainTab extends GetView<HomeController> {
             color: Colors.white,
             borderRadius: BorderRadius.circular(10.0),
             border: Border.all(width: 2.0, color: ColorConstants.borderColor),
-            // boxShadow: [
-            //   BoxShadow(
-            //     color: CommonWidget.setOpacity(Colors.black, 0.3),
-            //     blurRadius: 20.0,
-            //     spreadRadius: 4.0,
-            //     offset: Offset(
-            //       -10.0,
-            //       10.0,
-            //     ),
-            //   ),
-            // ],
           ),
           child: Padding(
               padding: const EdgeInsets.all(15.0),
@@ -720,16 +723,23 @@ class MainTab extends GetView<HomeController> {
                           ),
                         )
                       : Container(
-                          height: 30,
-                          width: 30,
+                          height: 35,
+                          width: 35,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                            color: Colors.black,
-                            image: new DecorationImage(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.blueAccent,
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network(
+                              photo,
                               fit: BoxFit.cover,
-                              image: new NetworkImage(
-                                photo,
-                              ),
+                              errorBuilder: (context, error, stackTrace) {
+                                return Center(
+                                  child: Icon(Icons.store_rounded,
+                                      color: Colors.white, size: 25),
+                                );
+                              },
                             ),
                           ),
                         ),

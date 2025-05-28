@@ -57,6 +57,33 @@ class AddKuisionerView extends GetView<KusionerController> {
                     labelText:
                         "Seberapa besar kemungkinan Anda merekomendasikan produk ini kepada orang lain?",
                   ),
+                  CommonWidget.bodyText(text: "Keterangan"),
+                  SizedBox(height: 10.0),
+                  TextAreaField(
+                    controller: controller.alasanEssay,
+                  ),
+                  Text(
+                    'Apa alasan Anda menggunakan produk kami?',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 10),
+                  MultipleChoice(
+                    options: [
+                      'Harga Terjangkau',
+                      'Kualitas Produk',
+                      'Rekomendasi Teman',
+                      'Layanan Pelanggan',
+                    ],
+                  ),
+                  SingleChoice(
+                    question: 'Apa alasan utama Anda menggunakan produk kami?',
+                    options: [
+                      'Harga Terjangkau',
+                      'Kualitas Produk',
+                      'Rekomendasi Teman',
+                      'Layanan Pelanggan',
+                    ],
+                  ),
                   SizedBox(height: 30.0),
                   CustomButton(
                     buttonText: 'SIMPAN',
@@ -68,5 +95,68 @@ class AddKuisionerView extends GetView<KusionerController> {
                 ],
               )),
         ));
+  }
+}
+
+class MultipleChoice extends GetView<KusionerController> {
+  final List<String> options;
+
+  const MultipleChoice({Key? key, required this.options}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      return Column(
+        children: options.map((option) {
+          final isSelected = controller.selectedReasons.contains(option);
+          return CheckboxListTile(
+            title: Text(option),
+            value: isSelected,
+            onChanged: (_) => controller.toggleReason(option),
+          );
+        }).toList(),
+      );
+    });
+  }
+}
+
+class SingleChoice extends GetView<KusionerController> {
+  final String question;
+  final List<String> options;
+
+  const SingleChoice({
+    Key? key,
+    required this.question,
+    required this.options,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          question,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 10),
+        Obx(() {
+          return Column(
+            children: options.map((option) {
+              return RadioListTile<String>(
+                title: Text(option),
+                value: option,
+                groupValue: controller.selectedReason.value,
+                onChanged: (value) {
+                  if (value != null) {
+                    controller.setReason(value);
+                  }
+                },
+              );
+            }).toList(),
+          );
+        }),
+      ],
+    );
   }
 }

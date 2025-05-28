@@ -23,12 +23,11 @@ class BaseController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-
+    _checkDownloadSpeed();
     Connectivity().onConnectivityChanged.listen((result) {
       _handleCheckConnectivity(result.first);
+      _checkDownloadSpeed();
     });
-
-    _checkDownloadSpeed();
   }
 
   @override

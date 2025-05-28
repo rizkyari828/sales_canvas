@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:sales/shared/constants/colors.dart';
 
 class NetworkChecker {
-  static networkMeter(String value) {
-    return Container(
-      decoration: BoxDecoration(
-        color: ColorConstants.white,
-        borderRadius: BorderRadius.circular(10.0),
-        border: Border.all(width: 2.0, color: ColorConstants.borderColor),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: _buildNetworkIcon(value),
-      ),
-    );
+  static Widget networkMeter(RxString value) {
+    return Obx(() => Container(
+          decoration: BoxDecoration(
+            color: ColorConstants.white,
+            borderRadius: BorderRadius.circular(10.0),
+            border: Border.all(width: 2.0, color: ColorConstants.borderColor),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _buildNetworkIcon(value.value),
+          ),
+        ));
   }
 
   static Widget _buildNetworkIcon(String quality) {

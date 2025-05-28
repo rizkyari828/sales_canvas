@@ -28,6 +28,7 @@ class KusionerController extends GetxController {
   final totalMCY = TextEditingController();
   final totalCAR = TextEditingController();
   final nipAdira = TextEditingController();
+  final alasanEssay = TextEditingController();
 
   RxString groupName = "".obs;
   RxString groupId = "".obs;
@@ -47,7 +48,24 @@ class KusionerController extends GetxController {
   RxString validationDate = "".obs;
   var listType = <DataTypeIzin>[].obs;
 
+  // Tambahkan ini
+  final selectedReasons = <String>[].obs;
+  final selectedReason = ''.obs;
+
+  void setReason(String value) {
+    selectedReason.value = value;
+  }
+
+  void toggleReason(String reason) {
+    if (selectedReasons.contains(reason)) {
+      selectedReasons.remove(reason);
+    } else {
+      selectedReasons.add(reason);
+    }
+  }
+
   void submit() {
+    print('Alasan dipilih: ${selectedReasons.join(', ')}');
     if (endDate.compareTo(startDate) >= 0) {
       submitData();
     } else {
