@@ -84,55 +84,64 @@ class AttendanceController extends FaceRecognitionController {
   }
 
   void submitIn() async {
-    // var mimeType = lookupMimeType(faceCameraCapture?.value.path ?? '');
-    // var bytesBefore =
-    //     await Io.File(faceCameraCapture?.value.path ?? '').readAsBytes();
-    // String img64 =
-    //     'data:' + mimeType.toString() + ';base64,' + base64Encode(bytesBefore);
-    // _afterBase64.add(img64);
-
-    final res = await apiRepository.submitAttendance(
-      AttendanceSubmitRequest(
-        latitude: myLocation.latitude.toString(),
-        longitude: myLocation.longitude.toString(),
-        idUser: userId.value,
-        token: token.value,
-        photo: MultipartFile(await imageFileList.first.readAsBytes(),
-            filename: imageFileList.first.name),
-      ),
-    );
-    if (res!.message == "berhasil absen masuk") {
-      EasyLoading.showSuccess('Berhasil Clock In');
-      var now = new DateTime.now();
-      timeIn.value = DateFormat("HH:mm:ss").format(now);
-      faceCameraCapture?.value = File('');
-      Get.back();
+    final file = faceCameraCapture?.value;
+    if (file != null) {
+      final res = await apiRepository.submitAttendance(
+        AttendanceSubmitRequest(
+          latitude: myLocation.latitude.toString(),
+          longitude: myLocation.longitude.toString(),
+          idUser: userId.value,
+          token: token.value,
+          // photo: MultipartFile(await imageFileList.first.readAsBytes(),
+          //     filename: imageFileList.first.name),
+          photo: MultipartFile(
+            await file.readAsBytes(),
+            filename: file.path.split('/').last,
+          ),
+        ),
+      );
+      if (res!.message == "berhasil absen masuk") {
+        EasyLoading.showSuccess('Berhasil Clock In');
+        var now = new DateTime.now();
+        timeIn.value = DateFormat("HH:mm:ss").format(now);
+        faceCameraCapture?.value = File('');
+        Get.back();
+      } else {
+        faceCameraCapture?.value = File('');
+        EasyLoading.showError('Gagal Clock In');
+      }
     } else {
-      faceCameraCapture?.value = File('');
-      EasyLoading.showError('Gagal Clock In');
+      EasyLoading.showError('Foto belum tersedia');
     }
   }
 
   void submitOut() async {
-    // attendanceSheetBar();
-    final res = await apiRepository.submitAttendanceOut(
-      AttendanceSubmitRequest(
+    final file = faceCameraCapture?.value;
+    if (file != null) {
+      final res =
+          await apiRepository.submitAttendanceOut(AttendanceSubmitRequest(
         latitude: myLocation.latitude.toString(),
         longitude: myLocation.longitude.toString(),
         idUser: userId.value,
         token: token.value,
-        photo: MultipartFile(await imageFileList.first.readAsBytes(),
-            filename: imageFileList.first.name),
-      ),
-    );
-    print(res);
-    if (res!.message == "berhasil absen keluar") {
-      EasyLoading.showSuccess('Berhasil Clock Out');
-      var now = new DateTime.now();
-      timeOut.value = DateFormat("HH:mm:ss").format(now);
-      Get.back();
+        // photo: MultipartFile(await imageFileList.first.readAsBytes(),
+        //     filename: imageFileList.first.name),
+        photo: MultipartFile(
+          await file.readAsBytes(),
+          filename: file.path.split('/').last,
+        ),
+      ));
+      print(res);
+      if (res!.message == "berhasil absen keluar") {
+        EasyLoading.showSuccess('Berhasil Clock Out');
+        var now = new DateTime.now();
+        timeOut.value = DateFormat("HH:mm:ss").format(now);
+        Get.back();
+      } else {
+        EasyLoading.showError('Gagal Clock Out');
+      }
     } else {
-      EasyLoading.showError('Gagal Clock Out');
+      EasyLoading.showError('Foto belum tersedia');
     }
   }
 

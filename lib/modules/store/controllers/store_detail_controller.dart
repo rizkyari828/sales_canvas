@@ -286,27 +286,36 @@ class StoreDetailController extends FaceRecognitionController {
   }
 
   void submitIn() async {
-    final res = await apiRepository.submitAttendanceStore(
-      AttendanceSubmitRequest(
-        idToko: argm['id'].toString(),
-        latitude: myLocation.latitude.toString(),
-        longitude: myLocation.longitude.toString(),
-        idUser: userId.value,
-        token: token.value,
-        photo: MultipartFile(await imageFileList.first.readAsBytes(),
-            filename: imageFileList.first.name),
-      ),
-    );
-    if (res!.message == "sukses") {
-      EasyLoading.showSuccess('Berhasil Clock In');
-      isAbsent.value = true;
-      absentTime.value = dateNow.value;
-      isShowMaps.value = false;
-      faceCameraCapture?.value = File('');
-      Get.back();
+    final file = faceCameraCapture?.value;
+    if (file != null) {
+      final res = await apiRepository.submitAttendanceStore(
+        AttendanceSubmitRequest(
+          idToko: argm['id'].toString(),
+          latitude: myLocation.latitude.toString(),
+          longitude: myLocation.longitude.toString(),
+          idUser: userId.value,
+          token: token.value,
+          // photo: MultipartFile(await imageFileList.first.readAsBytes(),
+          //     filename: imageFileList.first.name),
+          photo: MultipartFile(
+            await file.readAsBytes(),
+            filename: file.path.split('/').last,
+          ),
+        ),
+      );
+      if (res!.message == "sukses") {
+        EasyLoading.showSuccess('Berhasil Clock In');
+        isAbsent.value = true;
+        absentTime.value = dateNow.value;
+        isShowMaps.value = false;
+        faceCameraCapture?.value = File('');
+        Get.back();
+      } else {
+        faceCameraCapture?.value = File('');
+        EasyLoading.showError('Gagal Clock In');
+      }
     } else {
-      faceCameraCapture?.value = File('');
-      EasyLoading.showError('Gagal Clock In');
+      EasyLoading.showError('Foto belum tersedia');
     }
   }
 
