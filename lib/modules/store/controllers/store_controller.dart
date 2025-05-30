@@ -14,8 +14,8 @@ import 'package:sales/shared/widgets/input_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StoreController extends BaseController {
-  final ApiRepository apiRepository;
-  StoreController({required this.apiRepository});
+  StoreController({required ApiRepository apiRepository})
+      : super(apiRepository: apiRepository);
 
   final TextEditingController jumlah = TextEditingController();
   final TextEditingController note = TextEditingController();

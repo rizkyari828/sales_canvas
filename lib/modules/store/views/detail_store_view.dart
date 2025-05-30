@@ -51,7 +51,7 @@ class StoreDetailView extends GetView<StoreDetailController> {
           ],
         ),
         backgroundColor: Colors.white,
-        appBar: CommonWidget.appBar(title: 'Outlet'),
+        appBar: CommonWidget.appBar(title: 'Detail Kunjungan'),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(25.0),
@@ -227,9 +227,9 @@ class StoreDetailView extends GetView<StoreDetailController> {
                       color: Colors.orangeAccent,
                     ),
                     isSubtitle: false),
-                SizedBox(height: 30.0),
-                _cardMenu(Icons.production_quantity_limits, "Product",
-                    controller.goToAddPages, Colors.white, Colors.teal),
+                // SizedBox(height: 30.0),
+                // _cardMenu(Icons.production_quantity_limits, "Product",
+                //     controller.goToAddPages, Colors.white, Colors.teal),
                 SizedBox(height: 50.0),
               ],
             ),

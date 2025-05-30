@@ -102,8 +102,11 @@ class MainTab extends GetView<HomeController> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          _cardMenu(Icons.store, "Store",
-                              controller.goToStorePages, Colors.red),
+                          _cardMenu(Icons.store, "Kunjungan",
+                              controller.goToStorePages, Colors.green),
+                          CommonWidget.rowWidth(width: sw * .03),
+                          _cardMenu(Icons.airplane_ticket_rounded, "Leave",
+                              controller.goToLeavePages, Colors.blue),
                           CommonWidget.rowWidth(width: sw * .03),
                           _cardMenu(Icons.assignment, "Kuisioner",
                               controller.goToKuisionerPages, Colors.blueGrey),
@@ -204,23 +207,25 @@ class MainTab extends GetView<HomeController> {
                 SizedBox(
                   width: 3,
                 ),
-                InkWell(
-                    onTap: controller.dialogConfirmation,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: controller.isConnectedToInternet.value
-                            ? Colors.green
-                            : Colors.grey,
-                        borderRadius: BorderRadius.circular(10.0),
-                        border: Border.all(
-                            width: 2.0, color: ColorConstants.borderColor),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(Icons.sync,
-                            color: ColorConstants.white, size: 27),
-                      ),
-                    )),
+                controller.tipe.value == "2"
+                    ? InkWell(
+                        onTap: controller.dialogConfirmation,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: controller.isConnectedToInternet.value
+                                ? Colors.green
+                                : Colors.grey,
+                            borderRadius: BorderRadius.circular(10.0),
+                            border: Border.all(
+                                width: 2.0, color: ColorConstants.borderColor),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(Icons.sync,
+                                color: ColorConstants.white, size: 27),
+                          ),
+                        ))
+                    : Container(),
                 SizedBox(
                   width: 3,
                 ),

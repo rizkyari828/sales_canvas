@@ -2,6 +2,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:sales/shared/constants/colors.dart';
 import 'package:sales/shared/constants/common.dart';
+import 'package:sales/shared/utils/common_widget.dart';
 
 class InputField extends StatelessWidget {
   final TextEditingController controller;
@@ -41,10 +42,15 @@ class InputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: ColorConstants.backgroundTextField,
-      elevation: 0.1,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+    return Container(
+      decoration: BoxDecoration(
+        color: CommonWidget.setOpacity(ColorConstants.cardColor, 0.9),
+        borderRadius: BorderRadius.circular(10.0),
+        border: Border.all(width: 2.0, color: ColorConstants.borderColor),
+      ),
+      // color: ColorConstants.backgroundTextField,
+      // elevation: 0.1,
+      // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       child: TextFormField(
         decoration: InputDecoration(
           prefixIcon: prefixIcon,
@@ -57,11 +63,11 @@ class InputField extends StatelessWidget {
               : null,
           suffixIcon: _suffixIcon(),
           focusedBorder: new OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20.0),
+              borderRadius: BorderRadius.circular(10.0),
               borderSide: new BorderSide(
                   color: isError ?? false ? Colors.red : color, width: 1.0)),
           enabledBorder: new OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20.0),
+              borderRadius: BorderRadius.circular(10.0),
               borderSide: new BorderSide(
                   color: isError ?? false ? Colors.red : color, width: 1.0)),
           hintText: this.placeholder,

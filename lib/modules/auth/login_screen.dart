@@ -9,12 +9,12 @@ class LoginScreen extends GetView<AuthController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-            image: AssetImage('assets/images/login.png'), fit: BoxFit.cover),
-      ),
+      // decoration: BoxDecoration(
+      //   image: DecorationImage(
+      //       image: AssetImage('assets/images/login.png'), fit: BoxFit.cover),
+      // ),
       child: Scaffold(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         body: Container(
           alignment: Alignment.center,
           // decoration: BoxDecoration(color: Color.fromRGBO(0, 0, 0, 200)),
@@ -25,16 +25,17 @@ class LoginScreen extends GetView<AuthController> {
                   alignment: Alignment.center,
                   child: Container(
                     child: Image.asset(
-                      'assets/images/logo.png',
-                      height: MediaQuery.of(context).size.height * .30,
-                      width: MediaQuery.of(context).size.width * .70,
+                      'assets/images/logo_biru.png',
+                      height: MediaQuery.of(context).size.height * .13,
+                      width: MediaQuery.of(context).size.width * .80,
                       fit: BoxFit.fill,
                     ),
                   ),
                 ),
+
                 Container(
                   margin: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.height * .25),
+                      top: MediaQuery.of(context).size.height * .13),
                   alignment: Alignment.center,
                   padding: EdgeInsets.symmetric(horizontal: 35.0),
                   child: _buildForms(context),
@@ -89,6 +90,23 @@ class LoginScreen extends GetView<AuthController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CommonWidget.rowHeight(height: 32),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 5.0, left: 10),
+                child: CommonWidget.bigText(
+                    text: 'Login', color: ColorConstants.black),
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 15.0, left: 10),
+                child: CommonWidget.subtitleText(
+                    text: 'Masukkan username dan password untuk melanjutkan',
+                    color: ColorConstants.black),
+              ),
+            ),
             InputField(
               prefixIcon: Icon(
                 Icons.person,
@@ -145,7 +163,7 @@ class LoginScreen extends GetView<AuthController> {
             //   child: CommonWidget.subtitleText(
             //       text: "Lupa Password?", color: Colors.white),
             // ),
-            CommonWidget.rowHeight(),
+            CommonWidget.rowHeight(height: 30),
             CustomButton(
               buttonText: 'LOGIN',
               width: MediaQuery.of(context).size.width,

@@ -8,8 +8,8 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StoreListController extends BaseController {
-  final ApiRepository apiRepository;
-  StoreListController({required this.apiRepository});
+  StoreListController({required ApiRepository apiRepository})
+      : super(apiRepository: apiRepository);
 
   var listStore = <DataStore>[].obs;
   RxString groupName = "".obs;

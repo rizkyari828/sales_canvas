@@ -1,15 +1,22 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:sales/api/api_repository.dart';
+import 'package:sales/models/request/attendance/attendance_wrapper.dart';
+import 'package:sales/models/request/attendance/submit_attendance.dart';
 import 'package:sales/shared/constants/colors.dart';
 import 'package:sales/shared/utils/common_widget.dart';
 import 'package:sales/shared/utils/size_config.dart';
 import 'package:flutter_network_monitor/flutter_network_monitor.dart';
 
 class BaseController extends GetxController {
-  BaseController();
+  final ApiRepository apiRepository;
+  BaseController({required this.apiRepository});
 
   RxBool isConnectedToInternet = true.obs;
   RxBool isConnectedToInternetWidget = false.obs;
@@ -69,6 +76,8 @@ class BaseController extends GetxController {
         if (connection.isNotEmpty && connection[0].rawAddress.isNotEmpty) {
           isConnectedToInternet.value = true;
           isConnectedToInternetWidget.value = true;
+
+          await _submitPendingAttendance();
         }
       }
     } on SocketException catch (_) {
@@ -191,6 +200,49 @@ class BaseController extends GetxController {
             ),
           )
         : SizedBox();
+  }
+
+  Future<void> _submitPendingAttendance() async {
+    final storage = GetStorage();
+    final data = storage.read('pendingAttendance');
+
+    if (data != null) {
+      try {
+        final wrapper = AttendanceSubmitRequestWrapper.fromJson(data);
+        final success = await _submitAttendance(wrapper);
+
+        if (success) {
+          await storage.remove('pendingAttendance');
+          EasyLoading.showSuccess("Data tertunda berhasil dikirim");
+        } else {
+          EasyLoading.showInfo("Data tertunda belum berhasil dikirim");
+        }
+      } catch (e) {
+        print("Gagal mengirim data tertunda: $e");
+      }
+    }
+  }
+
+  Future<bool> _submitAttendance(AttendanceSubmitRequestWrapper wrapper) async {
+    try {
+      final request = AttendanceSubmitRequest(
+        idToko: wrapper.idToko,
+        latitude: wrapper.latitude,
+        longitude: wrapper.longitude,
+        idUser: wrapper.idUser,
+        token: wrapper.token,
+        photo: MultipartFile(
+          base64Decode(wrapper.photoBase64),
+          filename: wrapper.filename,
+        ),
+      );
+
+      final res = await apiRepository.submitAttendanceStore(request);
+      return res?.message == "sukses";
+    } catch (e) {
+      print("Error saat submit: $e");
+      return false;
+    }
   }
 
   void closeWidget() {

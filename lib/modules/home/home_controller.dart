@@ -33,8 +33,8 @@ import 'package:rating_dialog/rating_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeController extends BaseController {
-  final ApiRepository apiRepository;
-  HomeController({required this.apiRepository});
+  HomeController({required ApiRepository apiRepository})
+      : super(apiRepository: apiRepository);
 
   final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
   late LatLng myLocation = LatLng(0, 0);

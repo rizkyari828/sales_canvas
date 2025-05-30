@@ -58,7 +58,7 @@ class CommonWidget {
       textAlign: align,
       style: TextStyle(
           color: color,
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w600,
           fontSize: 33,
           fontFamily: 'Poppins'),
     );

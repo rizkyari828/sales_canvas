@@ -24,9 +24,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:face_camera/face_camera.dart';
 
 class AttendanceController extends FaceRecognitionController {
-  final ApiRepository apiRepository;
-
-  AttendanceController({required this.apiRepository});
+  AttendanceController({required ApiRepository apiRepository})
+      : super(apiRepository: apiRepository);
 
   final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
 

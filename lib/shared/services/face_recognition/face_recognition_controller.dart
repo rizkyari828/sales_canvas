@@ -2,9 +2,12 @@ import 'dart:io';
 
 import 'package:face_camera/face_camera.dart';
 import 'package:get/get.dart';
+import 'package:sales/api/api_repository.dart';
+import 'package:sales/modules/home/base_controller.dart';
 
-class FaceRecognitionController extends GetxController {
-  FaceRecognitionController();
+class FaceRecognitionController extends BaseController {
+  FaceRecognitionController({required ApiRepository apiRepository})
+      : super(apiRepository: apiRepository);
 
   Rx<File>? faceCameraCapture = Rx<File>(File(""));
 
