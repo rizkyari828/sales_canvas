@@ -204,24 +204,52 @@ class BaseController extends GetxController {
 
   Future<void> _submitPendingAttendance() async {
     final storage = GetStorage();
-    final data = storage.read('pendingAttendance');
+    final dataList = storage.read<List<dynamic>>('pendingAttendances');
 
-    if (data != null) {
-      try {
-        final wrapper = AttendanceSubmitRequestWrapper.fromJson(data);
-        final success = await _submitAttendance(wrapper);
+    if (dataList == null || dataList.isEmpty) return;
 
-        if (success) {
-          await storage.remove('pendingAttendance');
-          EasyLoading.showSuccess("Data tertunda berhasil dikirim");
-        } else {
-          EasyLoading.showInfo("Data tertunda belum berhasil dikirim");
-        }
-      } catch (e) {
-        print("Gagal mengirim data tertunda: $e");
+    final List<Map<String, dynamic>> updatedList =
+        List<Map<String, dynamic>>.from(dataList);
+
+    final List<Map<String, dynamic>> failedToSubmit = [];
+
+    for (final data in updatedList) {
+      final wrapper = AttendanceSubmitRequestWrapper.fromJson(data);
+      final success = await _submitAttendance(wrapper);
+      if (!success) {
+        failedToSubmit.add(data);
       }
     }
+
+    if (failedToSubmit.isEmpty) {
+      storage.remove('pendingAttendances');
+      EasyLoading.showSuccess("Semua data tertunda berhasil dikirim");
+    } else {
+      storage.write('pendingAttendances', failedToSubmit);
+      EasyLoading.showInfo("${failedToSubmit.length} data masih gagal dikirim");
+    }
   }
+
+  // Future<void> _submitPendingAttendance() async {
+  //   final storage = GetStorage();
+  //   final data = storage.read('pendingAttendance');
+
+  //   if (data != null) {
+  //     try {
+  //       final wrapper = AttendanceSubmitRequestWrapper.fromJson(data);
+  //       final success = await _submitAttendance(wrapper);
+
+  //       if (success) {
+  //         await storage.remove('pendingAttendance');
+  //         EasyLoading.showSuccess("Data tertunda berhasil dikirim");
+  //       } else {
+  //         EasyLoading.showInfo("Data tertunda belum berhasil dikirim");
+  //       }
+  //     } catch (e) {
+  //       print("Gagal mengirim data tertunda: $e");
+  //     }
+  //   }
+  // }
 
   Future<bool> _submitAttendance(AttendanceSubmitRequestWrapper wrapper) async {
     try {

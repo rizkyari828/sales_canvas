@@ -17,24 +17,27 @@ class AttendanceSubmitRequestWrapper {
     required this.filename,
   });
 
-  Map<String, dynamic> toJson() => {
-        'idToko': idToko,
-        'latitude': latitude,
-        'longitude': longitude,
-        'idUser': idUser,
-        'token': token,
-        'photoBase64': photoBase64,
-        'filename': filename,
-      };
+  factory AttendanceSubmitRequestWrapper.fromJson(Map<String, dynamic> json) {
+    return AttendanceSubmitRequestWrapper(
+      idToko: json['idToko'],
+      latitude: json['latitude'],
+      longitude: json['longitude'],
+      idUser: json['idUser'],
+      token: json['token'],
+      photoBase64: json['photoBase64'],
+      filename: json['filename'],
+    );
+  }
 
-  factory AttendanceSubmitRequestWrapper.fromJson(Map<String, dynamic> json) =>
-      AttendanceSubmitRequestWrapper(
-        idToko: json['idToko'],
-        latitude: json['latitude'],
-        longitude: json['longitude'],
-        idUser: json['idUser'],
-        token: json['token'],
-        photoBase64: json['photoBase64'],
-        filename: json['filename'],
-      );
+  Map<String, dynamic> toJson() {
+    return {
+      'idToko': idToko,
+      'latitude': latitude,
+      'longitude': longitude,
+      'idUser': idUser,
+      'token': token,
+      'photoBase64': photoBase64,
+      'filename': filename,
+    };
+  }
 }

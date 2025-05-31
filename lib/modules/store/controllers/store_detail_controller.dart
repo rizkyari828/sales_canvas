@@ -343,6 +343,69 @@ class StoreDetailController extends FaceRecognitionController {
     }
   }
 
+  void submitIn() async {
+    final file = faceCameraCapture?.value;
+    if (file == null || !file.existsSync()) {
+      EasyLoading.showError('Foto belum tersedia');
+      return;
+    }
+
+    final photoBytes = await file.readAsBytes();
+    final photoBase64 = base64Encode(photoBytes);
+
+    final wrapper = AttendanceSubmitRequestWrapper(
+      idToko: argm['id'].toString(),
+      latitude: myLocation.latitude.toString(),
+      longitude: myLocation.longitude.toString(),
+      idUser: userId.value,
+      token: token.value,
+      photoBase64: photoBase64,
+      filename: file.path.split('/').last,
+    );
+
+    if (isConnectedToInternet.value) {
+      final success = await _submitAttendance(wrapper);
+      if (success) {
+        EasyLoading.showSuccess('Berhasil Clock In');
+        isAbsent.value = true;
+        absentTime.value = dateNow.value;
+        isShowMaps.value = false;
+        faceCameraCapture?.value = File('');
+        Get.back();
+      } else {
+        EasyLoading.showError('Gagal Clock In');
+        faceCameraCapture?.value = File('');
+      }
+    } else {
+      _savePendingAttendance(wrapper);
+      EasyLoading.showInfo('Tidak ada koneksi. Data disimpan sementara.');
+      faceCameraCapture?.value = File('');
+    }
+  }
+
+  void _savePendingAttendance(AttendanceSubmitRequestWrapper wrapper) {
+    final storage = GetStorage();
+
+    final existingData = storage.read<List<dynamic>>('pendingAttendances');
+    final List<Map<String, dynamic>> updatedList = existingData != null
+        ? List<Map<String, dynamic>>.from(existingData)
+        : [];
+
+    updatedList.add(wrapper.toJson());
+    storage.write('pendingAttendances', updatedList);
+  }
+
+  // Future<void> saveAttendanceToLocal(
+  //     AttendanceSubmitRequestWrapper data) async {
+  //   final storage = GetStorage();
+  //   final existingData = storage.read<List>('pendingAttendance') ?? [];
+
+  //   final updatedList = List<Map<String, dynamic>>.from(existingData)
+  //     ..add(data.toJson());
+
+  //   await storage.write('pendingAttendance', updatedList);
+  // }
+
   Future<bool> _submitAttendance(AttendanceSubmitRequestWrapper wrapper) async {
     try {
       final request = AttendanceSubmitRequest(
