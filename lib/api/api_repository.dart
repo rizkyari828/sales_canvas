@@ -11,6 +11,7 @@ import 'package:sales/models/request/id_request.dart';
 import 'package:sales/models/request/input_request.dart';
 import 'package:sales/models/request/izin/submit_izin_request.dart';
 import 'package:sales/models/request/izin/update_approval_request.dart';
+import 'package:sales/models/request/kuisioner_request.dart';
 import 'package:sales/models/request/logout_request.dart';
 import 'package:sales/models/request/overtime/get_list.dart';
 import 'package:sales/models/request/overtime/set_done_overtime_request.dart';
@@ -34,6 +35,7 @@ import 'package:sales/models/response/benefit/type_cuti.dart';
 import 'package:sales/models/response/izin/list_izin.dart';
 import 'package:sales/models/response/izin/show_izin.dart';
 import 'package:sales/models/response/izin/type_izin.dart';
+import 'package:sales/models/response/kuisioner_response.dart';
 import 'package:sales/models/response/name_tad_list_response.dart';
 import 'package:sales/models/response/prospek/list.dart';
 import 'package:sales/models/response/prospek/master_data_response.dart';
@@ -674,7 +676,8 @@ class ApiRepository {
     return null;
   }
 
-  Future<BranchListResponse?> branchList({int page = 1, int limit = 100}) async {
+  Future<BranchListResponse?> branchList(
+      {int page = 1, int limit = 100}) async {
     try {
       final res = await apiProvider
           .getBranchList('/api/v1/branch?limit=' + limit.toString())
@@ -801,6 +804,23 @@ class ApiRepository {
     return null;
   }
 
+  Future<ErrorResponse?> submitKuisioner(KuisionerRequest data) async {
+    try {
+      final res = await apiProvider
+          .submitKuisioner('/api/saveCall', data)
+          .timeout(Duration(seconds: timeout));
+      if (res.statusCode == 200 || res.statusCode == 401) {
+        return ErrorResponse.fromJson(res.body);
+      }
+    } on TimeoutException catch (_) {
+      EasyLoading.showError('Connection Timeout. Please try again later');
+      EasyLoading.dismiss();
+    } catch (exception) {
+      print(exception);
+    }
+    return null;
+  }
+
   Future<AttendanceValidateResponse?> validateAttendanceStore(
       AttendanceValidateRequest request) async {
     final link = '/api/beforeAbsenKampas';
@@ -899,6 +919,29 @@ class ApiRepository {
           .timeout(Duration(seconds: timeout));
       if (res.statusCode == 200 || res.statusCode == 401) {
         return ListItemsResponse.fromJson(res.body);
+      }
+    } on TimeoutException catch (_) {
+      EasyLoading.showError('Connection Timeout. Please try again later');
+      EasyLoading.dismiss();
+    } catch (exception) {
+      print(exception);
+    }
+    return null;
+  }
+
+  Future<KuisionerResponse?> listKuisioner(
+      {int page = 1, int limit = 10, required UserIdRequest data}) async {
+    try {
+      final res = await apiProvider
+          .getKuisioner(
+              '/api/listKuisioner?page=' +
+                  page.toString() +
+                  '&limit=' +
+                  limit.toString(),
+              data)
+          .timeout(Duration(seconds: timeout));
+      if (res.statusCode == 200 || res.statusCode == 401) {
+        return KuisionerResponse.fromJson(res.body);
       }
     } on TimeoutException catch (_) {
       EasyLoading.showError('Connection Timeout. Please try again later');

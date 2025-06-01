@@ -1,3 +1,4 @@
+import 'package:get_storage/get_storage.dart';
 import 'package:sales/api/api_repository.dart';
 import 'package:sales/models/request/user_id_request.dart';
 import 'package:sales/models/response/store/list_store.dart';
@@ -28,12 +29,12 @@ class StoreListController extends BaseController {
   }
 
   void onLoading() async {
-    // page.value = page.value + 1;
+    page.value = page.value + 1;
 
-    // // monitor network fetch
-    // await Future.delayed(Duration(milliseconds: 1000));
-    // getStore(page.value);
-    // refreshController.loadComplete();
+    // monitor network fetch
+    await Future.delayed(Duration(milliseconds: 1000));
+    getStore(page.value);
+    refreshController.loadComplete();
   }
 
   @override
@@ -61,18 +62,58 @@ class StoreListController extends BaseController {
     super.onClose();
   }
 
+  final storage = GetStorage();
+
   void getStore(page) async {
-    final res = await apiRepository.listStore(
-        page: page, data: UserIdRequest(id: userId.value));
-    listStore.addAll(res?.data ?? []);
+    try {
+      final res = await apiRepository.listStore(
+          page: page, data: UserIdRequest(id: userId.value));
+
+      if (res != null && res.data != null) {
+        // Ubah objek DataStore ke JSON sebelum simpan
+        final jsonList = res.data!.map((e) => e.toJson()).toList();
+        storage.write('cached_items_page_$page', jsonList);
+
+        listStore.addAll(res.data!);
+      } else {
+        _loadFromCache(page);
+      }
+    } catch (e) {
+      // Gagal fetch, ambil dari cache
+      _loadFromCache(page);
+    }
+  }
+
+  void _loadFromCache(int page) {
+    final cachedData = storage.read('cached_items_page_$page');
+
+    if (cachedData != null) {
+      listStore.addAll(List<DataStore>.from(
+        (cachedData as List).map((e) => DataStore.fromJson(e)),
+      ));
+    }
   }
 
   Future<void> onRefresh() async {
     await Future.delayed(Duration(milliseconds: 1000));
     listStore.clear();
     page.value = 1;
+
+    if (isConnectedToInternet.value == true) {
+      clearCachedPages(prefix: 'cached_store_page_');
+    }
+
     getStore(page.value);
     refreshController.refreshCompleted();
+  }
+
+  void clearCachedPages({String prefix = 'cached_store_page_'}) {
+    final keys = storage.getKeys();
+    final pageKeys = keys.where((k) => k.startsWith(prefix)).toList();
+
+    for (final key in pageKeys) {
+      storage.remove(key);
+    }
   }
 
   void goToDetailPages({String id = "", String storeName = ''}) {

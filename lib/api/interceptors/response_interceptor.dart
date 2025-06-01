@@ -14,66 +14,58 @@ FutureOr<dynamic> responseInterceptor(
   print(response.body);
 
   if (response.statusCode == 200) {
-    final message = ErrorResponse.fromJson(response.body);
-    if (message.error == true) {
-      EasyLoading.showError(message.message ?? '');
-      EasyLoading.dismiss();
-      return;
+    try {
+      final message = ErrorResponse.fromJson(response.body);
+      if (message.error == true) {
+        EasyLoading.showError(message.message ?? '');
+        EasyLoading.dismiss();
+        return;
+      }
+    } catch (e) {
+      // Catch jika parsing gagal
+      print("Parsing ErrorResponse gagal: $e");
     }
   } else {
     print(response.statusCode);
     handleErrorStatus(response);
-    // return;
   }
+
   EasyLoading.dismiss();
   return response;
 }
 
 void handleErrorStatus(Response response) {
-  final message = ErrorResponse.fromJson(response.body);
-  if (message.error == true) {
-    EasyLoading.showError(message.message ?? '');
-    EasyLoading.dismiss();
-    return;
-  } else if (response.statusCode == 400) {
+  try {
     final message = ErrorResponse.fromJson(response.body);
-    CommonWidget.errorSnackBar(message.message ?? '');
-    EasyLoading.dismiss();
-    return;
-  } else if (response.statusCode == 401) {
-    final message = ErrorResponse.fromJson(response.body);
-    CommonWidget.errorSnackBar(message.message ?? '');
-    EasyLoading.dismiss();
-    if (message.message == 'Unauthenticated.') {
-      var storage = Get.find<SharedPreferences>();
-      storage.clear();
-      Get.offAllNamed(Routes.LOGIN);
-    }
-    return;
-  } else if (response.statusCode == 404) {
-    final message = ErrorResponse.fromJson(response.body);
-    if (message.message == 'Data rating belum tersedia') {
-    } else {
+
+    if (message.error == true) {
+      EasyLoading.showError(message.message ?? '');
+    } else if (response.statusCode == 400) {
       CommonWidget.errorSnackBar(message.message ?? '');
-    }
-    EasyLoading.dismiss();
-    return;
-  } else if (response.statusCode == 403) {
-    final message = ErrorResponse.fromJson(response.body);
-    if (message.message == 'Hanya client yg bisa memberika rating') {
-    } else {
+    } else if (response.statusCode == 401) {
       CommonWidget.errorSnackBar(message.message ?? '');
+      if (message.message == 'Unauthenticated.') {
+        var storage = Get.find<SharedPreferences>();
+        storage.clear();
+        Get.offAllNamed(Routes.LOGIN);
+      }
+    } else if (response.statusCode == 404) {
+      if (message.message != 'Data rating belum tersedia') {
+        CommonWidget.errorSnackBar(message.message ?? '');
+      }
+    } else if (response.statusCode == 403) {
+      if (message.message != 'Hanya client yg bisa memberika rating') {
+        CommonWidget.errorSnackBar(message.message ?? '');
+      }
+    } else if (response.statusCode == 422) {
+      CommonWidget.errorSnackBar(message.message ?? '');
+    } else {
+      EasyLoading.showError('Terjadi kesalahan. Silakan coba lagi nanti');
     }
-    EasyLoading.dismiss();
-    return;
-  } else if (response.statusCode == 422) {
-    final message = ErrorResponse.fromJson(response.body);
-    CommonWidget.errorSnackBar(message.message ?? '');
-    EasyLoading.dismiss();
-    return;
-  } else {
-    EasyLoading.showError('Error occured. Please try again later');
-    EasyLoading.dismiss();
-    return;
+  } catch (e) {
+    EasyLoading.showError('Terjadi kesalahan saat memproses data');
+    print("Parsing error di handleErrorStatus: $e");
   }
+
+  EasyLoading.dismiss();
 }

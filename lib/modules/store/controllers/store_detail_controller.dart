@@ -289,7 +289,7 @@ class StoreDetailController extends FaceRecognitionController {
     }
   }
 
-  void submit(String type) async {
+  void submitOld(String type) async {
     final file = faceCameraCapture?.value;
     if (file == null || !(await file.exists())) {
       EasyLoading.showError('Foto belum tersedia');
@@ -343,7 +343,7 @@ class StoreDetailController extends FaceRecognitionController {
     }
   }
 
-  void submitIn() async {
+  void submit(String type) async {
     final file = faceCameraCapture?.value;
     if (file == null || !file.existsSync()) {
       EasyLoading.showError('Foto belum tersedia');
@@ -366,14 +366,22 @@ class StoreDetailController extends FaceRecognitionController {
     if (isConnectedToInternet.value) {
       final success = await _submitAttendance(wrapper);
       if (success) {
-        EasyLoading.showSuccess('Berhasil Clock In');
+        if (type == 'Clock In') {
+          EasyLoading.showSuccess('Berhasil Clock In');
+        } else {
+          EasyLoading.showSuccess('Berhasil Clock Out');
+        }
         isAbsent.value = true;
         absentTime.value = dateNow.value;
         isShowMaps.value = false;
         faceCameraCapture?.value = File('');
         Get.back();
       } else {
-        EasyLoading.showError('Gagal Clock In');
+        if (type == 'Clock In') {
+          EasyLoading.showError('Gagal Clock In');
+        } else {
+          EasyLoading.showError('Gagal Clock Out');
+        }
         faceCameraCapture?.value = File('');
       }
     } else {

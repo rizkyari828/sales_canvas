@@ -1,34 +1,23 @@
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sales/api/api_repository.dart';
-import 'package:sales/models/request/input_request.dart';
+import 'package:sales/models/request/kuisioner_request.dart';
+import 'package:sales/models/request/user_id_request.dart';
 import 'package:sales/models/response/izin/type_izin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:sales/models/response/kuisioner_response.dart';
+import 'package:sales/modules/home/base_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class KusionerController extends GetxController {
-  final ApiRepository apiRepository;
-  KusionerController({required this.apiRepository});
+class KusionerController extends BaseController {
+  KusionerController({required ApiRepository apiRepository})
+      : super(apiRepository: apiRepository);
 
   final startDateController = TextEditingController();
   final endDateController = TextEditingController();
-  final totalBahanCRM = TextEditingController();
-  final jumlahFuWalk = TextEditingController();
-  final jumlahFuCRM = TextEditingController();
-  final jumahBerminat = TextEditingController();
-  final jumlahPikirPikir = TextEditingController();
-  final jumlahBelumBerminat = TextEditingController();
-  final jumlahTidakBisaDihubungi = TextEditingController();
-  final jumlah3n = TextEditingController();
-  final jumlahOrder = TextEditingController();
-  final jumlahMCY = TextEditingController();
-  final jumlahCAR = TextEditingController();
-  final totalMCYCAR = TextEditingController();
-  final totalMCY = TextEditingController();
-  final totalCAR = TextEditingController();
-  final nipAdira = TextEditingController();
-  final alasanEssay = TextEditingController();
+  final answerController = TextEditingController();
 
   RxString groupName = "".obs;
   RxString groupId = "".obs;
@@ -39,33 +28,25 @@ class KusionerController extends GetxController {
   RxString username = "".obs;
   RxString token = "".obs;
 
-  String date = "";
   DateTime selectedDate = DateTime.now();
-  RxString dateCnC = "".obs;
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now();
 
+  RxInt page = 1.obs;
+
   RxString validationDate = "".obs;
-  var listType = <DataTypeIzin>[].obs;
+  var listKuisioner = <ListKuisioner>[].obs;
 
-  // Tambahkan ini
-  final selectedReasons = <String>[].obs;
-  final selectedReason = ''.obs;
+  final selectedAnswer = ''.obs;
 
-  void setReason(String value) {
-    selectedReason.value = value;
-  }
+  RefreshController refreshController =
+      RefreshController(initialRefresh: false);
 
-  void toggleReason(String reason) {
-    if (selectedReasons.contains(reason)) {
-      selectedReasons.remove(reason);
-    } else {
-      selectedReasons.add(reason);
-    }
+  void setAnswer(String value) {
+    selectedAnswer.value = value;
   }
 
   void submit() {
-    print('Alasan dipilih: ${selectedReasons.join(', ')}');
     if (endDate.compareTo(startDate) >= 0) {
       submitData();
     } else {
@@ -75,25 +56,11 @@ class KusionerController extends GetxController {
   }
 
   void submitData() async {
-    final res = await apiRepository.submitInput(
-      SubmitInputRequest(
+    final res = await apiRepository.submitKuisioner(
+      KuisionerRequest(
         idUser: username.value,
-        token: token.value,
-        nipAdira: nipAdira.text,
-        totalBahanCRM: int.parse(totalBahanCRM.text),
-        jumlahFuWalk: int.parse(jumlahFuWalk.text),
-        jumlahFuCRM: int.parse(jumlahFuCRM.text),
-        jumahBerminat: int.parse(jumahBerminat.text),
-        jumlahPikirPikir: int.parse(jumlahPikirPikir.text),
-        jumlahBelumBerminat: int.parse(jumlahBelumBerminat.text),
-        jumlahTidakBisaDihubungi: int.parse(jumlahTidakBisaDihubungi.text),
-        jumlah3n: int.parse(jumlah3n.text),
-        jumlahOrder: int.parse(jumlahOrder.text),
-        jumlahMCY: int.parse(jumlahMCY.text),
-        totalMCYCAR: int.parse(totalMCYCAR.text),
-        jumlahCAR: int.parse(jumlahCAR.text),
-        totalMCY: int.parse(totalMCY.text),
-        totalCAR: int.parse(totalCAR.text),
+        idKuisioner: token.value,
+        answer: answerController.text,
       ),
     );
     if (res?.error == false) {
@@ -115,7 +82,7 @@ class KusionerController extends GetxController {
   void onReady() {
     super.onReady();
     loadUsers();
-    getType();
+    getKuisioner(page);
   }
 
   loadUsers() async {
@@ -154,9 +121,37 @@ class KusionerController extends GetxController {
         DateFormat("yyyy-MM-dd", "id_ID").format(selectedDate).toString();
   }
 
-  void getType() async {
-    final res = await apiRepository.typeIzin();
-    listType.addAll(res?.data ?? []);
+  void getKuisioner(page) async {
+    listKuisioner.add(
+        ListKuisioner(id: 1, type: 'essay', question: 'Ini Untuk Soal Essay'));
+    listKuisioner.add(ListKuisioner(
+        id: 2,
+        type: 'pg',
+        question: 'Ini Untuk Soal Pilihan',
+        optionA: 'Pilihan A',
+        optionB: 'Pilihan B',
+        optionC: 'Pilihan C',
+        optionD: 'Pilihan D'));
+    // final res = await apiRepository.listKuisioner(
+    //     page: page, data: UserIdRequest(id: idUser.value));
+    // listKuisioner.addAll(res?.data ?? []);
+  }
+
+  void onLoading() async {
+    page.value = page.value + 1;
+
+    // monitor network fetch
+    await Future.delayed(Duration(milliseconds: 1000));
+    getKuisioner(page.value);
+    refreshController.loadComplete();
+  }
+
+  Future<void> onRefresh() async {
+    await Future.delayed(Duration(milliseconds: 1000));
+    listKuisioner.clear();
+    page.value = 1;
+    getKuisioner(page.value);
+    refreshController.refreshCompleted();
   }
 
   @override

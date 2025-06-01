@@ -11,6 +11,7 @@ import 'package:sales/models/request/id_request.dart';
 import 'package:sales/models/request/input_request.dart';
 import 'package:sales/models/request/izin/submit_izin_request.dart';
 import 'package:sales/models/request/izin/update_approval_request.dart';
+import 'package:sales/models/request/kuisioner_request.dart';
 import 'package:sales/models/request/logout_request.dart';
 import 'package:sales/models/request/overtime/get_list.dart';
 import 'package:sales/models/request/overtime/set_done_overtime_request.dart';
@@ -24,6 +25,7 @@ import 'package:sales/models/request/store/update_qty_request.dart';
 import 'package:sales/models/request/update_fcm_profile_request.dart';
 import 'package:sales/models/request/update_photo_profile_request.dart';
 import 'package:get/get.dart';
+import 'package:sales/models/request/user_id_request.dart';
 
 class ApiProvider extends BaseProvider {
   Future<Response> login(String path, LoginRequest data) {
@@ -233,6 +235,11 @@ class ApiProvider extends BaseProvider {
     return post(path, data.toJson());
   }
 
+  Future<Response> submitKuisioner(String path, KuisionerRequest data) {
+    print(data.toJson());
+    return post(path, data.toJson());
+  }
+
   // Future<Response> getStore(String path, UserIdRequest data) {
   //   return post(path, data.toJson());
   // }
@@ -243,6 +250,10 @@ class ApiProvider extends BaseProvider {
 
   Future<Response> submitQtyInput(String path, QtyUpdateRequest data) {
     print(data.toJson());
+    return post(path, data.toJson());
+  }
+
+  Future<Response> getKuisioner(String path, UserIdRequest data) {
     return post(path, data.toJson());
   }
 }

@@ -131,10 +131,16 @@ class HomeController extends BaseController {
     loadUsers();
     discoverTab = DiscoverTab();
     meTab = MeTab();
-    determinePosition();
-    getDataEvent(1);
-    getDataBenefit();
-    getStore(page.value);
+
+    if (isConnectedToInternetWidget.value) {
+      determinePosition();
+      getDataEvent(1);
+      getDataBenefit();
+      getStore(page.value);
+    } else {
+      listStore.add(DataStore(tokoId: 0));
+    }
+
     // FirebaseMessaging messaging = FirebaseMessaging.instance;
 
     // messaging.getToken().then((value) {
