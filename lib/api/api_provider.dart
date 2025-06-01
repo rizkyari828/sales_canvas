@@ -52,10 +52,20 @@ class ApiProvider extends BaseProvider {
     return post(path, data.toJson());
   }
 
-  Future<Response> submitAttendance(String path, AttendanceSubmitRequest data) {
-    print(data.toFormData().fields);
-    print(data.toJson());
-    return post(path, data.toFormData(), contentType: "multipart/form-data");
+  Future<Response> submitAttendance(
+      String path, AttendanceSubmitRequest data) async {
+    try {
+      print(data.toFormData().fields);
+      print(data.toJson());
+
+      final response = await post(path, data.toFormData(),
+          contentType: "multipart/form-data");
+      return response;
+    } catch (e, stackTrace) {
+      print('Error saat submit attendance: $e');
+      print('Stack trace: $stackTrace');
+      rethrow; // atau bisa juga return Future.error(e); tergantung kebutuhan
+    }
   }
 
   Future<Response> validateAttendance(

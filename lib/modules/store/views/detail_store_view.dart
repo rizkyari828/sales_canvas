@@ -59,7 +59,7 @@ class StoreDetailView extends GetView<StoreDetailController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // SizedBox(height: 10.0),
-                !controller.isShowMaps.value && controller.isAbsent.value
+                !controller.isShowMaps.value
                     ? Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,18 +70,6 @@ class StoreDetailView extends GetView<StoreDetailController> {
                                 decoration: BoxDecoration(
                                   color: Colors.green,
                                   borderRadius: BorderRadius.circular(10.0),
-                                  // boxShadow: [
-                                  //   BoxShadow(
-                                  //     color: CommonWidget.setOpacity(
-                                  //         Colors.black, 0.3),
-                                  //     blurRadius: 20.0,
-                                  //     spreadRadius: 4.0,
-                                  //     offset: Offset(
-                                  //       -10.0,
-                                  //       10.0,
-                                  //     ),
-                                  //   ),
-                                  // ],
                                 ),
                                 height: sw * .12,
                                 width: sw * .5,

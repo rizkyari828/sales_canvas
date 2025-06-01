@@ -34,7 +34,7 @@ class MainTab extends GetView<HomeController> {
         );
   }
 
-  Widget _buildGridView(scaleWidth, context, controller) {
+  Widget _buildGridView(scaleWidth, context, HomeController controller) {
     final sw = SizeConfig().screenWidth;
     final sh = SizeConfig().screenHeight;
     return SingleChildScrollView(
@@ -98,14 +98,27 @@ class MainTab extends GetView<HomeController> {
                       header(controller),
                       CommonWidget.rowHeight(),
                       pendingTask(),
+                      dailyProgress(),
+                      attendanceTask(),
                       CommonWidget.rowHeight(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           _cardMenu(Icons.store, "Kunjungan",
-                              controller.goToStorePages, Colors.green),
+                              controller.goToStorePages, Colors.brown),
                           CommonWidget.rowWidth(width: sw * .03),
-                          _cardMenu(Icons.airplane_ticket_rounded, "Leave",
+                          _cardMenu(Icons.search_rounded, "Leads",
+                              controller.goToLeadsPages, Colors.red),
+                        ],
+                      ),
+                      CommonWidget.rowHeight(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          _cardMenu(Icons.work_rounded, "Lembur",
+                              controller.goToOvertimePages, Colors.teal),
+                          CommonWidget.rowWidth(width: sw * .03),
+                          _cardMenu(Icons.airplane_ticket_rounded, "Cuti",
                               controller.goToLeavePages, Colors.blue),
                           CommonWidget.rowWidth(width: sw * .03),
                           _cardMenu(Icons.assignment, "Kuisioner",
@@ -527,30 +540,30 @@ class MainTab extends GetView<HomeController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildGridView(scaleWidth, context, controller),
-                      SizedBox(
-                        height: 10,
-                      ),
+                      // SizedBox(
+                      //   height: 10,
+                      // ),
+                      // Padding(
+                      //   padding: const EdgeInsets.only(left: 15.0, right: 15),
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //     children: [
+                      //       _cardMenuFilter(
+                      //           "Hari Ini", () {}, ColorConstants.mainColor),
+                      //       _cardMenuFilter("Minggu Ini", () {}, Colors.grey),
+                      //       _cardMenuFilter("Bulan Ini", () {}, Colors.grey),
+                      //     ],
+                      //   ),
+                      // ),
+                      // SizedBox(
+                      //   height: 10,
+                      // ),
+                      // summaryCard(),
+                      // SizedBox(
+                      //   height: 10,
+                      // ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 15.0, right: 15),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            _cardMenuFilter(
-                                "Hari Ini", () {}, ColorConstants.mainColor),
-                            _cardMenuFilter("Minggu Ini", () {}, Colors.grey),
-                            _cardMenuFilter("Bulan Ini", () {}, Colors.grey),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      summaryCard(),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20.0, top: 20.0),
+                        padding: const EdgeInsets.only(left: 20.0, top: 10.0),
                         child: Row(
                           children: [
                             CommonWidget.subtitleText(
@@ -797,7 +810,7 @@ class MainTab extends GetView<HomeController> {
     );
   }
 
-  Widget pendingTask() {
+  Widget dailyProgress() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10, top: 10),
       child: InkWell(
@@ -838,7 +851,7 @@ class MainTab extends GetView<HomeController> {
                           ),
                           SizedBox(width: 10),
                           CommonWidget.subtitlePlusText(
-                              text: 'Progress  Harian',
+                              text: 'Progress Harian',
                               color: Colors.black,
                               fontWeight: FontWeight.bold),
                         ],
@@ -867,6 +880,141 @@ class MainTab extends GetView<HomeController> {
                         text: '70%',
                         color: Colors.black,
                       ))
+                ],
+              ),
+            ),
+          )),
+    );
+  }
+
+  Widget attendanceTask() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10, top: 10),
+      child: InkWell(
+          onTap: () => controller.goToKunjunganPages(),
+          child: Container(
+            height: 150,
+            decoration: BoxDecoration(
+              color: ColorConstants.greenBackground,
+              borderRadius: BorderRadius.circular(10.0),
+              // border: Border.all(width: 2.0, color: ColorConstants.borderColor),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            decoration: new BoxDecoration(
+                              color: Colors.green,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Icon(
+                                Icons.hourglass_empty,
+                                color: Colors.white,
+                                size: SizeConfig().screenWidth * .05,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          CommonWidget.subtitlePlusText(
+                              text: 'Absensi Harian',
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold),
+                        ],
+                      ),
+                      CommonWidget.rowHeight(),
+                      Row(
+                        children: [
+                          CommonWidget.bigText(
+                              text: ' 2 / 5', color: Colors.black),
+                          SizedBox(width: 10),
+                          CommonWidget.subtitleText(
+                            text: 'Kunjungan',
+                            color: Colors.black,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  CircularPercentIndicator(
+                      progressColor: Colors.green,
+                      radius: 50.0,
+                      lineWidth: 13.0,
+                      animation: true,
+                      percent: 0.7,
+                      center: CommonWidget.subtitleText(
+                        text: '70%',
+                        color: Colors.black,
+                      ))
+                ],
+              ),
+            ),
+          )),
+    );
+  }
+
+  Widget pendingTask() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10, top: 10),
+      child: InkWell(
+          onTap: () => controller.goToKunjunganPages(),
+          child: Container(
+            height: 75,
+            decoration: BoxDecoration(
+              color: ColorConstants.yellowBackground,
+              borderRadius: BorderRadius.circular(10.0),
+              // border: Border.all(width: 2.0, color: ColorConstants.borderColor),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    decoration: new BoxDecoration(
+                      color: Colors.orange,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Icon(
+                        Icons.warning_rounded,
+                        color: ColorConstants.white,
+                        size: SizeConfig().screenWidth * .05,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CommonWidget.minSubtitleText(
+                          text: '2 Data Pending',
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
+                      Container(
+                        width: SizeConfig().screenWidth * .70,
+                        child: CommonWidget.captionMultilineText(
+                          text:
+                              'Segera periksa koneksi internet mu dan klik disini untuk mengirim kembali',
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),

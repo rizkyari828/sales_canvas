@@ -13,6 +13,7 @@ class ColorConstants {
 
   static const Color greenBackground = Color(0xFFd6f3a1);
   static const Color blueBackground = Color(0xFFb2d8ff);
+  static const Color yellowBackground = Color(0xFFF4DE07);
   static const Color mainColor = Color(0xFF434792);
   static const Color secondaryColor = Color(0xFF061367);
   static const Color disableButton = Color.fromRGBO(200, 200, 200, 1.0);

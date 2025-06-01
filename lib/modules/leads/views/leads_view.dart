@@ -1,4 +1,4 @@
-import 'package:sales/modules/leave/controllers/leave_list_controller.dart';
+import 'package:sales/modules/leads/controllers/leads_list_controller.dart';
 import 'package:sales/shared/constants/constants.dart';
 import 'package:sales/shared/widgets/approval.dart';
 import 'package:sales/shared/widgets/custom_card.dart';
@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class LeaveView extends GetView<LeaveListController> {
+class LeadsView extends GetView<LeadsListController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +18,7 @@ class LeaveView extends GetView<LeaveListController> {
                   ),
           centerTitle: false,
           title: Text(
-            'List Cuti',
+            'List Leads',
             style: TextStyle(
               color: ColorConstants.black,
               fontWeight: FontWeight.w600,
@@ -36,7 +36,7 @@ class LeaveView extends GetView<LeaveListController> {
         body: Obx(() => _getItems(controller)));
   }
 
-  SmartRefresher _getItems(LeaveListController controller) {
+  SmartRefresher _getItems(LeadsListController controller) {
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: true,

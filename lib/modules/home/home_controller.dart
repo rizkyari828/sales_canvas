@@ -124,6 +124,19 @@ class HomeController extends BaseController {
   }
 
   @override
+  void onReady() {
+    super.onReady();
+    // if (isConnectedToInternetWidget.value == false) {
+    determinePosition();
+    getDataEvent(1);
+    getDataBenefit();
+    getStore(page.value);
+    // } else {
+    //   listStore.add(DataStore(tokoId: 0));
+    // }
+  }
+
+  @override
   void onInit() async {
     super.onInit();
     // getReviewRate();
@@ -131,15 +144,6 @@ class HomeController extends BaseController {
     loadUsers();
     discoverTab = DiscoverTab();
     meTab = MeTab();
-
-    if (isConnectedToInternetWidget.value) {
-      determinePosition();
-      getDataEvent(1);
-      getDataBenefit();
-      getStore(page.value);
-    } else {
-      listStore.add(DataStore(tokoId: 0));
-    }
 
     // FirebaseMessaging messaging = FirebaseMessaging.instance;
 
@@ -340,8 +344,10 @@ class HomeController extends BaseController {
       switch (tab) {
         case MainTabs.home:
           return 0;
-        case MainTabs.me:
+        case MainTabs.discover:
           return 1;
+        case MainTabs.me:
+          return 2;
         default:
           return 0;
       }
@@ -366,6 +372,8 @@ class HomeController extends BaseController {
       case 0:
         return MainTabs.home;
       case 1:
+        return MainTabs.discover;
+      case 2:
         return MainTabs.me;
       default:
         return MainTabs.home;
@@ -529,6 +537,14 @@ class HomeController extends BaseController {
 
   void goToStorePages() {
     Get.toNamed(Routes.STORE);
+  }
+
+  void goToOvertimePages() {
+    Get.toNamed(Routes.OVERTIME);
+  }
+
+  void goToLeadsPages() {
+    Get.toNamed(Routes.LEADS);
   }
 
   void closeWidget() {
@@ -820,10 +836,42 @@ class HomeController extends BaseController {
     benefitDashboard.value = res?.data!.first;
   }
 
+  // void getStore(page) async {
+  //   final res = await apiRepository.listStore(
+  //       page: page, data: UserIdRequest(id: userId.value));
+  //   listStore.addAll(res?.data ?? []);
+  // }
+
   void getStore(page) async {
-    final res = await apiRepository.listStore(
-        page: page, data: UserIdRequest(id: userId.value));
-    listStore.addAll(res?.data ?? []);
+    try {
+      final res = await apiRepository.listStore(
+          page: page, data: UserIdRequest(id: userId.value));
+
+      if (res != null && res.data != null) {
+        // Ubah objek DataStore ke JSON sebelum simpan
+        final jsonList = res.data!.map((e) => e.toJson()).toList();
+        box.write('cached_items_page_$page', jsonList);
+
+        listStore.addAll(res.data!);
+      } else {
+        _loadFromCache(page);
+      }
+    } catch (e) {
+      // Gagal fetch, ambil dari cache
+      _loadFromCache(page);
+    }
+  }
+
+  void _loadFromCache(int page) {
+    final cachedData = box.read('cached_items_page_$page');
+
+    if (cachedData != null) {
+      listStore.addAll(List<DataStore>.from(
+        (cachedData as List).map((e) => DataStore.fromJson(e)),
+      ));
+    } else {
+      listStore.add(DataStore(tokoId: 0));
+    }
   }
 
   Future<void> onRefresh() async {

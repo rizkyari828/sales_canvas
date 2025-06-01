@@ -99,7 +99,7 @@ class StoreListController extends BaseController {
     listStore.clear();
     page.value = 1;
 
-    if (isConnectedToInternet.value == true) {
+    if (isConnectedToInternetWidget.value == false) {
       clearCachedPages(prefix: 'cached_store_page_');
     }
 

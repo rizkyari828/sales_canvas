@@ -1,21 +1,32 @@
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sales/api/api_repository.dart';
-import 'package:sales/models/request/kuisioner_request.dart';
+import 'package:sales/models/request/izin/submit_izin_request.dart';
+import 'package:sales/models/response/izin/type_izin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:sales/models/response/kuisioner_response.dart';
-import 'package:sales/modules/home/base_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class KusionerController extends BaseController {
-  KusionerController({required ApiRepository apiRepository})
-      : super(apiRepository: apiRepository);
+class OvertimeController extends GetxController {
+  final ApiRepository apiRepository;
+  OvertimeController({required this.apiRepository});
+  var imageFileList = <XFile>[].obs;
 
+  set _imageFile(XFile? value) {
+    imageFileList.addAll((value == null ? null : <XFile>[value])!);
+  }
+
+  dynamic pickImageError;
+  RxString? retrieveDataError;
+
+  final ImagePicker _picker = ImagePicker();
+  final TextEditingController maxWidthController = TextEditingController();
+  final TextEditingController maxHeightController = TextEditingController();
+  final TextEditingController qualityController = TextEditingController();
   final startDateController = TextEditingController();
   final endDateController = TextEditingController();
-  final answerController = TextEditingController();
+  final noteController = TextEditingController();
 
   RxString groupName = "".obs;
   RxString groupId = "".obs;
@@ -23,25 +34,51 @@ class KusionerController extends BaseController {
   RxString nameItem = "".obs;
   RxString idType = "".obs;
   RxString idUser = "".obs;
-  RxString username = "".obs;
   RxString token = "".obs;
 
+  String date = "";
   DateTime selectedDate = DateTime.now();
+  RxString dateCnC = "".obs;
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now();
 
-  RxInt page = 1.obs;
-
   RxString validationDate = "".obs;
-  var listKuisioner = <ListKuisioner>[].obs;
+  var listType = <DataTypeIzin>[].obs;
 
-  final selectedAnswer = ''.obs;
+  Future<void> onImageButtonPressed(ImageSource source,
+      {BuildContext? context, bool isMultiImage = false}) async {
+    if (isMultiImage) {
+      await _displayPickImageDialog(context!,
+          (double? maxWidth, double? maxHeight, int? quality) async {
+        try {
+          final List<XFile>? pickedFileList = await _picker.pickMultiImage(
+            maxWidth: maxWidth,
+            maxHeight: maxHeight,
+            imageQuality: quality,
+          );
 
-  RefreshController refreshController =
-      RefreshController(initialRefresh: false);
+          imageFileList.addAll(pickedFileList!);
+        } catch (e) {
+          pickImageError = e;
+        }
+      });
+    } else {
+      await _displayPickImageDialog(context!,
+          (double? maxWidth, double? maxHeight, int? quality) async {
+        try {
+          final XFile? pickedFile = await _picker.pickImage(
+            source: source,
+            maxWidth: maxWidth,
+            maxHeight: maxHeight,
+            imageQuality: quality,
+          );
 
-  void setAnswer(String value) {
-    selectedAnswer.value = value;
+          _imageFile = pickedFile;
+        } catch (e) {
+          pickImageError = e;
+        }
+      });
+    }
   }
 
   void submit() {
@@ -54,12 +91,14 @@ class KusionerController extends BaseController {
   }
 
   void submitData() async {
-    final res = await apiRepository.submitKuisioner(
-      KuisionerRequest(
-        idUser: username.value,
-        idKuisioner: token.value,
-        answer: answerController.text,
-      ),
+    final res = await apiRepository.submitIzin(
+      SubmitIzinRequest(
+          idUser: idUser.value,
+          dateStart: startDateController.text,
+          dateEnd: endDateController.text,
+          note: noteController.text,
+          leaveTypeId: idType.value,
+          token: token.value),
     );
     if (res?.error == false) {
       EasyLoading.showSuccess('Berhasil disimpan');
@@ -71,6 +110,10 @@ class KusionerController extends BaseController {
     }
   }
 
+  Future<void> _displayPickImageDialog(BuildContext context, onPick) async {
+    return onPick(200.0, 200.0, 50);
+  }
+
   @override
   void onInit() {
     super.onInit();
@@ -80,7 +123,7 @@ class KusionerController extends BaseController {
   void onReady() {
     super.onReady();
     loadUsers();
-    getKuisioner(page);
+    getType();
   }
 
   loadUsers() async {
@@ -90,7 +133,6 @@ class KusionerController extends BaseController {
     placement.value = prefs.getString('placement') ?? "";
     token.value = prefs.getString('token') ?? "";
     idUser.value = prefs.getString('userId') ?? "";
-    username.value = prefs.getString('username') ?? "";
   }
 
   selectDateStart(BuildContext context) async {
@@ -119,37 +161,9 @@ class KusionerController extends BaseController {
         DateFormat("yyyy-MM-dd", "id_ID").format(selectedDate).toString();
   }
 
-  void getKuisioner(page) async {
-    listKuisioner.add(
-        ListKuisioner(id: 1, type: 'essay', question: 'Ini Untuk Soal Essay'));
-    listKuisioner.add(ListKuisioner(
-        id: 2,
-        type: 'pg',
-        question: 'Ini Untuk Soal Pilihan',
-        optionA: 'Pilihan A',
-        optionB: 'Pilihan B',
-        optionC: 'Pilihan C',
-        optionD: 'Pilihan D'));
-    // final res = await apiRepository.listKuisioner(
-    //     page: page, data: UserIdRequest(id: idUser.value));
-    // listKuisioner.addAll(res?.data ?? []);
-  }
-
-  void onLoading() async {
-    page.value = page.value + 1;
-
-    // monitor network fetch
-    await Future.delayed(Duration(milliseconds: 1000));
-    getKuisioner(page.value);
-    refreshController.loadComplete();
-  }
-
-  Future<void> onRefresh() async {
-    await Future.delayed(Duration(milliseconds: 1000));
-    listKuisioner.clear();
-    page.value = 1;
-    getKuisioner(page.value);
-    refreshController.refreshCompleted();
+  void getType() async {
+    final res = await apiRepository.typeIzin();
+    listType.addAll(res?.data ?? []);
   }
 
   @override

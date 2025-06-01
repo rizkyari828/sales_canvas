@@ -92,7 +92,7 @@ class DiscoverTab extends GetView<AttendanceController> {
                                                   controller.isClockIn.value ==
                                                           true
                                                       ? false
-                                                      : true,
+                                                      : false,
                                               borderColor:
                                                   ColorConstants.mainColor,
                                               buttonColor: Colors.white,
@@ -110,7 +110,7 @@ class DiscoverTab extends GetView<AttendanceController> {
                                                           FaceRecognitionWiget
                                                               .faceCameraRecognizer(
                                                                   controller,
-                                                                  'Clock Out'))));
+                                                                  'Clock In'))));
                                         })
                                       : CommonWidget.bodyText(
                                           text: controller.timeIn.value,

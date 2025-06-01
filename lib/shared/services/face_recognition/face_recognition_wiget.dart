@@ -46,11 +46,12 @@ class FaceRecognitionWiget {
                         onPressed: () async {
                           await controller.faceCameraController
                               .startImageStream();
-                          if (status == 'Clock In') {
-                            controller.submitIn();
-                          } else {
-                            controller.submitOut();
-                          }
+                          controller.submit(status);
+                          // if (status == 'Clock In') {
+                          //   controller.submitIn();
+                          // } else {
+                          //   controller.submitOut();
+                          // }
                         },
                       ),
                     ],

@@ -28,4 +28,10 @@ abstract class Routes {
   static const DETAIL_STORE = '/detail-store';
   static const KUISIONER = '/add-kuisioner';
   static const RESULT_KUNJUNGAN = '/result-kunjungan';
+  static const OVERTIME = '/overtime';
+  static const DETAIL_OVERTIME = '/detail-overtime';
+  static const ADD_OVERTIME = '/add-overtime';
+  static const LEADS = '/leads';
+  static const DETAIL_LEADS = '/detail-leads';
+  static const ADD_LEADS = '/add-leads';
 }

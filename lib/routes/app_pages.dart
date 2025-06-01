@@ -7,10 +7,18 @@ import 'package:sales/modules/input/bindings/input_binding.dart';
 import 'package:sales/modules/input/views/add_input_view.dart';
 import 'package:sales/modules/kuisioner/bindings/kuisioner_binding.dart';
 import 'package:sales/modules/kuisioner/views/add_kuisioner_view.dart';
+import 'package:sales/modules/leads/bindings/leads_binding.dart';
+import 'package:sales/modules/leads/views/add_leads_view.dart';
+import 'package:sales/modules/leads/views/detail_leads_view.dart';
+import 'package:sales/modules/leads/views/leads_view.dart';
 import 'package:sales/modules/leave/bindings/leave_binding.dart';
 import 'package:sales/modules/leave/views/add_leave_view.dart';
 import 'package:sales/modules/leave/views/detail_leave_view.dart';
 import 'package:sales/modules/leave/views/leave_view.dart';
+import 'package:sales/modules/overtime/bindings/overtime_binding.dart';
+import 'package:sales/modules/overtime/views/add_overtime_view.dart';
+import 'package:sales/modules/overtime/views/detail_overtime_view.dart';
+import 'package:sales/modules/overtime/views/leave_overtime.dart';
 import 'package:sales/modules/prospek/bindings/prospek_binding.dart';
 import 'package:sales/modules/prospek/views/add_prospek_view.dart';
 import 'package:sales/modules/prospek/views/detail_prospek_view.dart';
@@ -169,6 +177,36 @@ class AppPages {
       name: Routes.RESULT_KUNJUNGAN,
       page: () => ResultKunjunganView(),
       binding: StoreBinding(),
+    ),
+    GetPage(
+      name: Routes.OVERTIME,
+      page: () => OvertimeView(),
+      binding: OvertimeBinding(),
+    ),
+    GetPage(
+      name: Routes.ADD_OVERTIME,
+      page: () => AddOvertimeView(),
+      binding: OvertimeBinding(),
+    ),
+    GetPage(
+      name: Routes.DETAIL_OVERTIME,
+      page: () => OvertimeDetailView(),
+      binding: OvertimeBinding(),
+    ),
+    GetPage(
+      name: Routes.LEADS,
+      page: () => LeadsView(),
+      binding: LeadsBinding(),
+    ),
+    GetPage(
+      name: Routes.ADD_LEADS,
+      page: () => AddLeadsView(),
+      binding: LeadsBinding(),
+    ),
+    GetPage(
+      name: Routes.DETAIL_LEADS,
+      page: () => LeadsDetailView(),
+      binding: LeadsBinding(),
     ),
   ];
 }

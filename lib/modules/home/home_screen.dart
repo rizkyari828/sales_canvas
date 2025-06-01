@@ -37,14 +37,12 @@ class HomeScreen extends GetView<HomeController> {
               ? Icon(Icons.home_rounded)
               : Icon(Icons.home_outlined),
         ),
-        if (controller.tipe.value == '1') ...[
-          _buildNavigationBarItem(
-            "Kehadiran",
-            MainTabs.discover == controller.currentTab.value
-                ? Icon(Icons.alarm)
-                : Icon(Icons.alarm_outlined),
-          ),
-        ],
+        _buildNavigationBarItem(
+          "Kehadiran",
+          MainTabs.discover == controller.currentTab.value
+              ? Icon(Icons.alarm)
+              : Icon(Icons.alarm_outlined),
+        ),
         _buildNavigationBarItem(
           "Profile",
           MainTabs.me == controller.currentTab.value
@@ -81,6 +79,8 @@ class HomeScreen extends GetView<HomeController> {
     switch (tab) {
       case MainTabs.home:
         return controller.mainTab;
+      case MainTabs.discover:
+        return controller.discoverTab;
       case MainTabs.me:
         return controller.meTab;
       default:

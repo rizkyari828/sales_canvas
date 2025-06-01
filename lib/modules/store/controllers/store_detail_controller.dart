@@ -363,7 +363,7 @@ class StoreDetailController extends FaceRecognitionController {
       filename: file.path.split('/').last,
     );
 
-    if (isConnectedToInternet.value) {
+    if (isConnectedToInternetWidget.value == false) {
       final success = await _submitAttendance(wrapper);
       if (success) {
         if (type == 'Clock In') {

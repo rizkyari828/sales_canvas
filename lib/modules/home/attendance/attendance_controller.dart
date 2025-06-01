@@ -82,7 +82,7 @@ class AttendanceController extends FaceRecognitionController {
     Get.back();
   }
 
-  void submitIn() async {
+  void submit(String type) async {
     final file = faceCameraCapture?.value;
     if (file != null) {
       final res = await apiRepository.submitAttendance(
@@ -100,14 +100,25 @@ class AttendanceController extends FaceRecognitionController {
         ),
       );
       if (res!.message == "berhasil absen masuk") {
-        EasyLoading.showSuccess('Berhasil Clock In');
-        var now = new DateTime.now();
-        timeIn.value = DateFormat("HH:mm:ss").format(now);
+        if (type == 'Clock In') {
+          EasyLoading.showSuccess('Berhasil Clock In');
+          var now = new DateTime.now();
+          timeIn.value = DateFormat("HH:mm:ss").format(now);
+        } else {
+          EasyLoading.showSuccess('Berhasil Clock Out');
+          var now = new DateTime.now();
+          timeOut.value = DateFormat("HH:mm:ss").format(now);
+        }
+
         faceCameraCapture?.value = File('');
         Get.back();
       } else {
         faceCameraCapture?.value = File('');
-        EasyLoading.showError('Gagal Clock In');
+        if (type == 'Clock In') {
+          EasyLoading.showError('Gagal Clock In');
+        } else {
+          EasyLoading.showError('Gagal Clock Out');
+        }
       }
     } else {
       EasyLoading.showError('Foto belum tersedia');
@@ -378,7 +389,7 @@ class AttendanceController extends FaceRecognitionController {
                         buttonText: 'SIMPAN',
                         width: sw,
                         onPressed: () {
-                          type == 'Clock In' ? submitIn() : submitOut();
+                          submit(type);
                           // submitPhoto();
                           // controller.approval(action: 'approve');
                         },
