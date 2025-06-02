@@ -1,4 +1,4 @@
-import 'package:sales/modules/Overtime/controllers/Overtime_controller.dart';
+import 'package:sales/modules/overtime/controllers/overtime_controller.dart';
 import 'package:sales/shared/constants/colors.dart';
 import 'package:sales/shared/utils/utils.dart';
 import 'package:sales/shared/widgets/button.dart';
@@ -13,7 +13,7 @@ class AddOvertimeView extends GetView<OvertimeController> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: CommonWidget.appBar(title: 'Info Overtime'),
+        appBar: CommonWidget.appBar(title: 'Tambah Lembur'),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(25.0),

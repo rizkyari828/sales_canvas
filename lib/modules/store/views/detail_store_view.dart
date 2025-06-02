@@ -33,10 +33,8 @@ class StoreDetailView extends GetView<StoreDetailController> {
                   buttonTextColor: ColorConstants.mainColor,
                   // isDisabled: !controller.canAbsent.value ||
                   //         controller.isAbsentOut.value
-                  isDisabled: controller.isAbsentOut.value ? true : false,
-                  buttonText: controller.isAbsent.value
-                      ? 'ABSEN KELUAR'
-                      : 'ABSEN MASUK',
+                  isDisabled: controller.imageFileList.length < 1,
+                  buttonText: 'SUBMIT FOTO',
                   width: MediaQuery.of(context).size.width / 1.13,
                   onPressed: () => !controller.isAbsent.value
                       ? Navigator.push(
@@ -219,41 +217,47 @@ class StoreDetailView extends GetView<StoreDetailController> {
                       color: Colors.orangeAccent,
                     ),
                     isSubtitle: false),
+                SizedBox(height: 20.0),
+                CommonWidget.minSubtitleText(
+                    text: "Silahkan upload bukti Foto kunjungan anda"),
+                SizedBox(height: 10.0),
                 Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Obx(
                       () => CustomImagePicker.previewGridImages(controller)),
                 ),
-                InkWell(
-                  onTap: () {
-                    controller.onImageButtonPressed(ImageSource.camera,
-                        context: context);
-                  },
-                  child: DottedBorder(
-                    options: RectDottedBorderOptions(
-                      color: Colors.grey,
-                      dashPattern: [8, 4],
-                      strokeWidth: 1,
-                    ),
-                    child: Container(
-                      height: 50,
-                      width: sw,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.camera_alt,
+                controller.imageFileList.length < 3
+                    ? InkWell(
+                        onTap: () {
+                          controller.onImageButtonPressed(ImageSource.camera,
+                              context: context);
+                        },
+                        child: DottedBorder(
+                          options: RectDottedBorderOptions(
                             color: Colors.grey,
-                            size: 30,
+                            dashPattern: [8, 4],
+                            strokeWidth: 1,
                           ),
-                          SizedBox(width: 10.0),
-                          CommonWidget.bodyText(
-                              text: "Ambil Photo", color: Colors.grey),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                          child: Container(
+                            height: 50,
+                            width: sw,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.camera_alt,
+                                  color: Colors.grey,
+                                  size: 30,
+                                ),
+                                SizedBox(width: 10.0),
+                                CommonWidget.bodyText(
+                                    text: "Ambil Photos", color: Colors.grey),
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(),
                 // CommonWidget.cardWithShadow(Column(
                 //   crossAxisAlignment: CrossAxisAlignment.start,
                 //   children: [
@@ -278,6 +282,8 @@ class StoreDetailView extends GetView<StoreDetailController> {
                 // SizedBox(height: 30.0),
                 // _cardMenu(Icons.production_quantity_limits, "Product",
                 //     controller.goToAddPages, Colors.white, Colors.teal),
+                SizedBox(height: 10.0),
+                CommonWidget.captionText(text: "Maksimal melampirkan 3 Foto"),
                 SizedBox(height: 50.0),
               ],
             ),

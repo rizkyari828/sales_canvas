@@ -1,3 +1,4 @@
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sales/api/api_repository.dart';
@@ -22,6 +23,7 @@ class LeadsController extends GetxController {
 
   dynamic pickImageError;
   RxString? retrieveDataError;
+  RxString locationDetail = "".obs;
 
   final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
   late LatLng myLocation = LatLng(0, 0);
@@ -186,6 +188,12 @@ class LeadsController extends GetxController {
 
     final position = await _geolocatorPlatform.getCurrentPosition();
     myLocation = LatLng(position.latitude, position.longitude);
+
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+
+    locationDetail.value =
+        "${placemarks[2].street}, ${placemarks[2].subLocality}, ${placemarks[2].locality}, ${placemarks[2].administrativeArea}";
 
     final prefs = Get.find<SharedPreferences>();
     if (prefs.getString('token') != null) {
