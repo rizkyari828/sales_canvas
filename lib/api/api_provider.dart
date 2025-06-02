@@ -74,7 +74,7 @@ class ApiProvider extends BaseProvider {
   }
 
   //START OVERTIME
-  Future<Response> getOvertime(String path, GetListRequest data) {
+  Future<Response> getProspek(String path, GetListRequest data) {
     print(data.toJson());
     return post(path, data.toJson());
   }

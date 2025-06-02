@@ -64,6 +64,8 @@ class StoreDetailController extends FaceRecognitionController {
   RxString absentTimeOut = '00:00'.obs;
   RxBool isShowMaps = true.obs;
 
+  RxString? retrieveDataError;
+
   RxString dateNow = DateFormat("dd MMMM yyyy HH:mm:ss", "id_ID")
       .format(DateTime.now())
       .toString()
@@ -217,7 +219,7 @@ class StoreDetailController extends FaceRecognitionController {
                       CommonWidget.rowHeight(),
                       InkWell(
                         onTap: () {
-                          onImageButtonPressed(ImageSource.camera,
+                          onImageButtonPressed(ImageSource.gallery,
                               context: Get.context);
                         },
                         child: DottedBorder(

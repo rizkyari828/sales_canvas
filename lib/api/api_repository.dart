@@ -186,7 +186,7 @@ class ApiRepository {
       {int page = 1, int limit = 10}) async {
     try {
       final res = await apiProvider
-          .getOvertime(
+          .getProspek(
               '/api/getdata?page=' +
                   page.toString() +
                   '&limit=' +
@@ -951,4 +951,6 @@ class ApiRepository {
     }
     return null;
   }
+  
+  
 }

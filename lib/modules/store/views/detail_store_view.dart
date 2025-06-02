@@ -1,3 +1,6 @@
+import 'package:dotted_border/dotted_border.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:sales/modules/store/controllers/store_detail_controller.dart';
 import 'package:sales/shared/services/face_recognition/face_recognition_wiget.dart';
 import 'package:sales/shared/shared.dart';
@@ -5,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sales/shared/widgets/button.dart';
+import 'package:sales/shared/widgets/image_picker.dart';
 
 class StoreDetailView extends GetView<StoreDetailController> {
   final data = Get.arguments;
@@ -215,6 +219,62 @@ class StoreDetailView extends GetView<StoreDetailController> {
                       color: Colors.orangeAccent,
                     ),
                     isSubtitle: false),
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Obx(
+                      () => CustomImagePicker.previewGridImages(controller)),
+                ),
+                InkWell(
+                  onTap: () {
+                    controller.onImageButtonPressed(ImageSource.camera,
+                        context: context);
+                  },
+                  child: DottedBorder(
+                    options: RectDottedBorderOptions(
+                      color: Colors.grey,
+                      dashPattern: [8, 4],
+                      strokeWidth: 1,
+                    ),
+                    child: Container(
+                      height: 50,
+                      width: sw,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.camera_alt,
+                            color: Colors.grey,
+                            size: 30,
+                          ),
+                          SizedBox(width: 10.0),
+                          CommonWidget.bodyText(
+                              text: "Ambil Photo", color: Colors.grey),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                // CommonWidget.cardWithShadow(Column(
+                //   crossAxisAlignment: CrossAxisAlignment.start,
+                //   children: [
+                //     CommonWidget.minSubtitleText(
+                //         text:
+                //             "Minimal melampirkan 1 foto sebelum melakukan pengerjaan"),
+                //     SizedBox(height: 10.0),
+                //     controller.detail.value.afterPhotos.isNotEmpty
+                //         ? dokumenPhoto(controller, 'before')
+                //         : Container(),
+                //     CustomImagePicker.cardPickOneBeforeAfterCamera(
+                //         context, controller, 'before'),
+                //     CommonWidget.subtitleText(
+                //         text: "Update : " +
+                //             DateFormat("EEEE, d MMMM yyyy HH:mm:ss", "id_ID")
+                //                 .format(controller.detail.value.updatedAt ??
+                //                     DateTime.now())
+                //                 .toString()),
+                //     // Obx(() => ApprovalFlow.buttonApproval(controller)),
+                //   ],
+                // )),
                 // SizedBox(height: 30.0),
                 // _cardMenu(Icons.production_quantity_limits, "Product",
                 //     controller.goToAddPages, Colors.white, Colors.teal),
@@ -224,6 +284,38 @@ class StoreDetailView extends GetView<StoreDetailController> {
           ),
         )));
   }
+
+  // Widget dokumenPhoto(StoreDetailController controller, String type) {
+  //   return Container(
+  //     child: Card(
+  //       elevation: 0.1,
+  //       color: Colors.white,
+  //       shape: RoundedRectangleBorder(
+  //           borderRadius: BorderRadius.circular(10.0),
+  //           side: BorderSide(color: Colors.grey, width: 1)),
+  //       child: Container(
+  //         height: 200,
+  //         child: Padding(
+  //           padding: const EdgeInsets.all(10.0),
+  //           child: ListView.builder(
+  //             scrollDirection: Axis.horizontal,
+  //             itemCount: controller.detail.value.afterPhotos.length,
+  //             itemBuilder: (context, index) {
+  //               return Padding(
+  //                   padding: const EdgeInsets.only(bottom: 20.0),
+  //                   child: Container(
+  //                     width: 150,
+  //                     height: 150,
+  //                     child: Image.network(
+  //                         controller.detail.value.afterPhotos[index] ?? ''),
+  //                   ));
+  //             },
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget textIcon(Icon icon, String text, String value) {
     return Row(

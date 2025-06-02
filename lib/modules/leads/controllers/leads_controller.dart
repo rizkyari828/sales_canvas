@@ -1,3 +1,5 @@
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sales/api/api_repository.dart';
 import 'package:sales/models/request/izin/submit_izin_request.dart';
 import 'package:sales/models/response/izin/type_izin.dart';
@@ -6,6 +8,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:sales/shared/constants/storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LeadsController extends GetxController {
@@ -19,6 +22,9 @@ class LeadsController extends GetxController {
 
   dynamic pickImageError;
   RxString? retrieveDataError;
+
+  final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
+  late LatLng myLocation = LatLng(0, 0);
 
   final ImagePicker _picker = ImagePicker();
   final TextEditingController maxWidthController = TextEditingController();
@@ -110,6 +116,86 @@ class LeadsController extends GetxController {
     }
   }
 
+  Future<void> determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      Get.snackbar(
+        "Error",
+        "Location services are disabled.",
+        icon: Icon(Icons.person, color: Colors.white),
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red,
+        borderRadius: 20,
+        margin: EdgeInsets.all(15),
+        colorText: Colors.white,
+        duration: Duration(seconds: 4),
+        isDismissible: true,
+        //dismissDirection: SnackDismissDirection.HORIZONTAL,
+        forwardAnimationCurve: Curves.easeOutBack,
+      );
+
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        Get.snackbar(
+          "Error",
+          "Location permissions are denied",
+          icon: Icon(Icons.person, color: Colors.white),
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.red,
+          borderRadius: 20,
+          margin: EdgeInsets.all(15),
+          colorText: Colors.white,
+          duration: Duration(seconds: 4),
+          isDismissible: true,
+          //dismissDirection: SnackDismissDirection.HORIZONTAL,
+          forwardAnimationCurve: Curves.easeOutBack,
+        );
+        print("Location permissions are denied");
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      Get.snackbar(
+        "Error",
+        "Location permissions are permanently denied, we cannot request permissions.",
+        icon: Icon(Icons.person, color: Colors.white),
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red,
+        borderRadius: 20,
+        margin: EdgeInsets.all(15),
+        colorText: Colors.white,
+        duration: Duration(seconds: 4),
+        isDismissible: true,
+        //dismissDirection: SnackDismissDirection.HORIZONTAL,
+        forwardAnimationCurve: Curves.easeOutBack,
+      );
+      print(
+          "Location permissions are permanently denied, we cannot request permissions.");
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    final position = await _geolocatorPlatform.getCurrentPosition();
+    myLocation = LatLng(position.latitude, position.longitude);
+
+    final prefs = Get.find<SharedPreferences>();
+    if (prefs.getString('token') != null) {
+      prefs.setDouble(StorageConstants.initLatitude, position.latitude);
+      prefs.setDouble(StorageConstants.initLongitude, position.longitude);
+    }
+
+    EasyLoading.dismiss();
+  }
+
   Future<void> _displayPickImageDialog(BuildContext context, onPick) async {
     return onPick(200.0, 200.0, 50);
   }
@@ -117,6 +203,7 @@ class LeadsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    determinePosition();
   }
 
   @override
