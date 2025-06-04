@@ -1,5 +1,5 @@
 import 'package:intl/intl.dart';
-import 'package:sales/modules/Leads/controllers/Leads_controller.dart';
+import 'package:sales/modules/leads/controllers/leads_controller.dart';
 import 'package:sales/shared/constants/colors.dart';
 import 'package:sales/shared/utils/utils.dart';
 import 'package:sales/shared/widgets/button.dart';
@@ -26,6 +26,10 @@ class AddLeadsView extends GetView<LeadsController> {
                         value: DateFormat("EEEE, d MMMM yyyy", "id_ID")
                             .format(DateTime.now())
                             .toString()),
+                    SizedBox(height: 10.0),
+                    CommonWidget.labelExpanded(
+                        label: 'Lokasi',
+                        value: controller.locationDetail.value),
                     SizedBox(height: 10.0),
                     InputInputField(
                       keyboardType: TextInputType.text,

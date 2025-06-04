@@ -545,7 +545,7 @@ class StoreDetailController extends FaceRecognitionController {
 
   Future<void> onImageButtonPressed(ImageSource source,
       {BuildContext? context, bool isMultiImage = false}) async {
-    imageFileList.clear();
+    // imageFileList.clear();
     if (isMultiImage) {
       await _displayPickImageDialog(context!,
           (double? maxWidth, double? maxHeight, int? quality) async {
