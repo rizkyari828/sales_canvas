@@ -47,7 +47,7 @@ class ApprovalFlow {
     );
   }
 
-  static Widget buttonApproval(controller, condition, levelCondition) {
+  static Widget buttonApproval(controller, String condition, String levelCondition) {
     final sw = SizeConfig().screenWidth;
     return Container(
       child: controller.detail.value.status == '1' ||

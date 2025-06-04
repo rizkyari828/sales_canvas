@@ -1,6 +1,7 @@
 import 'package:sales/api/api_repository.dart';
 import 'package:sales/models/request/id_request.dart';
 import 'package:sales/models/response/izin/list_izin.dart';
+import 'package:sales/models/response/lembur/list_lembur.dart';
 import 'package:sales/routes/app_pages.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -10,7 +11,7 @@ class OvertimeListController extends GetxController {
   final ApiRepository apiRepository;
   OvertimeListController({required this.apiRepository});
 
-  var listIzin = <DataIzin>[].obs;
+  var listLembur = <DataLembur>[].obs;
   RxString groupName = "".obs;
   RxString groupId = "".obs;
   RxString userId = "".obs;
@@ -25,7 +26,7 @@ class OvertimeListController extends GetxController {
 
     // monitor network fetch
     await Future.delayed(Duration(milliseconds: 1000));
-    getIzin(page.value);
+    getLembur(page.value);
     refreshController.loadComplete();
   }
 
@@ -39,7 +40,7 @@ class OvertimeListController extends GetxController {
   void onReady() {
     super.onReady();
     loadUsers();
-    getIzin(page.value);
+    getLembur(page.value);
   }
 
   loadUsers() async {
@@ -55,17 +56,17 @@ class OvertimeListController extends GetxController {
     super.onClose();
   }
 
-  void getIzin(page) async {
-    final res = await apiRepository.listIzin(
+  void getLembur(page) async {
+    final res = await apiRepository.listLembur(
         page: page, data: IdRequest(id: userId.value, token: token.value));
-    listIzin.addAll(res?.data ?? []);
+    listLembur.addAll(res?.data ?? []);
   }
 
   Future<void> onRefresh() async {
     await Future.delayed(Duration(milliseconds: 1000));
-    listIzin.clear();
+    listLembur.clear();
     page.value = 1;
-    getIzin(page.value);
+    getLembur(page.value);
     refreshController.refreshCompleted();
   }
 

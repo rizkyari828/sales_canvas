@@ -3,6 +3,7 @@ import 'package:sales/shared/shared.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:sales/shared/widgets/approval.dart';
 
 class LeaveDetailView extends GetView<LeaveDetailController> {
   final data = Get.arguments;
@@ -50,6 +51,9 @@ class LeaveDetailView extends GetView<LeaveDetailController> {
                       CommonWidget.bodyText(
                           text: controller.detail.value.keterangan ?? ''),
                       SizedBox(height: 20.0),
+                      SizedBox(height: 50.0),
+                      Obx(() =>
+                          ApprovalFlow.buttonApproval(controller, "1", "1")),
                     ],
                   ),
           ),

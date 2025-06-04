@@ -12,6 +12,9 @@ import 'package:sales/models/request/input_request.dart';
 import 'package:sales/models/request/izin/submit_izin_request.dart';
 import 'package:sales/models/request/izin/update_approval_request.dart';
 import 'package:sales/models/request/kuisioner_request.dart';
+import 'package:sales/models/request/lembur/detail_request_lembur.dart';
+import 'package:sales/models/request/lembur/submit_izin_request.dart';
+import 'package:sales/models/request/lembur/update_approval_request.dart';
 import 'package:sales/models/request/logout_request.dart';
 import 'package:sales/models/request/overtime/get_list.dart';
 import 'package:sales/models/request/overtime/set_done_overtime_request.dart';
@@ -266,4 +269,31 @@ class ApiProvider extends BaseProvider {
   Future<Response> getKuisioner(String path, UserIdRequest data) {
     return post(path, data.toJson());
   }
+
+  //START IZIN
+  Future<Response> getLembur(String path, IdRequest data) {
+    return post(path, data.toJson());
+  }
+
+  Future<Response> getTypeLembur(String path) {
+    return get(path);
+  }
+
+  Future<Response> getShowLembur(String path, ShowLemburRequest data) {
+    return post(path, data.toJson());
+  }
+
+  Future<Response> submitLembur(String path, SubmitLemburRequest data) {
+    return post(path, data.toJson());
+  }
+
+  Future<Response> updateLembur(String path, SubmitLemburRequest data) {
+    return patch(path, data.toJson());
+  }
+
+  Future<Response> updateApprovalLembur(
+      String path, UpdateApprovalLemburRequest data) {
+    return patch(path, data.toJson());
+  }
+  //ENDIZIN
 }

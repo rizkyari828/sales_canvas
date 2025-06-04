@@ -45,27 +45,27 @@ class OvertimeView extends GetView<OvertimeListController> {
       onRefresh: controller.onRefresh,
       onLoading: controller.onLoading,
       child: ListView.builder(
-        itemCount: controller.listIzin.length,
+        itemCount: controller.listLembur.length,
         itemBuilder: (context, i) => InkWell(
           onTap: () {
             controller.goToDetailPages(
-                id: controller.listIzin[i].id.toString());
+                id: controller.listLembur[i].id.toString());
           },
           child: CustomExpandedCardView(
             name:
-                '${DateFormat("EEEE, d MMMM yyyy", "id_ID").format(controller.listIzin[i].cDate ?? DateTime.now())}',
-            firstParagraf: controller.listIzin[i].kodeIjin ?? '',
+                '${DateFormat("EEEE, d MMMM yyyy", "id_ID").format(controller.listLembur[i].cDate ?? DateTime.now())}',
+            firstParagraf: controller.listLembur[i].kodeIjin ?? '',
             secondParagrafLabel: "Mulai",
             secondParagrafValue:
-                '${DateFormat("EEEE, d MMMM yyyy", "id_ID").format(controller.listIzin[i].dateIn ?? DateTime.now())}',
+                '${DateFormat("EEEE, d MMMM yyyy", "id_ID").format(controller.listLembur[i].dateIn ?? DateTime.now())}',
             thirdParagrafLabel: "Selesai",
             thirdParagrafValue:
-                '${DateFormat("EEEE, d MMMM yyyy", "id_ID").format(controller.listIzin[i].dateOut ?? DateTime.now())}',
-            forthParagraf: controller.listIzin[i].keterangan ?? '',
+                '${DateFormat("EEEE, d MMMM yyyy", "id_ID").format(controller.listLembur[i].dateOut ?? DateTime.now())}',
+            forthParagraf: controller.listLembur[i].keterangan ?? '',
             // approval:
-            //     controller.listIzin[i].statusLabel == 'Waiting for approval'
+            //     controller.listLembur[i].statusLabel == 'Waiting for approval'
             //         ? 'Waiting'
-            //         : controller.listIzin[i].statusLabel ?? '',
+            //         : controller.listLembur[i].statusLabel ?? '',
           ),
         ),
       ),

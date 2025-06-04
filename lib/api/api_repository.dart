@@ -12,6 +12,9 @@ import 'package:sales/models/request/input_request.dart';
 import 'package:sales/models/request/izin/submit_izin_request.dart';
 import 'package:sales/models/request/izin/update_approval_request.dart';
 import 'package:sales/models/request/kuisioner_request.dart';
+import 'package:sales/models/request/lembur/detail_request_lembur.dart';
+import 'package:sales/models/request/lembur/submit_izin_request.dart';
+import 'package:sales/models/request/lembur/update_approval_request.dart';
 import 'package:sales/models/request/logout_request.dart';
 import 'package:sales/models/request/overtime/get_list.dart';
 import 'package:sales/models/request/overtime/set_done_overtime_request.dart';
@@ -36,6 +39,8 @@ import 'package:sales/models/response/izin/list_izin.dart';
 import 'package:sales/models/response/izin/show_izin.dart';
 import 'package:sales/models/response/izin/type_izin.dart';
 import 'package:sales/models/response/kuisioner_response.dart';
+import 'package:sales/models/response/lembur/list_lembur.dart';
+import 'package:sales/models/response/lembur/show_lembur.dart';
 import 'package:sales/models/response/name_tad_list_response.dart';
 import 'package:sales/models/response/prospek/list.dart';
 import 'package:sales/models/response/prospek/master_data_response.dart';
@@ -951,6 +956,95 @@ class ApiRepository {
     }
     return null;
   }
-  
-  
+
+  //START LEMBUR
+  Future<LemburResponse?> listLembur(
+      {int page = 1, int limit = 10, required IdRequest data}) async {
+    try {
+      final res = await apiProvider
+          .getLembur('/api/listIjin?page=' + page.toString(), data)
+          .timeout(Duration(seconds: timeout));
+      if (res.statusCode == 200 || res.statusCode == 401) {
+        return LemburResponse.fromJson(res.body);
+      }
+    } on TimeoutException catch (_) {
+      EasyLoading.showError('Connection Timeout. Please try again later');
+      EasyLoading.dismiss();
+    } catch (exception) {
+      print(exception);
+    }
+    return null;
+  }
+
+  Future<ShowLemburResponse?> showLembur(ShowLemburRequest data) async {
+    try {
+      final res = await apiProvider
+          .getShowLembur('/api/detailIjin', data)
+          .timeout(Duration(seconds: timeout));
+      if (res.statusCode == 200 || res.statusCode == 401) {
+        return ShowLemburResponse.fromJson(res.body);
+      }
+    } on TimeoutException catch (_) {
+      EasyLoading.showError('Connection Timeout. Please try again later');
+      EasyLoading.dismiss();
+    } catch (exception) {
+      print(exception);
+    }
+    return null;
+  }
+
+  Future<ErrorResponse?> submitLembur(SubmitLemburRequest data) async {
+    try {
+      final res = await apiProvider
+          .submitLembur('/api/ijin', data)
+          .timeout(Duration(seconds: timeout));
+      if (res.statusCode == 200 || res.statusCode == 401) {
+        return ErrorResponse.fromJson(res.body);
+      }
+    } on TimeoutException catch (_) {
+      EasyLoading.showError('Connection Timeout. Please try again later');
+      EasyLoading.dismiss();
+    } catch (exception) {
+      print(exception);
+    }
+    return null;
+  }
+
+  Future<ErrorResponse?> updateApprovalLembur(
+      String id, UpdateApprovalLemburRequest data) async {
+    try {
+      final res = await apiProvider
+          .updateApprovalLembur('/api/v1/izin/update-status/' + id, data)
+          .timeout(Duration(seconds: timeout));
+      if (res.statusCode == 200 || res.statusCode == 401) {
+        return ErrorResponse.fromJson(res.body);
+      }
+    } on TimeoutException catch (_) {
+      EasyLoading.showError('Connection Timeout. Please try again later');
+      EasyLoading.dismiss();
+    } catch (exception) {
+      print(exception);
+    }
+    return null;
+  }
+
+  Future<ErrorResponse?> updateLembur(
+      String id, SubmitLemburRequest data) async {
+    print(data);
+    try {
+      final res = await apiProvider
+          .updateLembur('/api/v1/izin/set-done/' + id, data)
+          .timeout(Duration(seconds: timeout));
+      print(res);
+      if (res.statusCode == 200 || res.statusCode == 401) {
+        return ErrorResponse.fromJson(res.body);
+      }
+    } on TimeoutException catch (_) {
+      EasyLoading.showError('Connection Timeout. Please try again later');
+      EasyLoading.dismiss();
+    } catch (exception) {
+      print(exception);
+    }
+    return null;
+  }
 }

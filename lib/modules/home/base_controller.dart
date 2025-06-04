@@ -259,10 +259,10 @@ class BaseController extends GetxController {
         longitude: wrapper.longitude,
         idUser: wrapper.idUser,
         token: wrapper.token,
-        photo: MultipartFile(
-          base64Decode(wrapper.photoBase64),
-          filename: wrapper.filename,
-        ),
+        // photo: MultipartFile(
+        //   base64Decode(wrapper.photoBase64),
+        //   filename: wrapper.filename,
+        // ),
       );
 
       final res = await apiRepository.submitAttendanceStore(request);

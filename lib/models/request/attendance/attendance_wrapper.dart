@@ -4,8 +4,7 @@ class AttendanceSubmitRequestWrapper {
   final String longitude;
   final String idUser;
   final String token;
-  final String photoBase64;
-  final String filename;
+  final List<PhotoAttachment> photos;
 
   AttendanceSubmitRequestWrapper({
     required this.idToko,
@@ -13,31 +12,45 @@ class AttendanceSubmitRequestWrapper {
     required this.longitude,
     required this.idUser,
     required this.token,
-    required this.photoBase64,
-    required this.filename,
+    required this.photos,
   });
 
-  factory AttendanceSubmitRequestWrapper.fromJson(Map<String, dynamic> json) {
-    return AttendanceSubmitRequestWrapper(
-      idToko: json['idToko'],
-      latitude: json['latitude'],
-      longitude: json['longitude'],
-      idUser: json['idUser'],
-      token: json['token'],
-      photoBase64: json['photoBase64'],
-      filename: json['filename'],
-    );
-  }
+  Map<String, dynamic> toJson() => {
+        'idToko': idToko,
+        'latitude': latitude,
+        'longitude': longitude,
+        'idUser': idUser,
+        'token': token,
+        'photos': photos.map((e) => e.toJson()).toList(),
+      };
 
-  Map<String, dynamic> toJson() {
-    return {
-      'idToko': idToko,
-      'latitude': latitude,
-      'longitude': longitude,
-      'idUser': idUser,
-      'token': token,
-      'photoBase64': photoBase64,
-      'filename': filename,
-    };
-  }
+  factory AttendanceSubmitRequestWrapper.fromJson(Map<String, dynamic> json) =>
+      AttendanceSubmitRequestWrapper(
+        idToko: json['idToko'],
+        latitude: json['latitude'],
+        longitude: json['longitude'],
+        idUser: json['idUser'],
+        token: json['token'],
+        photos: (json['photos'] as List)
+            .map((e) => PhotoAttachment.fromJson(e))
+            .toList(),
+      );
+}
+
+class PhotoAttachment {
+  final String photoBase64;
+  final String filename;
+
+  PhotoAttachment({required this.photoBase64, required this.filename});
+
+  Map<String, dynamic> toJson() => {
+        'photoBase64': photoBase64,
+        'filename': filename,
+      };
+
+  factory PhotoAttachment.fromJson(Map<String, dynamic> json) =>
+      PhotoAttachment(
+        photoBase64: json['photoBase64'],
+        filename: json['filename'],
+      );
 }

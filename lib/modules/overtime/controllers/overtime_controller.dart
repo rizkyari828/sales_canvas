@@ -1,11 +1,10 @@
 import 'package:sales/api/api_repository.dart';
-import 'package:sales/models/request/izin/submit_izin_request.dart';
-import 'package:sales/models/response/izin/type_izin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:sales/models/request/lembur/submit_izin_request.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OvertimeController extends GetxController {
@@ -43,7 +42,6 @@ class OvertimeController extends GetxController {
   DateTime endDate = DateTime.now();
 
   RxString validationDate = "".obs;
-  var listType = <DataTypeIzin>[].obs;
 
   Future<void> onImageButtonPressed(ImageSource source,
       {BuildContext? context, bool isMultiImage = false}) async {
@@ -91,8 +89,8 @@ class OvertimeController extends GetxController {
   }
 
   void submitData() async {
-    final res = await apiRepository.submitIzin(
-      SubmitIzinRequest(
+    final res = await apiRepository.submitLembur(
+      SubmitLemburRequest(
           idUser: idUser.value,
           dateStart: startDateController.text,
           dateEnd: endDateController.text,
@@ -123,7 +121,6 @@ class OvertimeController extends GetxController {
   void onReady() {
     super.onReady();
     loadUsers();
-    getType();
   }
 
   loadUsers() async {
@@ -159,11 +156,6 @@ class OvertimeController extends GetxController {
     endDate = selectedDate;
     endDateController.text =
         DateFormat("yyyy-MM-dd", "id_ID").format(selectedDate).toString();
-  }
-
-  void getType() async {
-    final res = await apiRepository.typeIzin();
-    listType.addAll(res?.data ?? []);
   }
 
   @override

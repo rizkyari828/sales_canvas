@@ -1,9 +1,9 @@
 import 'package:sales/api/api_repository.dart';
-import 'package:sales/models/request/detail_request_leave.dart';
-import 'package:sales/models/request/izin/update_approval_request.dart';
-import 'package:sales/models/response/izin/show_izin.dart';
+import 'package:sales/models/request/lembur/detail_request_lembur.dart';
+import 'package:sales/models/request/lembur/update_approval_request.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sales/models/response/lembur/show_lembur.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OvertimeDetailController extends GetxController {
@@ -11,7 +11,7 @@ class OvertimeDetailController extends GetxController {
   OvertimeDetailController({required this.apiRepository});
 
   final argm = Get.arguments;
-  var detail = DataIzin().obs;
+  var detail = DataLembur().obs;
   String date = "";
   DateTime selectedDate = DateTime.now();
   final noRequestController = TextEditingController();
@@ -34,7 +34,7 @@ class OvertimeDetailController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    getDetailIzin();
+    getDetailLembur();
     loadUsers();
   }
 
@@ -44,7 +44,7 @@ class OvertimeDetailController extends GetxController {
   }
 
   Future<void> onRefresh() async {
-    getDetailIzin();
+    getDetailLembur();
     // getItemCnC();
     loadUsers();
   }
@@ -55,9 +55,9 @@ class OvertimeDetailController extends GetxController {
     groupId.value = prefs.getString('groupId') ?? "";
   }
 
-  void getDetailIzin() async {
+  void getDetailLembur() async {
     final res =
-        await apiRepository.showIzin(ShowLeaveRequest(id: argm.toString()));
+        await apiRepository.showLembur(ShowLemburRequest(id: argm.toString()));
     print(res!.data!);
     detail.value = res.data!.first;
   }
@@ -65,15 +65,15 @@ class OvertimeDetailController extends GetxController {
   void approval({
     action = "reject",
   }) async {
-    final res = await apiRepository.updateApprovalIzin(
+    final res = await apiRepository.updateApprovalLembur(
         detail.value.id.toString(),
-        UpdateApprovalIzinRequest(
+        UpdateApprovalLemburRequest(
           action: action,
           noteApproval: noteApprovalController.text,
         ));
     // if (res?.error == false) {
     //   EasyLoading.showSuccess('Berhasil disimpan');
-    //   getDetailIzin();
+    //   getDetailLembur();
     //   loadUsers();
     // } else {
     //   EasyLoading.showError('Gagal disimpan');

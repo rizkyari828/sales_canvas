@@ -291,69 +291,84 @@ class StoreDetailController extends FaceRecognitionController {
     }
   }
 
-  void submitOld(String type) async {
-    final file = faceCameraCapture?.value;
-    if (file == null || !(await file.exists())) {
-      EasyLoading.showError('Foto belum tersedia');
-      return;
-    }
+  // void submitOld(String type) async {
+  //   final file = faceCameraCapture?.value;
+  //   if (file == null || !(await file.exists())) {
+  //     EasyLoading.showError('Foto belum tersedia');
+  //     return;
+  //   }
 
-    final base64Image = base64Encode(await file.readAsBytes());
-    final filename = file.path.split('/').last;
+  //   final base64Image = base64Encode(await file.readAsBytes());
+  //   final filename = file.path.split('/').last;
 
-    final wrapper = AttendanceSubmitRequestWrapper(
-      idToko: argm['id'].toString(),
-      latitude: myLocation.latitude.toString(),
-      longitude: myLocation.longitude.toString(),
-      idUser: userId.value,
-      token: token.value,
-      photoBase64: base64Image,
-      filename: filename,
-    );
+  //   final wrapper = AttendanceSubmitRequestWrapper(
+  //     idToko: argm['id'].toString(),
+  //     latitude: myLocation.latitude.toString(),
+  //     longitude: myLocation.longitude.toString(),
+  //     idUser: userId.value,
+  //     token: token.value,
+  //     photoBase64: base64Image,
+  //     filename: filename,
+  //   );
 
-    if (isConnectedToInternet.value) {
-      final storage = GetStorage();
-      await storage.write('pendingAttendance', wrapper.toJson());
-      EasyLoading.showInfo('Tidak ada internet. Data disimpan sementara.');
-      return;
-    }
+  //   if (isConnectedToInternet.value) {
+  //     final storage = GetStorage();
+  //     await storage.write('pendingAttendance', wrapper.toJson());
+  //     EasyLoading.showInfo('Tidak ada internet. Data disimpan sementara.');
+  //     return;
+  //   }
 
-    final response = await _submitAttendance(wrapper);
+  //   final response = await _submitAttendance(wrapper);
 
-    if (response) {
-      if (type == 'Clock In') {
-        EasyLoading.showSuccess('Berhasil Clock In');
-      } else {
-        EasyLoading.showSuccess('Berhasil Clock Out');
-      }
+  //   if (response) {
+  //     if (type == 'Clock In') {
+  //       EasyLoading.showSuccess('Berhasil Clock In');
+  //     } else {
+  //       EasyLoading.showSuccess('Berhasil Clock Out');
+  //     }
 
-      isAbsent.value = true;
-      absentTime.value = dateNow.value;
-      isShowMaps.value = false;
-      faceCameraCapture?.value = File('');
-      Get.back();
+  //     isAbsent.value = true;
+  //     absentTime.value = dateNow.value;
+  //     isShowMaps.value = false;
+  //     faceCameraCapture?.value = File('');
+  //     Get.back();
 
-      await _submitPendingAttendance();
-    } else {
-      if (type == 'Clock In') {
-        EasyLoading.showError('Gagal Clock In');
-      } else {
-        EasyLoading.showError('Gagal Clock Out');
-      }
+  //     await _submitPendingAttendance();
+  //   } else {
+  //     if (type == 'Clock In') {
+  //       EasyLoading.showError('Gagal Clock In');
+  //     } else {
+  //       EasyLoading.showError('Gagal Clock Out');
+  //     }
 
-      faceCameraCapture?.value = File('');
-    }
-  }
+  //     faceCameraCapture?.value = File('');
+  //   }
+  // }
 
   void submit(String type) async {
-    final file = faceCameraCapture?.value;
-    if (file == null || !file.existsSync()) {
+    if (imageFileList.isEmpty) {
       EasyLoading.showError('Foto belum tersedia');
       return;
     }
 
-    final photoBytes = await file.readAsBytes();
-    final photoBase64 = base64Encode(photoBytes);
+    List<PhotoAttachment> attachments = [];
+
+    for (var file in imageFileList) {
+      if (!(await File(file.path).exists())) {
+        EasyLoading.showError('Salah satu foto tidak ditemukan');
+        return;
+      }
+
+      final photoBytes = await File(file.path).readAsBytes();
+      final photoBase64 = base64Encode(photoBytes);
+
+      attachments.add(
+        PhotoAttachment(
+          photoBase64: photoBase64,
+          filename: file.path.split('/').last,
+        ),
+      );
+    }
 
     final wrapper = AttendanceSubmitRequestWrapper(
       idToko: argm['id'].toString(),
@@ -361,60 +376,87 @@ class StoreDetailController extends FaceRecognitionController {
       longitude: myLocation.longitude.toString(),
       idUser: userId.value,
       token: token.value,
-      photoBase64: photoBase64,
-      filename: file.path.split('/').last,
+      photos: attachments,
     );
 
-    if (isConnectedToInternetWidget.value == false) {
+    if (isConnectedToInternetWidget.value == true) {
       final success = await _submitAttendance(wrapper);
       if (success) {
-        if (type == 'Clock In') {
-          EasyLoading.showSuccess('Berhasil Clock In');
-        } else {
-          EasyLoading.showSuccess('Berhasil Clock Out');
-        }
-        isAbsent.value = true;
-        absentTime.value = dateNow.value;
-        isShowMaps.value = false;
-        faceCameraCapture?.value = File('');
-        Get.back();
+        EasyLoading.showSuccess('Berhasil ${type}');
+        _afterSuccess();
       } else {
-        if (type == 'Clock In') {
-          EasyLoading.showError('Gagal Clock In');
-        } else {
-          EasyLoading.showError('Gagal Clock Out');
-        }
-        faceCameraCapture?.value = File('');
+        EasyLoading.showError('Gagal ${type}');
+        _clearTempFile();
       }
     } else {
       _savePendingAttendance(wrapper);
       EasyLoading.showInfo('Tidak ada koneksi. Data disimpan sementara.');
-      faceCameraCapture?.value = File('');
+      _clearTempFile();
     }
+  }
+
+  void _afterSuccess() {
+    isAbsent.value = true;
+    absentTime.value = dateNow.value;
+    isShowMaps.value = false;
+    _clearTempFile();
+    Get.back();
+  }
+
+  void _clearTempFile() {
+    faceCameraCapture?.value = File('');
+    imageFileList.clear();
   }
 
   void _savePendingAttendance(AttendanceSubmitRequestWrapper wrapper) {
     final storage = GetStorage();
+    final existing = storage.read<List>('pendingAttendance');
 
-    final existingData = storage.read<List<dynamic>>('pendingAttendances');
-    final List<Map<String, dynamic>> updatedList = existingData != null
-        ? List<Map<String, dynamic>>.from(existingData)
-        : [];
+    final data = wrapper.toJson();
 
-    updatedList.add(wrapper.toJson());
-    storage.write('pendingAttendances', updatedList);
+    if (existing != null) {
+      final updatedList = List<Map<String, dynamic>>.from(existing)..add(data);
+      storage.write('pendingAttendance', updatedList);
+    } else {
+      storage.write('pendingAttendance', [data]);
+    }
   }
 
-  // Future<void> saveAttendanceToLocal(
-  //     AttendanceSubmitRequestWrapper data) async {
-  //   final storage = GetStorage();
-  //   final existingData = storage.read<List>('pendingAttendance') ?? [];
+  Future<void> saveAttendanceOffline({
+    required String idToko,
+    required String latitude,
+    required String longitude,
+    required String idUser,
+    required String token,
+    required List<XFile> imageFiles,
+  }) async {
+    final storage = GetStorage();
+    final stored = storage.read<List>('pendingAttendance') ?? [];
 
-  //   final updatedList = List<Map<String, dynamic>>.from(existingData)
-  //     ..add(data.toJson());
+    final List<PhotoAttachment> photoList = [];
 
-  //   await storage.write('pendingAttendance', updatedList);
-  // }
+    for (final file in imageFiles) {
+      final bytes = await file.readAsBytes();
+      photoList.add(PhotoAttachment(
+        photoBase64: base64Encode(bytes),
+        filename: file.name,
+      ));
+    }
+
+    final wrapper = AttendanceSubmitRequestWrapper(
+      idToko: idToko,
+      latitude: latitude,
+      longitude: longitude,
+      idUser: idUser,
+      token: token,
+      photos: photoList,
+    );
+
+    // Append ke list yang sudah ada
+    stored.add(wrapper.toJson());
+
+    await storage.write('pendingAttendance', stored);
+  }
 
   Future<bool> _submitAttendance(AttendanceSubmitRequestWrapper wrapper) async {
     try {
@@ -424,10 +466,10 @@ class StoreDetailController extends FaceRecognitionController {
         longitude: wrapper.longitude,
         idUser: wrapper.idUser,
         token: wrapper.token,
-        photo: MultipartFile(
-          base64Decode(wrapper.photoBase64),
-          filename: wrapper.filename,
-        ),
+        // photo: MultipartFile(
+        //   base64Decode(wrapper.photoBase64),
+        //   filename: wrapper.filename,
+        // ),
       );
 
       final res = await apiRepository.submitAttendanceStore(request);
@@ -435,23 +477,6 @@ class StoreDetailController extends FaceRecognitionController {
     } catch (e) {
       print("Error saat submit: $e");
       return false;
-    }
-  }
-
-  Future<void> _submitPendingAttendance() async {
-    final storage = GetStorage();
-    final data = storage.read('pendingAttendance');
-
-    if (data != null) {
-      final wrapper = AttendanceSubmitRequestWrapper.fromJson(data);
-      final success = await _submitAttendance(wrapper);
-
-      if (success) {
-        await storage.remove('pendingAttendance');
-        EasyLoading.showSuccess("Data tertunda berhasil dikirim");
-      } else {
-        EasyLoading.showInfo("Data tertunda belum berhasil dikirim");
-      }
     }
   }
 
