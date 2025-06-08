@@ -26,7 +26,7 @@ class MainTab extends GetView<HomeController> {
             backgroundColor: ColorConstants.lightScaffoldBackgroundColor,
             body: controller.tipe.value == '1'
                 ? _buildGridView(scaleWidth, context, controller)
-                : _getItems(controller, context))
+                : _buildGridView(scaleWidth, context, controller))
         // RefreshIndicator(
         //   child: _buildGridView(scaleWidth, context),
         //   onRefresh: () => controller.onRefresh(),
@@ -963,7 +963,7 @@ class MainTab extends GetView<HomeController> {
                           ),
                           SizedBox(width: 10),
                           CommonWidget.subtitlePlusText(
-                              text: 'Absensi Harian',
+                              text: 'Absensi Bulanan',
                               color: Colors.black,
                               fontWeight: FontWeight.bold),
                         ],
