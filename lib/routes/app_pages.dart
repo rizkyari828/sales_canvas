@@ -7,6 +7,7 @@ import 'package:sales/modules/input/bindings/input_binding.dart';
 import 'package:sales/modules/input/views/add_input_view.dart';
 import 'package:sales/modules/kuisioner/bindings/kuisioner_binding.dart';
 import 'package:sales/modules/kuisioner/views/add_kuisioner_view.dart';
+import 'package:sales/modules/kuisioner/views/input_data_kuisioner_view.dart';
 import 'package:sales/modules/leads/bindings/leads_binding.dart';
 import 'package:sales/modules/leads/views/add_leads_view.dart';
 import 'package:sales/modules/leads/views/detail_leads_view.dart';
@@ -207,6 +208,11 @@ class AppPages {
       name: Routes.DETAIL_LEADS,
       page: () => LeadsDetailView(),
       binding: LeadsBinding(),
+    ),
+    GetPage(
+      name: Routes.INPUT_DATA_KUISIONER,
+      page: () => InputDataKuisionerView(),
+      binding: KusionerBinding(),
     ),
   ];
 }

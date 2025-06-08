@@ -8,7 +8,13 @@ class BaseProvider extends GetConnect {
     httpClient.baseUrl = ApiConstants.baseUrl;
     httpClient.timeout = Duration(seconds: 120);
     httpClient.addAuthenticator(authInterceptor);
-    httpClient.addRequestModifier(requestInterceptor);
+    httpClient.addRequestModifier<dynamic>((request) async {
+      final result = await requestInterceptor(request);
+      // Jika null, batalkan request dengan throw
+      if (result == null)
+        throw Exception('Request dibatalkan karena tidak ada koneksi internet');
+      return result;
+    });
     httpClient.addResponseModifier(responseInterceptor);
   }
 }

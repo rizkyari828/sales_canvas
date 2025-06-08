@@ -13,6 +13,12 @@ FutureOr<dynamic> responseInterceptor(
   print(request.url);
   print(response.body);
 
+  if (response.statusCode == -1) {
+    EasyLoading.showError('Tidak ada koneksi internet');
+    EasyLoading.dismiss();
+    return response;
+  }
+
   if (response.statusCode == 200) {
     try {
       final message = ErrorResponse.fromJson(response.body);

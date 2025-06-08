@@ -26,7 +26,7 @@ class MainTab extends GetView<HomeController> {
             backgroundColor: ColorConstants.lightScaffoldBackgroundColor,
             body: controller.tipe.value == '1'
                 ? _buildGridView(scaleWidth, context, controller)
-                : _buildGridView(scaleWidth, context, controller))
+                : _getItems(controller, context))
         // RefreshIndicator(
         //   child: _buildGridView(scaleWidth, context),
         //   onRefresh: () => controller.onRefresh(),

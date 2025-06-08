@@ -1,12 +1,18 @@
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sales/api/api_repository.dart';
-import 'package:sales/models/request/kuisioner_request.dart';
+import 'package:sales/models/request/kuisioner/kuisioner_request.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:sales/models/request/pagination_request.dart';
 import 'package:sales/models/response/kuisioner_response.dart';
 import 'package:sales/modules/home/base_controller.dart';
+import 'package:sales/routes/app_pages.dart';
+import 'package:sales/shared/constants/colors.dart';
+import 'package:sales/shared/utils/common_widget.dart';
+import 'package:sales/shared/utils/size_config.dart';
+import 'package:sales/shared/widgets/button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class KusionerController extends BaseController {
@@ -33,54 +39,138 @@ class KusionerController extends BaseController {
   RxInt page = 1.obs;
 
   RxString validationDate = "".obs;
-  var listKuisioner = <ListKuisioner>[].obs;
+  var listKuisioner = <DataKuisioner>[].obs;
+  var submitKuisioner = <SubmitKuisioner>[].obs;
 
   final selectedAnswer = ''.obs;
+
+  // Tambahkan penampung jawaban
+  var answers = <String, String>{}.obs; // key: idSoal, value: jawaban
+
+  // Tambahkan map untuk essayControllers
+  final Map<String, TextEditingController> essayControllers = {};
 
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
 
-  void setAnswer(String value) {
-    selectedAnswer.value = value;
-  }
+  final argm = Get.arguments;
 
-  void submit() {
-    if (endDate.compareTo(startDate) >= 0) {
-      submitData();
-    } else {
-      validationDate.value =
-          'Tanggal selesai tidak bisa lebih besar dari tanggal mulai';
+  RxInt currentProgress = 0.obs;
+  RxInt allProgress = 0.obs;
+  RxInt idKuisioner = 0.obs;
+  RxDouble percentage = 0.0.obs;
+  RxInt idGroupKuisioner = 0.obs;
+
+  var jawabanList = <JawabanKuisioner>[].obs;
+
+  void setAnswer(String idSoal, String idKategori, String jawaban) {
+    // Update ke answers agar UI sinkron
+    answers[idSoal] = jawaban;
+    // Jika ingin update selectedAnswer untuk radio, bisa juga:
+    selectedAnswer.value = jawaban;
+    // Update ke jawabanList jika memang masih dipakai
+    final idx = jawabanList.indexWhere((e) => e.idSoal == idSoal);
+    if (idx != -1) {
+      jawabanList[idx].jawaban = jawaban;
+      jawabanList.refresh();
     }
   }
 
-  void submitData() async {
-    final res = await apiRepository.submitKuisioner(
-      KuisionerRequest(
-        idUser: username.value,
-        idKuisioner: token.value,
-        answer: answerController.text,
-      ),
-    );
+  void submit({bool isLast = false}) async {
+    // Kumpulkan jawaban ke dalam List<SubmitKuisioner>
+    List<SubmitKuisioner> dataToSend = listKuisioner
+        .map((item) => SubmitKuisioner(
+              idSoal: item.idSoal.toString(),
+              idKategori: item.idKategori.toString(),
+              jawaban: answers[item.idSoal.toString()] ?? "",
+              idTrans: idKuisioner.value,
+            ))
+        .toList();
+
+    final req = SubmitKuisionerRequest(data: dataToSend);
+    final res = await apiRepository.submitKuisioner(req);
     if (res?.error == false) {
       EasyLoading.showSuccess('Berhasil disimpan');
       EasyLoading.dismiss();
-      Get.back();
+      // Update currentProgress sesuai jumlah data yang disubmit
+      currentProgress.value += dataToSend.length;
+      // Jika progress sudah sama atau lebih dari total, tampilkan notif selesai
+      bool isFinished = currentProgress.value >= allProgress.value;
+      if (isLast || isFinished) {
+        // Tampilkan dialog selesai
+        Get.defaultDialog(
+          title: 'Kuisioner Selesai',
+          content: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              children: [
+                CommonWidget.subtitleText(text: 'Semua kuisioner telah diisi!'),
+                SizedBox(height: 30),
+                LinearProgressIndicator(
+                  value: 1.0,
+                  minHeight: 16,
+                  color: Colors.green,
+                  backgroundColor: Colors.green[100],
+                ),
+                SizedBox(height: 20),
+                CustomButton(
+                  buttonColor: ColorConstants.mainColor,
+                  buttonText: 'KEMBALI KE HOME',
+                  width: SizeConfig().screenWidth,
+                  onPressed: () {
+                    Get.offAllNamed(Routes.HOME);
+                  },
+                ),
+              ],
+            ),
+          ),
+          barrierDismissible: false,
+        );
+      } else {
+        Future.delayed(Duration(milliseconds: 100), () {
+          Get.offAllNamed(Routes.KUISIONER, arguments: {
+            'id_kuisioner': idKuisioner.value,
+            'id_group': idGroupKuisioner.value,
+            'total_question': allProgress.value,
+            'current_progress': currentProgress.value,
+            'page': page.value + 1,
+            'limit': 2
+          });
+        });
+      }
     } else {
       EasyLoading.showError('Gagal disimpan');
       EasyLoading.dismiss();
     }
   }
 
+  void updatePercentage() {
+    if (allProgress.value > 0) {
+      percentage.value = currentProgress.value / allProgress.value;
+    } else {
+      percentage.value = 0.0;
+    }
+  }
+
   @override
   void onInit() {
     super.onInit();
+    ever(currentProgress, (_) => updatePercentage());
   }
 
   @override
   void onReady() {
     super.onReady();
     loadUsers();
-    getKuisioner(page);
+
+    allProgress.value = argm['total_question'];
+    percentage.value = 0.0;
+    idKuisioner.value = argm['id_kuisioner'];
+    idGroupKuisioner.value = argm['id_group'];
+    currentProgress.value = argm['current_progress'] ?? 0;
+    page.value = argm['page'] ?? 1;
+
+    getKuisioner(page.value);
   }
 
   loadUsers() async {
@@ -120,19 +210,10 @@ class KusionerController extends BaseController {
   }
 
   void getKuisioner(page) async {
-    listKuisioner.add(
-        ListKuisioner(id: 1, type: 'essay', question: 'Ini Untuk Soal Essay'));
-    listKuisioner.add(ListKuisioner(
-        id: 2,
-        type: 'pg',
-        question: 'Ini Untuk Soal Pilihan',
-        optionA: 'Pilihan A',
-        optionB: 'Pilihan B',
-        optionC: 'Pilihan C',
-        optionD: 'Pilihan D'));
-    // final res = await apiRepository.listKuisioner(
-    //     page: page, data: UserIdRequest(id: idUser.value));
-    // listKuisioner.addAll(res?.data ?? []);
+    final res = await apiRepository.listKuisioner(
+        data: ListKuisionerRequest(
+            id: idGroupKuisioner.value, limit: 2, page: page));
+    listKuisioner.addAll(res?.data ?? []);
   }
 
   void onLoading() async {
@@ -156,4 +237,12 @@ class KusionerController extends BaseController {
   void onClose() {
     super.onClose();
   }
+}
+
+class JawabanKuisioner {
+  final String idSoal;
+  final String idKategori;
+  String jawaban;
+  JawabanKuisioner(
+      {required this.idSoal, required this.idKategori, this.jawaban = ""});
 }

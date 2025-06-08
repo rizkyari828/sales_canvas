@@ -34,4 +34,5 @@ abstract class Routes {
   static const LEADS = '/leads';
   static const DETAIL_LEADS = '/detail-leads';
   static const ADD_LEADS = '/add-leads';
+  static const INPUT_DATA_KUISIONER = '/input-data-kuisioner';
 }

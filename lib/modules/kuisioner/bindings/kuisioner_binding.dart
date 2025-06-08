@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:sales/modules/kuisioner/controllers/input_data_kuisioner_controller.dart';
 import 'package:sales/modules/kuisioner/controllers/kuisioner_controller.dart';
 
 class KusionerBinding extends Bindings {
@@ -6,6 +7,9 @@ class KusionerBinding extends Bindings {
   void dependencies() {
     Get.lazyPut<KusionerController>(
       () => KusionerController(apiRepository: Get.find()),
+    );
+    Get.lazyPut<InputDataKuisionerController>(
+      () => InputDataKuisionerController(apiRepository: Get.find()),
     );
   }
 }

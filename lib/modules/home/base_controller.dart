@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -253,17 +252,7 @@ class BaseController extends GetxController {
 
   Future<bool> _submitAttendance(AttendanceSubmitRequestWrapper wrapper) async {
     try {
-      final request = AttendanceSubmitRequest(
-        idToko: wrapper.idToko,
-        latitude: wrapper.latitude,
-        longitude: wrapper.longitude,
-        idUser: wrapper.idUser,
-        token: wrapper.token,
-        // photo: MultipartFile(
-        //   base64Decode(wrapper.photoBase64),
-        //   filename: wrapper.filename,
-        // ),
-      );
+      final request = wrapper;
 
       final res = await apiRepository.submitAttendanceStore(request);
       return res?.message == "sukses";

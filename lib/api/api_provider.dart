@@ -1,5 +1,6 @@
 import 'package:sales/api/base_provider.dart';
 import 'package:sales/models/models.dart';
+import 'package:sales/models/request/attendance/attendance_wrapper.dart';
 import 'package:sales/models/request/attendance/submit_attendance.dart';
 import 'package:sales/models/request/attendance/validate_attenance.dart';
 import 'package:sales/models/request/benefit_request.dart';
@@ -11,7 +12,8 @@ import 'package:sales/models/request/id_request.dart';
 import 'package:sales/models/request/input_request.dart';
 import 'package:sales/models/request/izin/submit_izin_request.dart';
 import 'package:sales/models/request/izin/update_approval_request.dart';
-import 'package:sales/models/request/kuisioner_request.dart';
+import 'package:sales/models/request/kuisioner/kuisioner_input_data_request.dart';
+import 'package:sales/models/request/kuisioner/kuisioner_request.dart';
 import 'package:sales/models/request/lembur/detail_request_lembur.dart';
 import 'package:sales/models/request/lembur/submit_izin_request.dart';
 import 'package:sales/models/request/lembur/update_approval_request.dart';
@@ -21,6 +23,7 @@ import 'package:sales/models/request/overtime/set_done_overtime_request.dart';
 import 'package:sales/models/request/overtime/submit_overtime_client_request.dart';
 import 'package:sales/models/request/overtime/submit_request_overtime.dart';
 import 'package:sales/models/request/overtime/update_approval_overtime_request.dart';
+import 'package:sales/models/request/pagination_request.dart';
 import 'package:sales/models/request/rate/submit_rate_request.dart';
 import 'package:sales/models/request/reliver/approve_reliver_request.dart';
 import 'package:sales/models/request/reliver/create_reliver_request.dart';
@@ -248,7 +251,13 @@ class ApiProvider extends BaseProvider {
     return post(path, data.toJson());
   }
 
-  Future<Response> submitKuisioner(String path, KuisionerRequest data) {
+  Future<Response> submitKuisioner(String path, SubmitKuisionerRequest data) {
+    print(data.toJson());
+    return post(path, data.toJson());
+  }
+
+  Future<Response> submitInputDataKuisioner(
+      String path, KuisionerInputDataRequest data) {
     print(data.toJson());
     return post(path, data.toJson());
   }
@@ -266,7 +275,7 @@ class ApiProvider extends BaseProvider {
     return post(path, data.toJson());
   }
 
-  Future<Response> getKuisioner(String path, UserIdRequest data) {
+  Future<Response> getKuisioner(String path, ListKuisionerRequest data) {
     return post(path, data.toJson());
   }
 
@@ -296,4 +305,18 @@ class ApiProvider extends BaseProvider {
     return patch(path, data.toJson());
   }
   //ENDIZIN
+
+  Future<Response> submitKunjungan(
+      String path, AttendanceSubmitRequestWrapper data) async {
+    try {
+      print(data.toJson());
+      // Kirim sebagai JSON, bukan multipart
+      final response = await post(path, data.toJson());
+      return response;
+    } catch (e, stackTrace) {
+      print('Error saat submit attendance: $e');
+      print('Stack trace: $stackTrace');
+      rethrow;
+    }
+  }
 }

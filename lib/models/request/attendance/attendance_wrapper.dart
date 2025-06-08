@@ -21,7 +21,7 @@ class AttendanceSubmitRequestWrapper {
         'longitude': longitude,
         'idUser': idUser,
         'token': token,
-        'photos': photos.map((e) => e.toJson()).toList(),
+        'foto': photos.map((e) => e.toJson()).toList(),
       };
 
   factory AttendanceSubmitRequestWrapper.fromJson(Map<String, dynamic> json) =>
@@ -31,26 +31,26 @@ class AttendanceSubmitRequestWrapper {
         longitude: json['longitude'],
         idUser: json['idUser'],
         token: json['token'],
-        photos: (json['photos'] as List)
+        photos: (json['foto'] as List)
             .map((e) => PhotoAttachment.fromJson(e))
             .toList(),
       );
 }
 
 class PhotoAttachment {
-  final String photoBase64;
+  final String img;
   final String filename;
 
-  PhotoAttachment({required this.photoBase64, required this.filename});
+  PhotoAttachment({required this.img, required this.filename});
 
   Map<String, dynamic> toJson() => {
-        'photoBase64': photoBase64,
+        'img': img,
         'filename': filename,
       };
 
   factory PhotoAttachment.fromJson(Map<String, dynamic> json) =>
       PhotoAttachment(
-        photoBase64: json['photoBase64'],
+        img: json['img'],
         filename: json['filename'],
       );
 }

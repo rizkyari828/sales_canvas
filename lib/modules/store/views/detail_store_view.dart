@@ -1,6 +1,5 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:sales/modules/store/controllers/store_detail_controller.dart';
 import 'package:sales/shared/services/face_recognition/face_recognition_wiget.dart';
 import 'package:sales/shared/shared.dart';
@@ -28,28 +27,17 @@ class StoreDetailView extends GetView<StoreDetailController> {
               left: sw * 0.06,
               top: sw * 0.02,
               child: CustomButton(
-                  buttonColor: Colors.white,
-                  borderColor: ColorConstants.mainColor,
-                  buttonTextColor: ColorConstants.mainColor,
-                  // isDisabled: !controller.canAbsent.value ||
-                  //         controller.isAbsentOut.value
-                  isDisabled: controller.imageFileList.length < 1,
-                  buttonText: 'SUBMIT FOTO',
-                  width: MediaQuery.of(context).size.width / 1.13,
-                  onPressed: () => !controller.isAbsent.value
-                      ? Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  FaceRecognitionWiget.faceCameraRecognizer(
-                                      controller, 'Clock In')))
-                      : Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  FaceRecognitionWiget.faceCameraRecognizer(
-                                      controller, 'Clock Out')))),
-            ),
+                buttonColor: Colors.white,
+                borderColor: ColorConstants.mainColor,
+                buttonTextColor: ColorConstants.mainColor,
+                // isDisabled: !controller.canAbsent.value ||
+                //         controller.isAbsentOut.value
+                isDisabled: controller.imageFileList.length < 1,
+                buttonText: 'SUBMIT FOTO',
+                width: MediaQuery.of(context).size.width / 1.13,
+                onPressed: () => controller.submit('Kunjungan'),
+              ),
+            )
           ],
         ),
         backgroundColor: Colors.white,
@@ -283,7 +271,8 @@ class StoreDetailView extends GetView<StoreDetailController> {
                 // _cardMenu(Icons.production_quantity_limits, "Product",
                 //     controller.goToAddPages, Colors.white, Colors.teal),
                 SizedBox(height: 10.0),
-                CommonWidget.captionText(text: "Maksimal melampirkan 3 Foto"),
+                CommonWidget.captionText(
+                    text: "Maksimal melampirkan 3 Foto", color: Colors.red),
                 SizedBox(height: 50.0),
               ],
             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:sales/shared/shared.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -150,7 +151,7 @@ class CommonWidget {
       text,
       style: TextStyle(
           color: color,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.normal,
           fontSize: 14,
           letterSpacing: 0.5,
           fontFamily: 'Poppins'),
@@ -165,6 +166,19 @@ class CommonWidget {
           color: color,
           fontWeight: FontWeight.normal,
           fontSize: 10,
+          letterSpacing: 0.4,
+          fontFamily: 'Poppins'),
+    );
+  }
+
+  static Text bodyMultilineText({String text = "", Color color = ColorConstants.black}) {
+    return Text(
+      text,
+      maxLines: 2,
+      style: TextStyle(
+          color: color,
+          fontWeight: FontWeight.normal,
+          fontSize: 14,
           letterSpacing: 0.4,
           fontFamily: 'Poppins'),
     );
@@ -349,5 +363,37 @@ class CommonWidget {
 
   static Color setOpacity(Color color, double opacity) {
     return color.withAlpha((opacity * 255).round());
+  }
+
+  static Widget progressLiniar(
+      int current, int total, double percentage, context) {
+    return Column(
+      children: [
+        LinearPercentIndicator(
+          width: MediaQuery.of(context).size.width - 50,
+          animation: true,
+          lineHeight: 20.0,
+          animationDuration: 2000,
+          percent: percentage,
+          center: CommonWidget.minSubtitleText(
+              text: '${current} / ${total}', color: ColorConstants.white),
+          barRadius: Radius.circular(10),
+          progressColor: percentage < 0.25
+              ? Colors.red
+              : percentage < 0.5
+                  ? Colors.orange
+                  : percentage < 0.75
+                      ? Colors.amber
+                      : percentage < 1.0
+                          ? Colors.blue
+                          : Colors.green,
+        ),
+        SizedBox(height: 20.0),
+        Divider(
+          color: ColorConstants.borderColor,
+        ),
+        SizedBox(height: 20.0),
+      ],
+    );
   }
 }

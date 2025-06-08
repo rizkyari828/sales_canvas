@@ -16,6 +16,7 @@ import 'package:sales/models/request/attendance/validate_attenance.dart';
 import 'package:sales/models/response/izin/show_izin.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sales/modules/home/base_controller.dart';
 import 'package:sales/routes/app_pages.dart';
 import 'package:sales/shared/constants/colors.dart';
 import 'package:sales/shared/constants/storage.dart';
@@ -26,7 +27,7 @@ import 'package:sales/shared/widgets/button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:geocoding/geocoding.dart';
 
-class StoreDetailController extends FaceRecognitionController {
+class StoreDetailController extends BaseController {
   StoreDetailController({required ApiRepository apiRepository})
       : super(apiRepository: apiRepository);
 
@@ -101,7 +102,6 @@ class StoreDetailController extends FaceRecognitionController {
   void onInit() {
     super.onInit();
     determinePosition();
-    validateAttandance();
   }
 
   @override
@@ -123,49 +123,7 @@ class StoreDetailController extends FaceRecognitionController {
     isAbsentOut.value = false;
     absentTimeOut.value = '--:--';
     determinePosition();
-    validateAttandance();
     loadUsers();
-  }
-
-  void validateAttandance() async {
-    try {
-      final res = await apiRepository.validateAttendance(
-          AttendanceValidateRequest(
-              idToko: argm['id'].toString(),
-              latitude: myLocation.latitude.toString(),
-              longitude: myLocation.longitude.toString(),
-              id: userId.value.toString(),
-              token: token.value.toString()));
-      print(res);
-
-      LatLng _myOffice = LatLng(
-          res?.data?.first.latitude ?? 0.0, res?.data?.first.longitude ?? 0.0);
-
-      circles.add(Circle(
-        circleId: CircleId('A1'),
-        center: _myOffice,
-        radius: 150,
-        fillColor: CommonWidget.setOpacity(Colors.blueAccent, 0.9),
-        strokeWidth: 3,
-        strokeColor: CommonWidget.setOpacity(Colors.blueAccent, 0.9),
-      ));
-
-      if (res?.data?.first.flag == "1") {
-        canAbsent.value = true;
-        if (res?.data?.first.absenIn != '') {
-          absentTime.value = res?.data?.first.absenIn.toString() ?? '';
-        }
-        if (res?.data?.first.absenOut != '') {
-          absentTimeOut.value = res?.data?.first.absenOut.toString() ?? '';
-        }
-      } else {
-        canAbsent.value = false;
-      }
-      EasyLoading.dismiss();
-    } catch (e) {
-      canAbsent.value = false;
-      EasyLoading.dismiss();
-    }
   }
 
   void goToAddPages() {
@@ -291,60 +249,6 @@ class StoreDetailController extends FaceRecognitionController {
     }
   }
 
-  // void submitOld(String type) async {
-  //   final file = faceCameraCapture?.value;
-  //   if (file == null || !(await file.exists())) {
-  //     EasyLoading.showError('Foto belum tersedia');
-  //     return;
-  //   }
-
-  //   final base64Image = base64Encode(await file.readAsBytes());
-  //   final filename = file.path.split('/').last;
-
-  //   final wrapper = AttendanceSubmitRequestWrapper(
-  //     idToko: argm['id'].toString(),
-  //     latitude: myLocation.latitude.toString(),
-  //     longitude: myLocation.longitude.toString(),
-  //     idUser: userId.value,
-  //     token: token.value,
-  //     photoBase64: base64Image,
-  //     filename: filename,
-  //   );
-
-  //   if (isConnectedToInternet.value) {
-  //     final storage = GetStorage();
-  //     await storage.write('pendingAttendance', wrapper.toJson());
-  //     EasyLoading.showInfo('Tidak ada internet. Data disimpan sementara.');
-  //     return;
-  //   }
-
-  //   final response = await _submitAttendance(wrapper);
-
-  //   if (response) {
-  //     if (type == 'Clock In') {
-  //       EasyLoading.showSuccess('Berhasil Clock In');
-  //     } else {
-  //       EasyLoading.showSuccess('Berhasil Clock Out');
-  //     }
-
-  //     isAbsent.value = true;
-  //     absentTime.value = dateNow.value;
-  //     isShowMaps.value = false;
-  //     faceCameraCapture?.value = File('');
-  //     Get.back();
-
-  //     await _submitPendingAttendance();
-  //   } else {
-  //     if (type == 'Clock In') {
-  //       EasyLoading.showError('Gagal Clock In');
-  //     } else {
-  //       EasyLoading.showError('Gagal Clock Out');
-  //     }
-
-  //     faceCameraCapture?.value = File('');
-  //   }
-  // }
-
   void submit(String type) async {
     if (imageFileList.isEmpty) {
       EasyLoading.showError('Foto belum tersedia');
@@ -364,7 +268,7 @@ class StoreDetailController extends FaceRecognitionController {
 
       attachments.add(
         PhotoAttachment(
-          photoBase64: photoBase64,
+          img: photoBase64,
           filename: file.path.split('/').last,
         ),
       );
@@ -404,7 +308,6 @@ class StoreDetailController extends FaceRecognitionController {
   }
 
   void _clearTempFile() {
-    faceCameraCapture?.value = File('');
     imageFileList.clear();
   }
 
@@ -438,7 +341,7 @@ class StoreDetailController extends FaceRecognitionController {
     for (final file in imageFiles) {
       final bytes = await file.readAsBytes();
       photoList.add(PhotoAttachment(
-        photoBase64: base64Encode(bytes),
+        img: base64Encode(bytes),
         filename: file.name,
       ));
     }
@@ -460,17 +363,7 @@ class StoreDetailController extends FaceRecognitionController {
 
   Future<bool> _submitAttendance(AttendanceSubmitRequestWrapper wrapper) async {
     try {
-      final request = AttendanceSubmitRequest(
-        idToko: wrapper.idToko,
-        latitude: wrapper.latitude,
-        longitude: wrapper.longitude,
-        idUser: wrapper.idUser,
-        token: wrapper.token,
-        // photo: MultipartFile(
-        //   base64Decode(wrapper.photoBase64),
-        //   filename: wrapper.filename,
-        // ),
-      );
+      final request = wrapper;
 
       final res = await apiRepository.submitAttendanceStore(request);
       return res?.message == "sukses";

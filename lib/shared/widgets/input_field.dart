@@ -226,17 +226,20 @@ class InputInputField extends StatelessWidget {
 class TextAreaField extends StatelessWidget {
   final TextEditingController controller;
   final isDisabled;
+  final ValueChanged<String>? onChanged;
 
-  TextAreaField({required this.controller, this.isDisabled = false});
+  TextAreaField(
+      {required this.controller, this.isDisabled = false, this.onChanged});
 
   @override
   Widget build(BuildContext context) {
     return Card(
         elevation: 0.1,
-        color: isDisabled ? Colors.grey[200] : Colors.white,
+        color:
+            isDisabled ? Colors.grey[200] : ColorConstants.backgroundTextField,
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            side: BorderSide(color: ColorConstants.mainColor, width: 1)),
+          borderRadius: BorderRadius.circular(10.0),
+        ),
         child: Padding(
           padding: EdgeInsets.all(8.0),
           child: TextField(
@@ -250,8 +253,9 @@ class TextAreaField extends StatelessWidget {
                 fontFamily: 'Poppins'),
             controller: controller,
             maxLines: 8,
+            onChanged: onChanged,
             decoration: InputDecoration.collapsed(
-              hintText: "Enter your text here",
+              hintText: "Masukkan text disini",
               hintStyle: TextStyle(
                   color: ColorConstants.black,
                   fontWeight: FontWeight.normal,
@@ -259,8 +263,12 @@ class TextAreaField extends StatelessWidget {
                   letterSpacing: 0.5,
                   fontFamily: 'Poppins'),
               filled: true,
-              fillColor: isDisabled ? Colors.grey[200] : Colors.white,
-              focusColor: isDisabled ? Colors.grey[200] : Colors.white,
+              fillColor: isDisabled
+                  ? Colors.grey[200]
+                  : ColorConstants.backgroundTextField,
+              focusColor: isDisabled
+                  ? Colors.grey[200]
+                  : ColorConstants.backgroundTextField,
             ),
           ),
         ));

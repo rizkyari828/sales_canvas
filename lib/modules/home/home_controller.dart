@@ -808,7 +808,7 @@ class HomeController extends BaseController {
   }
 
   void goToKuisionerPages() {
-    Get.toNamed(Routes.KUISIONER);
+    Get.toNamed(Routes.INPUT_DATA_KUISIONER);
   }
 
   void goToTaskListPages() {

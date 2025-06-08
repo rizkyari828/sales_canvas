@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:sales/models/models.dart';
+import 'package:sales/models/request/attendance/attendance_wrapper.dart';
 import 'package:sales/models/request/attendance/submit_attendance.dart';
 import 'package:sales/models/request/attendance/validate_attenance.dart';
 import 'package:sales/models/request/benefit_request.dart';
@@ -11,7 +12,8 @@ import 'package:sales/models/request/id_request.dart';
 import 'package:sales/models/request/input_request.dart';
 import 'package:sales/models/request/izin/submit_izin_request.dart';
 import 'package:sales/models/request/izin/update_approval_request.dart';
-import 'package:sales/models/request/kuisioner_request.dart';
+import 'package:sales/models/request/kuisioner/kuisioner_input_data_request.dart';
+import 'package:sales/models/request/kuisioner/kuisioner_request.dart';
 import 'package:sales/models/request/lembur/detail_request_lembur.dart';
 import 'package:sales/models/request/lembur/submit_izin_request.dart';
 import 'package:sales/models/request/lembur/update_approval_request.dart';
@@ -21,6 +23,7 @@ import 'package:sales/models/request/overtime/set_done_overtime_request.dart';
 import 'package:sales/models/request/overtime/submit_overtime_client_request.dart';
 import 'package:sales/models/request/overtime/submit_request_overtime.dart';
 import 'package:sales/models/request/overtime/update_approval_overtime_request.dart';
+import 'package:sales/models/request/pagination_request.dart';
 import 'package:sales/models/request/rate/submit_rate_request.dart';
 import 'package:sales/models/request/reliver/approve_reliver_request.dart';
 import 'package:sales/models/request/reliver/create_reliver_request.dart';
@@ -38,6 +41,7 @@ import 'package:sales/models/response/benefit/type_cuti.dart';
 import 'package:sales/models/response/izin/list_izin.dart';
 import 'package:sales/models/response/izin/show_izin.dart';
 import 'package:sales/models/response/izin/type_izin.dart';
+import 'package:sales/models/response/kuisioner/input_data_kuisioner_respons.dart';
 import 'package:sales/models/response/kuisioner_response.dart';
 import 'package:sales/models/response/lembur/list_lembur.dart';
 import 'package:sales/models/response/lembur/show_lembur.dart';
@@ -809,13 +813,31 @@ class ApiRepository {
     return null;
   }
 
-  Future<ErrorResponse?> submitKuisioner(KuisionerRequest data) async {
+  Future<ErrorResponse?> submitKuisioner(SubmitKuisionerRequest data) async {
     try {
       final res = await apiProvider
-          .submitKuisioner('/api/saveCall', data)
+          .submitKuisioner('/api/simpanQuisionerKedua', data)
           .timeout(Duration(seconds: timeout));
       if (res.statusCode == 200 || res.statusCode == 401) {
         return ErrorResponse.fromJson(res.body);
+      }
+    } on TimeoutException catch (_) {
+      EasyLoading.showError('Connection Timeout. Please try again later');
+      EasyLoading.dismiss();
+    } catch (exception) {
+      print(exception);
+    }
+    return null;
+  }
+
+  Future<InputDataKuisionerRespons?> submitDataKuisioner(
+      KuisionerInputDataRequest data) async {
+    try {
+      final res = await apiProvider
+          .submitInputDataKuisioner('/api/simpanQuisionerAwal', data)
+          .timeout(Duration(seconds: timeout));
+      if (res.statusCode == 200 || res.statusCode == 401) {
+        return InputDataKuisionerRespons.fromJson(res.body);
       }
     } on TimeoutException catch (_) {
       EasyLoading.showError('Connection Timeout. Please try again later');
@@ -846,10 +868,10 @@ class ApiRepository {
   }
 
   Future<AttendanceSubmitResponse?> submitAttendanceStore(
-      AttendanceSubmitRequest data) async {
+      AttendanceSubmitRequestWrapper data) async {
     try {
       final res = await apiProvider
-          .submitAttendance('/api/chekInkampas', data)
+          .submitKunjungan('/api/chekInkampas', data)
           .timeout(Duration(seconds: timeout));
       if (res.statusCode == 200 || res.statusCode == 401) {
         return AttendanceSubmitResponse.fromJson(res.body);
@@ -934,19 +956,14 @@ class ApiRepository {
     return null;
   }
 
-  Future<KuisionerResponse?> listKuisioner(
-      {int page = 1, int limit = 10, required UserIdRequest data}) async {
+  Future<ListKuisionerRespons?> listKuisioner(
+      {required ListKuisionerRequest data}) async {
     try {
       final res = await apiProvider
-          .getKuisioner(
-              '/api/listKuisioner?page=' +
-                  page.toString() +
-                  '&limit=' +
-                  limit.toString(),
-              data)
+          .getKuisioner('/api/listQuisioner', data)
           .timeout(Duration(seconds: timeout));
       if (res.statusCode == 200 || res.statusCode == 401) {
-        return KuisionerResponse.fromJson(res.body);
+        return ListKuisionerRespons.fromJson(res.body);
       }
     } on TimeoutException catch (_) {
       EasyLoading.showError('Connection Timeout. Please try again later');
