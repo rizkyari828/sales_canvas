@@ -283,19 +283,19 @@ class StoreDetailController extends BaseController {
       photos: attachments,
     );
 
-    if (isConnectedToInternetWidget.value == true) {
+    if (isConnectedToInternet.value == true) {
       final success = await _submitAttendance(wrapper);
       if (success) {
         EasyLoading.showSuccess('Berhasil ${type}');
         _afterSuccess();
       } else {
         EasyLoading.showError('Gagal ${type}');
-        _clearTempFile();
+        // _clearTempFile();
       }
     } else {
       _savePendingAttendance(wrapper);
       EasyLoading.showInfo('Tidak ada koneksi. Data disimpan sementara.');
-      _clearTempFile();
+      // _clearTempFile();
     }
   }
 

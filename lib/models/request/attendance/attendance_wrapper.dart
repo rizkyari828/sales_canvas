@@ -16,20 +16,20 @@ class AttendanceSubmitRequestWrapper {
   });
 
   Map<String, dynamic> toJson() => {
-        'idToko': idToko,
-        'latitude': latitude,
-        'longitude': longitude,
-        'idUser': idUser,
+        'id_toko': idToko,
+        'lat': latitude,
+        'long': longitude,
+        'id_user': idUser,
         'token': token,
         'foto': photos.map((e) => e.toJson()).toList(),
       };
 
   factory AttendanceSubmitRequestWrapper.fromJson(Map<String, dynamic> json) =>
       AttendanceSubmitRequestWrapper(
-        idToko: json['idToko'],
-        latitude: json['latitude'],
-        longitude: json['longitude'],
-        idUser: json['idUser'],
+        idToko: json['id_toko'],
+        latitude: json['lat'],
+        longitude: json['long'],
+        idUser: json['id_user'],
         token: json['token'],
         photos: (json['foto'] as List)
             .map((e) => PhotoAttachment.fromJson(e))
