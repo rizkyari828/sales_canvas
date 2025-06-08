@@ -523,6 +523,8 @@ class MainTab extends GetView<HomeController> {
 
   SmartRefresher _getItems(HomeController controller, context) {
     double scaleWidth = MediaQuery.of(context).size.width / 360;
+    final sh = SizeConfig().screenHeight;
+    final sw = SizeConfig().screenWidth;
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: true,
@@ -576,19 +578,52 @@ class MainTab extends GetView<HomeController> {
                     ],
                   )
                 : SizedBox(),
-            InkWell(
-              onTap: () {
-                controller.goToDetailPages(
-                    id: controller.listStore[i].tokoId.toString(),
-                    storeName: controller.listStore[i].namaToko ?? '');
-              },
-              child: customKunjungankExpandedCard(
-                name: controller.listStore[i].namaToko ?? '',
-                photo: controller.listStore[i].pathToko ?? '',
-                type: '',
-                address: controller.listStore[i].alamatToko ?? '',
-              ),
-            ),
+            controller.listStore[i].tokoId.toString() != "0"
+                ? InkWell(
+                    onTap: () {
+                      controller.goToDetailPages(
+                          id: controller.listStore[i].tokoId.toString(),
+                          storeName: controller.listStore[i].namaToko ?? '');
+                    },
+                    child: customKunjungankExpandedCard(
+                      name: controller.listStore[i].namaToko ?? '',
+                      photo: controller.listStore[i].pathToko ?? '',
+                      type: '',
+                      address: controller.listStore[i].alamatToko ?? '',
+                    ),
+                  )
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CommonWidget.rowHeight(),
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        height: sh * .13,
+                        width: sw * .92,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10.0),
+                          border: Border.all(
+                              width: 2.0, color: ColorConstants.borderColor),
+                        ),
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.error,
+                              color: ColorConstants.darkGray,
+                              size: 40,
+                            ),
+                            CommonWidget.rowHeight(height: 5),
+                            CommonWidget.subtitleText(
+                                text: 'Belum ada jadwal kunjungan',
+                                color: ColorConstants.black,
+                                fontWeight: FontWeight.normal),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
           ],
         ),
       ),

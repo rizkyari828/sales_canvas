@@ -115,12 +115,12 @@ class HomeController extends BaseController {
   }
 
   void onLoading() async {
-    // page.value = page.value + 1;
+    page.value = page.value + 1;
 
-    // // monitor network fetch
-    // await Future.delayed(Duration(milliseconds: 1000));
-    // getStore(page.value);
-    // refreshController.loadComplete();
+    // monitor network fetch
+    await Future.delayed(Duration(milliseconds: 1000));
+    getStore(page.value);
+    refreshController.loadComplete();
   }
 
   @override
@@ -847,12 +847,15 @@ class HomeController extends BaseController {
       final res = await apiRepository.listStore(
           page: page, data: UserIdRequest(id: userId.value));
 
-      if (res != null && res.data != null) {
+      if (res != null && res.data?.length != 0) {
         // Ubah objek DataStore ke JSON sebelum simpan
-        final jsonList = res.data!.map((e) => e.toJson()).toList();
+        final jsonList = res.data?.map((e) => e.toJson()).toList();
         box.write('cached_items_page_$page', jsonList);
-
-        listStore.addAll(res.data!);
+        if (jsonList?.length != 0) {
+          listStore.addAll(res.data!);
+        } else {
+          _loadFromCache(page);
+        }
       } else {
         _loadFromCache(page);
       }
@@ -865,7 +868,7 @@ class HomeController extends BaseController {
   void _loadFromCache(int page) {
     final cachedData = box.read('cached_items_page_$page');
 
-    if (cachedData != null) {
+    if (cachedData.length != 0) {
       listStore.addAll(List<DataStore>.from(
         (cachedData as List).map((e) => DataStore.fromJson(e)),
       ));
