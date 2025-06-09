@@ -17,21 +17,16 @@ class MainTab extends GetView<HomeController> {
     double scaleWidth = MediaQuery.of(context).size.width / 360;
     controller.context = context;
     return Obx(() => Scaffold(
-            floatingActionButton: controller.isConnectedToInternetWidget.value
-                ? Padding(
-                    padding: EdgeInsets.only(left: scaleWidth * 30),
-                    child: controller.internetConnection(),
-                  )
-                : SizedBox(),
-            backgroundColor: ColorConstants.lightScaffoldBackgroundColor,
-            body: controller.tipe.value == '1'
-                ? _buildGridView(scaleWidth, context, controller)
-                : _getItems(controller, context))
-        // RefreshIndicator(
-        //   child: _buildGridView(scaleWidth, context),
-        //   onRefresh: () => controller.onRefresh(),
-        // )),
-        );
+        floatingActionButton: controller.isConnectedToInternetWidget.value
+            ? Padding(
+                padding: EdgeInsets.only(left: scaleWidth * 30),
+                child: controller.internetConnection(),
+              )
+            : SizedBox(),
+        backgroundColor: ColorConstants.lightScaffoldBackgroundColor,
+        body: controller.tipe.value == '1'
+            ? _buildGridView(scaleWidth, context, controller)
+            : _getItems(controller, context)));
   }
 
   Widget _buildGridView(scaleWidth, context, HomeController controller) {
@@ -97,7 +92,9 @@ class MainTab extends GetView<HomeController> {
                       CommonWidget.rowHeight(),
                       header(controller),
                       CommonWidget.rowHeight(),
-                      pendingTask(),
+                      controller.pendingAttendanceCount != 0
+                          ? pendingTask()
+                          : SizedBox(),
                       dailyProgress(),
                       attendanceTask(),
                       CommonWidget.rowHeight(),
@@ -220,28 +217,28 @@ class MainTab extends GetView<HomeController> {
                 SizedBox(
                   width: 3,
                 ),
-                controller.tipe.value == "2"
-                    ? InkWell(
-                        onTap: controller.dialogConfirmation,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: controller.isConnectedToInternet.value
-                                ? Colors.green
-                                : Colors.grey,
-                            borderRadius: BorderRadius.circular(10.0),
-                            border: Border.all(
-                                width: 2.0, color: ColorConstants.borderColor),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Icon(Icons.sync,
-                                color: ColorConstants.white, size: 27),
-                          ),
-                        ))
-                    : Container(),
-                SizedBox(
-                  width: 3,
-                ),
+                // controller.tipe.value == "2"
+                //     ? InkWell(
+                //         onTap: controller.dialogConfirmation,
+                //         child: Container(
+                //           decoration: BoxDecoration(
+                //             color: controller.isConnectedToInternet.value
+                //                 ? Colors.green
+                //                 : Colors.grey,
+                //             borderRadius: BorderRadius.circular(10.0),
+                //             border: Border.all(
+                //                 width: 2.0, color: ColorConstants.borderColor),
+                //           ),
+                //           child: Padding(
+                //             padding: const EdgeInsets.all(8.0),
+                //             child: Icon(Icons.sync,
+                //                 color: ColorConstants.white, size: 27),
+                //           ),
+                //         ))
+                //     : Container(),
+                // SizedBox(
+                //   width: 3,
+                // ),
                 NetworkChecker.networkMeter(
                   controller.qualityNetwork,
                 )
@@ -878,7 +875,7 @@ class MainTab extends GetView<HomeController> {
                             child: Padding(
                               padding: const EdgeInsets.all(5.0),
                               child: Icon(
-                                Icons.hourglass_empty,
+                                Icons.assignment_turned_in,
                                 color: Colors.white,
                                 size: SizeConfig().screenWidth * .05,
                               ),
@@ -930,9 +927,8 @@ class MainTab extends GetView<HomeController> {
           child: Container(
             height: 150,
             decoration: BoxDecoration(
-              color: ColorConstants.greenBackground,
+              color: Colors.green[100],
               borderRadius: BorderRadius.circular(10.0),
-              // border: Border.all(width: 2.0, color: ColorConstants.borderColor),
             ),
             child: Padding(
               padding: const EdgeInsets.all(15.0),
@@ -955,7 +951,7 @@ class MainTab extends GetView<HomeController> {
                             child: Padding(
                               padding: const EdgeInsets.all(5.0),
                               child: Icon(
-                                Icons.hourglass_empty,
+                                Icons.calendar_month,
                                 color: Colors.white,
                                 size: SizeConfig().screenWidth * .05,
                               ),
@@ -975,7 +971,7 @@ class MainTab extends GetView<HomeController> {
                               text: ' 2 / 5', color: Colors.black),
                           SizedBox(width: 10),
                           CommonWidget.subtitleText(
-                            text: 'Kunjungan',
+                            text: 'Absensi',
                             color: Colors.black,
                           ),
                         ],
@@ -1000,16 +996,26 @@ class MainTab extends GetView<HomeController> {
   }
 
   Widget pendingTask() {
+    final hasInternet = controller.isConnectedToInternet.value;
+    final bgColor =
+        hasInternet ? Colors.green[100] : ColorConstants.yellowBackground;
+    final iconColor = hasInternet ? Colors.green : Colors.orange;
+    final iconData =
+        hasInternet ? Icons.cloud_done_rounded : Icons.warning_rounded;
+    final infoText = hasInternet
+        ? 'Koneksi internet tersedia, klik untuk kirim data pending.'
+        : 'Segera periksa koneksi internet mu dan klik disini untuk mengirim kembali';
     return Padding(
       padding: const EdgeInsets.only(bottom: 10, top: 10),
       child: InkWell(
-          onTap: () => controller.goToKunjunganPages(),
+          onTap: () async {
+            await controller.submitPendingAttendance();
+          },
           child: Container(
             height: 75,
             decoration: BoxDecoration(
-              color: ColorConstants.yellowBackground,
+              color: bgColor,
               borderRadius: BorderRadius.circular(10.0),
-              // border: Border.all(width: 2.0, color: ColorConstants.borderColor),
             ),
             child: Padding(
               padding: const EdgeInsets.all(15.0),
@@ -1018,14 +1024,14 @@ class MainTab extends GetView<HomeController> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    decoration: new BoxDecoration(
-                      color: Colors.orange,
+                    decoration: BoxDecoration(
+                      color: iconColor,
                       shape: BoxShape.circle,
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(5.0),
                       child: Icon(
-                        Icons.warning_rounded,
+                        iconData,
                         color: ColorConstants.white,
                         size: SizeConfig().screenWidth * .05,
                       ),
@@ -1033,18 +1039,18 @@ class MainTab extends GetView<HomeController> {
                   ),
                   SizedBox(width: 10),
                   Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CommonWidget.minSubtitleText(
-                          text: '2 Data Pending',
+                          text:
+                              '${controller.pendingAttendanceCount} Data Pending',
                           color: Colors.black,
                           fontWeight: FontWeight.bold),
                       Container(
                         width: SizeConfig().screenWidth * .70,
                         child: CommonWidget.captionMultilineText(
-                          text:
-                              'Segera periksa koneksi internet mu dan klik disini untuk mengirim kembali',
+                          text: infoText,
                           color: Colors.black,
                         ),
                       ),

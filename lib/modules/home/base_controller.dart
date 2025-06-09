@@ -7,7 +7,6 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sales/api/api_repository.dart';
 import 'package:sales/models/request/attendance/attendance_wrapper.dart';
-import 'package:sales/models/request/attendance/submit_attendance.dart';
 import 'package:sales/shared/constants/colors.dart';
 import 'package:sales/shared/utils/common_widget.dart';
 import 'package:sales/shared/utils/size_config.dart';
@@ -76,7 +75,7 @@ class BaseController extends GetxController {
           isConnectedToInternet.value = true;
           isConnectedToInternetWidget.value = true;
 
-          await _submitPendingAttendance();
+          await submitPendingAttendance();
         }
       }
     } on SocketException catch (_) {
@@ -201,9 +200,10 @@ class BaseController extends GetxController {
         : SizedBox();
   }
 
-  Future<void> _submitPendingAttendance() async {
+  // Ubah dari private ke public agar bisa diakses dari widget
+  Future<void> submitPendingAttendance() async {
     final storage = GetStorage();
-    final dataList = storage.read<List<dynamic>>('pendingAttendances');
+    final dataList = storage.read<List<dynamic>>('pendingAttendance');
 
     if (dataList == null || dataList.isEmpty) return;
 
@@ -213,42 +213,26 @@ class BaseController extends GetxController {
     final List<Map<String, dynamic>> failedToSubmit = [];
 
     for (final data in updatedList) {
-      final wrapper = AttendanceSubmitRequestWrapper.fromJson(data);
-      final success = await _submitAttendance(wrapper);
-      if (!success) {
+      try {
+        final wrapper = AttendanceSubmitRequestWrapper.fromJson(data);
+        final success = await _submitAttendance(wrapper);
+        if (!success) {
+          failedToSubmit.add(data);
+        }
+      } catch (e) {
+        print('Error parsing pending attendance: $e');
         failedToSubmit.add(data);
       }
     }
 
     if (failedToSubmit.isEmpty) {
-      storage.remove('pendingAttendances');
+      storage.remove('pendingAttendance');
       EasyLoading.showSuccess("Semua data tertunda berhasil dikirim");
     } else {
-      storage.write('pendingAttendances', failedToSubmit);
+      storage.write('pendingAttendance', failedToSubmit);
       EasyLoading.showInfo("${failedToSubmit.length} data masih gagal dikirim");
     }
   }
-
-  // Future<void> _submitPendingAttendance() async {
-  //   final storage = GetStorage();
-  //   final data = storage.read('pendingAttendance');
-
-  //   if (data != null) {
-  //     try {
-  //       final wrapper = AttendanceSubmitRequestWrapper.fromJson(data);
-  //       final success = await _submitAttendance(wrapper);
-
-  //       if (success) {
-  //         await storage.remove('pendingAttendance');
-  //         EasyLoading.showSuccess("Data tertunda berhasil dikirim");
-  //       } else {
-  //         EasyLoading.showInfo("Data tertunda belum berhasil dikirim");
-  //       }
-  //     } catch (e) {
-  //       print("Gagal mengirim data tertunda: $e");
-  //     }
-  //   }
-  // }
 
   Future<bool> _submitAttendance(AttendanceSubmitRequestWrapper wrapper) async {
     try {
@@ -264,6 +248,13 @@ class BaseController extends GetxController {
 
   void closeWidget() {
     isConnectedToInternetWidget.value = false;
+  }
+
+  int get pendingAttendanceCount {
+    final storage = GetStorage();
+    final dataList = storage.read<List<dynamic>>('pendingAttendance');
+    if (dataList == null) return 0;
+    return dataList.length;
   }
 
   @override

@@ -314,14 +314,33 @@ class StoreDetailController extends BaseController {
   void _savePendingAttendance(AttendanceSubmitRequestWrapper wrapper) {
     final storage = GetStorage();
     final existing = storage.read<List>('pendingAttendance');
+    String today = DateTime.now().toIso8601String().substring(0, 10);
+    final data = wrapper.toJson(date: today);
 
-    final data = wrapper.toJson();
-
+    // Cek duplikasi berdasarkan id_toko dan tanggal (YYYY-MM-DD)
+    bool isDuplicate = false;
     if (existing != null) {
-      final updatedList = List<Map<String, dynamic>>.from(existing)..add(data);
-      storage.write('pendingAttendance', updatedList);
-    } else {
-      storage.write('pendingAttendance', [data]);
+      for (final item in existing) {
+        final map = Map<String, dynamic>.from(item);
+        final idToko = map['id_toko']?.toString() ?? '';
+        final date = map['date']?.toString() ?? '';
+        if (idToko == wrapper.idToko) {
+          String itemDate = date.isNotEmpty ? date.substring(0, 10) : today;
+          if (itemDate == today) {
+            isDuplicate = true;
+            break;
+          }
+        }
+      }
+    }
+    if (!isDuplicate) {
+      if (existing != null) {
+        final updatedList = List<Map<String, dynamic>>.from(existing)
+          ..add(data);
+        storage.write('pendingAttendance', updatedList);
+      } else {
+        storage.write('pendingAttendance', [data]);
+      }
     }
   }
 

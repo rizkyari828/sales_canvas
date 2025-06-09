@@ -13,7 +13,7 @@ class StoreView extends GetView<StoreListController> {
     double scaleWidth = MediaQuery.of(context).size.width / 360;
     return Obx(() => Scaffold(
         appBar: CustomAppBarWithNetwork(
-          title: 'List Store',
+          title: 'Kunjungan Terjadwal',
           networkStatus: controller.qualityNetwork,
         ),
         floatingActionButton: controller.isConnectedToInternetWidget.value
@@ -45,7 +45,24 @@ class StoreView extends GetView<StoreListController> {
             children: [
               i == 0
                   ? Column(
-                      children: [hasilCard(), pendingTask()],
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                                child: pendingTask('1', 'Kunjungan hari ini')),
+                            Expanded(
+                                child: pendingTask('5', 'Kunjungan bulan ini')),
+                            SizedBox(width: 20),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 20.0, right: 20, bottom: 10, top: 10),
+                          child: Divider(
+                            color: ColorConstants.borderColor,
+                          ),
+                        ),
+                      ],
                     )
                   : SizedBox(),
               customStockExpandedCard(
@@ -61,95 +78,58 @@ class StoreView extends GetView<StoreListController> {
     );
   }
 
-  Widget hasilCard() {
+  Widget pendingTask(String value, String title) {
+    // Pilih icon sesuai jenis kunjungan
+    IconData iconData;
+    Color iconColor;
+    if (title.toLowerCase().contains('bulan')) {
+      iconData = Icons.calendar_month;
+      iconColor = Colors.deepPurple;
+    } else {
+      iconData = Icons.assignment_turned_in;
+      iconColor = Colors.blue;
+    }
     return Padding(
-      padding:
-          const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10, top: 10),
-      child: InkWell(
-          onTap: () => controller.goToKunjunganPages(),
-          child: Container(
-            decoration: BoxDecoration(
-              color: ColorConstants.greenBackground,
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    decoration: new BoxDecoration(
-                      color: Colors.green,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Icon(
-                        Icons.summarize,
-                        color: Colors.white,
-                        size: SizeConfig().screenWidth * .05,
-                      ),
-                    ),
+      padding: const EdgeInsets.only(left: 20.0, bottom: 10, top: 10),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10.0),
+          border: Border.all(width: 2.0, color: ColorConstants.borderColor),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                decoration: new BoxDecoration(
+                  color: iconColor.withAlpha((0.2 * 255).toInt()),
+                  shape: BoxShape.circle,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Icon(
+                    iconData,
+                    color: iconColor,
+                    size: SizeConfig().screenWidth * .05,
                   ),
-                  SizedBox(width: 10),
-                  CommonWidget.minHeadText(text: ' Hasil Kunjungan'),
-                ],
+                ),
               ),
-            ),
-          )),
-    );
-  }
-
-  Widget pendingTask() {
-    return Padding(
-      padding:
-          const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10, top: 10),
-      child: InkWell(
-          onTap: () => controller.goToKunjunganPages(),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10.0),
-              border: Border.all(width: 2.0, color: ColorConstants.borderColor),
-              // boxShadow: [
-              //   BoxShadow(
-              //     color: CommonWidget.setOpacity(Colors.black, 0.3),
-              //     blurRadius: 20.0,
-              //     spreadRadius: 4.0,
-              //     offset: Offset(
-              //       -10.0,
-              //       10.0,
-              //     ),
-              //   ),
-              // ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
+              SizedBox(height: 5),
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
-                    decoration: new BoxDecoration(
-                      color: Colors.grey[400],
-                      shape: BoxShape.circle,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Icon(
-                        Icons.hourglass_empty,
-                        color: Colors.white,
-                        size: SizeConfig().screenWidth * .05,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 5),
+                  CommonWidget.minHeadText(text: value, color: Colors.black),
                   CommonWidget.subtitleText(
-                      text: ' Kunjungan', color: Colors.black),
-                  CommonWidget.minHeadText(text: ' 0/6', color: Colors.black),
+                      text: ' $title', color: Colors.black),
                 ],
               ),
-            ),
-          )),
+            ],
+          ),
+        ),
+      ),
     );
   }
 

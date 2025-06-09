@@ -255,18 +255,6 @@ class RecapView extends GetView<RecapController> {
                                           SizedBox(
                                             width: sw * .01,
                                           ),
-                                          // Container(
-                                          //   width: sw * .12,
-                                          //   child: CommonWidget.minSubtitleText(
-                                          //       text: controller.historyData[i]
-                                          //                   .sts ==
-                                          //               1
-                                          //           ? "Ya"
-                                          //           : "Tidak"),
-                                          // ),
-                                          // SizedBox(
-                                          //   width: sw * .01,
-                                          // ),
                                         ],
                                       ),
                                       SizedBox(
