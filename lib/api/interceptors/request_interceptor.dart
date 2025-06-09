@@ -8,6 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/request/request.dart';
+import 'package:sales/shared/constants/colors.dart';
+import 'package:sales/shared/utils/common_widget.dart';
+import 'package:sales/shared/utils/size_config.dart';
+import 'package:sales/shared/widgets/button.dart';
 
 FutureOr<Request?> requestInterceptor(Request request) async {
   // Tambahkan header dasar
@@ -26,14 +30,17 @@ FutureOr<Request?> requestInterceptor(Request request) async {
     Future.delayed(Duration.zero, () {
       Get.dialog(
         AlertDialog(
-          title: Text("Fake Location Terdeteksi"),
-          content: Text("Matikan aplikasi lokasi palsu untuk melanjutkan."),
+          title: CommonWidget.bodyText(text: 'Fake Location Terdeteksi'),
+          content: CommonWidget.subtitleText(
+              text: 'Matikan aplikasi lokasi palsu untuk melanjutkan.'),
           actions: [
-            TextButton(
+            CustomButton(
+              buttonColor: ColorConstants.mainColor,
+              buttonText: 'KELUAR',
+              width: SizeConfig().screenWidth,
               onPressed: () {
                 SystemNavigator.pop();
               },
-              child: Text("Keluar"),
             ),
           ],
         ),
