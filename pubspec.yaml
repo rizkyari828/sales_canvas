@@ -60,6 +60,7 @@ dependencies:
   flutter_network_monitor: ^0.0.4
   percent_indicator: ^4.2.5
   face_camera: ^0.1.4
+  detect_fake_location: ^2.2.0+1
 
 dev_dependencies:
   flutter_launcher_icons: ^0.14.3

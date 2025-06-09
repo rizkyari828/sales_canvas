@@ -2,7 +2,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:detect_fake_location/detect_fake_location.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/request/request.dart';
 
 FutureOr<Request?> requestInterceptor(Request request) async {
@@ -12,7 +16,33 @@ FutureOr<Request?> requestInterceptor(Request request) async {
   // final token = prefs.getString('token') ?? "";
   // request.headers['Authorization'] = 'Bearer $token';
 
-  // Cek koneksi internet
+  bool isFakeLocation = false;
+  try {
+    isFakeLocation = await DetectFakeLocation().detectFakeLocation();
+  } catch (e) {
+    isFakeLocation = false;
+  }
+  if (isFakeLocation) {
+    Future.delayed(Duration.zero, () {
+      Get.dialog(
+        AlertDialog(
+          title: Text("Fake Location Terdeteksi"),
+          content: Text("Matikan aplikasi lokasi palsu untuk melanjutkan."),
+          actions: [
+            TextButton(
+              onPressed: () {
+                SystemNavigator.pop();
+              },
+              child: Text("Keluar"),
+            ),
+          ],
+        ),
+        barrierDismissible: false,
+      );
+    });
+    return null;
+  }
+
   var result = await Connectivity().checkConnectivity();
   if (result == ConnectivityResult.none) {
     Future.delayed(Duration.zero, () {
