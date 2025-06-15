@@ -1,8 +1,11 @@
+import 'package:dotted_border/dotted_border.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:sales/modules/leads/controllers/leads_controller.dart';
 import 'package:sales/shared/constants/colors.dart';
 import 'package:sales/shared/utils/utils.dart';
 import 'package:sales/shared/widgets/button.dart';
+import 'package:sales/shared/widgets/image_picker.dart';
 import 'package:sales/shared/widgets/input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,6 +15,7 @@ class AddLeadsView extends GetView<LeadsController> {
 
   @override
   Widget build(BuildContext context) {
+    final sw = SizeConfig().screenWidth;
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: CommonWidget.appBar(title: 'Tambah Leads'),
@@ -31,10 +35,43 @@ class AddLeadsView extends GetView<LeadsController> {
                         label: 'Lokasi',
                         value: controller.locationDetail.value),
                     SizedBox(height: 10.0),
+                    CustomDropDownSearch(
+                      enabled: true,
+                      selectedItem: controller.leadSource.value,
+                      listItem: controller.listLeadSource.map((item) {
+                        return item.name.toString();
+                      }).toList(),
+                      labelText: "Sumber Lead",
+                      onChanged: (value) async {
+                        controller.leadSource.value = value;
+                        controller.changeStatus(value);
+                      },
+                    ),
+                    SizedBox(height: 10.0),
+                    if (controller.optionalText.value) ...[
+                      InputInputField(
+                        keyboardType: TextInputType.text,
+                        controller: controller.agendaController,
+                        labelText: "Input Kegiatan",
+                      ),
+                    ],
+                    SizedBox(height: 10.0),
                     InputInputField(
                       keyboardType: TextInputType.text,
-                      controller: TextEditingController(),
-                      labelText: "Nama Toko",
+                      controller: controller.nameController,
+                      labelText: "Nama Orang / Perusahaan",
+                    ),
+                    SizedBox(height: 10.0),
+                    InputInputField(
+                      keyboardType: TextInputType.text,
+                      controller: controller.emailController,
+                      labelText: "Email Kontak",
+                    ),
+                    SizedBox(height: 10.0),
+                    InputInputField(
+                      keyboardType: TextInputType.number,
+                      controller: controller.noHpController,
+                      labelText: "Nomor Telephone",
                     ),
                     CommonWidget.bodyText(text: "Alamat"),
                     SizedBox(height: 10.0),
@@ -48,14 +85,46 @@ class AddLeadsView extends GetView<LeadsController> {
                         child: Padding(
                           padding: EdgeInsets.all(8.0),
                           child: TextField(
-                            controller: controller.noteController,
+                            controller: controller.alamatController,
                             maxLines: 8,
                             decoration: InputDecoration.collapsed(
                                 hintText: "Enter your text here"),
                           ),
                         )),
                     SizedBox(height: 10.0),
-                    CommonWidget.bodyText(text: "Deskipsi"),
+                    CustomDropDownSearch(
+                      enabled: true,
+                      selectedItem: controller.leadCategory.value,
+                      listItem: controller.listLeadCategory.map((item) {
+                        return item.name.toString();
+                      }).toList(),
+                      labelText: "Kategori Lead",
+                      onChanged: (value) async {
+                        controller.leadCategory.value = value;
+                        controller.changeStatus(value);
+                      },
+                    ),
+                    SizedBox(height: 10.0),
+                    InputInputField(
+                      keyboardType: TextInputType.text,
+                      controller: controller.minatProductController,
+                      labelText: "Product Minat",
+                    ),
+                    SizedBox(height: 10.0),
+                    CustomDropDownSearch(
+                      enabled: true,
+                      selectedItem: controller.statusLead.value,
+                      listItem: controller.listStatusLead.map((item) {
+                        return item.name.toString();
+                      }).toList(),
+                      labelText: "Status Lead",
+                      onChanged: (value) async {
+                        controller.actionStatus.value = value;
+                        controller.changeStatus(value);
+                      },
+                    ),
+                    SizedBox(height: 10.0),
+                    CommonWidget.bodyText(text: "Catatan"),
                     SizedBox(height: 10.0),
                     Card(
                         elevation: 0.1,
@@ -73,6 +142,52 @@ class AddLeadsView extends GetView<LeadsController> {
                                 hintText: "Enter your text here"),
                           ),
                         )),
+                    SizedBox(height: 10.0),
+                    CommonWidget.minSubtitleText(
+                        text: "Silahkan upload bukti Foto kunjungan anda"),
+                    SizedBox(height: 10.0),
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Obx(() =>
+                          CustomImagePicker.previewGridImages(controller)),
+                    ),
+                    controller.imageFileList.length < 3
+                        ? InkWell(
+                            onTap: () {
+                              controller.onImageButtonPressed(
+                                  ImageSource.camera,
+                                  context: context);
+                            },
+                            child: DottedBorder(
+                              options: RectDottedBorderOptions(
+                                color: Colors.grey,
+                                dashPattern: [8, 4],
+                                strokeWidth: 1,
+                              ),
+                              child: Container(
+                                height: 50,
+                                width: sw,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.camera_alt,
+                                      color: Colors.grey,
+                                      size: 30,
+                                    ),
+                                    SizedBox(width: 10.0),
+                                    CommonWidget.bodyText(
+                                        text: "Ambil Photos",
+                                        color: Colors.grey),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        : Container(),
+                    SizedBox(height: 10.0),
+                    CommonWidget.captionText(
+                        text: "Maksimal melampirkan 3 Foto", color: Colors.red),
                     SizedBox(height: 30.0),
                     CustomButton(
                       buttonText: 'SIMPAN',

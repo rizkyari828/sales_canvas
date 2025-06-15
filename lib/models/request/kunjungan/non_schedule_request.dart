@@ -1,13 +1,11 @@
-class AttendanceSubmitRequestWrapper {
-  final String? idToko;
+import 'package:sales/models/request/attendance/attendance_wrapper.dart';
+
+class NonScheduleSubmitRequest {
   final String? latitude;
   final String? longitude;
   final String? idUser;
-  final String? token;
   final List<PhotoAttachment>? photos;
-  final String? date;
   // NON
-  final String? type;
   final String? name;
   final String? alamat;
   final String? agenda;
@@ -15,17 +13,13 @@ class AttendanceSubmitRequestWrapper {
   final String? visitNote;
   final String? planExecution;
 
-  AttendanceSubmitRequestWrapper({
-    this.idToko,
+  NonScheduleSubmitRequest({
     this.latitude,
     this.longitude,
     this.idUser,
-    this.token,
     this.photos,
-    this.date,
     // NON
     this.name,
-    this.type,
     this.alamat,
     this.agenda,
     this.status,
@@ -34,57 +28,31 @@ class AttendanceSubmitRequestWrapper {
   });
 
   Map<String, dynamic> toJson({String? date}) => {
-        'id_toko': idToko,
         'lat': latitude,
         'long': longitude,
         'id_user': idUser,
-        'token': token,
         'foto': photos?.map((e) => e.toJson()).toList(),
-        'date': date ?? this.date,
-        'type': type,
-        'name': name,
-        'alamat': alamat,
+        'nama_kunjungan': name,
+        'alamat_kunjungan': alamat,
         'agenda': agenda,
         'status': status,
         'visit_note': visitNote,
         'plan_execution': planExecution,
       };
 
-  factory AttendanceSubmitRequestWrapper.fromJson(Map<String, dynamic> json) =>
-      AttendanceSubmitRequestWrapper(
-        idToko: json['id_toko']?.toString() ?? '',
+  factory NonScheduleSubmitRequest.fromJson(Map<String, dynamic> json) =>
+      NonScheduleSubmitRequest(
         latitude: json['lat']?.toString() ?? '',
         longitude: json['long']?.toString() ?? '',
         idUser: json['id_user']?.toString() ?? '',
-        token: json['token']?.toString() ?? '',
         photos: (json['foto'] as List? ?? [])
             .map((e) => PhotoAttachment.fromJson(e))
             .toList(),
-        date: json['date']?.toString(),
-        type: json['type']?.toString() ?? 'schedule',
-        name: json['name']?.toString() ?? '',
-        alamat: json['alamat']?.toString() ?? '',
+        name: json['nama_kunjungan']?.toString() ?? '',
+        alamat: json['alamat_kunjungan']?.toString() ?? '',
         agenda: json['agenda']?.toString() ?? '',
         status: json['status']?.toString() ?? '',
         visitNote: json['visit_note']?.toString() ?? '',
         planExecution: json['plan_execution']?.toString() ?? '',
-      );
-}
-
-class PhotoAttachment {
-  final String img;
-  final String filename;
-
-  PhotoAttachment({required this.img, required this.filename});
-
-  Map<String, dynamic> toJson() => {
-        'img': img,
-        'filename': filename,
-      };
-
-  factory PhotoAttachment.fromJson(Map<String, dynamic> json) =>
-      PhotoAttachment(
-        img: json['img']?.toString() ?? '',
-        filename: json['filename']?.toString() ?? '',
       );
 }

@@ -1,8 +1,13 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sales/api/api_repository.dart';
-import 'package:sales/models/request/izin/submit_izin_request.dart';
+import 'package:sales/models/action.dart';
+import 'package:sales/models/request/attendance/attendance_wrapper.dart';
+import 'package:sales/models/request/leads/submit_lead.dart';
 import 'package:sales/models/response/izin/type_izin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -35,6 +40,12 @@ class LeadsController extends GetxController {
   final startDateController = TextEditingController();
   final endDateController = TextEditingController();
   final noteController = TextEditingController();
+  final TextEditingController agendaController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController noHpController = TextEditingController();
+  final TextEditingController alamatController = TextEditingController();
+  final TextEditingController minatProductController = TextEditingController();
 
   RxString groupName = "".obs;
   RxString groupId = "".obs;
@@ -45,13 +56,27 @@ class LeadsController extends GetxController {
   RxString token = "".obs;
 
   String date = "";
-  DateTime selectedDate = DateTime.now();
-  RxString dateCnC = "".obs;
-  DateTime startDate = DateTime.now();
-  DateTime endDate = DateTime.now();
+  DateTime dateNow = DateTime.now();
 
   RxString validationDate = "".obs;
   var listType = <DataTypeIzin>[].obs;
+
+  var listLeadSource = <ActionStatus>[].obs;
+  var listLeadCategory = <ActionStatus>[].obs;
+  var listStatusLead = <ActionStatus>[].obs;
+  RxString leadCategory = "".obs;
+  RxString statusLead = "".obs;
+  RxString leadSource = "".obs;
+
+  RxString actionStatus = "".obs;
+  RxString reason = "".obs;
+  RxBool optionalText = false.obs;
+
+  void changeStatus(value) {
+    if (value == 'Dll') {
+      optionalText.value = true;
+    }
+  }
 
   Future<void> onImageButtonPressed(ImageSource source,
       {BuildContext? context, bool isMultiImage = false}) async {
@@ -89,24 +114,47 @@ class LeadsController extends GetxController {
     }
   }
 
-  void submit() {
-    if (endDate.compareTo(startDate) >= 0) {
-      submitData();
-    } else {
-      validationDate.value =
-          'Tanggal selesai tidak bisa lebih besar dari tanggal mulai';
+  void submit() async {
+    if (imageFileList.isEmpty) {
+      EasyLoading.showError('Foto belum tersedia');
+      return;
     }
-  }
 
-  void submitData() async {
-    final res = await apiRepository.submitIzin(
-      SubmitIzinRequest(
-          idUser: idUser.value,
-          dateStart: startDateController.text,
-          dateEnd: endDateController.text,
-          note: noteController.text,
-          leaveTypeId: idType.value,
-          token: token.value),
+    List<PhotoAttachment> attachments = [];
+
+    for (var file in imageFileList) {
+      if (!(await File(file.path).exists())) {
+        EasyLoading.showError('Salah satu foto tidak ditemukan');
+        return;
+      }
+
+      final photoBytes = await File(file.path).readAsBytes();
+      final photoBase64 = base64Encode(photoBytes);
+
+      attachments.add(
+        PhotoAttachment(
+          img: photoBase64,
+          filename: file.path.split('/').last,
+        ),
+      );
+    }
+
+    final res = await apiRepository.submitLead(
+      SubmitLeadRequest(
+        idUser: idUser.value,
+        date: DateFormat("yyyy-MM-dd", "id_ID").format(dateNow).toString(),
+        latitude: myLocation.latitude.toString(),
+        longitude: myLocation.longitude.toString(),
+        email: emailController.text,
+        name: nameController.text,
+        noHp: noHpController.text,
+        leadSource: leadSource.value,
+        leadCategory: leadCategory.value,
+        minatProduct: minatProductController.text,
+        leadStatus: statusLead.value,
+        note: noteController.text,
+        photos: attachments,
+      ),
     );
     if (res?.error == false) {
       EasyLoading.showSuccess('Berhasil disimpan');
@@ -211,6 +259,66 @@ class LeadsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+
+    listLeadSource.add(ActionStatus(
+      id: "1",
+      name: "Website",
+    ));
+    listLeadSource.add(ActionStatus(
+      id: "2",
+      name: "Event",
+    ));
+    listLeadSource.add(ActionStatus(
+      id: "3",
+      name: "Referral",
+    ));
+    listLeadSource.add(ActionStatus(
+      id: "4",
+      name: "Ads",
+    ));
+    listLeadSource.add(ActionStatus(
+      id: "5",
+      name: "Dll",
+    ));
+
+    listLeadCategory.add(ActionStatus(
+      id: "1",
+      name: "Individu",
+    ));
+    listLeadCategory.add(ActionStatus(
+      id: "2",
+      name: "UMKM",
+    ));
+    listLeadCategory.add(ActionStatus(
+      id: "3",
+      name: "Coorporate",
+    ));
+    listLeadSource.add(ActionStatus(
+      id: "4",
+      name: "Dll",
+    ));
+
+    listStatusLead.add(ActionStatus(
+      id: "1",
+      name: "Baru",
+    ));
+    listStatusLead.add(ActionStatus(
+      id: "2",
+      name: "Dikontak",
+    ));
+    listStatusLead.add(ActionStatus(
+      id: "3",
+      name: "Follow Up",
+    ));
+    listStatusLead.add(ActionStatus(
+      id: "4",
+      name: "Tidak Tertarik",
+    ));
+    listStatusLead.add(ActionStatus(
+      id: "4",
+      name: "Berhasil Jadi Client",
+    ));
+
     determinePosition();
   }
 
@@ -218,7 +326,6 @@ class LeadsController extends GetxController {
   void onReady() {
     super.onReady();
     loadUsers();
-    getType();
   }
 
   loadUsers() async {
@@ -228,37 +335,6 @@ class LeadsController extends GetxController {
     placement.value = prefs.getString('placement') ?? "";
     token.value = prefs.getString('token') ?? "";
     idUser.value = prefs.getString('userId') ?? "";
-  }
-
-  selectDateStart(BuildContext context) async {
-    final DateTime? selected = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(2010),
-      lastDate: DateTime(2025),
-    );
-    if (selected != null && selected != selectedDate) selectedDate = selected;
-    startDate = selectedDate;
-    startDateController.text =
-        DateFormat("yyyy-MM-dd", "id_ID").format(selectedDate).toString();
-  }
-
-  selectDateEnd(BuildContext context) async {
-    final DateTime? selected = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(2010),
-      lastDate: DateTime(2025),
-    );
-    if (selected != null && selected != selectedDate) selectedDate = selected;
-    endDate = selectedDate;
-    endDateController.text =
-        DateFormat("yyyy-MM-dd", "id_ID").format(selectedDate).toString();
-  }
-
-  void getType() async {
-    final res = await apiRepository.typeIzin();
-    listType.addAll(res?.data ?? []);
   }
 
   @override

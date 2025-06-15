@@ -1,263 +1,197 @@
+import 'package:dotted_border/dotted_border.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:sales/modules/store/controllers/store_controller.dart';
-import 'package:sales/shared/constants/constants.dart';
-import 'package:sales/shared/utils/common_widget.dart';
-import 'package:sales/shared/utils/size_config.dart';
+import 'package:sales/modules/store/controllers/store_add_controller.dart';
+import 'package:sales/shared/constants/colors.dart';
+import 'package:sales/shared/utils/utils.dart';
+import 'package:sales/shared/widgets/button.dart';
+import 'package:sales/shared/widgets/custom_appbar.dart';
+import 'package:sales/shared/widgets/image_picker.dart';
+import 'package:sales/shared/widgets/input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class AddStoreView extends GetView<StoreController> {
-  final data = Get.arguments;
+class AddStoreView extends GetView<StoreAddController> {
+  const AddStoreView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Pastikan UI update terjadi setelah build selesai
-    });
-    double scaleWidth = MediaQuery.of(context).size.width / 360;
-    return Obx(() => Scaffold(
-        floatingActionButton: controller.isConnectedToInternetWidget.value
-            ? Padding(
-                padding: EdgeInsets.only(left: scaleWidth * 30),
-                child: controller.internetConnection(),
-              )
-            : SizedBox(),
-        appBar: AppBar(
-          iconTheme:
-              IconThemeData(color: ColorConstants.black //change your color here
-                  ),
-          centerTitle: false,
-          title: Text(
-            'List Product',
-            style: TextStyle(
-              color: ColorConstants.black,
-              fontWeight: FontWeight.w600,
-              fontSize: 20,
-              fontFamily: 'Poppins',
-            ),
+    final sw = SizeConfig().screenWidth;
+    return Scaffold(
+        backgroundColor: Colors.white,
+        appBar: CustomAppBarWithNetwork(
+          title: 'Tambah Kunjungan',
+          networkStatus: controller.qualityNetwork,
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(25.0),
+            child: Obx(() => Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CommonWidget.labelExpanded(
+                        label: 'Tanggal Pengajuan',
+                        value: DateFormat("EEEE, d MMMM yyyy", "id_ID")
+                            .format(DateTime.now())
+                            .toString()),
+                    SizedBox(height: 10.0),
+                    CommonWidget.labelExpanded(
+                        label: 'Lokasi dari GPS',
+                        value: controller.locationDetail.value),
+                    SizedBox(height: 10.0),
+                    InputInputField(
+                      keyboardType: TextInputType.text,
+                      controller: controller.nameController,
+                      labelText: "Nama yang dikunjungi",
+                    ),
+                    SizedBox(height: 10.0),
+                    CommonWidget.bodyText(text: "Alamat"),
+                    SizedBox(height: 10.0),
+                    Card(
+                        elevation: 0.1,
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                            side: BorderSide(
+                                color: ColorConstants.mainColor, width: 1)),
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: TextField(
+                            controller: controller.alamatController,
+                            maxLines: 8,
+                            decoration: InputDecoration.collapsed(
+                                hintText: "Enter your text here"),
+                          ),
+                        )),
+                    SizedBox(height: 20.0),
+                    CustomDropDownSearch(
+                      enabled: true,
+                      selectedItem: controller.agenda.value,
+                      listItem: controller.listAgenda.map((item) {
+                        return item.name.toString();
+                      }).toList(),
+                      labelText: "Kegiatan",
+                      onChanged: (value) async {
+                        controller.agenda.value = value;
+                        controller.changeStatus(value);
+                      },
+                    ),
+                    // SizedBox(height: 10.0),
+                    // if (controller.optionalText.value) ...[
+                    //   InputInputField(
+                    //     keyboardType: TextInputType.text,
+                    //     controller: controller.agendaController,
+                    //     labelText: "Input Kegiatan",
+                    //   ),
+                    // ],
+                    SizedBox(height: 20.0),
+                    CustomDropDownSearch(
+                      enabled: true,
+                      selectedItem: controller.status.value,
+                      listItem: controller.listStatus.map((item) {
+                        return item.name.toString();
+                      }).toList(),
+                      labelText: "Status",
+                      onChanged: (value) async {
+                        controller.status.value = value;
+                        controller.changeStatus(value);
+                      },
+                    ),
+                    SizedBox(height: 10.0),
+                    CommonWidget.bodyText(text: "Catatan Kunjungan"),
+                    SizedBox(height: 10.0),
+                    Card(
+                        elevation: 0.1,
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                            side: BorderSide(
+                                color: ColorConstants.mainColor, width: 1)),
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: TextField(
+                            controller: controller.visitNoteController,
+                            maxLines: 8,
+                            decoration: InputDecoration.collapsed(
+                                hintText: "Enter your text here"),
+                          ),
+                        )),
+                    SizedBox(height: 10.0),
+                    CommonWidget.bodyText(text: "Rencana Tindak Lanjut"),
+                    SizedBox(height: 10.0),
+                    Card(
+                        elevation: 0.1,
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                            side: BorderSide(
+                                color: ColorConstants.mainColor, width: 1)),
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: TextField(
+                            controller: controller.planExecutionController,
+                            maxLines: 8,
+                            decoration: InputDecoration.collapsed(
+                                hintText: "Enter your text here"),
+                          ),
+                        )),
+                    SizedBox(height: 10.0),
+                    CommonWidget.minSubtitleText(
+                        text: "Silahkan upload bukti Foto kunjungan anda"),
+                    SizedBox(height: 10.0),
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Obx(() =>
+                          CustomImagePicker.previewGridImages(controller)),
+                    ),
+                    controller.imageFileList.length < 3
+                        ? InkWell(
+                            onTap: () {
+                              controller.onImageButtonPressed(
+                                  ImageSource.camera,
+                                  context: context);
+                            },
+                            child: DottedBorder(
+                              options: RectDottedBorderOptions(
+                                color: Colors.grey,
+                                dashPattern: [8, 4],
+                                strokeWidth: 1,
+                              ),
+                              child: Container(
+                                height: 50,
+                                width: sw,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.camera_alt,
+                                      color: Colors.grey,
+                                      size: 30,
+                                    ),
+                                    SizedBox(width: 10.0),
+                                    CommonWidget.bodyText(
+                                        text: "Ambil Photos",
+                                        color: Colors.grey),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        : Container(),
+                    SizedBox(height: 10.0),
+                    CommonWidget.captionText(
+                        text: "Maksimal melampirkan 3 Foto", color: Colors.red),
+                    SizedBox(height: 30.0),
+                    CustomButton(
+                      buttonText: 'SIMPAN',
+                      width: MediaQuery.of(context).size.width,
+                      onPressed: () {
+                        controller.submit();
+                      },
+                    ),
+                  ],
+                )),
           ),
-          backgroundColor: ColorConstants.lightScaffoldBackgroundColor,
-          elevation: 0.0,
-        ),
-        body: _getItems(controller)));
-  }
-
-  SmartRefresher _getItems(StoreController controller) {
-    final currencyFormatter = NumberFormat.currency(locale: 'ID', symbol: '');
-
-    return SmartRefresher(
-        enablePullDown: true,
-        enablePullUp: true,
-        header: WaterDropHeader(),
-        controller: controller.refreshController,
-        onRefresh: controller.onRefresh,
-        onLoading: controller.onLoading,
-        child: ListView.builder(
-          itemCount: controller.listProduct.length,
-          itemBuilder: (context, i) => customStockExpandedCard(
-              name: controller.listProduct[i].namaBarang ?? '',
-              type: '',
-              price: currencyFormatter.format(0).toString(),
-              stock: controller.listProduct[i].qtyNow?.toInt() ?? 0,
-              photo: '',
-              // onPressedAdd: () => controller.addStock(i),
-              // onPressedRemove: () => controller.subtractStock(i),
-              inputDataSheet: () => controller.inputDataSheet(
-                  context,
-                  controller.listProduct[i].idBarang.toString(),
-                  controller.listProduct[i].namaBarang.toString())),
-
-          // name: controller.listProduct[i].name ?? '',
-          // type: controller.listProduct[i].type ?? '',
-          // price: currencyFormatter
-          //     .format(controller.listProduct[i].price)
-          //     .toString(),
-          // stock: controller.listProduct[i].stock,
-          // photo: controller.listProduct[i].photo ?? '',
-          // onPressedAdd: () => controller.addStock(i),
-          // onPressedRemove: () => controller.subtractStock(i),
-          // inputDataSheet: () => controller.inputDataSheet()),
         ));
-  }
-
-  Widget customStockExpandedCard(
-      {String name = '',
-      String type = '',
-      String price = '',
-      String photo = '',
-      required int stock,
-      VoidCallback? onPressedAdd,
-      VoidCallback? onPressedRemove,
-      VoidCallback? inputDataSheet}) {
-    final sh = SizeConfig().screenHeight;
-    return Container(
-      margin: const EdgeInsets.only(left: 15.0, right: 15.0, top: 15.0),
-      height: name == '' ? sh * .13 : sh * .14,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10.0),
-        border: Border.all(width: 2.0, color: ColorConstants.borderColor),
-        // boxShadow: [
-        //   BoxShadow(
-        //     color: CommonWidget.setOpacity(Colors.black, 0.3),
-        //     blurRadius: 20.0,
-        //     spreadRadius: 4.0,
-        //     offset: Offset(
-        //       -10.0,
-        //       10.0,
-        //     ),
-        //   ),
-        // ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Expanded(
-              flex: 5,
-              child: Row(
-                children: [
-                  photo == ''
-                      ? Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                            color: ColorConstants.mainColor,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(3.0),
-                            child: Icon(
-                              Icons.shopping_bag,
-                              color: Colors.white,
-                              size: 60,
-                            ),
-                          ),
-                        )
-                      : Container(
-                          height: 60,
-                          width: 60,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                            color: Colors.black,
-                            image: new DecorationImage(
-                              fit: BoxFit.cover,
-                              image: new NetworkImage(
-                                photo,
-                              ),
-                            ),
-                          ),
-                        ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Container(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        name == ''
-                            ? SizedBox(height: 0)
-                            : Row(
-                                children: [
-                                  stock != 0
-                                      ? Icon(
-                                          Icons.timelapse,
-                                          color: Colors.orange,
-                                          size: 20,
-                                        )
-                                      : Icon(
-                                          Icons.check_circle_rounded,
-                                          color: Colors.green,
-                                          size: 20,
-                                        ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  CommonWidget.minHeadText(
-                                      text: name,
-                                      // fontWeight: FontWeight.bold,
-                                      color: ColorConstants.mainColor),
-                                ],
-                              ),
-                        // SizedBox(
-                        //   height: 10,
-                        // ),
-                        // CommonWidget.subtitleText(text: type),
-                        Row(
-                          children: [
-                            CommonWidget.subtitleText(text: 'Rp. '),
-                            CommonWidget.minHeadText(
-                                text: price,
-                                // fontWeight: FontWeight.bold,
-                                color: Colors.deepOrange),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CommonWidget.subtitleText(text: 'Stok'),
-                  CommonWidget.bigText(
-                      text: stock.toString(), color: ColorConstants.mainColor),
-                  InkWell(
-                    child: Card(
-                      color: Colors.green,
-                      child: Padding(
-                        padding: const EdgeInsets.all(2.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.remove_circle,
-                              color: Colors.white,
-                              size: 15,
-                            ),
-                            CommonWidget.captionText(
-                                text: ' Ubah', color: Colors.white),
-                          ],
-                        ),
-                      ),
-                    ),
-                    onTap: inputDataSheet,
-                  ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: [
-                  //     InkWell(
-                  //       child: Icon(
-                  //         Icons.remove_circle_rounded,
-                  //         color: Colors.red,
-                  //         size: 25,
-                  //       ),
-                  //       onTap: onPressedRemove,
-                  //     ),
-                  //     SizedBox(
-                  //       width: 5,
-                  //     ),
-                  //     InkWell(
-                  //       child: Container(
-                  //         child: Icon(Icons.add_circle_rounded,
-                  //             color: Colors.green, size: 25),
-                  //       ),
-                  //       onTap: onPressedAdd,
-                  //     ),
-                  //   ],
-                  // ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }

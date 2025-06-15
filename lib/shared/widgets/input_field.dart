@@ -297,6 +297,7 @@ class CustomDropDownSearch extends StatelessWidget {
       // width: MediaQuery.of(context).size.width,
       // height: MediaQuery.of(context).size.height / 11,
       child: DropdownSearch<dynamic>(
+        compareFn: (a, b) => a == b,
         decoratorProps: DropDownDecoratorProps(
             decoration: InputDecoration(
           labelStyle: TextStyle(
@@ -341,7 +342,7 @@ class CustomDropDownSearch extends StatelessWidget {
         )),
         enabled: enabled,
         selectedItem: selectedItem,
-        items: listItem,
+        items: (filter, infiniteScrollProps) => listItem,
         onChanged: onChanged,
         // showSearchBox: true,
       ),

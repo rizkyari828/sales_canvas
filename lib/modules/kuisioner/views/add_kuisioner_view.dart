@@ -81,7 +81,7 @@ class AddKuisionerView extends GetView<KusionerController> {
                             : SizedBox(),
                         controller.listKuisioner[i].idKategori == 2
                             ? soalEssay(
-                                controller.listKuisioner[i].no ?? 0,
+                                controller.currentProgress.value + i + 1,
                                 controller.listKuisioner[i].soal ?? '',
                                 controller.listKuisioner[i].idSoal ?? 0,
                                 controller.listKuisioner[i].idKategori ?? 0,
@@ -93,7 +93,7 @@ class AddKuisionerView extends GetView<KusionerController> {
                                     "",
                               )
                             : SingleChoice(
-                                no: controller.listKuisioner[i].no ?? 0,
+                                no: controller.currentProgress.value + i + 1,
                                 question:
                                     controller.listKuisioner[i].soal ?? '',
                                 idSoal: controller.listKuisioner[i].idSoal ?? 0,

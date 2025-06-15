@@ -14,6 +14,8 @@ import 'package:sales/models/request/izin/submit_izin_request.dart';
 import 'package:sales/models/request/izin/update_approval_request.dart';
 import 'package:sales/models/request/kuisioner/kuisioner_input_data_request.dart';
 import 'package:sales/models/request/kuisioner/kuisioner_request.dart';
+import 'package:sales/models/request/kunjungan/non_schedule_request.dart';
+import 'package:sales/models/request/leads/submit_lead.dart';
 import 'package:sales/models/request/lembur/detail_request_lembur.dart';
 import 'package:sales/models/request/lembur/submit_izin_request.dart';
 import 'package:sales/models/request/lembur/update_approval_request.dart';
@@ -31,7 +33,6 @@ import 'package:sales/models/request/store/update_qty_request.dart';
 import 'package:sales/models/request/update_fcm_profile_request.dart';
 import 'package:sales/models/request/update_photo_profile_request.dart';
 import 'package:get/get.dart';
-import 'package:sales/models/request/user_id_request.dart';
 
 class ApiProvider extends BaseProvider {
   Future<Response> login(String path, LoginRequest data) {
@@ -318,5 +319,27 @@ class ApiProvider extends BaseProvider {
       print('Stack trace: $stackTrace');
       rethrow;
     }
+  }
+
+  Future<Response> submitNonKunjungan(
+      String path, NonScheduleSubmitRequest data) async {
+    try {
+      print(data.toJson());
+      // Kirim sebagai JSON, bukan multipart
+      final response = await post(path, data.toJson());
+      return response;
+    } catch (e, stackTrace) {
+      print('Error saat submit attendance: $e');
+      print('Stack trace: $stackTrace');
+      rethrow;
+    }
+  }
+
+  Future<Response> submitLead(String path, SubmitLeadRequest data) {
+    return post(path, data.toJson());
+  }
+
+  Future<Response> getLeads(String path, IdRequest data) {
+    return post(path, data.toJson());
   }
 }

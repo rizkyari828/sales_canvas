@@ -1,5 +1,6 @@
 import 'package:sales/api/api_repository.dart';
 import 'package:sales/models/request/id_request.dart';
+import 'package:sales/models/response/Lead/list_lead_respone.dart';
 import 'package:sales/models/response/izin/list_izin.dart';
 import 'package:sales/routes/app_pages.dart';
 import 'package:get/get.dart';
@@ -10,7 +11,7 @@ class LeadsListController extends GetxController {
   final ApiRepository apiRepository;
   LeadsListController({required this.apiRepository});
 
-  var listIzin = <DataIzin>[].obs;
+  var list = <DataLead>[].obs;
   RxString groupName = "".obs;
   RxString groupId = "".obs;
   RxString userId = "".obs;
@@ -25,7 +26,7 @@ class LeadsListController extends GetxController {
 
     // monitor network fetch
     await Future.delayed(Duration(milliseconds: 1000));
-    getIzin(page.value);
+    getLeads(page.value);
     refreshController.loadComplete();
   }
 
@@ -39,7 +40,7 @@ class LeadsListController extends GetxController {
   void onReady() {
     super.onReady();
     loadUsers();
-    getIzin(page.value);
+    getLeads(page.value);
   }
 
   loadUsers() async {
@@ -55,17 +56,17 @@ class LeadsListController extends GetxController {
     super.onClose();
   }
 
-  void getIzin(page) async {
-    final res = await apiRepository.listIzin(
+  void getLeads(page) async {
+    final res = await apiRepository.listLeads(
         page: page, data: IdRequest(id: userId.value, token: token.value));
-    listIzin.addAll(res?.data ?? []);
+    list.addAll(res?.data ?? []);
   }
 
   Future<void> onRefresh() async {
     await Future.delayed(Duration(milliseconds: 1000));
-    listIzin.clear();
+    list.clear();
     page.value = 1;
-    getIzin(page.value);
+    getLeads(page.value);
     refreshController.refreshCompleted();
   }
 

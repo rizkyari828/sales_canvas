@@ -1,7 +1,6 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sales/modules/store/controllers/store_detail_controller.dart';
-import 'package:sales/shared/services/face_recognition/face_recognition_wiget.dart';
 import 'package:sales/shared/shared.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -230,7 +229,6 @@ class StoreDetailView extends GetView<StoreDetailController> {
                     ),
                   )
                 : Container(),
-
             SizedBox(height: 10.0),
             CommonWidget.captionText(
                 text: "Maksimal melampirkan 3 Foto", color: Colors.red),

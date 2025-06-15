@@ -7,6 +7,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sales/api/api_repository.dart';
 import 'package:sales/models/request/attendance/attendance_wrapper.dart';
+import 'package:sales/models/request/kunjungan/non_schedule_request.dart';
 import 'package:sales/shared/constants/colors.dart';
 import 'package:sales/shared/utils/common_widget.dart';
 import 'package:sales/shared/utils/size_config.dart';
@@ -215,7 +216,13 @@ class BaseController extends GetxController {
     for (final data in updatedList) {
       try {
         final wrapper = AttendanceSubmitRequestWrapper.fromJson(data);
-        final success = await _submitAttendance(wrapper);
+        bool success = false;
+        if (wrapper.type == 'schedule') {
+          success = await _submitAttendance(wrapper);
+        } else {
+          success = await _nonSubmitAttendance(wrapper);
+        }
+
         if (!success) {
           failedToSubmit.add(data);
         }
@@ -239,6 +246,32 @@ class BaseController extends GetxController {
       final request = wrapper;
 
       final res = await apiRepository.submitAttendanceStore(request);
+      return res?.message == "sukses";
+    } catch (e) {
+      print("Error saat submit: $e");
+      return false;
+    }
+  }
+
+  Future<bool> _nonSubmitAttendance(
+      AttendanceSubmitRequestWrapper wrapper) async {
+    try {
+      final nonScheduleRequest = NonScheduleSubmitRequest(
+        latitude: wrapper.latitude,
+        longitude: wrapper.longitude,
+        idUser: wrapper.idUser,
+        photos: wrapper.photos,
+        // NON
+        name: wrapper.name,
+        alamat: wrapper.alamat,
+        agenda: wrapper.agenda,
+        status: wrapper.status,
+        visitNote: wrapper.visitNote,
+        planExecution: wrapper.planExecution,
+      );
+
+      final res =
+          await apiRepository.submitNonScheduleVisited(nonScheduleRequest);
       return res?.message == "sukses";
     } catch (e) {
       print("Error saat submit: $e");

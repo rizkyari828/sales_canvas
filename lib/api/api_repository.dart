@@ -14,6 +14,8 @@ import 'package:sales/models/request/izin/submit_izin_request.dart';
 import 'package:sales/models/request/izin/update_approval_request.dart';
 import 'package:sales/models/request/kuisioner/kuisioner_input_data_request.dart';
 import 'package:sales/models/request/kuisioner/kuisioner_request.dart';
+import 'package:sales/models/request/kunjungan/non_schedule_request.dart';
+import 'package:sales/models/request/leads/submit_lead.dart';
 import 'package:sales/models/request/lembur/detail_request_lembur.dart';
 import 'package:sales/models/request/lembur/submit_izin_request.dart';
 import 'package:sales/models/request/lembur/update_approval_request.dart';
@@ -31,6 +33,7 @@ import 'package:sales/models/request/store/update_qty_request.dart';
 import 'package:sales/models/request/update_fcm_profile_request.dart';
 import 'package:sales/models/request/update_photo_profile_request.dart';
 import 'package:sales/models/request/user_id_request.dart';
+import 'package:sales/models/response/Lead/list_lead_respone.dart';
 import 'package:sales/models/response/attendance/attendance_submit.dart';
 import 'package:sales/models/response/attendance/attendance_validate.dart';
 import 'package:sales/models/response/benefit/benefit_dashboard_response.dart';
@@ -885,6 +888,24 @@ class ApiRepository {
     return null;
   }
 
+  Future<AttendanceSubmitResponse?> submitNonScheduleVisited(
+      NonScheduleSubmitRequest data) async {
+    try {
+      final res = await apiProvider
+          .submitNonKunjungan('/api/simpanKunjunganNon', data)
+          .timeout(Duration(seconds: timeout));
+      if (res.statusCode == 200 || res.statusCode == 401) {
+        return AttendanceSubmitResponse.fromJson(res.body);
+      }
+    } on TimeoutException catch (_) {
+      EasyLoading.showError('Connection Timeout. Please try again later');
+      EasyLoading.dismiss();
+    } catch (exception) {
+      print(exception);
+    }
+    return null;
+  }
+
   Future<AttendanceSubmitResponse?> submitAttendanceOutStore(
       AttendanceSubmitRequest data) async {
     try {
@@ -1055,6 +1076,41 @@ class ApiRepository {
       print(res);
       if (res.statusCode == 200 || res.statusCode == 401) {
         return ErrorResponse.fromJson(res.body);
+      }
+    } on TimeoutException catch (_) {
+      EasyLoading.showError('Connection Timeout. Please try again later');
+      EasyLoading.dismiss();
+    } catch (exception) {
+      print(exception);
+    }
+    return null;
+  }
+
+  Future<ErrorResponse?> submitLead(SubmitLeadRequest data) async {
+    try {
+      final res = await apiProvider
+          .submitLead('/api/ijin', data)
+          .timeout(Duration(seconds: timeout));
+      if (res.statusCode == 200 || res.statusCode == 401) {
+        return ErrorResponse.fromJson(res.body);
+      }
+    } on TimeoutException catch (_) {
+      EasyLoading.showError('Connection Timeout. Please try again later');
+      EasyLoading.dismiss();
+    } catch (exception) {
+      print(exception);
+    }
+    return null;
+  }
+
+  Future<LeadResponse?> listLeads(
+      {int page = 1, int limit = 10, required IdRequest data}) async {
+    try {
+      final res = await apiProvider
+          .getLeads('/api/listIjin?page=' + page.toString(), data)
+          .timeout(Duration(seconds: timeout));
+      if (res.statusCode == 200 || res.statusCode == 401) {
+        return LeadResponse.fromJson(res.body);
       }
     } on TimeoutException catch (_) {
       EasyLoading.showError('Connection Timeout. Please try again later');

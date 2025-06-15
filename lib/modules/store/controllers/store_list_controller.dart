@@ -122,6 +122,6 @@ class StoreListController extends BaseController {
   }
 
   void goToAddPages() {
-    Get.toNamed(Routes.ADD_LEAVE);
+    Get.toNamed(Routes.ADD_STORE);
   }
 }

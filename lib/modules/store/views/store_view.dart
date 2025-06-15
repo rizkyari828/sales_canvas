@@ -5,6 +5,7 @@ import 'package:sales/shared/utils/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:sales/shared/widgets/approval.dart';
 import 'package:sales/shared/widgets/custom_appbar.dart';
 
 class StoreView extends GetView<StoreListController> {
@@ -15,6 +16,8 @@ class StoreView extends GetView<StoreListController> {
         appBar: CustomAppBarWithNetwork(
           title: 'Kunjungan Terjadwal',
           networkStatus: controller.qualityNetwork,
+          addButton: ApprovalFlow.addButtonApproval(
+              controller: controller, onPressed: controller.goToAddPages),
         ),
         floatingActionButton: controller.isConnectedToInternetWidget.value
             ? Padding(
@@ -35,44 +38,44 @@ class StoreView extends GetView<StoreListController> {
       onLoading: controller.onLoading,
       child: ListView.builder(
         itemCount: controller.listStore.length,
-        itemBuilder: (context, i) => InkWell(
-          onTap: () {
-            controller.goToDetailPages(
-                id: controller.listStore[i].tokoId.toString(),
-                storeName: controller.listStore[i].namaToko ?? '');
-          },
-          child: Column(
-            children: [
-              i == 0
-                  ? Column(
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                                child: pendingTask('1', 'Kunjungan hari ini')),
-                            Expanded(
-                                child: pendingTask('5', 'Kunjungan bulan ini')),
-                            SizedBox(width: 20),
-                          ],
+        itemBuilder: (context, i) => Column(
+          children: [
+            i == 0
+                ? Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                              child: pendingTask('1', 'Kunjungan hari ini')),
+                          Expanded(
+                              child: pendingTask('5', 'Kunjungan bulan ini')),
+                          SizedBox(width: 20),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 20.0, right: 20, bottom: 10, top: 10),
+                        child: Divider(
+                          color: ColorConstants.borderColor,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 20.0, right: 20, bottom: 10, top: 10),
-                          child: Divider(
-                            color: ColorConstants.borderColor,
-                          ),
-                        ),
-                      ],
-                    )
-                  : SizedBox(),
-              customStockExpandedCard(
+                      ),
+                    ],
+                  )
+                : SizedBox(),
+            InkWell(
+              onTap: () {
+                controller.goToDetailPages(
+                    id: controller.listStore[i].tokoId.toString(),
+                    storeName: controller.listStore[i].namaToko ?? '');
+              },
+              child: customStockExpandedCard(
                 name: controller.listStore[i].namaToko ?? '',
                 photo: controller.listStore[i].pathToko ?? '',
                 type: '',
                 address: controller.listStore[i].alamatToko ?? '',
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
