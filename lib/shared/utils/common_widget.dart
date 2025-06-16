@@ -171,7 +171,8 @@ class CommonWidget {
     );
   }
 
-  static Text bodyMultilineText({String text = "", Color color = ColorConstants.black}) {
+  static Text bodyMultilineText(
+      {String text = "", Color color = ColorConstants.black}) {
     return Text(
       text,
       maxLines: 2,
@@ -254,6 +255,49 @@ class CommonWidget {
             child: isSubtitle
                 ? minHeadText(text: text, color: color, fontWeight: fontWeight2)
                 : captionText(text: text, color: color)),
+      ],
+    );
+  }
+
+  static Row twoLabelIconExpanded(
+      {Icon icon = const Icon(
+        Icons.person,
+        size: 30,
+        color: Colors.orangeAccent,
+      ),
+      text = "",
+      text2 = "",
+      Color color = ColorConstants.black,
+      fontWeight2 = FontWeight.w600,
+      fontSize = 14.0,
+      isSubtitle = true}) {
+    return Row(
+      children: <Widget>[
+        icon,
+        SizedBox(
+          width: 10,
+        ),
+        Expanded(
+            child: isSubtitle
+                ? Column(
+                    children: [
+                      minHeadText(
+                          text: text, color: color, fontWeight: fontWeight2),
+                      minHeadText(
+                          text: text2, color: color, fontWeight: fontWeight2),
+                    ],
+                  )
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      minSubtitleText(text: text, color: color),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      captionText(text: text2, color: color),
+                    ],
+                  )),
       ],
     );
   }

@@ -29,6 +29,7 @@ import 'package:sales/models/request/pagination_request.dart';
 import 'package:sales/models/request/rate/submit_rate_request.dart';
 import 'package:sales/models/request/reliver/approve_reliver_request.dart';
 import 'package:sales/models/request/reliver/create_reliver_request.dart';
+import 'package:sales/models/request/store/detail_request_leave.dart';
 import 'package:sales/models/request/store/update_qty_request.dart';
 import 'package:sales/models/request/update_fcm_profile_request.dart';
 import 'package:sales/models/request/update_photo_profile_request.dart';
@@ -48,6 +49,7 @@ import 'package:sales/models/response/kuisioner/input_data_kuisioner_respons.dar
 import 'package:sales/models/response/kuisioner_response.dart';
 import 'package:sales/models/response/lembur/list_lembur.dart';
 import 'package:sales/models/response/lembur/show_lembur.dart';
+import 'package:sales/models/response/master_data_2_response.dart';
 import 'package:sales/models/response/name_tad_list_response.dart';
 import 'package:sales/models/response/prospek/list.dart';
 import 'package:sales/models/response/prospek/master_data_response.dart';
@@ -58,6 +60,7 @@ import 'package:sales/models/response/rate/show_rate_review_response.dart';
 import 'package:sales/models/response/recap_history.dart';
 import 'package:sales/models/response/reliver/list_reliver_response.dart';
 import 'package:sales/models/response/reliver/show_reliver_response.dart';
+import 'package:sales/models/response/store/detail_store_response.dart';
 import 'package:sales/models/response/store/list_items.dart';
 import 'package:sales/models/response/store/list_store.dart';
 import 'package:sales/models/response/update_profile_response.dart';
@@ -1089,7 +1092,7 @@ class ApiRepository {
   Future<ErrorResponse?> submitLead(SubmitLeadRequest data) async {
     try {
       final res = await apiProvider
-          .submitLead('/api/ijin', data)
+          .submitLead('/api/simpan_leads', data)
           .timeout(Duration(seconds: timeout));
       if (res.statusCode == 200 || res.statusCode == 401) {
         return ErrorResponse.fromJson(res.body);
@@ -1103,14 +1106,48 @@ class ApiRepository {
     return null;
   }
 
-  Future<LeadResponse?> listLeads(
-      {int page = 1, int limit = 10, required IdRequest data}) async {
+  Future<LeadResponse?> listLeads({required UserIdRequest data}) async {
     try {
       final res = await apiProvider
-          .getLeads('/api/listIjin?page=' + page.toString(), data)
+          .getLeads('/api/get_leads', data)
           .timeout(Duration(seconds: timeout));
       if (res.statusCode == 200 || res.statusCode == 401) {
         return LeadResponse.fromJson(res.body);
+      }
+    } on TimeoutException catch (_) {
+      EasyLoading.showError('Connection Timeout. Please try again later');
+      EasyLoading.dismiss();
+    } catch (exception) {
+      print(exception);
+    }
+    return null;
+  }
+
+  Future<MasterData2Response?> getMasterData2() async {
+    try {
+      final res = await apiProvider
+          .getMasterData('/api/getMaster')
+          .timeout(Duration(seconds: timeout));
+      if (res.statusCode == 200 || res.statusCode == 401) {
+        return MasterData2Response.fromJson(res.body);
+      }
+    } on TimeoutException catch (_) {
+      EasyLoading.showError('Connection Timeout. Please try again later');
+      EasyLoading.dismiss();
+    } catch (exception) {
+      print(exception);
+    }
+    return null;
+  }
+
+  Future<DetailStoreResponseResponse?> showDetailKunjungan(
+      ShowDetailKunjunganRequest data) async {
+    try {
+      final res = await apiProvider
+          .getShowKunjungan('/api/DetailListKampas', data)
+          .timeout(Duration(seconds: timeout));
+      if (res.statusCode == 200 || res.statusCode == 401) {
+        return DetailStoreResponseResponse.fromJson(res.body);
       }
     } on TimeoutException catch (_) {
       EasyLoading.showError('Connection Timeout. Please try again later');

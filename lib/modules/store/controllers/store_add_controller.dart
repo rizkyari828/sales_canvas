@@ -9,7 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sales/api/api_repository.dart';
 import 'package:sales/models/request/attendance/attendance_wrapper.dart';
 import 'package:sales/models/request/kunjungan/non_schedule_request.dart';
-import 'package:sales/models/response/prospek/master_data_response.dart';
+import 'package:sales/models/response/master_data_2_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
@@ -39,8 +39,8 @@ class StoreAddController extends BaseController {
   RxDouble longitude = 0.0.obs;
   final nickname = TextEditingController();
 
-  var listAgenda = <MasterData>[].obs;
-  var listStatus = <MasterData>[].obs;
+  var listAgenda = <MasterData2>[].obs;
+  var listStatus = <MasterData2>[].obs;
   RxBool optionalText = false.obs;
   RxString agenda = "".obs;
   RxString status = "".obs;
@@ -52,8 +52,8 @@ class StoreAddController extends BaseController {
   RxString locationDetail = "".obs;
   final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
 
-  var masterData = <MasterData>[].obs;
-  var listSourceOfOrder = <MasterData>[].obs;
+  var masterData = <MasterData2>[].obs;
+  var listSourceOfOrder = <MasterData2>[].obs;
 
   final ImagePicker _picker = ImagePicker();
 
@@ -80,7 +80,7 @@ class StoreAddController extends BaseController {
   }
 
   void getMasterData() async {
-    final res = await apiRepository.getMasterData();
+    final res = await apiRepository.getMasterData2();
     masterData.value = res!.data!;
     for (var element in masterData) {
       if (element.flag == "5") {
@@ -270,6 +270,7 @@ class StoreAddController extends BaseController {
       token: token.value,
       photos: attachments,
       //NON
+      name: nameController.text,
       type: 'non schedule',
       alamat: alamatController.text,
       agenda: agendaId.value,

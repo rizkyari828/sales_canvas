@@ -1,15 +1,20 @@
 // To parse this JSON data, do
 //
-//     final LeadResponse = LeadResponseFromJson(jsonString);
+//     final leadResponse = leadResponseFromJson(jsonString);
 
 import 'dart:convert';
 
-LeadResponse LeadResponseFromJson(String str) =>
+LeadResponse leadResponseFromJson(String str) =>
     LeadResponse.fromJson(json.decode(str));
 
-String LeadResponseToJson(LeadResponse data) => json.encode(data.toJson());
+String leadResponseToJson(LeadResponse data) => json.encode(data.toJson());
 
 class LeadResponse {
+  String? status;
+  String? message;
+  bool? error;
+  List<DataLead>? data;
+
   LeadResponse({
     this.status,
     this.message,
@@ -17,71 +22,70 @@ class LeadResponse {
     this.data,
   });
 
-  String? status;
-  String? message;
-  bool? error;
-  List<DataLead>? data;
-
   factory LeadResponse.fromJson(Map<String, dynamic> json) => LeadResponse(
-        status: json["status"] == null ? null : json["status"],
-        message: json["message"] == null ? null : json["message"],
-        error: json["error"] == null ? null : json["error"],
+        status: json["status"],
+        message: json["message"],
+        error: json["error"],
         data: json["Data"] == null
-            ? null
+            ? []
             : List<DataLead>.from(
-                json["Data"].map((x) => DataLead.fromJson(x))),
+                json["Data"]!.map((x) => DataLead.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
-        "status": status == null ? null : status,
-        "message": message == null ? null : message,
-        "error": error == null ? null : error,
+        "status": status,
+        "message": message,
+        "error": error,
         "Data": data == null
-            ? null
+            ? []
             : List<dynamic>.from(data!.map((x) => x.toJson())),
       };
 }
 
 class DataLead {
+  int? sumberLeads;
+  dynamic sumberLeads2;
+  String? nama;
+  String? email;
+  String? telphone;
+  String? alamat;
+  String? productMinat;
+  String? catatan;
+  String? foto;
+
   DataLead({
-    this.id,
-    this.kodeIjin,
-    this.dateIn,
-    this.dateOut,
-    this.keterangan,
-    this.cDate,
+    this.sumberLeads,
+    this.sumberLeads2,
+    this.nama,
+    this.email,
+    this.telphone,
+    this.alamat,
+    this.productMinat,
+    this.catatan,
+    this.foto,
   });
 
-  int? id;
-  String? kodeIjin;
-  DateTime? dateIn;
-  DateTime? dateOut;
-  DateTime? cDate;
-  String? keterangan;
-
   factory DataLead.fromJson(Map<String, dynamic> json) => DataLead(
-        id: json["id"] == null ? null : json["id"],
-        kodeIjin: json["kode_ijin"] == null ? null : json["kode_ijin"],
-        dateIn:
-            json["date_in"] == null ? null : DateTime.parse(json["date_in"]),
-        dateOut:
-            json["date_out"] == null ? null : DateTime.parse(json["date_out"]),
-        cDate: json["c_date"] == null ? null : DateTime.parse(json["c_date"]),
-        keterangan: json["keterangan"] == null ? null : json["keterangan"],
+        sumberLeads: json["sumber_leads"],
+        sumberLeads2: json["sumber_leads2"],
+        nama: json["nama"],
+        email: json["email"],
+        telphone: json["telphone"],
+        alamat: json["alamat"],
+        productMinat: json["product_minat"],
+        catatan: json["catatan"],
+        foto: json["foto"],
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id == null ? null : id,
-        "kode_ijin": kodeIjin == null ? null : kodeIjin,
-        "date_in": dateIn == null
-            ? null
-            : "${dateIn?.year.toString().padLeft(4, '0')}-${dateIn?.month.toString().padLeft(2, '0')}-${dateIn?.day.toString().padLeft(2, '0')}",
-        "date_out": dateOut == null
-            ? null
-            : "${dateOut?.year.toString().padLeft(4, '0')}-${dateOut?.month.toString().padLeft(2, '0')}-${dateOut?.day.toString().padLeft(2, '0')}",
-        "c_date": cDate == null
-            ? null
-            : "${cDate?.year.toString().padLeft(4, '0')}-${cDate?.month.toString().padLeft(2, '0')}-${cDate?.day.toString().padLeft(2, '0')}",
-        "keterangan": keterangan == null ? null : keterangan,
+        "sumber_leads": sumberLeads,
+        "sumber_leads2": sumberLeads2,
+        "nama": nama,
+        "email": email,
+        "telphone": telphone,
+        "alamat": alamat,
+        "product_minat": productMinat,
+        "catatan": catatan,
+        "foto": foto,
       };
 }

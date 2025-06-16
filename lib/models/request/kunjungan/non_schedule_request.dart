@@ -34,10 +34,10 @@ class NonScheduleSubmitRequest {
         'foto': photos?.map((e) => e.toJson()).toList(),
         'nama_kunjungan': name,
         'alamat_kunjungan': alamat,
-        'agenda': agenda,
-        'status': status,
-        'visit_note': visitNote,
-        'plan_execution': planExecution,
+        'status1': agenda,
+        'status2': status,
+        'catatan': visitNote,
+        'rencana': planExecution,
       };
 
   factory NonScheduleSubmitRequest.fromJson(Map<String, dynamic> json) =>
@@ -50,9 +50,9 @@ class NonScheduleSubmitRequest {
             .toList(),
         name: json['nama_kunjungan']?.toString() ?? '',
         alamat: json['alamat_kunjungan']?.toString() ?? '',
-        agenda: json['agenda']?.toString() ?? '',
-        status: json['status']?.toString() ?? '',
-        visitNote: json['visit_note']?.toString() ?? '',
-        planExecution: json['plan_execution']?.toString() ?? '',
+        agenda: json['status1']?.toString() ?? '',
+        status: json['status2']?.toString() ?? '',
+        visitNote: json['catatan']?.toString() ?? '',
+        planExecution: json['rencana']?.toString() ?? '',
       );
 }

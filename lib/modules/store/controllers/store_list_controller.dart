@@ -116,9 +116,10 @@ class StoreListController extends BaseController {
     }
   }
 
-  void goToDetailPages({String id = "", String storeName = ''}) {
+  void goToDetailPages(
+      {String id = "", String type = '', String storeName = ''}) {
     Get.toNamed(Routes.DETAIL_STORE,
-        arguments: {'id': id, 'storeName': storeName});
+        arguments: {'id': id, 'type': type, 'storeName': storeName});
   }
 
   void goToAddPages() {

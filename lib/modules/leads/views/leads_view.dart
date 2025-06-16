@@ -48,19 +48,15 @@ class LeadsView extends GetView<LeadsListController> {
         itemCount: controller.list.length,
         itemBuilder: (context, i) => InkWell(
           onTap: () {
-            controller.goToDetailPages(id: controller.list[i].id.toString());
+            controller.goToDetailPages(id: controller.list[i].nama.toString());
           },
           child: CustomExpandedCardView(
-            name:
-                '${DateFormat("EEEE, d MMMM yyyy", "id_ID").format(controller.list[i].cDate ?? DateTime.now())}',
-            firstParagraf: controller.list[i].kodeIjin ?? '',
-            secondParagrafLabel: "Mulai",
-            secondParagrafValue:
-                '${DateFormat("EEEE, d MMMM yyyy", "id_ID").format(controller.list[i].dateIn ?? DateTime.now())}',
-            thirdParagrafLabel: "Selesai",
-            thirdParagrafValue:
-                '${DateFormat("EEEE, d MMMM yyyy", "id_ID").format(controller.list[i].dateOut ?? DateTime.now())}',
-            forthParagraf: controller.list[i].keterangan ?? '',
+            name: controller.list[i].nama ?? '',
+            firstParagraf: controller.list[i].email ?? '',
+            secondParagrafLabel: "Telepon",
+            secondParagrafValue: controller.list[i].telphone ?? '',
+            thirdParagrafLabel: "Product Minat",
+            thirdParagrafValue: controller.list[i].productMinat ?? '',
           ),
         ),
       ),

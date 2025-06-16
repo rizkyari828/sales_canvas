@@ -15,6 +15,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:sales/models/response/master_data_2_response.dart';
 import 'package:sales/models/response/prospek/master_data_response.dart';
 import 'package:sales/shared/constants/storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -63,10 +64,10 @@ class LeadsController extends GetxController {
   RxString validationDate = "".obs;
   var listType = <DataTypeIzin>[].obs;
 
-  var listLeadSource = <MasterData>[].obs;
-  var listLeadCategory = <MasterData>[].obs;
-  var listStatusLead = <MasterData>[].obs;
-  var masterData = <MasterData>[].obs;
+  var listLeadSource = <MasterData2>[].obs;
+  var listLeadCategory = <MasterData2>[].obs;
+  var listStatusLead = <MasterData2>[].obs;
+  var masterData = <MasterData2>[].obs;
   RxString leadCategory = "".obs;
   RxString statusLead = "".obs;
   RxString leadSource = "".obs;
@@ -77,6 +78,7 @@ class LeadsController extends GetxController {
   RxString actionStatus = "".obs;
   RxString reason = "".obs;
   RxBool optionalText = false.obs;
+  RxString optionalTextValue = ''.obs;
 
   void changeStatus(value) {
     if (value == 'Dll') {
@@ -147,20 +149,21 @@ class LeadsController extends GetxController {
 
     final res = await apiRepository.submitLead(
       SubmitLeadRequest(
-        idUser: idUser.value,
-        date: DateFormat("yyyy-MM-dd", "id_ID").format(dateNow).toString(),
-        latitude: myLocation.latitude.toString(),
-        longitude: myLocation.longitude.toString(),
-        email: emailController.text,
-        name: nameController.text,
-        noHp: noHpController.text,
-        leadSource: leadSource.value,
-        leadCategory: leadCategory.value,
-        minatProduct: minatProductController.text,
-        leadStatus: statusLead.value,
-        note: noteController.text,
-        photos: attachments,
-      ),
+          idUser: idUser.value,
+          date: DateFormat("yyyy-MM-dd", "id_ID").format(dateNow).toString(),
+          latitude: myLocation.latitude.toString(),
+          longitude: myLocation.longitude.toString(),
+          email: emailController.text,
+          name: nameController.text,
+          noHp: noHpController.text,
+          leadSource: leadSourceId.value,
+          optionLeadSource: optionalTextValue.value,
+          leadCategory: leadCategoryId.value,
+          minatProduct: minatProductController.text,
+          leadStatus: statusLeadId.value,
+          note: noteController.text,
+          photos: attachments,
+          alamat: alamatController.text),
     );
     if (res?.error == false) {
       EasyLoading.showSuccess('Berhasil disimpan');
@@ -271,7 +274,7 @@ class LeadsController extends GetxController {
   }
 
   void getMasterData() async {
-    final res = await apiRepository.getMasterData();
+    final res = await apiRepository.getMasterData2();
     masterData.value = res!.data!;
 
     for (var element in masterData) {

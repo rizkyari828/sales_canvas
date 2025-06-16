@@ -14,7 +14,7 @@ class StoreView extends GetView<StoreListController> {
     double scaleWidth = MediaQuery.of(context).size.width / 360;
     return Obx(() => Scaffold(
         appBar: CustomAppBarWithNetwork(
-          title: 'Kunjungan Terjadwal',
+          title: 'Kunjungan',
           networkStatus: controller.qualityNetwork,
           addButton: ApprovalFlow.addButtonApproval(
               controller: controller, onPressed: controller.goToAddPages),
@@ -66,12 +66,15 @@ class StoreView extends GetView<StoreListController> {
               onTap: () {
                 controller.goToDetailPages(
                     id: controller.listStore[i].tokoId.toString(),
+                    type: controller.listStore[i].typList.toString(),
                     storeName: controller.listStore[i].namaToko ?? '');
               },
               child: customStockExpandedCard(
                 name: controller.listStore[i].namaToko ?? '',
                 photo: controller.listStore[i].pathToko ?? '',
-                type: '',
+                type: controller.listStore[i].typList == '1'
+                    ? 'Kunjungan Terjadwal'
+                    : 'Kunjungan Tidak Terjadwal',
                 address: controller.listStore[i].alamatToko ?? '',
               ),
             ),
@@ -214,15 +217,25 @@ class StoreView extends GetView<StoreListController> {
                           children: [
                             CommonWidget.minHeadText(text: name),
                             // CommonWidget.subtitleText(text: type),
+                            SizedBox(
+                              height: 5,
+                            ),
                             Row(
                               children: [
-                                CommonWidget.subtitleText(text: 'alamat : '),
+                                CommonWidget.subtitleText(text: 'Alamat : '),
                                 CommonWidget.subtitleText(
                                     text: address,
                                     // fontWeight: FontWeight.bold,
                                     color: ColorConstants.mainColor),
                               ],
                             ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            CommonWidget.subtitleText(
+                                text: type,
+                                // fontWeight: FontWeight.bold,
+                                color: ColorConstants.mainColor),
                           ],
                         ),
                       ],

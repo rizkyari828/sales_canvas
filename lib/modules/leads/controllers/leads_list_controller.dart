@@ -1,5 +1,6 @@
 import 'package:sales/api/api_repository.dart';
 import 'package:sales/models/request/id_request.dart';
+import 'package:sales/models/request/user_id_request.dart';
 import 'package:sales/models/response/Lead/list_lead_respone.dart';
 import 'package:sales/models/response/izin/list_izin.dart';
 import 'package:sales/routes/app_pages.dart';
@@ -57,8 +58,8 @@ class LeadsListController extends GetxController {
   }
 
   void getLeads(page) async {
-    final res = await apiRepository.listLeads(
-        page: page, data: IdRequest(id: userId.value, token: token.value));
+    final res =
+        await apiRepository.listLeads(data: UserIdRequest(id: userId.value));
     list.addAll(res?.data ?? []);
   }
 

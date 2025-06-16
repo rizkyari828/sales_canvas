@@ -13,25 +13,27 @@ String SubmitLeadRequestToJson(SubmitLeadRequest data) =>
     json.encode(data.toJson());
 
 class SubmitLeadRequest {
-  SubmitLeadRequest({
-    this.idUser,
-    this.date,
-    this.leadSource,
-    this.email,
-    this.name,
-    this.noHp,
-    this.latitude,
-    this.longitude,
-    this.leadCategory,
-    this.minatProduct,
-    this.leadStatus,
-    this.note,
-    this.photos,
-  });
+  SubmitLeadRequest(
+      {this.idUser,
+      this.date,
+      this.leadSource,
+      this.optionLeadSource,
+      this.email,
+      this.name,
+      this.noHp,
+      this.latitude,
+      this.longitude,
+      this.leadCategory,
+      this.minatProduct,
+      this.leadStatus,
+      this.note,
+      this.photos,
+      this.alamat});
 
   String? idUser;
   String? date;
   String? leadSource;
+  String? optionLeadSource;
   String? email;
   String? name;
   String? noHp;
@@ -41,40 +43,45 @@ class SubmitLeadRequest {
   String? minatProduct;
   String? leadStatus;
   String? note;
+  String? alamat;
   final List<PhotoAttachment>? photos;
 
   factory SubmitLeadRequest.fromJson(Map<String, dynamic> json) =>
       SubmitLeadRequest(
-        idUser: json["id_user"],
+        idUser: json["user_id"],
         date: json["date"],
-        leadSource: json["lead_source"],
+        leadSource: json["sumber_leads"],
+        optionLeadSource: json["sumber_leads2"],
         email: json["email"],
-        name: json["name"],
-        noHp: json["ho_hp"],
+        name: json["nama"],
+        noHp: json["telphone"],
         latitude: json["lat"],
         longitude: json["long"],
-        leadCategory: json["lead_category"],
-        minatProduct: json["minat_product"],
-        leadStatus: json["lead_status"],
-        note: json["note"],
+        leadCategory: json["kategori_leads"],
+        minatProduct: json["product_minat"],
+        leadStatus: json["status_leads"],
+        note: json["catatan"],
+        alamat: json["alamat"],
         photos: (json['foto'] as List? ?? [])
             .map((e) => PhotoAttachment.fromJson(e))
             .toList(),
       );
 
   Map<String, dynamic> toJson() => {
-        'id_user': idUser,
+        'user_id': idUser,
         'date': date,
-        'lead_source': leadSource,
+        'sumber_leads': leadSource,
+        'sumber_leads2': optionLeadSource,
         'email': email,
-        'name': name,
-        'ho_hp': noHp,
+        'nama': name,
+        'telphone': noHp,
         'lat': latitude,
         'long': longitude,
-        'lead_category': leadCategory,
-        'minat_product': minatProduct,
-        'lead_status': leadStatus,
-        'note': note,
+        'kategori_leads': leadCategory,
+        'product_minat': minatProduct,
+        'status_leads': leadStatus,
+        'catatan': note,
+        'alamat': alamat,
         'foto': photos?.map((e) => e.toJson()).toList(),
       };
 }

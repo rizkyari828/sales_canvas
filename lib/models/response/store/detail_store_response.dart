@@ -1,35 +1,37 @@
 // To parse this JSON data, do
 //
-//     final KanvasResponse = KanvasResponseFromJson(jsonString);
+//     final detailStoreResponseResponse = detailStoreResponseResponseFromJson(jsonString);
 
 import 'dart:convert';
 
-KanvasResponse KanvasResponseFromJson(String str) =>
-    KanvasResponse.fromJson(json.decode(str));
+DetailStoreResponseResponse detailStoreResponseResponseFromJson(String str) =>
+    DetailStoreResponseResponse.fromJson(json.decode(str));
 
-String KanvasResponseToJson(KanvasResponse data) => json.encode(data.toJson());
+String detailStoreResponseResponseToJson(DetailStoreResponseResponse data) =>
+    json.encode(data.toJson());
 
-class KanvasResponse {
+class DetailStoreResponseResponse {
   String? status;
   String? message;
   bool? error;
-  List<DataStore>? data;
+  List<DetailStore>? data;
 
-  KanvasResponse({
+  DetailStoreResponseResponse({
     this.status,
     this.message,
     this.error,
     this.data,
   });
 
-  factory KanvasResponse.fromJson(Map<String, dynamic> json) => KanvasResponse(
+  factory DetailStoreResponseResponse.fromJson(Map<String, dynamic> json) =>
+      DetailStoreResponseResponse(
         status: json["status"],
         message: json["message"],
         error: json["error"],
         data: json["Data"] == null
             ? []
-            : List<DataStore>.from(
-                json["Data"]!.map((x) => DataStore.fromJson(x))),
+            : List<DetailStore>.from(
+                json["Data"]!.map((x) => DetailStore.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -42,17 +44,18 @@ class KanvasResponse {
       };
 }
 
-class DataStore {
+class DetailStore {
   int? tokoId;
   String? namaToko;
   String? alamatToko;
-  String? pathToko;
+  dynamic pathToko;
   String? langToko;
   String? latToko;
   String? typList;
-  String? statusKunjungan;
+  String? catatan;
+  String? rencana;
 
-  DataStore({
+  DetailStore({
     this.tokoId,
     this.namaToko,
     this.alamatToko,
@@ -60,10 +63,11 @@ class DataStore {
     this.langToko,
     this.latToko,
     this.typList,
-    this.statusKunjungan,
+    this.catatan,
+    this.rencana,
   });
 
-  factory DataStore.fromJson(Map<String, dynamic> json) => DataStore(
+  factory DetailStore.fromJson(Map<String, dynamic> json) => DetailStore(
         tokoId: json["toko_id"],
         namaToko: json["nama_toko"],
         alamatToko: json["alamat_toko"],
@@ -71,7 +75,8 @@ class DataStore {
         langToko: json["lang_toko"],
         latToko: json["lat_toko"],
         typList: json["typ_list"],
-        statusKunjungan: json["status_kunjungan"],
+        catatan: json["catatan"],
+        rencana: json["rencana"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -82,6 +87,7 @@ class DataStore {
         "lang_toko": langToko,
         "lat_toko": latToko,
         "typ_list": typList,
-        "status_kunjungan": statusKunjungan,
+        "catatan": catatan,
+        "rencana": rencana,
       };
 }

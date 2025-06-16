@@ -11,9 +11,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:sales/api/api_repository.dart';
 import 'package:sales/models/request/attendance/attendance_wrapper.dart';
-import 'package:sales/models/response/izin/show_izin.dart';
+import 'package:sales/models/request/store/detail_request_leave.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sales/models/response/store/detail_store_response.dart';
 import 'package:sales/modules/home/base_controller.dart';
 import 'package:sales/routes/app_pages.dart';
 import 'package:sales/shared/constants/colors.dart';
@@ -29,7 +30,7 @@ class StoreDetailController extends BaseController {
       : super(apiRepository: apiRepository);
 
   final argm = Get.arguments;
-  var detail = DataIzin().obs;
+  var detail = DetailStore().obs;
   String date = "";
   DateTime selectedDate = DateTime.now();
   final noRequestController = TextEditingController();
@@ -47,8 +48,11 @@ class StoreDetailController extends BaseController {
   RxString userId = "".obs;
   RxString token = "".obs;
   RxString storeName = "".obs;
+  RxString idStore = "".obs;
+  RxString typeStore = "".obs;
 
   late LatLng myLocation = LatLng(0, 0);
+  late LatLng dataLocation = LatLng(0, 0);
   var markers = <Marker>[].obs;
   var circles = Set<Circle>().obs;
   final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
@@ -106,6 +110,9 @@ class StoreDetailController extends BaseController {
     super.onReady();
     loadUsers();
     storeName.value = argm['storeName'];
+    idStore.value = argm['id'];
+    typeStore.value = argm['type'];
+    getDetail();
   }
 
   @override
@@ -113,21 +120,23 @@ class StoreDetailController extends BaseController {
     super.onClose();
   }
 
-  Future<void> onRefresh() async {
-    isAbsent.value = false;
-    absentTime.value = '--:--';
-    isShowMaps.value = true;
-    isAbsentOut.value = false;
-    absentTimeOut.value = '--:--';
-    determinePosition();
-    loadUsers();
-  }
+  void getDetail() async {
+    final res = await apiRepository.showDetailKunjungan(
+        ShowDetailKunjunganRequest(
+            id: idStore.value, type: typeStore.value, idUser: userId.value));
+    print(res!.data!);
+    detail.value = res.data!.first;
 
-  void goToAddPages() {
-    Get.toNamed(
-      Routes.ADD_STORE,
-      arguments: argm['id'].toString(),
-    );
+    final lat = double.tryParse(detail.value.latToko ?? '');
+    final lng = double.tryParse(detail.value.langToko ?? '');
+
+    if (lat != null && lng != null) {
+      List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
+      locationStore.value =
+          "${placemarks[2].street}, ${placemarks[2].subLocality}, ${placemarks[2].locality}, ${placemarks[2].administrativeArea}";
+    } else {
+      EasyLoading.showError('Location Toko tidak valid');
+    }
   }
 
   void attendanceSheetBar(String type) {
