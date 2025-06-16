@@ -8,12 +8,14 @@ import 'package:sales/api/api_repository.dart';
 import 'package:sales/models/action.dart';
 import 'package:sales/models/request/attendance/attendance_wrapper.dart';
 import 'package:sales/models/request/leads/submit_lead.dart';
+import 'package:sales/models/response/get_master_response.dart';
 import 'package:sales/models/response/izin/type_izin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:sales/models/response/prospek/master_data_response.dart';
 import 'package:sales/shared/constants/storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -61,12 +63,16 @@ class LeadsController extends GetxController {
   RxString validationDate = "".obs;
   var listType = <DataTypeIzin>[].obs;
 
-  var listLeadSource = <ActionStatus>[].obs;
-  var listLeadCategory = <ActionStatus>[].obs;
-  var listStatusLead = <ActionStatus>[].obs;
+  var listLeadSource = <MasterData>[].obs;
+  var listLeadCategory = <MasterData>[].obs;
+  var listStatusLead = <MasterData>[].obs;
+  var masterData = <MasterData>[].obs;
   RxString leadCategory = "".obs;
   RxString statusLead = "".obs;
   RxString leadSource = "".obs;
+  RxString leadCategoryId = "".obs;
+  RxString statusLeadId = "".obs;
+  RxString leadSourceId = "".obs;
 
   RxString actionStatus = "".obs;
   RxString reason = "".obs;
@@ -260,66 +266,23 @@ class LeadsController extends GetxController {
   void onInit() {
     super.onInit();
 
-    listLeadSource.add(ActionStatus(
-      id: "1",
-      name: "Website",
-    ));
-    listLeadSource.add(ActionStatus(
-      id: "2",
-      name: "Event",
-    ));
-    listLeadSource.add(ActionStatus(
-      id: "3",
-      name: "Referral",
-    ));
-    listLeadSource.add(ActionStatus(
-      id: "4",
-      name: "Ads",
-    ));
-    listLeadSource.add(ActionStatus(
-      id: "5",
-      name: "Dll",
-    ));
-
-    listLeadCategory.add(ActionStatus(
-      id: "1",
-      name: "Individu",
-    ));
-    listLeadCategory.add(ActionStatus(
-      id: "2",
-      name: "UMKM",
-    ));
-    listLeadCategory.add(ActionStatus(
-      id: "3",
-      name: "Coorporate",
-    ));
-    listLeadSource.add(ActionStatus(
-      id: "4",
-      name: "Dll",
-    ));
-
-    listStatusLead.add(ActionStatus(
-      id: "1",
-      name: "Baru",
-    ));
-    listStatusLead.add(ActionStatus(
-      id: "2",
-      name: "Dikontak",
-    ));
-    listStatusLead.add(ActionStatus(
-      id: "3",
-      name: "Follow Up",
-    ));
-    listStatusLead.add(ActionStatus(
-      id: "4",
-      name: "Tidak Tertarik",
-    ));
-    listStatusLead.add(ActionStatus(
-      id: "4",
-      name: "Berhasil Jadi Client",
-    ));
-
     determinePosition();
+    getMasterData();
+  }
+
+  void getMasterData() async {
+    final res = await apiRepository.getMasterData();
+    masterData.value = res!.data!;
+
+    for (var element in masterData) {
+      if (element.flag == "9") {
+        listLeadSource.add(element);
+      } else if (element.flag == "7") {
+        listLeadCategory.add(element);
+      } else if (element.flag == "8") {
+        listStatusLead.add(element);
+      }
+    }
   }
 
   @override

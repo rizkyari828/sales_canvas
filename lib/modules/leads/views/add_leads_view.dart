@@ -39,11 +39,16 @@ class AddLeadsView extends GetView<LeadsController> {
                       enabled: true,
                       selectedItem: controller.leadSource.value,
                       listItem: controller.listLeadSource.map((item) {
-                        return item.name.toString();
+                        return item.nama.toString();
                       }).toList(),
                       labelText: "Sumber Lead",
                       onChanged: (value) async {
                         controller.leadSource.value = value;
+                        for (var f in controller.listLeadSource) {
+                          if (f.nama == value) {
+                            controller.leadSourceId.value = f.id.toString();
+                          }
+                        }
                         controller.changeStatus(value);
                       },
                     ),
@@ -96,11 +101,16 @@ class AddLeadsView extends GetView<LeadsController> {
                       enabled: true,
                       selectedItem: controller.leadCategory.value,
                       listItem: controller.listLeadCategory.map((item) {
-                        return item.name.toString();
+                        return item.nama.toString();
                       }).toList(),
                       labelText: "Kategori Lead",
                       onChanged: (value) async {
                         controller.leadCategory.value = value;
+                        for (var f in controller.listLeadCategory) {
+                          if (f.nama == value) {
+                            controller.leadCategoryId.value = f.id.toString();
+                          }
+                        }
                         controller.changeStatus(value);
                       },
                     ),
@@ -115,11 +125,16 @@ class AddLeadsView extends GetView<LeadsController> {
                       enabled: true,
                       selectedItem: controller.statusLead.value,
                       listItem: controller.listStatusLead.map((item) {
-                        return item.name.toString();
+                        return item.nama.toString();
                       }).toList(),
                       labelText: "Status Lead",
                       onChanged: (value) async {
-                        controller.actionStatus.value = value;
+                        controller.statusLead.value = value;
+                         for (var f in controller.listStatusLead) {
+                          if (f.nama == value) {
+                            controller.statusLeadId.value = f.id.toString();
+                          }
+                        }
                         controller.changeStatus(value);
                       },
                     ),

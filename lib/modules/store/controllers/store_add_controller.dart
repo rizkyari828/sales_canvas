@@ -7,7 +7,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sales/api/api_repository.dart';
-import 'package:sales/models/action.dart';
 import 'package:sales/models/request/attendance/attendance_wrapper.dart';
 import 'package:sales/models/request/kunjungan/non_schedule_request.dart';
 import 'package:sales/models/response/prospek/master_data_response.dart';
@@ -40,11 +39,13 @@ class StoreAddController extends BaseController {
   RxDouble longitude = 0.0.obs;
   final nickname = TextEditingController();
 
-  var listAgenda = <ActionStatus>[].obs;
-  var listStatus = <ActionStatus>[].obs;
+  var listAgenda = <MasterData>[].obs;
+  var listStatus = <MasterData>[].obs;
   RxBool optionalText = false.obs;
   RxString agenda = "".obs;
   RxString status = "".obs;
+  RxString agendaId = "".obs;
+  RxString statusId = "".obs;
 
   late LatLng myLocation = LatLng(0, 0);
 
@@ -75,38 +76,19 @@ class StoreAddController extends BaseController {
   void onInit() {
     super.onInit();
     determinePosition();
-    listAgenda.add(ActionStatus(
-      id: "1",
-      name: "Penawaran Harga",
-    ));
-    listAgenda.add(ActionStatus(
-      id: "",
-      name: "Follow Up",
-    ));
-    listAgenda.add(ActionStatus(
-      id: "4",
-      name: "Closing",
-    ));
-    listAgenda.add(ActionStatus(
-      id: "5",
-      name: "Dll",
-    ));
-    listStatus.add(ActionStatus(
-      id: "1",
-      name: "Deal",
-    ));
-    listStatus.add(ActionStatus(
-      id: "2",
-      name: "Masih Pertimbangan",
-    ));
-    listStatus.add(ActionStatus(
-      id: "2",
-      name: "Tunda",
-    ));
-    listStatus.add(ActionStatus(
-      id: "3",
-      name: "Tidak Tertarik",
-    ));
+    getMasterData();
+  }
+
+  void getMasterData() async {
+    final res = await apiRepository.getMasterData();
+    masterData.value = res!.data!;
+    for (var element in masterData) {
+      if (element.flag == "5") {
+        listAgenda.add(element);
+      } else if (element.flag == "6") {
+        listStatus.add(element);
+      }
+    }
   }
 
   @override
@@ -290,8 +272,8 @@ class StoreAddController extends BaseController {
       //NON
       type: 'non schedule',
       alamat: alamatController.text,
-      agenda: agenda.value,
-      status: status.value,
+      agenda: agendaId.value,
+      status: statusId.value,
       visitNote: visitNoteController.text,
       planExecution: planExecutionController.text,
     );

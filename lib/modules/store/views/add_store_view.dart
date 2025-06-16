@@ -68,11 +68,12 @@ class AddStoreView extends GetView<StoreAddController> {
                       enabled: true,
                       selectedItem: controller.agenda.value,
                       listItem: controller.listAgenda.map((item) {
-                        return item.name.toString();
+                        return item.nama.toString();
                       }).toList(),
                       labelText: "Kegiatan",
                       onChanged: (value) async {
                         controller.agenda.value = value;
+                        controller.agendaId.value = value;
                         controller.changeStatus(value);
                       },
                     ),
@@ -89,11 +90,12 @@ class AddStoreView extends GetView<StoreAddController> {
                       enabled: true,
                       selectedItem: controller.status.value,
                       listItem: controller.listStatus.map((item) {
-                        return item.name.toString();
+                        return item.nama.toString();
                       }).toList(),
                       labelText: "Status",
                       onChanged: (value) async {
                         controller.status.value = value;
+                        controller.statusId.value = value;
                         controller.changeStatus(value);
                       },
                     ),
