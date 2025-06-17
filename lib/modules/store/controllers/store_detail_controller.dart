@@ -50,6 +50,7 @@ class StoreDetailController extends BaseController {
   RxString storeName = "".obs;
   RxString idStore = "".obs;
   RxString typeStore = "".obs;
+  RxString statusKunjungan = "".obs;
 
   late LatLng myLocation = LatLng(0, 0);
   late LatLng dataLocation = LatLng(0, 0);
@@ -112,6 +113,7 @@ class StoreDetailController extends BaseController {
     storeName.value = argm['storeName'];
     idStore.value = argm['id'];
     typeStore.value = argm['type'];
+    statusKunjungan.value = argm['status_kunjungan'];
     getDetail();
   }
 
@@ -124,18 +126,24 @@ class StoreDetailController extends BaseController {
     final res = await apiRepository.showDetailKunjungan(
         ShowDetailKunjunganRequest(
             id: idStore.value, type: typeStore.value, idUser: userId.value));
-    print(res!.data!);
-    detail.value = res.data!.first;
+    // print(res!.data!);
+    if (res != null || res?.data != null) {
+      detail.value = res!.data!.first;
 
-    final lat = double.tryParse(detail.value.latToko ?? '');
-    final lng = double.tryParse(detail.value.langToko ?? '');
+      final lat = double.tryParse(detail.value.latToko ?? '');
+      final lng = double.tryParse(detail.value.langToko ?? '');
 
-    if (lat != null && lng != null) {
-      List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
-      locationStore.value =
-          "${placemarks[2].street}, ${placemarks[2].subLocality}, ${placemarks[2].locality}, ${placemarks[2].administrativeArea}";
-    } else {
-      EasyLoading.showError('Location Toko tidak valid');
+      if (lat != null && lng != null) {
+        try {
+          List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
+          locationStore.value =
+              "${placemarks[2].street}, ${placemarks[2].subLocality}, ${placemarks[2].locality}, ${placemarks[2].administrativeArea}";
+        } catch (e) {
+          EasyLoading.showError('Location Toko tidak valid');
+        }
+      } else {
+        EasyLoading.showError('Location Toko tidak valid');
+      }
     }
   }
 
@@ -510,11 +518,15 @@ class StoreDetailController extends BaseController {
     final position = await _geolocatorPlatform.getCurrentPosition();
     myLocation = LatLng(position.latitude, position.longitude);
 
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(position.latitude, position.longitude);
+    try {
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(position.latitude, position.longitude);
 
-    locationDetail.value =
-        "${placemarks[2].street}, ${placemarks[2].subLocality}, ${placemarks[2].locality}, ${placemarks[2].administrativeArea}";
+      locationDetail.value =
+          "${placemarks[2].street}, ${placemarks[2].subLocality}, ${placemarks[2].locality}, ${placemarks[2].administrativeArea}";
+    } catch (e) {
+      EasyLoading.showError('Location Toko tidak valid');
+    }
 
     final prefs = Get.find<SharedPreferences>();
     if (prefs.getString('token') != null) {

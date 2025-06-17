@@ -27,10 +27,16 @@ class StoreDetailView extends GetView<StoreDetailController> {
               )
             : SizedBox(),
         backgroundColor: ColorConstants.lightScaffoldBackgroundColor,
-        body: controller.typeStore == ''
-            ? SizedBox()
+        body: controller.detail.value.typList == null
+            ? Center(
+                child: CircularProgressIndicator(
+                  backgroundColor: ColorConstants.mainColor,
+                ),
+              )
             : controller.typeStore == '1'
-                ? _buildViewSchedule(context)
+                ? controller.statusKunjungan == '0'
+                    ? _buildViewSchedule(context)
+                    : _buildViewScheduleSubmit(context)
                 : _buildViewNon(context)));
   }
 
@@ -252,6 +258,105 @@ class StoreDetailView extends GetView<StoreDetailController> {
               width: MediaQuery.of(context).size.width / 1.13,
               onPressed: () => controller.submit('Kunjungan'),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildViewScheduleSubmit(BuildContext context) {
+    final sw = SizeConfig().screenWidth;
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(25.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    CommonWidget.subtitleText(text: 'Hai, '),
+                    CommonWidget.minHeadText(
+                        text: controller.name.value,
+                        color: ColorConstants.mainColor,
+                        fontWeight: FontWeight.w500),
+                  ],
+                ),
+                SizedBox(height: 20.0),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                controller.detail.value.pathToko == ''
+                    ? Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          color: Colors.red,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(3.0),
+                          child: Icon(
+                            Icons.store_rounded,
+                            color: Colors.white,
+                            size: 60,
+                          ),
+                        ),
+                      )
+                    : Container(
+                        height: 70,
+                        width: 70,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.blueAccent,
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.network(
+                            controller.detail.value.pathToko,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Center(
+                                child: Icon(Icons.store_rounded,
+                                    color: Colors.white, size: 65),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                SizedBox(
+                  width: 20,
+                ),
+                CommonWidget.minHeadText(
+                    text: controller.detail.value.namaToko ?? ''),
+              ],
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Divider(
+              color: ColorConstants.borderColor,
+            ),
+            SizedBox(height: 20.0),
+            CommonWidget.twoLabelIconExpanded(
+                text: controller.detail.value.alamatToko,
+                text2: controller.locationStore.value,
+                icon: Icon(
+                  Icons.location_pin,
+                  size: 30,
+                  color: Colors.orangeAccent,
+                ),
+                isSubtitle: false),
+            SizedBox(height: 20.0),
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Obx(() => CustomImagePicker.previewGridImages(controller)),
+            ),
+            SizedBox(height: 20.0),
           ],
         ),
       ),

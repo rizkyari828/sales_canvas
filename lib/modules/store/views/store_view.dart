@@ -67,7 +67,9 @@ class StoreView extends GetView<StoreListController> {
                 controller.goToDetailPages(
                     id: controller.listStore[i].tokoId.toString(),
                     type: controller.listStore[i].typList.toString(),
-                    storeName: controller.listStore[i].namaToko ?? '');
+                    storeName: controller.listStore[i].namaToko ?? '',
+                    statusKunjungan:
+                        controller.listStore[i].statusKunjungan ?? '');
               },
               child: customStockExpandedCard(
                 name: controller.listStore[i].namaToko ?? '',

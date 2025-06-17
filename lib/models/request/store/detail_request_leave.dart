@@ -22,7 +22,7 @@ class ShowDetailKunjunganRequest {
 
   Map<String, dynamic> toJson() => {
         "id_toko": id,
-        "typ_list": id,
-        "user_id": id,
+        "typ_list": type,
+        "user_id": idUser,
       };
 }

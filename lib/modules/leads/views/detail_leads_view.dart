@@ -15,40 +15,70 @@ class LeadsDetailView extends GetView<LeadsDetailController> {
             child: Padding(
           padding: const EdgeInsets.all(25.0),
           child: Obx(
-            () => controller.detail.value.kodeIjin == null
-                ? CircularProgressIndicator(
-                    backgroundColor: ColorConstants.mainColor,
+            () => controller.detail.value.nama == null
+                ? Center(
+                    child: CircularProgressIndicator(
+                      backgroundColor: ColorConstants.mainColor,
+                    ),
                   )
                 : Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CommonWidget.labelExpanded(
-                          label: 'Nomor Leads',
-                          value: controller.detail.value.kodeIjin),
-                      SizedBox(height: 10.0),
-                      CommonWidget.labelExpanded(
-                          label: 'Tanggal Mulai',
-                          value: controller.detail.value.dateIn.toString() != ''
-                              ? DateFormat("EEEE, d MMMM yyyy", "id_ID")
-                                  .format(controller.detail.value.dateIn ??
-                                      DateTime.now())
-                                  .toString()
-                              : ""),
-                      SizedBox(height: 10.0),
-                      CommonWidget.labelExpanded(
-                          label: 'Tanggal Selesai',
+                          label: 'Sumber Leads',
                           value:
-                              controller.detail.value.dateOut.toString() != ''
-                                  ? DateFormat("EEEE, d MMMM yyyy", "id_ID")
-                                      .format(controller.detail.value.dateOut ??
-                                          DateTime.now())
-                                      .toString()
-                                  : ""),
-                      SizedBox(height: 20.0),
-                      CommonWidget.bodyText(text: "Keterangan"),
+                              controller.detail.value.sumberLeads.toString()),
+                      SizedBox(height: 10.0),
+                      CommonWidget.labelExpanded(
+                          label: 'Nama',
+                          value: controller.detail.value.email.toString()),
+                      SizedBox(height: 10.0),
+                      CommonWidget.labelExpanded(
+                          label: 'Email',
+                          value: controller.detail.value.email.toString()),
+                      SizedBox(height: 10.0),
+                      CommonWidget.labelExpanded(
+                          label: 'Telephone',
+                          value: controller.detail.value.telphone.toString()),
+                      // SizedBox(height: 10.0),
+                      // CommonWidget.labelExpanded(
+                      //     label: 'Alamat',
+                      //     value: controller.detail.value.alamat.toString()),
+                      SizedBox(height: 10.0),
+                      // CommonWidget.labelExpanded(
+                      //     label: 'Titik Kordinat',
+                      //     value: controller.detail.value.nama),
+                      //      SizedBox(height: 10.0),
+                      // CommonWidget.labelExpanded(
+                      //     label: 'Kategori Lead',
+                      //     value: controller.detail.value.),
+                      //      SizedBox(height: 10.0),
+                      CommonWidget.labelExpanded(
+                          label: 'Product Minat',
+                          value:
+                              controller.detail.value.productMinat.toString()),
+                      SizedBox(height: 10.0),
+                      // CommonWidget.labelExpanded(
+                      //     label: 'Status Lead',
+                      //     value: controller.detail.value.nama),
+                      // SizedBox(height: 10.0),
+                      // CommonWidget.labelExpanded(
+                      //     label: 'Catatan',
+                      //     value: controller.detail.value.catatan.toString()),
+                      // SizedBox(height: 20.0),
+                      CommonWidget.bodyText(text: "Alamat"),
                       SizedBox(height: 10.0),
                       CommonWidget.bodyText(
-                          text: controller.detail.value.keterangan ?? ''),
+                          text: controller.detail.value.alamat ?? ''),
+                      SizedBox(height: 10.0),
+                      CommonWidget.bodyText(text: "Catatan"),
+                      SizedBox(height: 10.0),
+                      CommonWidget.bodyText(
+                          text: controller.detail.value.catatan ?? ''),
+                      SizedBox(height: 10.0),
+
+                      CommonWidget.labelExpanded(
+                          label: 'Photo', value: controller.detail.value.foto),
                       SizedBox(height: 20.0),
                     ],
                   ),

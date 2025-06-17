@@ -48,7 +48,7 @@ class LeadsView extends GetView<LeadsListController> {
         itemCount: controller.list.length,
         itemBuilder: (context, i) => InkWell(
           onTap: () {
-            controller.goToDetailPages(id: controller.list[i].nama.toString());
+            controller.goToDetailPages(dataLead: controller.list[i]);
           },
           child: CustomExpandedCardView(
             name: controller.list[i].nama ?? '',

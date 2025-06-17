@@ -22,7 +22,8 @@ FutureOr<Request?> requestInterceptor(Request request) async {
 
   bool isFakeLocation = false;
   try {
-    isFakeLocation = await DetectFakeLocation().detectFakeLocation();
+    // isFakeLocation = await DetectFakeLocation().detectFakeLocation();
+    isFakeLocation = false;
   } catch (e) {
     isFakeLocation = false;
   }

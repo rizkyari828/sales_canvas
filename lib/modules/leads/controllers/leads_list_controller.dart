@@ -71,8 +71,8 @@ class LeadsListController extends GetxController {
     refreshController.refreshCompleted();
   }
 
-  void goToDetailPages({String id = ""}) {
-    Get.toNamed(Routes.DETAIL_LEADS, arguments: id);
+  void goToDetailPages({DataLead? dataLead}) {
+    Get.toNamed(Routes.DETAIL_LEADS, arguments: {'data_lead': dataLead});
   }
 
   void goToAddPages() {

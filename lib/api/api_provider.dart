@@ -347,6 +347,7 @@ class ApiProvider extends BaseProvider {
 
   Future<Response> getShowKunjungan(
       String path, ShowDetailKunjunganRequest data) {
+    print(data.toJson());
     return post(path, data.toJson());
   }
 }
