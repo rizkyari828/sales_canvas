@@ -130,7 +130,7 @@ class AddLeadsView extends GetView<LeadsController> {
                       labelText: "Status Lead",
                       onChanged: (value) async {
                         controller.statusLead.value = value;
-                         for (var f in controller.listStatusLead) {
+                        for (var f in controller.listStatusLead) {
                           if (f.nama == value) {
                             controller.statusLeadId.value = f.id.toString();
                           }

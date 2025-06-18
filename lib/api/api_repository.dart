@@ -1123,10 +1123,10 @@ class ApiRepository {
     return null;
   }
 
-  Future<MasterData2Response?> getMasterData2() async {
+  Future<MasterData2Response?> getMasterData2(String filter) async {
     try {
       final res = await apiProvider
-          .getMasterData('/api/getMaster')
+          .getMasterData('/api/getMaster?flag=' + filter)
           .timeout(Duration(seconds: timeout));
       if (res.statusCode == 200 || res.statusCode == 401) {
         return MasterData2Response.fromJson(res.body);

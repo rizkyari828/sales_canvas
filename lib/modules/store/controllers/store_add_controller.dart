@@ -80,14 +80,18 @@ class StoreAddController extends BaseController {
   }
 
   void getMasterData() async {
-    final res = await apiRepository.getMasterData2();
-    masterData.value = res!.data!;
+    masterData.clear();
+    final resListAgenda = await apiRepository.getMasterData2('status 1');
+    masterData.value = resListAgenda!.data!;
     for (var element in masterData) {
-      if (element.flag == "5") {
-        listAgenda.add(element);
-      } else if (element.flag == "6") {
-        listStatus.add(element);
-      }
+      listAgenda.add(element);
+    }
+
+    masterData.clear();
+    final resListStatus = await apiRepository.getMasterData2('status 2');
+    masterData.value = resListStatus!.data!;
+    for (var element in masterData) {
+      listStatus.add(element);
     }
   }
 

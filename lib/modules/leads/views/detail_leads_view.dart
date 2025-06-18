@@ -3,6 +3,7 @@ import 'package:sales/shared/shared.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:sales/shared/widgets/image_picker.dart';
 
 class LeadsDetailView extends GetView<LeadsDetailController> {
   final data = Get.arguments;
@@ -26,8 +27,13 @@ class LeadsDetailView extends GetView<LeadsDetailController> {
                     children: [
                       CommonWidget.labelExpanded(
                           label: 'Sumber Leads',
-                          value:
-                              controller.detail.value.sumberLeads.toString()),
+                          value: controller.detail.value.sumberLeadsId
+                                      .toString() ==
+                                  ''
+                              ? controller.detail.value.sumberLeadsValue
+                                  .toString()
+                              : controller.detail.value.sumberLeads2
+                                  .toString()),
                       SizedBox(height: 10.0),
                       CommonWidget.labelExpanded(
                           label: 'Nama',
@@ -76,9 +82,11 @@ class LeadsDetailView extends GetView<LeadsDetailController> {
                       CommonWidget.bodyText(
                           text: controller.detail.value.catatan ?? ''),
                       SizedBox(height: 10.0),
-
-                      CommonWidget.labelExpanded(
-                          label: 'Photo', value: controller.detail.value.foto),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Obx(() =>
+                            CustomImagePicker.previewGridImages(controller)),
+                      ),
                       SizedBox(height: 20.0),
                     ],
                   ),

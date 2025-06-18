@@ -101,7 +101,7 @@ class StoreView extends GetView<StoreListController> {
       padding: const EdgeInsets.only(left: 20.0, bottom: 10, top: 10),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: iconColor.withAlpha((0.2 * 255).toInt()),
           borderRadius: BorderRadius.circular(10.0),
           border: Border.all(width: 2.0, color: ColorConstants.borderColor),
         ),
@@ -112,7 +112,7 @@ class StoreView extends GetView<StoreListController> {
             children: [
               Container(
                 decoration: new BoxDecoration(
-                  color: iconColor.withAlpha((0.2 * 255).toInt()),
+                  color: Colors.white,
                   shape: BoxShape.circle,
                 ),
                 child: Padding(

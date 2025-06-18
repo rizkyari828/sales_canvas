@@ -205,16 +205,16 @@ class CustomExpandedCardView extends StatelessWidget {
                           text: firstParagraf, fontWeight: FontWeight.bold),
                   name == ''
                       ? SizedBox(height: 0)
-                      : CommonWidget.minSubtitleText(text: name),
+                      : CommonWidget.subtitleText(text: name),
                   secondParagrafValue == ''
                       ? SizedBox(height: 0)
                       : Row(
                           children: [
                             Container(
                                 width: sw * 0.2,
-                                child: CommonWidget.minSubtitleText(
+                                child: CommonWidget.subtitleText(
                                     text: secondParagrafLabel)),
-                            CommonWidget.minSubtitleText(
+                            CommonWidget.subtitleText(
                                 text: ': ' + secondParagrafValue),
                           ],
                         ),
@@ -224,15 +224,15 @@ class CustomExpandedCardView extends StatelessWidget {
                           children: [
                             Container(
                                 width: sw * 0.2,
-                                child: CommonWidget.minSubtitleText(
+                                child: CommonWidget.subtitleText(
                                     text: thirdParagrafLabel)),
-                            CommonWidget.minSubtitleText(
+                            CommonWidget.subtitleText(
                                 text: ': ' + thirdParagrafValue),
                           ],
                         ),
                   forthParagraf == ''
                       ? SizedBox(height: 0)
-                      : CommonWidget.minSubtitleText(text: forthParagraf),
+                      : CommonWidget.subtitleText(text: forthParagraf),
                 ],
               ),
             ),

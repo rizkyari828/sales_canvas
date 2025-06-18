@@ -274,17 +274,26 @@ class LeadsController extends GetxController {
   }
 
   void getMasterData() async {
-    final res = await apiRepository.getMasterData2();
-    masterData.value = res!.data!;
-
+    masterData.clear();
+    final resListLeadSource = await apiRepository.getMasterData2('Sumber Lead');
+    masterData.value = resListLeadSource!.data!;
     for (var element in masterData) {
-      if (element.flag == "9") {
-        listLeadSource.add(element);
-      } else if (element.flag == "7") {
-        listLeadCategory.add(element);
-      } else if (element.flag == "8") {
-        listStatusLead.add(element);
-      }
+      listLeadSource.add(element);
+    }
+
+    masterData.clear();
+    final resListLeadCategory =
+        await apiRepository.getMasterData2('Kategori Lead');
+    masterData.value = resListLeadCategory!.data!;
+    for (var element in masterData) {
+      listLeadCategory.add(element);
+    }
+
+    masterData.clear();
+    final resListStatusLead = await apiRepository.getMasterData2('Status Lead');
+    masterData.value = resListStatusLead!.data!;
+    for (var element in masterData) {
+      listStatusLead.add(element);
     }
   }
 

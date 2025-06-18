@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:sales/models/response/Lead/list_lead_respone.dart';
 import 'package:sales/modules/home/home_controller.dart';
 import 'package:sales/shared/shared.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -33,30 +34,41 @@ class CustomImagePicker {
     if (retrieveError != null) {
       return retrieveError;
     }
-    if (controller.imageFileList != null) {
+    if (controller.imageFileList != null && controller.imageFileList.isNotEmpty) {
       return Semantics(
-          child: GridView.count(
-              key: UniqueKey(),
-              crossAxisCount: 2,
-              crossAxisSpacing: 10.0,
-              mainAxisSpacing: 10.0,
-              shrinkWrap: true,
-              children: List.generate(
-                controller.imageFileList.length,
-                (index) {
-                  return Semantics(
-                    onTap: () {
-                      FullScreenImage();
-                    },
-                    label: 'image_picker_example_picked_image',
-                    child: kIsWeb
-                        ? Image.network(controller.imageFileList[index].path)
-                        : Image.file(
-                            File(controller.imageFileList[index].path)),
-                  );
-                },
-              )),
-          label: 'image_picker_example_picked_images');
+        child: GridView.count(
+          key: UniqueKey(),
+          crossAxisCount: 2,
+          crossAxisSpacing: 10.0,
+          mainAxisSpacing: 10.0,
+          shrinkWrap: true,
+          children: List.generate(
+            controller.imageFileList.length,
+            (index) {
+              final item = controller.imageFileList[index];
+              // Cek apakah item punya properti 'img' (dari API)
+              if (item is Foto && item.img != null && item.img!.startsWith('http')) {
+                return Semantics(
+                  label: 'image_picker_example_picked_image',
+                  child: Image.network(item.img!),
+                );
+              }
+              // Cek apakah item punya properti 'path' (dari XFile picker)
+              else if (item.path != null) {
+                return Semantics(
+                  label: 'image_picker_example_picked_image',
+                  child: kIsWeb
+                      ? Image.network(item.path)
+                      : Image.file(File(item.path)),
+                );
+              } else {
+                return const Icon(Icons.broken_image);
+              }
+            },
+          ),
+        ),
+        label: 'image_picker_example_picked_images',
+      );
     } else if (controller.pickImageError != null) {
       return Text(
         'Pick image error: ${controller.pickImageError}',

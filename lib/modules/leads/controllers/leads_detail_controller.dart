@@ -14,6 +14,8 @@ class LeadsDetailController extends GetxController {
   RxString groupName = "".obs;
   RxString groupId = "".obs;
 
+  RxList<Foto> imageFileList = (List<Foto>.of([])).obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -24,6 +26,7 @@ class LeadsDetailController extends GetxController {
     super.onReady();
     detail.value = argm['data_lead'];
     // getDetailIzin();
+    imageFileList.addAll(detail.value.foto ?? []);
     loadUsers();
   }
 
