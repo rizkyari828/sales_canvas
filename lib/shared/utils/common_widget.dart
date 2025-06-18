@@ -281,9 +281,9 @@ class CommonWidget {
             child: isSubtitle
                 ? Column(
                     children: [
-                      minHeadText(
+                      subtitleText(
                           text: text, color: color, fontWeight: fontWeight2),
-                      minHeadText(
+                      subtitleText(
                           text: text2, color: color, fontWeight: fontWeight2),
                     ],
                   )
@@ -291,11 +291,11 @@ class CommonWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      minSubtitleText(text: text, color: color),
+                      subtitleText(text: text, color: color),
                       SizedBox(
                         height: 5,
                       ),
-                      captionText(text: text2, color: color),
+                      subtitleText(text: text2, color: color),
                     ],
                   )),
       ],

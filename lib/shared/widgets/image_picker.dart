@@ -34,7 +34,8 @@ class CustomImagePicker {
     if (retrieveError != null) {
       return retrieveError;
     }
-    if (controller.imageFileList != null && controller.imageFileList.isNotEmpty) {
+    if (controller.imageFileList != null &&
+        controller.imageFileList.isNotEmpty) {
       return Semantics(
         child: GridView.count(
           key: UniqueKey(),
@@ -42,19 +43,20 @@ class CustomImagePicker {
           crossAxisSpacing: 10.0,
           mainAxisSpacing: 10.0,
           shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(), // <--- ini penting!
           children: List.generate(
             controller.imageFileList.length,
             (index) {
               final item = controller.imageFileList[index];
               // Cek apakah item punya properti 'img' (dari API)
-              if (item is Foto && item.img != null && item.img!.startsWith('http')) {
+              if (item is Foto && (item.img == null || item.img!.isEmpty)) {
+                return const Icon(Icons.broken_image);
+              } else if (item is Foto && item.img!.startsWith('http')) {
                 return Semantics(
                   label: 'image_picker_example_picked_image',
                   child: Image.network(item.img!),
                 );
-              }
-              // Cek apakah item punya properti 'path' (dari XFile picker)
-              else if (item.path != null) {
+              } else if (item.path != null) {
                 return Semantics(
                   label: 'image_picker_example_picked_image',
                   child: kIsWeb
@@ -76,7 +78,7 @@ class CustomImagePicker {
       );
     } else {
       return const Text(
-        'You have not yet picked an image.',
+        '',
         textAlign: TextAlign.center,
       );
     }

@@ -16,6 +16,8 @@ class LeadsDetailController extends GetxController {
 
   RxList<Foto> imageFileList = (List<Foto>.of([])).obs;
 
+  RxString? retrieveDataError;
+
   @override
   void onInit() {
     super.onInit();

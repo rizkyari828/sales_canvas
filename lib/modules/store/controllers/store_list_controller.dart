@@ -109,7 +109,8 @@ class StoreListController extends BaseController {
 
   void clearCachedPages({String prefix = 'cached_store_page_'}) {
     final keys = storage.getKeys();
-    final pageKeys = keys.where((k) => k.startsWith(prefix)).toList();
+    final pageKeys =
+        keys.where((k) => k is String && k.startsWith(prefix)).toList();
 
     for (final key in pageKeys) {
       storage.remove(key);

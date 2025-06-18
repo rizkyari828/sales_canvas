@@ -42,8 +42,9 @@ class StoreDetailView extends GetView<StoreDetailController> {
 
   Widget _buildViewSchedule(BuildContext context) {
     final sw = SizeConfig().screenWidth;
-    return SingleChildScrollView(
-      child: Padding(
+    return Scaffold(
+      backgroundColor: ColorConstants.lightScaffoldBackgroundColor,
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(25.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,36 +98,7 @@ class StoreDetailView extends GetView<StoreDetailController> {
                                   ]),
                             ),
                           )),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      Row(
-                        children: [
-                          CommonWidget.subtitleText(text: 'Hai, '),
-                          CommonWidget.minHeadText(
-                              text: controller.name.value,
-                              color: ColorConstants.mainColor,
-                              fontWeight: FontWeight.w500),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      textIcon(
-                          Icon(Icons.login_rounded,
-                              color: ColorConstants.mainColor),
-                          'Anda sudah absen masuk di jam ',
-                          controller.absentTime.value),
-                      controller.isAbsentOut.value
-                          ? textIcon(
-                              Icon(Icons.logout_rounded,
-                                  color: ColorConstants.mainColor),
-                              'Anda sudah absen keluar di jam ',
-                              controller.absentTimeOut.value)
-                          : SizedBox(
-                              height: 0,
-                            ),
-                      SizedBox(height: 20.0),
+                      SizedBox(height: 20),
                     ],
                   )
                 : Column(
@@ -242,23 +214,27 @@ class StoreDetailView extends GetView<StoreDetailController> {
             SizedBox(height: 10.0),
             CommonWidget.captionText(
                 text: "Maksimal melampirkan 3 Foto", color: Colors.red),
-            SizedBox(height: 20.0),
-            CustomButton(
-              buttonColor: Colors.white,
-              borderColor: controller.isConnectedToInternetWidget.value
-                  ? ColorConstants.backgroundTextField
-                  : ColorConstants.mainColor,
-              buttonTextColor: controller.isConnectedToInternetWidget.value
-                  ? ColorConstants.black
-                  : ColorConstants.mainColor,
-              isDisabled: controller.imageFileList.length < 1,
-              buttonText: controller.isConnectedToInternetWidget.value
-                  ? 'SIMPAN SEMENTARA'
-                  : 'SIMPAN KUNJUNGAN',
-              width: MediaQuery.of(context).size.width / 1.13,
-              onPressed: () => controller.submit('Kunjungan'),
-            ),
+            SizedBox(height: 90), // beri jarak agar button tidak tertutup
           ],
+        ),
+      ),
+      bottomNavigationBar: Container(
+        color: Colors.white,
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 25),
+        child: CustomButton(
+          buttonColor: Colors.white,
+          borderColor: controller.isConnectedToInternetWidget.value
+              ? ColorConstants.backgroundTextField
+              : ColorConstants.mainColor,
+          buttonTextColor: controller.isConnectedToInternetWidget.value
+              ? ColorConstants.black
+              : ColorConstants.mainColor,
+          isDisabled: controller.imageFileList.length < 1,
+          buttonText: controller.isConnectedToInternetWidget.value
+              ? 'SIMPAN SEMENTARA'
+              : 'SIMPAN KUNJUNGAN',
+          width: MediaQuery.of(context).size.width / 1.13,
+          onPressed: () => controller.submit('Kunjungan'),
         ),
       ),
     );
@@ -272,22 +248,22 @@ class StoreDetailView extends GetView<StoreDetailController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    CommonWidget.subtitleText(text: 'Hai, '),
-                    CommonWidget.minHeadText(
-                        text: controller.name.value,
-                        color: ColorConstants.mainColor,
-                        fontWeight: FontWeight.w500),
-                  ],
-                ),
-                SizedBox(height: 20.0),
-              ],
-            ),
+            // Column(
+            //   mainAxisAlignment: MainAxisAlignment.start,
+            //   crossAxisAlignment: CrossAxisAlignment.start,
+            //   children: [
+            //     Row(
+            //       children: [
+            //         CommonWidget.subtitleText(text: 'Hai, '),
+            //         CommonWidget.minHeadText(
+            //             text: controller.name.value,
+            //             color: ColorConstants.mainColor,
+            //             fontWeight: FontWeight.w500),
+            //       ],
+            //     ),
+            //     SizedBox(height: 20.0),
+            //   ],
+            // ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -371,22 +347,22 @@ class StoreDetailView extends GetView<StoreDetailController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    CommonWidget.subtitleText(text: 'Hai, '),
-                    CommonWidget.minHeadText(
-                        text: controller.name.value,
-                        color: ColorConstants.mainColor,
-                        fontWeight: FontWeight.w500),
-                  ],
-                ),
-                SizedBox(height: 20.0),
-              ],
-            ),
+            // Column(
+            //   mainAxisAlignment: MainAxisAlignment.start,
+            //   crossAxisAlignment: CrossAxisAlignment.start,
+            //   children: [
+            //     Row(
+            //       children: [
+            //         CommonWidget.subtitleText(text: 'Hai, '),
+            //         CommonWidget.minHeadText(
+            //             text: controller.name.value,
+            //             color: ColorConstants.mainColor,
+            //             fontWeight: FontWeight.w500),
+            //       ],
+            //     ),
+            //     SizedBox(height: 20.0),
+            //   ],
+            // ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -450,6 +426,16 @@ class StoreDetailView extends GetView<StoreDetailController> {
                   color: Colors.orangeAccent,
                 ),
                 isSubtitle: false),
+            SizedBox(height: 20.0),
+            CommonWidget.subtitleText(text: "Catatan"),
+            SizedBox(height: 10.0),
+            CommonWidget.subtitleText(
+                text: controller.detail.value.catatan ?? ''),
+            SizedBox(height: 10.0),
+            CommonWidget.subtitleText(text: "Rencana"),
+            SizedBox(height: 10.0),
+            CommonWidget.subtitleText(
+                text: controller.detail.value.rencana ?? ''),
             SizedBox(height: 20.0),
             Padding(
               padding: EdgeInsets.all(8.0),

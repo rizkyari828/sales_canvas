@@ -72,13 +72,14 @@ class StoreView extends GetView<StoreListController> {
                         controller.listStore[i].statusKunjungan ?? '');
               },
               child: customStockExpandedCard(
-                name: controller.listStore[i].namaToko ?? '',
-                photo: controller.listStore[i].pathToko ?? '',
-                type: controller.listStore[i].typList == '1'
-                    ? 'Kunjungan Terjadwal'
-                    : 'Kunjungan Tidak Terjadwal',
-                address: controller.listStore[i].alamatToko ?? '',
-              ),
+                  name: controller.listStore[i].namaToko ?? '',
+                  photo: controller.listStore[i].pathToko ?? '',
+                  type: controller.listStore[i].typList == '1'
+                      ? 'Kunjungan Terjadwal'
+                      : 'Kunjungan Tidak Terjadwal',
+                  address: controller.listStore[i].alamatToko ?? '',
+                  statusKunjungan:
+                      controller.listStore[i].statusKunjungan ?? ''),
             ),
           ],
         ),
@@ -146,9 +147,11 @@ class StoreView extends GetView<StoreListController> {
     String name = '',
     String type = '',
     String address = '',
+    String statusKunjungan = '',
     VoidCallback? onPressed,
   }) {
     final sh = SizeConfig().screenHeight;
+    final sw = SizeConfig().screenWidth;
     return Container(
       margin: const EdgeInsets.only(left: 15.0, right: 15.0, top: 15.0),
       height: name == '' ? sh * .15 : sh * .16,
@@ -238,9 +241,43 @@ class StoreView extends GetView<StoreListController> {
                                 text: type,
                                 // fontWeight: FontWeight.bold,
                                 color: ColorConstants.mainColor),
+                            SizedBox(
+                              height: 5,
+                            ),
                           ],
                         ),
                       ],
+                    ),
+                    Spacer(),
+                    Container(
+                      width: sw * .85,
+                      decoration: BoxDecoration(
+                        color: statusKunjungan == '1'
+                            ? Colors.green[100]
+                            : Colors.yellow[100],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: const EdgeInsets.all(5),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            statusKunjungan == '1'
+                                ? Icons.check_circle
+                                : Icons.warning_amber_rounded,
+                            color: statusKunjungan == '1'
+                                ? Colors.green
+                                : Colors.orange,
+                          ),
+                          const SizedBox(width: 10),
+                          CommonWidget.captionText(
+                            text: statusKunjungan == '1'
+                                ? 'Sudah dikunjungi'
+                                : 'Belum dikunjungi',
+                            color: ColorConstants.mainColor,
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
