@@ -1140,14 +1140,14 @@ class ApiRepository {
     return null;
   }
 
-  Future<DetailStoreResponseResponse?> showDetailKunjungan(
+  Future<DetailStoreResponse?> showDetailKunjungan(
       ShowDetailKunjunganRequest data) async {
     try {
       final res = await apiProvider
           .getShowKunjungan('/api/DetailListKampas', data)
           .timeout(Duration(seconds: timeout));
       if (res.statusCode == 200 || res.statusCode == 401) {
-        return DetailStoreResponseResponse.fromJson(res.body);
+        return DetailStoreResponse.fromJson(res.body);
       }
     } on TimeoutException catch (_) {
       EasyLoading.showError('Connection Timeout. Please try again later');
