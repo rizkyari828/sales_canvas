@@ -45,7 +45,7 @@ class AddStoreView extends GetView<StoreAddController> {
                       labelText: "Nama yang dikunjungi",
                     ),
                     SizedBox(height: 10.0),
-                    CommonWidget.bodyText(text: "Alamat"),
+                    CommonWidget.bodyText(text: "Detail Alamat"),
                     SizedBox(height: 10.0),
                     Card(
                         elevation: 0.1,
@@ -70,7 +70,7 @@ class AddStoreView extends GetView<StoreAddController> {
                       listItem: controller.listAgenda.map((item) {
                         return item.nama.toString();
                       }).toList(),
-                      labelText: "Kegiatan",
+                      labelText: "Aktivitas Kunjungan",
                       onChanged: (value) async {
                         controller.agenda.value = value;
                         controller.agendaId.value = value;
@@ -92,7 +92,7 @@ class AddStoreView extends GetView<StoreAddController> {
                       listItem: controller.listStatus.map((item) {
                         return item.nama.toString();
                       }).toList(),
-                      labelText: "Status",
+                      labelText: "Status Kunjungan",
                       onChanged: (value) async {
                         controller.status.value = value;
                         controller.statusId.value = value;

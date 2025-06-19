@@ -32,7 +32,7 @@ class AddLeadsView extends GetView<LeadsController> {
                             .toString()),
                     SizedBox(height: 10.0),
                     CommonWidget.labelExpanded(
-                        label: 'Lokasi',
+                        label: 'Lokasi dari GPS',
                         value: controller.locationDetail.value),
                     SizedBox(height: 10.0),
                     CustomDropDownSearch(
@@ -78,7 +78,7 @@ class AddLeadsView extends GetView<LeadsController> {
                       controller: controller.noHpController,
                       labelText: "Nomor Telephone",
                     ),
-                    CommonWidget.bodyText(text: "Alamat"),
+                    CommonWidget.bodyText(text: "Detail Alamat"),
                     SizedBox(height: 10.0),
                     Card(
                         elevation: 0.1,
