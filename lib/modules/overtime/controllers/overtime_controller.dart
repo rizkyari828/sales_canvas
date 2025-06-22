@@ -20,12 +20,10 @@ class OvertimeController extends GetxController {
   RxString? retrieveDataError;
 
   final ImagePicker _picker = ImagePicker();
-  final TextEditingController maxWidthController = TextEditingController();
-  final TextEditingController maxHeightController = TextEditingController();
-  final TextEditingController qualityController = TextEditingController();
-  final startDateController = TextEditingController();
-  final endDateController = TextEditingController();
+  final dateController = TextEditingController();
   final noteController = TextEditingController();
+  final startTimeController = TextEditingController();
+  final endTimeController = TextEditingController();
 
   RxString groupName = "".obs;
   RxString groupId = "".obs;
@@ -91,12 +89,12 @@ class OvertimeController extends GetxController {
   void submitData() async {
     final res = await apiRepository.submitLembur(
       SubmitLemburRequest(
-          idUser: idUser.value,
-          dateStart: startDateController.text,
-          dateEnd: endDateController.text,
-          note: noteController.text,
-          leaveTypeId: idType.value,
-          token: token.value),
+        idUser: idUser.value,
+        startTime: startTimeController.text,
+        endTime: endTimeController.text,
+        note: noteController.text,
+        date: dateController.text,
+      ),
     );
     if (res?.error == false) {
       EasyLoading.showSuccess('Berhasil disimpan');
@@ -136,26 +134,34 @@ class OvertimeController extends GetxController {
     final DateTime? selected = await showDatePicker(
       context: context,
       initialDate: selectedDate,
-      firstDate: DateTime(2010),
-      lastDate: DateTime(2025),
+      firstDate: DateTime(2024),
+      lastDate: DateTime(2028),
     );
     if (selected != null && selected != selectedDate) selectedDate = selected;
     startDate = selectedDate;
-    startDateController.text =
+    dateController.text =
         DateFormat("yyyy-MM-dd", "id_ID").format(selectedDate).toString();
   }
 
-  selectDateEnd(BuildContext context) async {
-    final DateTime? selected = await showDatePicker(
+  Future<void> selectTime(
+      BuildContext context, TextEditingController controller) async {
+    final TimeOfDay? picked = await showTimePicker(
       context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(2010),
-      lastDate: DateTime(2025),
+      initialTime: TimeOfDay.now(),
+      builder: (context, child) {
+        // Untuk memastikan tampilan 24 jam di beberapa device
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+          child: child!,
+        );
+      },
     );
-    if (selected != null && selected != selectedDate) selectedDate = selected;
-    endDate = selectedDate;
-    endDateController.text =
-        DateFormat("yyyy-MM-dd", "id_ID").format(selectedDate).toString();
+    if (picked != null) {
+      // Format ke 24 jam: HH:mm
+      final hour = picked.hour.toString().padLeft(2, '0');
+      final minute = picked.minute.toString().padLeft(2, '0');
+      controller.text = '$hour:$minute';
+    }
   }
 
   @override

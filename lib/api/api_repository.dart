@@ -1000,10 +1000,10 @@ class ApiRepository {
 
   //START LEMBUR
   Future<LemburResponse?> listLembur(
-      {int page = 1, int limit = 10, required IdRequest data}) async {
+      {int page = 1, int limit = 10, required UserIdRequest data}) async {
     try {
       final res = await apiProvider
-          .getLembur('/api/listIjin?page=' + page.toString(), data)
+          .getLembur('/api/list_lembur?page=' + page.toString(), data)
           .timeout(Duration(seconds: timeout));
       if (res.statusCode == 200 || res.statusCode == 401) {
         return LemburResponse.fromJson(res.body);
@@ -1037,7 +1037,7 @@ class ApiRepository {
   Future<ErrorResponse?> submitLembur(SubmitLemburRequest data) async {
     try {
       final res = await apiProvider
-          .submitLembur('/api/ijin', data)
+          .submitLembur('/api/simpan_lembur', data)
           .timeout(Duration(seconds: timeout));
       if (res.statusCode == 200 || res.statusCode == 401) {
         return ErrorResponse.fromJson(res.body);

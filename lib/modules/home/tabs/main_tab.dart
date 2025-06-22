@@ -16,6 +16,7 @@ class MainTab extends GetView<HomeController> {
   Widget build(BuildContext context) {
     double scaleWidth = MediaQuery.of(context).size.width / 360;
     controller.context = context;
+    controller.showMoodDialogOncePerDay(context);
     return Obx(() => Scaffold(
         floatingActionButton: controller.isConnectedToInternetWidget.value
             ? Padding(

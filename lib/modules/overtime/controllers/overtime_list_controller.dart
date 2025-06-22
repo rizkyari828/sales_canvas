@@ -1,5 +1,6 @@
 import 'package:sales/api/api_repository.dart';
 import 'package:sales/models/request/id_request.dart';
+import 'package:sales/models/request/user_id_request.dart';
 import 'package:sales/models/response/lembur/list_lembur.dart';
 import 'package:sales/routes/app_pages.dart';
 import 'package:get/get.dart';
@@ -57,7 +58,7 @@ class OvertimeListController extends GetxController {
 
   void getLembur(page) async {
     final res = await apiRepository.listLembur(
-        page: page, data: IdRequest(id: userId.value, token: token.value));
+        page: page, data: UserIdRequest(id: userId.value));
     listLembur.addAll(res?.data ?? []);
   }
 

@@ -18,7 +18,7 @@ class OvertimeView extends GetView<OvertimeListController> {
                   ),
           centerTitle: false,
           title: Text(
-            'List Overtime',
+            'List Lembur',
             style: TextStyle(
               color: ColorConstants.black,
               fontWeight: FontWeight.w600,
@@ -49,23 +49,21 @@ class OvertimeView extends GetView<OvertimeListController> {
         itemBuilder: (context, i) => InkWell(
           onTap: () {
             controller.goToDetailPages(
-                id: controller.listLembur[i].id.toString());
+                // id: controller.listLembur[i].id.toString());
+                id: '1');
           },
           child: CustomExpandedCardView(
-            name:
-                '${DateFormat("EEEE, d MMMM yyyy", "id_ID").format(controller.listLembur[i].cDate ?? DateTime.now())}',
-            firstParagraf: controller.listLembur[i].kodeIjin ?? '',
+            name: 'Dummy Name',
+            firstParagraf:
+                '${DateFormat("EEEE, d MMMM yyyy", "id_ID").format(controller.listLembur[i].tanggalLembur ?? DateTime.now())}',
             secondParagrafLabel: "Mulai",
-            secondParagrafValue:
-                '${DateFormat("EEEE, d MMMM yyyy", "id_ID").format(controller.listLembur[i].dateIn ?? DateTime.now())}',
+            secondParagrafValue: controller.listLembur[i].jamIn ?? '',
             thirdParagrafLabel: "Selesai",
-            thirdParagrafValue:
-                '${DateFormat("EEEE, d MMMM yyyy", "id_ID").format(controller.listLembur[i].dateOut ?? DateTime.now())}',
-            forthParagraf: controller.listLembur[i].keterangan ?? '',
-            // approval:
-            //     controller.listLembur[i].statusLabel == 'Waiting for approval'
-            //         ? 'Waiting'
-            //         : controller.listLembur[i].statusLabel ?? '',
+            thirdParagrafValue: controller.listLembur[i].jamOut ?? '',
+            forthParagraf: controller.listLembur[i].statusLembur ?? '',
+            approval: controller.listLembur[i].statusLembur == 'pengajuan'
+                ? 'Waiting'
+                : controller.listLembur[i].statusLembur ?? '',
           ),
         ),
       ),

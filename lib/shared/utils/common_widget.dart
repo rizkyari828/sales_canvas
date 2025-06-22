@@ -134,15 +134,18 @@ class CommonWidget {
   static Text minSubtitleText(
       {String text = "",
       Color color = ColorConstants.black,
-      FontWeight fontWeight = FontWeight.normal}) {
+      FontWeight fontWeight = FontWeight.normal,
+      textAlign = TextAlign.start}) {
     return Text(
       text,
+      textAlign: textAlign,
       style: TextStyle(
-          color: color,
-          fontWeight: fontWeight,
-          fontSize: 12,
-          letterSpacing: 0.15,
-          fontFamily: 'Poppins'),
+        color: color,
+        fontWeight: fontWeight,
+        fontSize: 12,
+        letterSpacing: 0.15,
+        fontFamily: 'Poppins',
+      ),
     );
   }
 

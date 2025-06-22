@@ -283,7 +283,7 @@ class ApiProvider extends BaseProvider {
   }
 
   //START IZIN
-  Future<Response> getLembur(String path, IdRequest data) {
+  Future<Response> getLembur(String path, UserIdRequest data) {
     return post(path, data.toJson());
   }
 
@@ -296,6 +296,7 @@ class ApiProvider extends BaseProvider {
   }
 
   Future<Response> submitLembur(String path, SubmitLemburRequest data) {
+    print(data.toJson());
     return post(path, data.toJson());
   }
 

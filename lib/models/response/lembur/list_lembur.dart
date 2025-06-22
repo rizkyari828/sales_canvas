@@ -4,84 +4,62 @@
 
 import 'dart:convert';
 
-LemburResponse lemburResponseFromJson(String str) =>
-    LemburResponse.fromJson(json.decode(str));
+LemburResponse lemburResponseFromJson(String str) => LemburResponse.fromJson(json.decode(str));
 
 String lemburResponseToJson(LemburResponse data) => json.encode(data.toJson());
 
 class LemburResponse {
-  LemburResponse({
-    this.status,
-    this.message,
-    this.error,
-    this.data,
-  });
+    String? status;
+    String? message;
+    bool? error;
+    List<DataLembur>? data;
 
-  String? status;
-  String? message;
-  bool? error;
-  List<DataLembur>? data;
+    LemburResponse({
+        this.status,
+        this.message,
+        this.error,
+        this.data,
+    });
 
-  factory LemburResponse.fromJson(Map<String, dynamic> json) => LemburResponse(
-        status: json["status"] == null ? null : json["status"],
-        message: json["message"] == null ? null : json["message"],
-        error: json["error"] == null ? null : json["error"],
-        data: json["Data"] == null
-            ? null
-            : List<DataLembur>.from(
-                json["Data"].map((x) => DataLembur.fromJson(x))),
-      );
+    factory LemburResponse.fromJson(Map<String, dynamic> json) => LemburResponse(
+        status: json["status"],
+        message: json["message"],
+        error: json["error"],
+        data: json["Data"] == null ? [] : List<DataLembur>.from(json["Data"]!.map((x) => DataLembur.fromJson(x))),
+    );
 
-  Map<String, dynamic> toJson() => {
-        "status": status == null ? null : status,
-        "message": message == null ? null : message,
-        "error": error == null ? null : error,
-        "Data": data == null
-            ? null
-            : List<dynamic>.from(data!.map((x) => x.toJson())),
-      };
+    Map<String, dynamic> toJson() => {
+        "status": status,
+        "message": message,
+        "error": error,
+        "Data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
+    };
 }
 
 class DataLembur {
-  DataLembur({
-    this.id,
-    this.kodeIjin,
-    this.dateIn,
-    this.dateOut,
-    this.keterangan,
-    this.cDate,
-  });
+    DateTime? tanggalLembur;
+    String? jamIn;
+    String? jamOut;
+    String? statusLembur;
 
-  int? id;
-  String? kodeIjin;
-  DateTime? dateIn;
-  DateTime? dateOut;
-  DateTime? cDate;
-  String? keterangan;
+    DataLembur({
+        this.tanggalLembur,
+        this.jamIn,
+        this.jamOut,
+        this.statusLembur,
+    });
 
-  factory DataLembur.fromJson(Map<String, dynamic> json) => DataLembur(
-        id: json["id"] == null ? null : json["id"],
-        kodeIjin: json["kode_ijin"] == null ? null : json["kode_ijin"],
-        dateIn:
-            json["date_in"] == null ? null : DateTime.parse(json["date_in"]),
-        dateOut:
-            json["date_out"] == null ? null : DateTime.parse(json["date_out"]),
-        cDate: json["c_date"] == null ? null : DateTime.parse(json["c_date"]),
-        keterangan: json["keterangan"] == null ? null : json["keterangan"],
-      );
+    factory DataLembur.fromJson(Map<String, dynamic> json) => DataLembur(
+        tanggalLembur: json["tanggal_lembur"] == null ? null : DateTime.parse(json["tanggal_lembur"]),
+        jamIn: json["jam_in"],
+        jamOut: json["jam_out"],
+        statusLembur: json["status_lembur"],
+    );
 
-  Map<String, dynamic> toJson() => {
-        "id": id == null ? null : id,
-        "kode_ijin": kodeIjin == null ? null : kodeIjin,
-        "date_in": dateIn == null
-            ? null
-            : "${dateIn?.year.toString().padLeft(4, '0')}-${dateIn?.month.toString().padLeft(2, '0')}-${dateIn?.day.toString().padLeft(2, '0')}",
-        "date_out": dateOut == null
-            ? null
-            : "${dateOut?.year.toString().padLeft(4, '0')}-${dateOut?.month.toString().padLeft(2, '0')}-${dateOut?.day.toString().padLeft(2, '0')}",
-        "c_date": cDate == null
-            ? null
-            : "${cDate?.year.toString().padLeft(4, '0')}-${cDate?.month.toString().padLeft(2, '0')}-${cDate?.day.toString().padLeft(2, '0')}",
-        "keterangan": keterangan == null ? null : keterangan,
-      };
+    Map<String, dynamic> toJson() => {
+        "tanggal_lembur": "${tanggalLembur!.year.toString().padLeft(4, '0')}-${tanggalLembur!.month.toString().padLeft(2, '0')}-${tanggalLembur!.day.toString().padLeft(2, '0')}",
+        "jam_in": jamIn,
+        "jam_out": jamOut,
+        "status_lembur": statusLembur,
+    };
 }

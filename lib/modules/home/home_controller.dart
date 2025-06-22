@@ -895,6 +895,114 @@ class HomeController extends BaseController {
     Get.toNamed(Routes.ADD_LEAVE);
   }
 
+  void showMoodDialog(BuildContext context, Function(String mood) onSelected) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          title: Center(
+            child: CommonWidget.subtitleText(
+              text:
+                  'Sebelum mulai hari ini, beri tahu kamu bagaimana perasaan mu!',
+              color: ColorConstants.black,
+              textAlign: TextAlign.center,
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _moodIcon(context, 'Sangat Senang',
+                      Icons.sentiment_very_satisfied, Colors.green, onSelected),
+                  _moodIcon(context, 'Cukup Baik', Icons.sentiment_satisfied,
+                      Colors.lightGreen, onSelected),
+                ],
+              ),
+              SizedBox(height: 12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _moodIcon(context, 'Biasa Saja', Icons.sentiment_neutral,
+                      Colors.amber, onSelected),
+                  _moodIcon(context, 'Sedikit Lelah',
+                      Icons.sentiment_dissatisfied, Colors.orange, onSelected),
+                  // _moodIcon(
+                  //     context,
+                  //     'Tidak Senang',
+                  //     Icons.sentiment_very_dissatisfied,
+                  //     Colors.red,
+                  //     onSelected),
+                ],
+              ),
+              SizedBox(height: 12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _moodIcon(
+                      context,
+                      'Kurang bersemangat',
+                      Icons.sentiment_very_dissatisfied,
+                      Colors.red,
+                      onSelected),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _moodIcon(BuildContext context, String label, IconData icon,
+      Color color, Function(String) onSelected) {
+    return Container(
+      width: SizeConfig().screenWidth * .30,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        border: Border.all(width: 2.0, color: ColorConstants.borderColor),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              icon: Icon(icon, color: color, size: 36),
+              onPressed: () {
+                Navigator.of(context).pop();
+                onSelected(label);
+              },
+            ),
+            CommonWidget.minSubtitleText(
+                text: label,
+                color: ColorConstants.black,
+                textAlign: TextAlign.center)
+          ],
+        ),
+      ),
+    );
+  }
+
+  void showMoodDialogOncePerDay(BuildContext context) async {
+    final storage = GetStorage();
+    final today = DateTime.now().toIso8601String().substring(0, 10);
+    final lastShown = storage.read('lastMoodDialogDate');
+    // if (lastShown != today) {
+    //   // Tampilkan dialog
+    //   Future.delayed(Duration.zero, () {
+    //     showMoodDialog(context, (selectedMood) {
+    //       // Simpan mood jika perlu
+    //       print('Mood dipilih: $selectedMood');
+    //     });
+    //   });
+    //   // Simpan tanggal hari ini agar tidak muncul lagi hari ini
+    //   storage.write('lastMoodDialogDate', today);
+    // }
+  }
+
   @override
   void onClose() {
     super.onClose();

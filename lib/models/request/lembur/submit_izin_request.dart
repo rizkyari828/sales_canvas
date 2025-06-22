@@ -13,36 +13,32 @@ String submitLemburRequestToJson(SubmitLemburRequest data) =>
 class SubmitLemburRequest {
   SubmitLemburRequest({
     this.idUser,
-    this.leaveTypeId,
-    this.dateStart,
-    this.dateEnd,
+    this.date,
+    this.startTime,
+    this.endTime,
     this.note,
-    this.token,
   });
 
   String? idUser;
-  String? leaveTypeId;
-  String? dateStart;
-  String? dateEnd;
+  String? date;
+  String? startTime;
+  String? endTime;
   String? note;
-  String? token;
 
   factory SubmitLemburRequest.fromJson(Map<String, dynamic> json) =>
       SubmitLemburRequest(
-        idUser: json["id_user"],
-        leaveTypeId: json["type_ijin"],
-        dateStart: json["date_in"],
-        dateEnd: json["date_out"],
-        note: json["keterangan"],
-        token: json["token"],
+        idUser: json["user_id"],
+        date: json["tanggal_lembur"],
+        startTime: json["jam_in"],
+        endTime: json["jam_out"],
+        note: json["keperluan"],
       );
 
   Map<String, dynamic> toJson() => {
-        'id_user': idUser,
-        "type_ijin": leaveTypeId,
-        "date_in": dateStart,
-        "date_out": dateEnd,
-        "keterangan": note,
-        "token": token,
+        'user_id': idUser,
+        "tanggal_lembur": date,
+        "jam_in": startTime,
+        "jam_out": endTime,
+        "keperluan": note,
       };
 }

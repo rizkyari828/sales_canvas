@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:sales/modules/overtime/controllers/overtime_controller.dart';
 import 'package:sales/shared/constants/colors.dart';
 import 'package:sales/shared/utils/utils.dart';
@@ -20,28 +21,39 @@ class AddOvertimeView extends GetView<OvertimeController> {
             child: Obx(() => Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // CommonWidget.labelExpanded(
-                    //     label: 'Tanggal Pengajuan',
-                    //     value: DateFormat("EEEE, d MMMM yyyy", "id_ID")
-                    //         .format(DateTime.now())
-                    //         .toString()),
+                    CommonWidget.labelExpanded(
+                        label: 'Tanggal Pengajuan',
+                        value: DateFormat("EEEE, d MMMM yyyy", "id_ID")
+                            .format(DateTime.now())
+                            .toString()),
                     SizedBox(height: 10.0),
                     InputInputField(
                       isSuffixIcon: true,
                       suffixIcon: Icon(Icons.calendar_today_rounded),
-                      controller: controller.startDateController,
-                      labelText: "Tanggal Mulai",
+                      controller: controller.dateController,
+                      labelText: "Tanggal Lembur",
                       onSuffixPressed: () {
                         controller.selectDateStart(context);
                       },
                     ),
                     InputInputField(
                       isSuffixIcon: true,
-                      suffixIcon: Icon(Icons.calendar_today_rounded),
-                      controller: controller.endDateController,
-                      labelText: "Tanggal Selesai",
+                      suffixIcon: Icon(Icons.access_time),
+                      controller: controller.startTimeController,
+                      labelText: "Jam Mulai",
                       onSuffixPressed: () {
-                        controller.selectDateEnd(context);
+                        controller.selectTime(
+                            context, controller.startTimeController);
+                      },
+                    ),
+                    InputInputField(
+                      isSuffixIcon: true,
+                      suffixIcon: Icon(Icons.access_time),
+                      controller: controller.endTimeController,
+                      labelText: "Jam Selesai",
+                      onSuffixPressed: () {
+                        controller.selectTime(
+                            context, controller.endTimeController);
                       },
                     ),
                     controller.validationDate.value != ""
@@ -50,22 +62,7 @@ class AddOvertimeView extends GetView<OvertimeController> {
                             color: Colors.red)
                         : SizedBox(height: 0),
                     SizedBox(height: 10.0),
-                    // CustomDropDownSearch(
-                    //   listItem: controller.listType.map((item) {
-                    //     return item.keterangan;
-                    //   }).toList(),
-                    //   labelText: "Type Overtime",
-                    //   onChanged: (value) async {
-                    //     // controller.nameItem.value = value;
-                    //     for (var f in controller.listType) {
-                    //       if (f.keterangan == value) {
-                    //         controller.idType.value = f.id.toString();
-                    //       }
-                    //     }
-                    //   },
-                    // ),
-                    // SizedBox(height: 10.0),
-                    CommonWidget.bodyText(text: "Info Overtime"),
+                    CommonWidget.bodyText(text: "Keperluan"),
                     SizedBox(height: 10.0),
                     Card(
                         elevation: 0.1,

@@ -114,8 +114,8 @@ class InputController extends GetxController {
     final DateTime? selected = await showDatePicker(
       context: context,
       initialDate: selectedDate,
-      firstDate: DateTime(2010),
-      lastDate: DateTime(2025),
+      firstDate: DateTime(2024),
+      lastDate: DateTime(2028),
     );
     if (selected != null && selected != selectedDate) selectedDate = selected;
     startDate = selectedDate;
@@ -127,8 +127,8 @@ class InputController extends GetxController {
     final DateTime? selected = await showDatePicker(
       context: context,
       initialDate: selectedDate,
-      firstDate: DateTime(2010),
-      lastDate: DateTime(2025),
+      firstDate: DateTime(2024),
+      lastDate: DateTime(2028),
     );
     if (selected != null && selected != selectedDate) selectedDate = selected;
     endDate = selectedDate;
