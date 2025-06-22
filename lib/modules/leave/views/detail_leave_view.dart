@@ -51,9 +51,15 @@ class LeaveDetailView extends GetView<LeaveDetailController> {
                       CommonWidget.bodyText(
                           text: controller.detail.value.keterangan ?? ''),
                       SizedBox(height: 20.0),
-                      SizedBox(height: 50.0),
-                      Obx(() =>
-                          ApprovalFlow.buttonApproval(controller, "1", "1")),
+                      controller.tipeUser.value == '1'
+                          ? Column(
+                              children: [
+                                SizedBox(height: 50.0),
+                                Obx(() => ApprovalFlow.buttonApproval(
+                                    controller, "1", "1")),
+                              ],
+                            )
+                          : Container(),
                     ],
                   ),
           ),

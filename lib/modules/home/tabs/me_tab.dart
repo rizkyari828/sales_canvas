@@ -171,7 +171,7 @@ class MeTab extends GetView<HomeController> {
                   controller.idPegawai.value),
               SizedBox(height: 20),
               listCard(
-                  Icons.type_specimen_rounded, 'Tipe', controller.tipe.value),
+                  Icons.type_specimen_rounded, 'Tipe', controller.tipeUser.value),
               SizedBox(height: 20),
             ],
           )),

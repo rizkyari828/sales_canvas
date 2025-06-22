@@ -25,7 +25,7 @@ class MainTab extends GetView<HomeController> {
               )
             : SizedBox(),
         backgroundColor: ColorConstants.lightScaffoldBackgroundColor,
-        body: controller.tipe.value == '1'
+        body: controller.tipeUser.value == '1'
             ? _buildGridView(scaleWidth, context, controller)
             : _getItems(controller, context)));
   }
@@ -36,7 +36,7 @@ class MainTab extends GetView<HomeController> {
     return SingleChildScrollView(
       child: Stack(
         children: [
-          controller.tipe.value == "1"
+          controller.tipeUser.value == "1"
               ? Container(
                   margin:
                       EdgeInsets.only(left: sw * .04, right: sw * .04, top: 0),

@@ -1,14 +1,15 @@
 import 'package:sales/api/api_repository.dart';
 import 'package:sales/models/request/id_request.dart';
 import 'package:sales/models/response/izin/list_izin.dart';
+import 'package:sales/modules/home/base_controller.dart';
 import 'package:sales/routes/app_pages.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LeaveListController extends GetxController {
-  final ApiRepository apiRepository;
-  LeaveListController({required this.apiRepository});
+class LeaveListController extends BaseController {
+  LeaveListController({required ApiRepository apiRepository})
+      : super(apiRepository: apiRepository);
 
   var listIzin = <DataIzin>[].obs;
   RxString groupName = "".obs;

@@ -17,7 +17,7 @@ class HomeScreen extends GetView<HomeController> {
   Widget _buildWidget() {
     return Scaffold(
       body: Center(
-        child: controller.tipe.value == "1"
+        child: controller.tipeUser.value == "1"
             ? _buildContent(controller.currentTab.value)
             : _buildContentTipe2(controller.currentTab.value),
       ),

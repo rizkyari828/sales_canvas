@@ -62,6 +62,7 @@ class LeaveView extends GetView<LeaveListController> {
             thirdParagrafValue:
                 '${DateFormat("EEEE, d MMMM yyyy", "id_ID").format(controller.listIzin[i].dateOut ?? DateTime.now())}',
             forthParagraf: controller.listIzin[i].keterangan ?? '',
+            approval: controller.tipeUser.value == '1' ? '' : 'Waiting',
             // approval:
             //     controller.listIzin[i].statusLabel == 'Waiting for approval'
             //         ? 'Waiting'

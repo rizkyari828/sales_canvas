@@ -4,11 +4,12 @@ import 'package:sales/models/request/izin/update_approval_request.dart';
 import 'package:sales/models/response/izin/show_izin.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sales/modules/home/base_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LeaveDetailController extends GetxController {
-  final ApiRepository apiRepository;
-  LeaveDetailController({required this.apiRepository});
+class LeaveDetailController extends BaseController {
+  LeaveDetailController({required ApiRepository apiRepository})
+      : super(apiRepository: apiRepository);
 
   final argm = Get.arguments;
   var detail = DataIzin().obs;

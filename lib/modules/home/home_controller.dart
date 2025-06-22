@@ -66,13 +66,7 @@ class HomeController extends BaseController {
   RxString dateNow =
       DateFormat("dd MMMM yyyy", "id_ID").format(DateTime.now()).toString().obs;
 
-  RxString name = "".obs;
-  RxString idPegawai = "".obs;
-  RxString userId = "".obs;
-  RxString profilePhoto = "".obs;
-  RxString username = "".obs;
-  RxString token = "".obs;
-  RxString tipe = "".obs;
+
   RxBool showRateDialog = false.obs;
   RxBool isConnectedToInternet = true.obs;
   RxBool isConnectedToInternetWidget = false.obs;
@@ -141,7 +135,6 @@ class HomeController extends BaseController {
     super.onInit();
     // getReviewRate();
     mainTab = MainTab();
-    loadUsers();
     discoverTab = DiscoverTab();
     meTab = MeTab();
 
@@ -215,17 +208,6 @@ class HomeController extends BaseController {
     });
   }
 
-  loadUsers() async {
-    var prefs = Get.find<SharedPreferences>();
-    name.value = prefs.getString('name') ?? "";
-    idPegawai.value = prefs.getString('idPegawai') ?? "";
-    userId.value = prefs.getString('userId') ?? "";
-    profilePhoto.value = prefs.getString('profilePhoto') ?? "";
-    username.value = prefs.getString('username') ?? "";
-    token.value = prefs.getString('token') ?? "";
-    userId.value = prefs.getString('userId') ?? "";
-    tipe.value = prefs.getString('tipe') ?? "";
-  }
 
   void signout() async {
     EasyLoading.show(status: 'loading..');
@@ -319,7 +301,7 @@ class HomeController extends BaseController {
   }
 
   void switchTab(index) {
-    if (tipe.value == '1') {
+    if (tipeUser.value == '1') {
       var tab = _getCurrentTab(index);
       currentTab.value = tab;
     } else {
@@ -329,7 +311,7 @@ class HomeController extends BaseController {
   }
 
   int getCurrentIndex(MainTabs tab) {
-    if (tipe.value == "1") {
+    if (tipeUser.value == "1") {
       switch (tab) {
         case MainTabs.home:
           return 0;

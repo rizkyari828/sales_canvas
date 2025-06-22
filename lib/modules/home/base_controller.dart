@@ -12,6 +12,7 @@ import 'package:sales/shared/constants/colors.dart';
 import 'package:sales/shared/utils/common_widget.dart';
 import 'package:sales/shared/utils/size_config.dart';
 import 'package:flutter_network_monitor/flutter_network_monitor.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BaseController extends GetxController {
   final ApiRepository apiRepository;
@@ -25,6 +26,14 @@ class BaseController extends GetxController {
   ConnectionQuality quality = ConnectionQuality.moderate;
 
   RxString qualityNetwork = "".obs;
+
+  RxString name = "".obs;
+  RxString idPegawai = "".obs;
+  RxString userId = "".obs;
+  RxString profilePhoto = "".obs;
+  RxString username = "".obs;
+  RxString token = "".obs;
+  RxString tipeUser = "".obs;
 
   @override
   void onInit() async {
@@ -46,6 +55,7 @@ class BaseController extends GetxController {
         _checkDownloadSpeed();
       });
     }
+    loadUsers();
   }
 
   final speedTest = SpeedTest();
@@ -288,6 +298,18 @@ class BaseController extends GetxController {
     final dataList = storage.read<List<dynamic>>('pendingAttendance');
     if (dataList == null) return 0;
     return dataList.length;
+  }
+
+  loadUsers() async {
+    var prefs = Get.find<SharedPreferences>();
+    name.value = prefs.getString('name') ?? "";
+    idPegawai.value = prefs.getString('idPegawai') ?? "";
+    userId.value = prefs.getString('userId') ?? "";
+    profilePhoto.value = prefs.getString('profilePhoto') ?? "";
+    username.value = prefs.getString('username') ?? "";
+    token.value = prefs.getString('token') ?? "";
+    userId.value = prefs.getString('userId') ?? "";
+    tipeUser.value = prefs.getString('tipe') ?? "";
   }
 
   @override
