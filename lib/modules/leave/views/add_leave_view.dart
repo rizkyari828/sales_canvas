@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:sales/modules/leave/controllers/leave_controller.dart';
 import 'package:sales/shared/constants/colors.dart';
 import 'package:sales/shared/utils/utils.dart';
@@ -13,18 +14,18 @@ class AddLeaveView extends GetView<LeaveController> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: CommonWidget.appBar(title: 'Info Leave'),
+        appBar: CommonWidget.appBar(title: 'Info Cuti'),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(25.0),
             child: Obx(() => Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // CommonWidget.labelExpanded(
-                    //     label: 'Tanggal Pengajuan',
-                    //     value: DateFormat("EEEE, d MMMM yyyy", "id_ID")
-                    //         .format(DateTime.now())
-                    //         .toString()),
+                    CommonWidget.labelExpanded(
+                        label: 'Tanggal Pengajuan',
+                        value: DateFormat("EEEE, d MMMM yyyy", "id_ID")
+                            .format(DateTime.now())
+                            .toString()),
                     SizedBox(height: 10.0),
                     InputInputField(
                       isSuffixIcon: true,
@@ -65,7 +66,7 @@ class AddLeaveView extends GetView<LeaveController> {
                     //   },
                     // ),
                     // SizedBox(height: 10.0),
-                    CommonWidget.bodyText(text: "Info Leave"),
+                    CommonWidget.bodyText(text: "Info Cuti"),
                     SizedBox(height: 10.0),
                     Card(
                         elevation: 0.1,
