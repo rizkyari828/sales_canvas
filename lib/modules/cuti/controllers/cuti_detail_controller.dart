@@ -1,17 +1,19 @@
 import 'package:sales/api/api_repository.dart';
+import 'package:sales/models/request/cuti_sales/detail_request_cuti.dart';
+import 'package:sales/models/request/cuti_sales/update_approval_request.dart';
 import 'package:sales/models/request/lembur/detail_request_lembur.dart';
 import 'package:sales/models/request/lembur/update_approval_request.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sales/models/response/lembur/show_lembur.dart';
+import 'package:sales/models/response/cuti_sales/show_cuti_sales.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class OvertimeDetailController extends GetxController {
+class CutiDetailController extends GetxController {
   final ApiRepository apiRepository;
-  OvertimeDetailController({required this.apiRepository});
+  CutiDetailController({required this.apiRepository});
 
   final argm = Get.arguments;
-  var detail = ShowDataLembur().obs;
+  var detail = ShowDataCutiSales().obs;
   String date = "";
   DateTime selectedDate = DateTime.now();
   final noRequestController = TextEditingController();
@@ -34,7 +36,7 @@ class OvertimeDetailController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    getDetailLembur();
+    getDetailCuti();
     loadUsers();
   }
 
@@ -44,7 +46,7 @@ class OvertimeDetailController extends GetxController {
   }
 
   Future<void> onRefresh() async {
-    getDetailLembur();
+    getDetailCuti();
     // getItemCnC();
     loadUsers();
   }
@@ -55,9 +57,9 @@ class OvertimeDetailController extends GetxController {
     groupId.value = prefs.getString('groupId') ?? "";
   }
 
-  void getDetailLembur() async {
-    final res =
-        await apiRepository.showLembur(ShowLemburRequest(id: argm.toString()));
+  void getDetailCuti() async {
+    final res = await apiRepository
+        .showCutiSales(ShowCutiSalesRequest(id: argm.toString()));
     print(res!.data!);
     detail.value = res.data!.first;
   }
@@ -65,9 +67,9 @@ class OvertimeDetailController extends GetxController {
   void approval({
     action = "reject",
   }) async {
-    final res = await apiRepository.updateApprovalLembur(
+    final res = await apiRepository.updateApprovalCutiSales(
         detail.value.idLembur.toString(),
-        UpdateApprovalLemburRequest(
+        UpdateApprovalCutiSalesRequest(
           action: action,
           noteApproval: noteApprovalController.text,
         ));

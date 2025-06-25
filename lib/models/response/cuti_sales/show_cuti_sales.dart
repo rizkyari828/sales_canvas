@@ -1,31 +1,31 @@
 // To parse this JSON data, do
 //
-//     final showLemburResponse = showLemburResponseFromJson(jsonString);
+//     final showCutiSalesResponse = showCutiSalesResponseFromJson(jsonString);
 
 import 'dart:convert';
 
-ShowLemburResponse showLemburResponseFromJson(String str) => ShowLemburResponse.fromJson(json.decode(str));
+ShowCutiSalesResponse showCutiSalesResponseFromJson(String str) => ShowCutiSalesResponse.fromJson(json.decode(str));
 
-String showLemburResponseToJson(ShowLemburResponse data) => json.encode(data.toJson());
+String showCutiSalesResponseToJson(ShowCutiSalesResponse data) => json.encode(data.toJson());
 
-class ShowLemburResponse {
+class ShowCutiSalesResponse {
     String? status;
     String? message;
     bool? error;
-    List<ShowDataLembur>? data;
+    List<ShowDataCutiSales>? data;
 
-    ShowLemburResponse({
+    ShowCutiSalesResponse({
         this.status,
         this.message,
         this.error,
         this.data,
     });
 
-    factory ShowLemburResponse.fromJson(Map<String, dynamic> json) => ShowLemburResponse(
+    factory ShowCutiSalesResponse.fromJson(Map<String, dynamic> json) => ShowCutiSalesResponse(
         status: json["status"],
         message: json["message"],
         error: json["error"],
-        data: json["Data"] == null ? [] : List<ShowDataLembur>.from(json["Data"]!.map((x) => ShowDataLembur.fromJson(x))),
+        data: json["Data"] == null ? [] : List<ShowDataCutiSales>.from(json["Data"]!.map((x) => ShowDataCutiSales.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -36,14 +36,14 @@ class ShowLemburResponse {
     };
 }
 
-class ShowDataLembur {
+class ShowDataCutiSales {
     DateTime? tanggalLembur;
     String? jamIn;
     String? jamOut;
     String? statusLembur;
     int? idLembur;
 
-    ShowDataLembur({
+    ShowDataCutiSales({
         this.tanggalLembur,
         this.jamIn,
         this.jamOut,
@@ -51,7 +51,7 @@ class ShowDataLembur {
         this.idLembur,
     });
 
-    factory ShowDataLembur.fromJson(Map<String, dynamic> json) => ShowDataLembur(
+    factory ShowDataCutiSales.fromJson(Map<String, dynamic> json) => ShowDataCutiSales(
         tanggalLembur: json["tanggal_lembur"] == null ? null : DateTime.parse(json["tanggal_lembur"]),
         jamIn: json["jam_in"],
         jamOut: json["jam_out"],

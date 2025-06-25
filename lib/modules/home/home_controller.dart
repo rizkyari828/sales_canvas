@@ -66,7 +66,6 @@ class HomeController extends BaseController {
   RxString dateNow =
       DateFormat("dd MMMM yyyy", "id_ID").format(DateTime.now()).toString().obs;
 
-
   RxBool showRateDialog = false.obs;
   RxBool isConnectedToInternet = true.obs;
   RxBool isConnectedToInternetWidget = false.obs;
@@ -207,7 +206,6 @@ class HomeController extends BaseController {
               ));
     });
   }
-
 
   void signout() async {
     EasyLoading.show(status: 'loading..');
@@ -523,6 +521,10 @@ class HomeController extends BaseController {
 
   void goToOvertimePages() {
     Get.toNamed(Routes.OVERTIME);
+  }
+
+  void goToCutiPages() {
+    Get.toNamed(Routes.CUTI);
   }
 
   void goToLeadsPages() {

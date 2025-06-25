@@ -1,4 +1,4 @@
-import 'package:sales/modules/overtime/controllers/overtime_list_controller.dart';
+import 'package:sales/modules/cuti/controllers/cuti_list_controller.dart';
 import 'package:sales/shared/constants/constants.dart';
 import 'package:sales/shared/widgets/approval.dart';
 import 'package:sales/shared/widgets/custom_card.dart';
@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class OvertimeView extends GetView<OvertimeListController> {
+class CutiView extends GetView<CutiListController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +18,7 @@ class OvertimeView extends GetView<OvertimeListController> {
                   ),
           centerTitle: false,
           title: Text(
-            'List Lembur',
+            'List Cuti',
             style: TextStyle(
               color: ColorConstants.black,
               fontWeight: FontWeight.w600,
@@ -36,7 +36,7 @@ class OvertimeView extends GetView<OvertimeListController> {
         body: Obx(() => _getItems(controller)));
   }
 
-  SmartRefresher _getItems(OvertimeListController controller) {
+  SmartRefresher _getItems(CutiListController controller) {
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: true,
@@ -45,24 +45,26 @@ class OvertimeView extends GetView<OvertimeListController> {
       onRefresh: controller.onRefresh,
       onLoading: controller.onLoading,
       child: ListView.builder(
-        itemCount: controller.listLembur.length,
+        itemCount: controller.listCuti.length,
         itemBuilder: (context, i) => InkWell(
           onTap: () {
             controller.goToDetailPages(
-                id: controller.listLembur[i].idLembur.toString());
+                id: controller.listCuti[i].idCuti.toString());
           },
           child: CustomExpandedCardView(
-            name: controller.listLembur[i].user.toString(),
+            name: controller.listCuti[i].user.toString(),
             firstParagraf:
-                '${DateFormat("EEEE, d MMMM yyyy", "id_ID").format(controller.listLembur[i].tanggalLembur ?? DateTime.now())}',
-            secondParagrafLabel: "Mulai",
-            secondParagrafValue: controller.listLembur[i].jamIn ?? '',
-            thirdParagrafLabel: "Selesai",
-            thirdParagrafValue: controller.listLembur[i].jamOut ?? '',
-            forthParagraf: controller.listLembur[i].statusLembur ?? '',
-            approval: controller.listLembur[i].statusLembur == 'pengajuan'
+                '${DateFormat("EEEE, d MMMM yyyy", "id_ID").format(controller.listCuti[i].tanggalPengajuan ?? DateTime.now())}',
+            secondParagrafLabel: "Tanggal Mulai",
+            secondParagrafValue:
+                '${DateFormat("EEEE, d MMMM yyyy", "id_ID").format(controller.listCuti[i].tanggalAwal ?? DateTime.now())}',
+            thirdParagrafLabel: "Tanggal Selesai",
+            thirdParagrafValue:
+                '${DateFormat("EEEE, d MMMM yyyy", "id_ID").format(controller.listCuti[i].tanggalAkhir ?? DateTime.now())}',
+            forthParagraf: controller.listCuti[i].statusCuti ?? '',
+            approval: controller.listCuti[i].statusCuti == 'pengajuan'
                 ? 'Waiting'
-                : controller.listLembur[i].statusLembur ?? '',
+                : controller.listCuti[i].statusCuti ?? '',
           ),
         ),
       ),

@@ -35,4 +35,7 @@ abstract class Routes {
   static const DETAIL_LEADS = '/detail-leads';
   static const ADD_LEADS = '/add-leads';
   static const INPUT_DATA_KUISIONER = '/input-data-kuisioner';
+  static const CUTI = '/cuti-sales';
+  static const DETAIL_CUTI_SALES = '/detail-cuti-sales';
+  static const ADD_CUTI_SALES = '/add-cuti-sales';
 }

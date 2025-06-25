@@ -6,6 +6,9 @@ import 'package:sales/models/request/attendance/validate_attenance.dart';
 import 'package:sales/models/request/benefit_request.dart';
 import 'package:sales/models/request/cuti/submit_cuti_request.dart';
 import 'package:sales/models/request/cuti/update_approval_request.dart';
+import 'package:sales/models/request/cuti_sales/detail_request_cuti.dart';
+import 'package:sales/models/request/cuti_sales/submit_izin_request.dart';
+import 'package:sales/models/request/cuti_sales/update_approval_request.dart';
 import 'package:sales/models/request/detail_request.dart';
 import 'package:sales/models/request/detail_request_leave.dart';
 import 'package:sales/models/request/id_request.dart';
@@ -351,4 +354,28 @@ class ApiProvider extends BaseProvider {
     print(data.toJson());
     return post(path, data.toJson());
   }
+
+  //START CUTI
+  Future<Response> getCutiSales(String path, UserIdRequest data) {
+    return post(path, data.toJson());
+  }
+
+  Future<Response> getShowCutiSales(String path, ShowCutiSalesRequest data) {
+    return post(path, data.toJson());
+  }
+
+  Future<Response> submitCutiSales(String path, SubmitCutiSalesRequest data) {
+    print(data.toJson());
+    return post(path, data.toJson());
+  }
+
+  Future<Response> updateCutiSales(String path, SubmitCutiSalesRequest data) {
+    return patch(path, data.toJson());
+  }
+
+  Future<Response> updateApprovalCutiSales(
+      String path, UpdateApprovalCutiSalesRequest data) {
+    return patch(path, data.toJson());
+  }
+  //ENDIZIN
 }

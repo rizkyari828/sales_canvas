@@ -3,6 +3,10 @@ import 'package:sales/modules/benefit/bindings/benefit_binding.dart';
 import 'package:sales/modules/benefit/views/benefit_add_view.dart';
 import 'package:sales/modules/benefit/views/benefit_detail_view.dart';
 import 'package:sales/modules/benefit/views/benefit_view.dart';
+import 'package:sales/modules/cuti/bindings/cuti_binding.dart';
+import 'package:sales/modules/cuti/views/add_cuti_view.dart';
+import 'package:sales/modules/cuti/views/detail_cuti_view.dart';
+import 'package:sales/modules/cuti/views/list_cuti.dart';
 import 'package:sales/modules/input/bindings/input_binding.dart';
 import 'package:sales/modules/input/views/add_input_view.dart';
 import 'package:sales/modules/kuisioner/bindings/kuisioner_binding.dart';
@@ -213,6 +217,21 @@ class AppPages {
       name: Routes.INPUT_DATA_KUISIONER,
       page: () => InputDataKuisionerView(),
       binding: KusionerBinding(),
+    ),
+    GetPage(
+      name: Routes.CUTI,
+      page: () => CutiView(),
+      binding: CutiBinding(),
+    ),
+    GetPage(
+      name: Routes.ADD_CUTI_SALES,
+      page: () => AddCutiView(),
+      binding: CutiBinding(),
+    ),
+    GetPage(
+      name: Routes.DETAIL_CUTI_SALES,
+      page: () => CutiDetailView(),
+      binding: CutiBinding(),
     ),
   ];
 }

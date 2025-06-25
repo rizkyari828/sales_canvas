@@ -6,6 +6,9 @@ import 'package:sales/models/request/attendance/validate_attenance.dart';
 import 'package:sales/models/request/benefit_request.dart';
 import 'package:sales/models/request/cuti/submit_cuti_request.dart';
 import 'package:sales/models/request/cuti/update_approval_request.dart';
+import 'package:sales/models/request/cuti_sales/detail_request_cuti.dart';
+import 'package:sales/models/request/cuti_sales/submit_izin_request.dart';
+import 'package:sales/models/request/cuti_sales/update_approval_request.dart';
 import 'package:sales/models/request/detail_request.dart';
 import 'package:sales/models/request/detail_request_leave.dart';
 import 'package:sales/models/request/id_request.dart';
@@ -42,6 +45,8 @@ import 'package:sales/models/response/branch_response.dart';
 import 'package:sales/models/response/benefit/list_benefit.dart';
 import 'package:sales/models/response/benefit/show_benefit.dart';
 import 'package:sales/models/response/benefit/type_cuti.dart';
+import 'package:sales/models/response/cuti_sales/list_cuti_sales.dart';
+import 'package:sales/models/response/cuti_sales/show_cuti_sales.dart';
 import 'package:sales/models/response/izin/list_izin.dart';
 import 'package:sales/models/response/izin/show_izin.dart';
 import 'package:sales/models/response/izin/type_izin.dart';
@@ -1020,7 +1025,7 @@ class ApiRepository {
   Future<ShowLemburResponse?> showLembur(ShowLemburRequest data) async {
     try {
       final res = await apiProvider
-          .getShowLembur('/api/detailIjin', data)
+          .getShowLembur('/api/detail_lembur', data)
           .timeout(Duration(seconds: timeout));
       if (res.statusCode == 200 || res.statusCode == 401) {
         return ShowLemburResponse.fromJson(res.body);
@@ -1148,6 +1153,98 @@ class ApiRepository {
           .timeout(Duration(seconds: timeout));
       if (res.statusCode == 200 || res.statusCode == 401) {
         return DetailStoreResponse.fromJson(res.body);
+      }
+    } on TimeoutException catch (_) {
+      EasyLoading.showError('Connection Timeout. Please try again later');
+      EasyLoading.dismiss();
+    } catch (exception) {
+      print(exception);
+    }
+    return null;
+  }
+
+  //START LEMBUR
+  Future<CutiSalesResponse?> listCuti(
+      {int page = 1, int limit = 10, required UserIdRequest data}) async {
+    try {
+      final res = await apiProvider
+          .getLembur('/api/list_cuti?page=' + page.toString(), data)
+          .timeout(Duration(seconds: timeout));
+      if (res.statusCode == 200 || res.statusCode == 401) {
+        return CutiSalesResponse.fromJson(res.body);
+      }
+    } on TimeoutException catch (_) {
+      EasyLoading.showError('Connection Timeout. Please try again later');
+      EasyLoading.dismiss();
+    } catch (exception) {
+      print(exception);
+    }
+    return null;
+  }
+
+  Future<ShowCutiSalesResponse?> showCutiSales(
+      ShowCutiSalesRequest data) async {
+    try {
+      final res = await apiProvider
+          .getShowCutiSales('/api/detail_cuti', data)
+          .timeout(Duration(seconds: timeout));
+      if (res.statusCode == 200 || res.statusCode == 401) {
+        return ShowCutiSalesResponse.fromJson(res.body);
+      }
+    } on TimeoutException catch (_) {
+      EasyLoading.showError('Connection Timeout. Please try again later');
+      EasyLoading.dismiss();
+    } catch (exception) {
+      print(exception);
+    }
+    return null;
+  }
+
+  Future<ErrorResponse?> submitCutiSales(SubmitCutiSalesRequest data) async {
+    try {
+      final res = await apiProvider
+          .submitCutiSales('/api/simpan_cuti', data)
+          .timeout(Duration(seconds: timeout));
+      if (res.statusCode == 200 || res.statusCode == 401) {
+        return ErrorResponse.fromJson(res.body);
+      }
+    } on TimeoutException catch (_) {
+      EasyLoading.showError('Connection Timeout. Please try again later');
+      EasyLoading.dismiss();
+    } catch (exception) {
+      print(exception);
+    }
+    return null;
+  }
+
+  Future<ErrorResponse?> updateApprovalCutiSales(
+      String id, UpdateApprovalCutiSalesRequest data) async {
+    try {
+      final res = await apiProvider
+          .updateApprovalCutiSales('/api/v1/izin/update-status/' + id, data)
+          .timeout(Duration(seconds: timeout));
+      if (res.statusCode == 200 || res.statusCode == 401) {
+        return ErrorResponse.fromJson(res.body);
+      }
+    } on TimeoutException catch (_) {
+      EasyLoading.showError('Connection Timeout. Please try again later');
+      EasyLoading.dismiss();
+    } catch (exception) {
+      print(exception);
+    }
+    return null;
+  }
+
+  Future<ErrorResponse?> updateCutiSales(
+      String id, SubmitCutiSalesRequest data) async {
+    print(data);
+    try {
+      final res = await apiProvider
+          .updateCutiSales('/api/v1/izin/set-done/' + id, data)
+          .timeout(Duration(seconds: timeout));
+      print(res);
+      if (res.statusCode == 200 || res.statusCode == 401) {
+        return ErrorResponse.fromJson(res.body);
       }
     } on TimeoutException catch (_) {
       EasyLoading.showError('Connection Timeout. Please try again later');

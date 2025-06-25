@@ -12,10 +12,10 @@ class ShowLemburRequest {
 
   factory ShowLemburRequest.fromJson(Map<String, dynamic> json) =>
       ShowLemburRequest(
-        id: json["id_ijin"],
+        id: json["id_lembur"],
       );
 
   Map<String, dynamic> toJson() => {
-        "id_ijin": id,
+        "id_lembur": id,
       };
 }

@@ -1,17 +1,16 @@
-import 'package:sales/modules/overtime/controllers/overtime_detail_controller.dart';
+import 'package:sales/modules/cuti/controllers/cuti_detail_controller.dart';
 import 'package:sales/shared/shared.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:sales/shared/widgets/approval.dart';
 
-class OvertimeDetailView extends GetView<OvertimeDetailController> {
+class CutiDetailView extends GetView<CutiDetailController> {
   final data = Get.arguments;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: CommonWidget.appBar(title: 'Detail Lembur'),
+        appBar: CommonWidget.appBar(title: 'Detail Cuti'),
         body: SingleChildScrollView(
             child: Padding(
           padding: const EdgeInsets.all(25.0),

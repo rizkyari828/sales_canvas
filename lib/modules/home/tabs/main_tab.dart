@@ -117,7 +117,7 @@ class MainTab extends GetView<HomeController> {
                               controller.goToOvertimePages, Colors.indigo),
                           CommonWidget.rowWidth(width: sw * .03),
                           _cardMenu(Icons.airplane_ticket_rounded, "Cuti",
-                              controller.goToLeavePages, Colors.indigo),
+                              controller.goToCutiPages, Colors.indigo),
                           CommonWidget.rowWidth(width: sw * .03),
                           _cardMenu(Icons.assignment, "Kuisioner",
                               controller.goToKuisionerPages, Colors.indigo),
