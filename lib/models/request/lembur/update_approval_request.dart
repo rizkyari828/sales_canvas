@@ -12,21 +12,25 @@ String updateApprovalLemburRequestToJson(UpdateApprovalLemburRequest data) =>
 
 class UpdateApprovalLemburRequest {
   UpdateApprovalLemburRequest({
+    this.id,
     this.action,
     this.noteApproval,
   });
 
+  String? id;
   String? action;
   String? noteApproval;
 
   factory UpdateApprovalLemburRequest.fromJson(Map<String, dynamic> json) =>
       UpdateApprovalLemburRequest(
-        action: json["action"],
-        noteApproval: json["note_approval"],
+        id: json["id_lembur"],
+        action: json["sts"],
+        noteApproval: json["note"],
       );
 
   Map<String, dynamic> toJson() => {
-        "action": action,
-        "note_approval": noteApproval,
+        "id_lembur": id,
+        "sts": action,
+        "note": noteApproval,
       };
 }

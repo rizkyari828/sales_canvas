@@ -24,6 +24,10 @@ class OvertimeDetailView extends GetView<OvertimeDetailController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CommonWidget.labelExpanded(
+                          label: 'Email',
+                          value: controller.detail.value.user.toString()),
+                      SizedBox(height: 10.0),
+                      CommonWidget.labelExpanded(
                           label: 'Jam Mulai',
                           value: controller.detail.value.jamIn.toString()),
                       SizedBox(height: 10.0),
@@ -33,12 +37,11 @@ class OvertimeDetailView extends GetView<OvertimeDetailController> {
                       SizedBox(height: 20.0),
                       CommonWidget.bodyText(text: "Keterangan"),
                       SizedBox(height: 10.0),
-                      // CommonWidget.bodyText(
-                      //     text: controller.detail.value.keterangan ?? ''),
-                      // SizedBox(height: 20.0),
+                      CommonWidget.bodyText(
+                          text: controller.detail.value.keperluan ?? ''),
+                      SizedBox(height: 20.0),
                       SizedBox(height: 50.0),
-                      Obx(() =>
-                          ApprovalFlow.buttonApproval(controller, "1", "1")),
+                      Obx(() => ApprovalFlow.buttonApproval(controller)),
                     ],
                   ),
           ),

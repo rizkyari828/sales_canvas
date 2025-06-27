@@ -1,3 +1,4 @@
+import 'package:sales/shared/constants/colors.dart';
 import 'package:sales/shared/utils/common_widget.dart';
 import 'package:sales/shared/utils/size_config.dart';
 import 'package:sales/shared/widgets/button.dart';
@@ -47,51 +48,58 @@ class ApprovalFlow {
     );
   }
 
-  static Widget buttonApproval(controller, String condition, String levelCondition) {
+  static Widget buttonApproval(controller) {
     final sw = SizeConfig().screenWidth;
-    return Container(
-      child: controller.detail.value.status == '1' ||
-              controller.detail.value.statusLabel == 'Created'
-          ? controller.groupId.toString() == '5'
-              ? controller.detail.value.statusLabel == 'Created'
-                  ? Container(
-                      child: CustomButton(
-                        buttonText: 'SIMPAN',
-                        width: sw,
-                        onPressed: () {
-                          controller.submit();
-                        },
-                      ),
-                    )
-                  : Container()
-              : condition == '1'
-                  ? Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CustomButton(
-                            buttonColor: Colors.red,
-                            buttonText: 'REJECT',
-                            width: sw / 2.5,
-                            onPressed: () {
-                              controller.approval(action: 'reject');
-                            },
-                          ),
-                          CustomButton(
-                            buttonColor: Colors.green,
-                            buttonText: 'APPROVE',
-                            width: sw / 2.5,
-                            onPressed: () {
-                              controller.approval(action: 'approve');
-                            },
-                          ),
-                        ],
-                      ),
-                    )
-                  : buttonLevelCondition(
-                      controller, levelCondition, controller.groupId.toString())
-          : Container(),
-    );
+    return controller.statusApproval == 'pengajuan'
+        ? Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CommonWidget.bodyText(text: "Catatan Approval"),
+              SizedBox(height: 10.0),
+              Card(
+                  elevation: 0.1,
+                  color: Colors.white,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                      side: BorderSide(
+                          color: ColorConstants.mainColor, width: 1)),
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: TextField(
+                      controller: controller.noteApprovalController,
+                      maxLines: 8,
+                      decoration: InputDecoration.collapsed(
+                          hintText: "Enter your text here"),
+                    ),
+                  )),
+              SizedBox(height: 20.0),
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CustomButton(
+                      buttonColor: Colors.red,
+                      buttonText: 'REJECT',
+                      width: sw / 2.5,
+                      onPressed: () {
+                        controller.approval(action: 'reject');
+                      },
+                    ),
+                    CustomButton(
+                      buttonColor: Colors.green,
+                      buttonText: 'APPROVE',
+                      width: sw / 2.5,
+                      onPressed: () {
+                        controller.approval(action: 'approve');
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          )
+        : Container();
   }
 
   static Widget buttonLevelCondition(controller, levelCondition, groupId) {

@@ -1057,10 +1057,10 @@ class ApiRepository {
   }
 
   Future<ErrorResponse?> updateApprovalLembur(
-      String id, UpdateApprovalLemburRequest data) async {
+      UpdateApprovalLemburRequest data) async {
     try {
       final res = await apiProvider
-          .updateApprovalLembur('/api/v1/izin/update-status/' + id, data)
+          .updateApprovalLembur('/api/approve_lembur', data)
           .timeout(Duration(seconds: timeout));
       if (res.statusCode == 200 || res.statusCode == 401) {
         return ErrorResponse.fromJson(res.body);
@@ -1218,10 +1218,10 @@ class ApiRepository {
   }
 
   Future<ErrorResponse?> updateApprovalCutiSales(
-      String id, UpdateApprovalCutiSalesRequest data) async {
+      UpdateApprovalCutiSalesRequest data) async {
     try {
       final res = await apiProvider
-          .updateApprovalCutiSales('/api/v1/izin/update-status/' + id, data)
+          .updateApprovalCutiSales('/api/approve_cuti', data)
           .timeout(Duration(seconds: timeout));
       if (res.statusCode == 200 || res.statusCode == 401) {
         return ErrorResponse.fromJson(res.body);

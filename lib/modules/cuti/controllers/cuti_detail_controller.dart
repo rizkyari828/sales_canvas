@@ -1,3 +1,4 @@
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:sales/api/api_repository.dart';
 import 'package:sales/models/request/cuti_sales/detail_request_cuti.dart';
 import 'package:sales/models/request/cuti_sales/update_approval_request.dart';
@@ -27,6 +28,7 @@ class CutiDetailController extends GetxController {
   RxString nameItem = "".obs;
   RxString groupName = "".obs;
   RxString groupId = "".obs;
+  RxString statusApproval = "".obs;
 
   @override
   void onInit() {
@@ -62,24 +64,31 @@ class CutiDetailController extends GetxController {
         .showCutiSales(ShowCutiSalesRequest(id: argm.toString()));
     print(res!.data!);
     detail.value = res.data!.first;
+    statusApproval.value = detail.value.statusCuti ?? '';
   }
 
   void approval({
     action = "reject",
   }) async {
-    final res = await apiRepository.updateApprovalCutiSales(
-        detail.value.idLembur.toString(),
-        UpdateApprovalCutiSalesRequest(
-          action: action,
-          noteApproval: noteApprovalController.text,
-        ));
-    // if (res?.error == false) {
-    //   EasyLoading.showSuccess('Berhasil disimpan');
-    //   getDetailLembur();
-    //   loadUsers();
-    // } else {
-    //   EasyLoading.showError('Gagal disimpan');
-    // }
+    String id_action = '0';
+    if (action == 'reject') {
+      id_action = '0';
+    } else {
+      id_action = '1';
+    }
+    final res = await apiRepository
+        .updateApprovalCutiSales(UpdateApprovalCutiSalesRequest(
+      id: detail.value.idCuti.toString(),
+      action: id_action,
+      noteApproval: noteApprovalController.text,
+    ));
+    if (res?.error == false) {
+      EasyLoading.showSuccess('Berhasil disimpan');
+      getDetailCuti();
+      loadUsers();
+    } else {
+      EasyLoading.showError('Gagal disimpan');
+    }
   }
 
   selectDate(BuildContext context) async {
