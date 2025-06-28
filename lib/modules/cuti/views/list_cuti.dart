@@ -61,10 +61,7 @@ class CutiView extends GetView<CutiListController> {
             thirdParagrafLabel: "Tanggal Selesai",
             thirdParagrafValue:
                 '${DateFormat("EEEE, d MMMM yyyy", "id_ID").format(controller.listCuti[i].tanggalAkhir ?? DateTime.now())}',
-            forthParagraf: controller.listCuti[i].statusCuti ?? '',
-            approval: controller.listCuti[i].statusCuti == 'pengajuan'
-                ? 'Waiting'
-                : controller.listCuti[i].statusCuti ?? '',
+            approval: controller.listCuti[i].statusCuti ?? '',
           ),
         ),
       ),

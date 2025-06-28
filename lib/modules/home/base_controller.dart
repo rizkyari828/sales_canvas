@@ -34,6 +34,7 @@ class BaseController extends GetxController {
   RxString username = "".obs;
   RxString token = "".obs;
   RxString tipeUser = "".obs;
+  RxString groupId = "".obs;
 
   @override
   void onInit() async {
@@ -310,6 +311,7 @@ class BaseController extends GetxController {
     token.value = prefs.getString('token') ?? "";
     userId.value = prefs.getString('userId') ?? "";
     tipeUser.value = prefs.getString('tipe') ?? "";
+    groupId.value = prefs.getString('groupId') ?? "";
   }
 
   @override

@@ -304,12 +304,12 @@ class ApiProvider extends BaseProvider {
   }
 
   Future<Response> updateLembur(String path, SubmitLemburRequest data) {
-    return patch(path, data.toJson());
+    return post(path, data.toJson());
   }
 
   Future<Response> updateApprovalLembur(
       String path, UpdateApprovalLemburRequest data) {
-    return patch(path, data.toJson());
+    return post(path, data.toJson());
   }
   //ENDIZIN
 
@@ -370,12 +370,12 @@ class ApiProvider extends BaseProvider {
   }
 
   Future<Response> updateCutiSales(String path, SubmitCutiSalesRequest data) {
-    return patch(path, data.toJson());
+    return post(path, data.toJson());
   }
 
   Future<Response> updateApprovalCutiSales(
       String path, UpdateApprovalCutiSalesRequest data) {
-    return patch(path, data.toJson());
+    return post(path, data.toJson());
   }
   //ENDIZIN
 }

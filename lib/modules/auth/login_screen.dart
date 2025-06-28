@@ -111,6 +111,7 @@ class LoginScreen extends GetView<AuthController> {
               prefixIcon: Icon(
                 Icons.person,
                 size: 30,
+                color: ColorConstants.black,
               ),
               controller: controller.loginEmailController,
               keyboardType: TextInputType.text,
@@ -136,6 +137,7 @@ class LoginScreen extends GetView<AuthController> {
                   prefixIcon: Icon(
                     Icons.vpn_key_rounded,
                     size: 30,
+                    color: ColorConstants.black,
                   ),
                   controller: controller.loginPasswordController,
                   keyboardType: TextInputType.emailAddress,

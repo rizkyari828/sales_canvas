@@ -23,6 +23,9 @@ class OvertimeDetailView extends GetView<OvertimeDetailController> {
                 : Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      ApprovalFlow.statusApproval(
+                          controller.detail.value.statusLembur),
+                      SizedBox(height: 20.0),
                       CommonWidget.labelExpanded(
                           label: 'Email',
                           value: controller.detail.value.user.toString()),

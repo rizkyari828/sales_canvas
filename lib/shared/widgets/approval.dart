@@ -50,7 +50,15 @@ class ApprovalFlow {
 
   static Widget buttonApproval(controller) {
     final sw = SizeConfig().screenWidth;
-    return controller.statusApproval == 'pengajuan'
+    return controller.groupId != '1'
+        ? buttonApprovalFlow(controller)
+        : Container();
+  }
+
+  static Widget buttonApprovalFlow(controller) {
+    final sw = SizeConfig().screenWidth;
+    return controller.statusApproval == 'pengajuan' ||
+            controller.statusApproval == 'proses'
         ? Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -243,9 +251,9 @@ class ApprovalFlow {
         height: sh * .05,
         child: Card(
             elevation: 0,
-            color: label == 'Booking'
+            color: label == 'aprove'
                 ? Colors.green
-                : label == 'Order' || label == 'Prospek'
+                : label == 'proses' || label == 'pengajuan'
                     ? Colors.yellow[800]
                     : Colors.red,
             shape: RoundedRectangleBorder(

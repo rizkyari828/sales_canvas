@@ -106,27 +106,26 @@ class CustomCardView extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Icon(
-                              (approval == "Approved" || approval == "Selesai")
+                              (approval == "aprove")
                                   ? Icons.check_circle_outlined
-                                  : (approval == "Waiting")
+                                  : (approval == "pengajuan" ||
+                                          approval == "proses")
                                       ? Icons.access_time_outlined
                                       : Icons.close,
-                              color: (approval == "Approved" ||
-                                      approval == "Selesai")
+                              color: (approval == "aprove")
                                   ? Colors.green
-                                  : (approval == "Waiting" ||
-                                          approval == "Created")
+                                  : (approval == "pengajuan" ||
+                                          approval == "proses")
                                       ? Colors.orange
                                       : Colors.red,
                               size: 30,
                             ),
                             CommonWidget.captionText(
-                              text: CommonWidget.convertStatus(approval),
-                              color: (approval == "Approved" ||
-                                      approval == "Selesai")
+                              text: approval,
+                              color: (approval == "aprove")
                                   ? Colors.green
-                                  : (approval == "Waiting" ||
-                                          approval == "Created")
+                                  : (approval == "pengajuan" ||
+                                          approval == "proses")
                                       ? Colors.orange
                                       : Colors.red,
                             ),
@@ -269,29 +268,26 @@ class CustomExpandedCardView extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Icon(
-                                  (approval == "3")
+                                  (approval == "aprove")
                                       ? Icons.check_circle_outlined
-                                      : (approval == "1" ||
-                                              approval == "2" ||
-                                              approval == "6")
+                                      : (approval == "pengajuan" ||
+                                              approval == "proses")
                                           ? Icons.access_time_outlined
                                           : Icons.close,
-                                  color: (approval == "3")
+                                  color: (approval == "aprove")
                                       ? Colors.green
-                                      : (approval == "1" ||
-                                              approval == "2" ||
-                                              approval == "6")
+                                      : (approval == "pengajuan" ||
+                                              approval == "proses")
                                           ? Colors.orange
                                           : Colors.red,
                                   size: 30,
                                 ),
                                 CommonWidget.captionText(
-                                  text: CommonWidget.convertStatus(approval),
-                                  color: (approval == "3")
+                                  text: approval,
+                                  color: (approval == "aprove")
                                       ? Colors.green
-                                      : (approval == "1" ||
-                                              approval == "2" ||
-                                              approval == "6")
+                                      : (approval == "pengajuan" ||
+                                              approval == "proses")
                                           ? Colors.orange
                                           : Colors.red,
                                 ),

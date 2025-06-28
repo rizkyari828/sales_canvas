@@ -389,25 +389,6 @@ class CommonWidget {
     );
   }
 
-  static String convertStatus(status) {
-    switch (status) {
-      case '1':
-        return 'Prospek';
-      case '2':
-        return 'Order';
-      case '3':
-        return 'Booking';
-      case '4':
-        return 'Cancle';
-      case '5':
-        return 'Reject';
-      case '6':
-        return 'TBC';
-      default:
-        return '';
-    }
-  }
-
   static Color setOpacity(Color color, double opacity) {
     return color.withAlpha((opacity * 255).round());
   }

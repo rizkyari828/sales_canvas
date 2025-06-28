@@ -171,11 +171,44 @@ class MeTab extends GetView<HomeController> {
                   controller.idPegawai.value),
               SizedBox(height: 20),
               listCard(
-                  Icons.type_specimen_rounded, 'Tipe', controller.tipeUser.value),
+                  Icons.business_center, 'Tipe', controller.tipeUser.value),
+              SizedBox(height: 20),
+              listCard(getRoleIcon(controller.groupId.value), 'Role',
+                  getRoleLabel(controller.groupId.value)),
               SizedBox(height: 20),
             ],
           )),
     );
+  }
+
+  IconData getRoleIcon(String role) {
+    switch (role.toLowerCase()) {
+      case '4':
+        return Icons.admin_panel_settings;
+      case '3':
+        return Icons.supervisor_account;
+      case '2':
+        return Icons.manage_accounts;
+      case '1':
+        return Icons.person_pin;
+      default:
+        return Icons.person_outline;
+    }
+  }
+
+  String getRoleLabel(String role) {
+    switch (role.toLowerCase()) {
+      case '1':
+        return 'TAD';
+      case '2':
+        return 'Cabang';
+      case '3':
+        return 'Area';
+      case '4':
+        return 'HO';
+      default:
+        return 'TAD';
+    }
   }
 
   Widget listCard(IconData icon, String label, String value) {

@@ -21,9 +21,6 @@ class OvertimeDetailController extends GetxController {
   final qtyController = TextEditingController();
   final dateController = TextEditingController();
   final dateCnCController = TextEditingController();
-  RxString dateCnC = "".obs;
-  RxString dateGoods = "".obs;
-  RxString nameItem = "".obs;
   RxString groupName = "".obs;
   RxString groupId = "".obs;
   RxString statusApproval = "".obs;
@@ -97,17 +94,5 @@ class OvertimeDetailController extends GetxController {
       lastDate: DateTime(2028),
     );
     if (selected != null && selected != selectedDate) selectedDate = selected;
-    dateCnC.value = selectedDate.toString();
   }
-
-  void dateSubmit() {
-    dateCnC.value = dateCnCController.text;
-  }
-
-  void updateGoods({name}) {
-    // goods.removeWhere((e) => e.id == id);
-    // goods[goods.indexWhere((element) => element.name == name)] = singleGoods;
-  }
-
-  void deleteGoods({name}) {}
 }
