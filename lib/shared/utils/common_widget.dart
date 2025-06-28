@@ -424,4 +424,21 @@ class CommonWidget {
       ],
     );
   }
+
+  static String getRoleLabel(String role) {
+    switch (role.toLowerCase()) {
+      case '1':
+        return 'TAD';
+      case '2':
+        return 'Cabang';
+      case '3':
+        return 'Area';
+      case '4':
+        return 'Client';
+      default:
+        return 'TAD';
+    }
+  }
+
+  
 }

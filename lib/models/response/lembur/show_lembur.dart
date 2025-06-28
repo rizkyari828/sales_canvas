@@ -52,16 +52,17 @@ class ShowDataLembur {
   int? idLembur;
   String? user;
   String? keperluan;
+  String? levelApproval;
 
-  ShowDataLembur({
-    this.tanggalLembur,
-    this.jamIn,
-    this.jamOut,
-    this.statusLembur,
-    this.idLembur,
-    this.user,
-    this.keperluan,
-  });
+  ShowDataLembur(
+      {this.tanggalLembur,
+      this.jamIn,
+      this.jamOut,
+      this.statusLembur,
+      this.idLembur,
+      this.user,
+      this.keperluan,
+      this.levelApproval});
 
   factory ShowDataLembur.fromJson(Map<String, dynamic> json) => ShowDataLembur(
         tanggalLembur: json["tanggal_lembur"] == null
@@ -73,6 +74,8 @@ class ShowDataLembur {
         idLembur: json["id_lembur"],
         user: json["user"],
         keperluan: json["keperluan"],
+        // levelApproval: json["level"],
+        levelApproval: 'Hardcode Cabang',
       );
 
   Map<String, dynamic> toJson() => {
@@ -84,5 +87,7 @@ class ShowDataLembur {
         "id_lembur": idLembur,
         "user": user,
         "keperluan": keperluan,
+        // "level": levelApproval,
+        "level": 'Hardcode Cabang',
       };
 }

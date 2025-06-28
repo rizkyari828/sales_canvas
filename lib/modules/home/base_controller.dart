@@ -314,6 +314,8 @@ class BaseController extends GetxController {
     groupId.value = prefs.getString('groupId') ?? "";
   }
 
+
+
   @override
   void onClose() {
     super.onClose();

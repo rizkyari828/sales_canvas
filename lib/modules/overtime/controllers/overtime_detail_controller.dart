@@ -24,6 +24,7 @@ class OvertimeDetailController extends GetxController {
   RxString groupName = "".obs;
   RxString groupId = "".obs;
   RxString statusApproval = "".obs;
+  RxBool approvalCondition = false.obs;
 
   @override
   void onInit() {
@@ -60,6 +61,23 @@ class OvertimeDetailController extends GetxController {
     print(res!.data!);
     detail.value = res.data!.first;
     statusApproval.value = detail.value.statusLembur ?? '';
+    String idRoleDetail = stringRoletoId(detail.value.levelApproval ?? '');
+    approvalCondition.value = idRoleDetail == groupId.value;
+  }
+
+  String stringRoletoId(String role) {
+    switch (role.toLowerCase()) {
+      case 'tad':
+        return '1';
+      case 'cabang':
+        return '2';
+      case 'area':
+        return '3';
+      case 'client':
+        return '4';
+      default:
+        return '1';
+    }
   }
 
   void approval({

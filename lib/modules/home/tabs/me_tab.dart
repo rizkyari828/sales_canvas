@@ -174,7 +174,7 @@ class MeTab extends GetView<HomeController> {
                   Icons.business_center, 'Tipe', controller.tipeUser.value),
               SizedBox(height: 20),
               listCard(getRoleIcon(controller.groupId.value), 'Role',
-                  getRoleLabel(controller.groupId.value)),
+                  CommonWidget.getRoleLabel(controller.groupId.value)),
               SizedBox(height: 20),
             ],
           )),
@@ -196,20 +196,7 @@ class MeTab extends GetView<HomeController> {
     }
   }
 
-  String getRoleLabel(String role) {
-    switch (role.toLowerCase()) {
-      case '1':
-        return 'TAD';
-      case '2':
-        return 'Cabang';
-      case '3':
-        return 'Area';
-      case '4':
-        return 'HO';
-      default:
-        return 'TAD';
-    }
-  }
+
 
   Widget listCard(IconData icon, String label, String value) {
     final sw = SizeConfig().screenWidth;

@@ -23,7 +23,7 @@ class CutiDetailView extends GetView<CutiDetailController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ApprovalFlow.statusApproval(
-                          controller.detail.value.statusCuti),
+                          controller.detail.value.statusCuti, controller.detail.value.levelApproval),
                       SizedBox(height: 20.0),
                       CommonWidget.labelExpanded(
                           label: 'Email',

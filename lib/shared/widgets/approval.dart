@@ -48,10 +48,58 @@ class ApprovalFlow {
     );
   }
 
-  static Widget buttonApproval(controller) {
+  static Widget buttonApprovalProspect(controller, condition, levelCondition) {
     final sw = SizeConfig().screenWidth;
-    return controller.groupId != '1'
-        ? buttonApprovalFlow(controller)
+    return Container(
+      child: controller.detail.value.status == '1' ||
+              controller.detail.value.statusLabel == 'Created'
+          ? controller.groupId.toString() == '5'
+              ? controller.detail.value.statusLabel == 'Created'
+                  ? Container(
+                      child: CustomButton(
+                        buttonText: 'SIMPAN',
+                        width: sw,
+                        onPressed: () {
+                          controller.submit();
+                        },
+                      ),
+                    )
+                  : Container()
+              : condition == '1'
+                  ? Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CustomButton(
+                            buttonColor: Colors.red,
+                            buttonText: 'REJECT',
+                            width: sw / 2.5,
+                            onPressed: () {
+                              controller.approval(action: 'reject');
+                            },
+                          ),
+                          CustomButton(
+                            buttonColor: Colors.green,
+                            buttonText: 'APPROVE',
+                            width: sw / 2.5,
+                            onPressed: () {
+                              controller.approval(action: 'approve');
+                            },
+                          ),
+                        ],
+                      ),
+                    )
+                  : buttonLevelCondition(
+                      controller, levelCondition, controller.groupId.toString())
+          : Container(),
+    );
+  }
+
+  static Widget buttonApproval(controller) {
+    return controller.groupId.value != '1'
+        ? controller.approvalCondition.value == true
+            ? buttonApprovalFlow(controller)
+            : Container()
         : Container();
   }
 
@@ -243,7 +291,7 @@ class ApprovalFlow {
                     text: data.statusLabel.toString(), color: Colors.white))));
   }
 
-  static Widget statusApproval(label) {
+  static Widget statusApprovalProspect(label) {
     final sw = SizeConfig().screenWidth;
     final sh = SizeConfig().screenHeight;
     return Container(
@@ -251,9 +299,9 @@ class ApprovalFlow {
         height: sh * .05,
         child: Card(
             elevation: 0,
-            color: label == 'aprove'
+            color: label == 'Booking'
                 ? Colors.green
-                : label == 'proses' || label == 'pengajuan'
+                : label == 'Order' || label == 'Prospek'
                     ? Colors.yellow[800]
                     : Colors.red,
             shape: RoundedRectangleBorder(
@@ -263,6 +311,47 @@ class ApprovalFlow {
             child: Center(
                 child: CommonWidget.bodyText(
                     text: label.toString(), color: Colors.white))));
+  }
+
+  static Widget statusApproval(label, levelApproval) {
+    final sw = SizeConfig().screenWidth;
+    final sh = SizeConfig().screenHeight;
+    return Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10.0),
+          border: Border.all(width: 2.0, color: ColorConstants.borderColor),
+        ),
+        width: sw,
+        height: sh * .07,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              CommonWidget.bodyText(
+                  text: levelApproval.toUpperCase(),
+                  color: ColorConstants.black),
+              Card(
+                  elevation: 0,
+                  color: label == 'aprove'
+                      ? Colors.green
+                      : label == 'proses' || label == 'pengajuan'
+                          ? Colors.yellow[800]
+                          : Colors.red,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                    Radius.circular(5.0),
+                  )),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Center(
+                        child: CommonWidget.bodyText(
+                            text: label.toString(), color: Colors.white)),
+                  )),
+            ],
+          ),
+        ));
   }
 
   static Widget deleteButtonApproval({controller, name}) {

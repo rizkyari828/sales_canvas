@@ -2,8 +2,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:sales/api/api_repository.dart';
 import 'package:sales/models/request/cuti_sales/detail_request_cuti.dart';
 import 'package:sales/models/request/cuti_sales/update_approval_request.dart';
-import 'package:sales/models/request/lembur/detail_request_lembur.dart';
-import 'package:sales/models/request/lembur/update_approval_request.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sales/models/response/cuti_sales/show_cuti_sales.dart';
@@ -29,6 +27,7 @@ class CutiDetailController extends GetxController {
   RxString groupName = "".obs;
   RxString groupId = "".obs;
   RxString statusApproval = "".obs;
+  RxBool approvalCondition = false.obs;
 
   @override
   void onInit() {
@@ -65,6 +64,23 @@ class CutiDetailController extends GetxController {
     print(res!.data!);
     detail.value = res.data!.first;
     statusApproval.value = detail.value.statusCuti ?? '';
+    String idRoleDetail = stringRoletoId(detail.value.levelApproval ?? '');
+    approvalCondition.value = idRoleDetail == groupId.value;
+  }
+
+  String stringRoletoId(String role) {
+    switch (role.toLowerCase()) {
+      case 'tad':
+        return '1';
+      case 'cabang':
+        return '2';
+      case 'area':
+        return '3';
+      case 'client':
+        return '4';
+      default:
+        return '1';
+    }
   }
 
   void approval({
@@ -83,9 +99,9 @@ class CutiDetailController extends GetxController {
       noteApproval: noteApprovalController.text,
     ));
     if (res?.error == false) {
-      EasyLoading.showSuccess('Berhasil disimpan');
       getDetailCuti();
       loadUsers();
+      EasyLoading.showSuccess('Berhasil disimpan');
     } else {
       EasyLoading.showError('Gagal disimpan');
     }
