@@ -34,6 +34,7 @@ import 'package:sales/models/request/reliver/approve_reliver_request.dart';
 import 'package:sales/models/request/reliver/create_reliver_request.dart';
 import 'package:sales/models/request/store/detail_request_leave.dart';
 import 'package:sales/models/request/store/update_qty_request.dart';
+import 'package:sales/models/request/submit_mood_request.dart';
 import 'package:sales/models/request/update_fcm_profile_request.dart';
 import 'package:sales/models/request/update_photo_profile_request.dart';
 import 'package:sales/models/request/user_id_request.dart';
@@ -1243,6 +1244,23 @@ class ApiRepository {
           .updateCutiSales('/api/v1/izin/set-done/' + id, data)
           .timeout(Duration(seconds: timeout));
       print(res);
+      if (res.statusCode == 200 || res.statusCode == 401) {
+        return ErrorResponse.fromJson(res.body);
+      }
+    } on TimeoutException catch (_) {
+      EasyLoading.showError('Connection Timeout. Please try again later');
+      EasyLoading.dismiss();
+    } catch (exception) {
+      print(exception);
+    }
+    return null;
+  }
+
+  Future<ErrorResponse?> sumbmitDialogMood(SubmitDialogMoodRequest data) async {
+    try {
+      final res = await apiProvider
+          .submitDialogMood('/api/submit_mood', data)
+          .timeout(Duration(seconds: timeout));
       if (res.statusCode == 200 || res.statusCode == 401) {
         return ErrorResponse.fromJson(res.body);
       }

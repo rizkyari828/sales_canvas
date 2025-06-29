@@ -6,6 +6,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sales/models/request/id_request.dart';
 import 'package:sales/models/request/rate/submit_rate_request.dart';
 import 'package:sales/models/request/store/update_qty_request.dart';
+import 'package:sales/models/request/submit_mood_request.dart';
 import 'package:sales/models/request/update_fcm_profile_request.dart';
 import 'package:sales/models/request/update_photo_profile_request.dart';
 import 'package:sales/models/request/user_id_request.dart';
@@ -974,17 +975,36 @@ class HomeController extends BaseController {
     final storage = GetStorage();
     final today = DateTime.now().toIso8601String().substring(0, 10);
     final lastShown = storage.read('lastMoodDialogDate');
-    // if (lastShown != today) {
-    //   // Tampilkan dialog
-    //   Future.delayed(Duration.zero, () {
-    //     showMoodDialog(context, (selectedMood) {
-    //       // Simpan mood jika perlu
-    //       print('Mood dipilih: $selectedMood');
-    //     });
-    //   });
-    //   // Simpan tanggal hari ini agar tidak muncul lagi hari ini
-    //   storage.write('lastMoodDialogDate', today);
-    // }
+    if (lastShown != today) {
+      // Tampilkan dialog
+      Future.delayed(Duration.zero, () {
+        showMoodDialog(context, (selectedMood) {
+          // Simpan mood jika perlu
+          print('Mood dipilih: $selectedMood');
+          submitDialogMood(selectedMood);
+        });
+      });
+      storage.write('lastMoodDialogDate', today);
+    }
+    storage.remove('lastMoodDialogDate');
+  }
+
+  void submitDialogMood(String value) async {
+    final res = await apiRepository.sumbmitDialogMood(
+      SubmitDialogMoodRequest(
+        idUser: userId.value,
+        value: value,
+      ),
+    );
+    if (res?.error == false) {
+      EasyLoading.showSuccess('Berhasil disimpan');
+      EasyLoading.dismiss();
+      Get.back();
+    } else {
+      EasyLoading.showError('Gagal disimpan');
+      EasyLoading.dismiss();
+      Get.back();
+    }
   }
 
   @override
