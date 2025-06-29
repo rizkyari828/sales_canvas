@@ -62,6 +62,7 @@ class CutiView extends GetView<CutiListController> {
             thirdParagrafValue:
                 '${DateFormat("EEEE, d MMMM yyyy", "id_ID").format(controller.listCuti[i].tanggalAkhir ?? DateTime.now())}',
             approval: controller.listCuti[i].statusCuti ?? '',
+            levelApproval: controller.listCuti[i].levelApproval ?? '',
           ),
         ),
       ),

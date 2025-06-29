@@ -55,62 +55,62 @@ class AddKuisionerView extends GetView<KusionerController> {
   }
 
   Widget _getItems(KusionerController controller) {
-    final sh = SizeConfig().screenHeight;
-    return Column(
-      children: [
-        Container(
-          height: sh * .750,
-          child: ListView.builder(
-              itemCount: controller.listKuisioner.length,
-              itemBuilder: (context, i) => Padding(
-                    padding: const EdgeInsets.only(
-                        left: 20.0, right: 20, bottom: 20),
-                    child: Column(
+    return SingleChildScrollView(
+      padding: EdgeInsets.only(
+        top: 0,
+        bottom: MediaQuery.of(Get.context!).viewInsets.bottom + 250,
+      ),
+      child: Column(
+        children: [
+          ...List.generate(controller.listKuisioner.length, (i) {
+            return Padding(
+              padding: const EdgeInsets.only(left: 20.0, right: 20, bottom: 20),
+              child: Column(
+                children: [
+                  if (i == 0)
+                    Column(
                       children: [
-                        i == 0
-                            ? Column(
-                                children: [
-                                  SizedBox(height: 20.0),
-                                  CommonWidget.progressLiniar(
-                                      controller.currentProgress.value,
-                                      controller.allProgress.value,
-                                      controller.percentage.value,
-                                      context),
-                                ],
-                              )
-                            : SizedBox(),
-                        controller.listKuisioner[i].idKategori == 2
-                            ? soalEssay(
-                                controller.currentProgress.value + i + 1,
-                                controller.listKuisioner[i].soal ?? '',
-                                controller.listKuisioner[i].idSoal ?? 0,
-                                controller.listKuisioner[i].idKategori ?? 0,
-                                controller,
-                                initialValue: controller.answers[controller
-                                            .listKuisioner[i].idSoal
-                                            ?.toString() ??
-                                        ""] ??
-                                    "",
-                              )
-                            : SingleChoice(
-                                no: controller.currentProgress.value + i + 1,
-                                question:
-                                    controller.listKuisioner[i].soal ?? '',
-                                idSoal: controller.listKuisioner[i].idSoal ?? 0,
-                                idKategori:
-                                    controller.listKuisioner[i].idKategori ?? 0,
-                                options: [
-                                  controller.listKuisioner[i].pilihan1 ?? '',
-                                  controller.listKuisioner[i].pilihan2 ?? '',
-                                  controller.listKuisioner[i].pilihan3 ?? '',
-                                  controller.listKuisioner[i].pilihan4 ?? '',
-                                ],
-                              ),
+                        SizedBox(height: 20.0),
+                        CommonWidget.progressLiniar(
+                          controller.currentProgress.value,
+                          controller.allProgress.value,
+                          controller.percentage.value,
+                          Get.context!,
+                        ),
                       ],
                     ),
-                  )),
-        ),
-      ],
+                  controller.listKuisioner[i].idKategori == 2
+                      ? soalEssay(
+                          controller.currentProgress.value + i + 1,
+                          controller.listKuisioner[i].soal ?? '',
+                          controller.listKuisioner[i].idSoal ?? 0,
+                          controller.listKuisioner[i].idKategori ?? 0,
+                          controller,
+                          initialValue: controller.answers[controller
+                                      .listKuisioner[i].idSoal
+                                      ?.toString() ??
+                                  ""] ??
+                              "",
+                        )
+                      : SingleChoice(
+                          no: controller.currentProgress.value + i + 1,
+                          question: controller.listKuisioner[i].soal ?? '',
+                          idSoal: controller.listKuisioner[i].idSoal ?? 0,
+                          idKategori:
+                              controller.listKuisioner[i].idKategori ?? 0,
+                          options: [
+                            controller.listKuisioner[i].pilihan1 ?? '',
+                            controller.listKuisioner[i].pilihan2 ?? '',
+                            controller.listKuisioner[i].pilihan3 ?? '',
+                            controller.listKuisioner[i].pilihan4 ?? '',
+                          ],
+                        ),
+                ],
+              ),
+            );
+          }),
+        ],
+      ),
     );
   }
 }

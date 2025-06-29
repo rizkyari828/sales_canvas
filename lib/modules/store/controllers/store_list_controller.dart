@@ -130,7 +130,12 @@ class StoreListController extends BaseController {
     });
   }
 
-  void goToAddPages() {
-    Get.toNamed(Routes.ADD_STORE);
+  void goToAddPages() async {
+    var result = await Get.toNamed(Routes.ADD_STORE);
+    if (result == true) {
+      listStore.clear();
+      page.value = 1;
+      getStore(page.value);
+    }
   }
 }

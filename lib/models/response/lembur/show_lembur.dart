@@ -74,8 +74,7 @@ class ShowDataLembur {
         idLembur: json["id_lembur"],
         user: json["user"],
         keperluan: json["keperluan"],
-        // levelApproval: json["level"],
-        levelApproval: 'Hardcode Cabang',
+        levelApproval: json["level"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -87,7 +86,6 @@ class ShowDataLembur {
         "id_lembur": idLembur,
         "user": user,
         "keperluan": keperluan,
-        // "level": levelApproval,
-        "level": 'Hardcode Cabang',
+        "level": levelApproval,
       };
 }

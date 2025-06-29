@@ -38,7 +38,7 @@ class AddStoreView extends GetView<StoreAddController> {
                     CommonWidget.labelExpanded(
                         label: 'Lokasi dari GPS',
                         value: controller.locationDetail.value),
-                    SizedBox(height: 10.0),
+                    SizedBox(height: 20.0),
                     InputInputField(
                       keyboardType: TextInputType.text,
                       controller: controller.nameController,
@@ -47,22 +47,25 @@ class AddStoreView extends GetView<StoreAddController> {
                     SizedBox(height: 10.0),
                     CommonWidget.bodyText(text: "Detail Alamat"),
                     SizedBox(height: 10.0),
-                    Card(
-                        elevation: 0.1,
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0),
-                            side: BorderSide(
-                                color: ColorConstants.mainColor, width: 1)),
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: TextField(
-                            controller: controller.alamatController,
-                            maxLines: 8,
-                            decoration: InputDecoration.collapsed(
-                                hintText: "Enter your text here"),
-                          ),
-                        )),
+                    TextAreaField(
+                      controller: controller.alamatController,
+                    ),
+                    // Card(
+                    //     elevation: 0.1,
+                    //     color: Colors.white,
+                    //     shape: RoundedRectangleBorder(
+                    //         borderRadius: BorderRadius.circular(15.0),
+                    //         side: BorderSide(
+                    //             color: ColorConstants.mainColor, width: 1)),
+                    //     child: Padding(
+                    //       padding: EdgeInsets.all(8.0),
+                    //       child: TextField(
+                    //         controller: controller.alamatController,
+                    //         maxLines: 8,
+                    //         decoration: InputDecoration.collapsed(
+                    //             hintText: "Enter your text here"),
+                    //       ),
+                    //     )),
                     SizedBox(height: 20.0),
                     CustomDropDownSearch(
                       enabled: true,
@@ -102,41 +105,47 @@ class AddStoreView extends GetView<StoreAddController> {
                     SizedBox(height: 10.0),
                     CommonWidget.bodyText(text: "Catatan Kunjungan"),
                     SizedBox(height: 10.0),
-                    Card(
-                        elevation: 0.1,
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0),
-                            side: BorderSide(
-                                color: ColorConstants.mainColor, width: 1)),
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: TextField(
-                            controller: controller.visitNoteController,
-                            maxLines: 8,
-                            decoration: InputDecoration.collapsed(
-                                hintText: "Enter your text here"),
-                          ),
-                        )),
+                    TextAreaField(
+                      controller: controller.visitNoteController,
+                    ),
+                    // Card(
+                    //     elevation: 0.1,
+                    //     color: Colors.white,
+                    //     shape: RoundedRectangleBorder(
+                    //         borderRadius: BorderRadius.circular(15.0),
+                    //         side: BorderSide(
+                    //             color: ColorConstants.mainColor, width: 1)),
+                    //     child: Padding(
+                    //       padding: EdgeInsets.all(8.0),
+                    //       child: TextField(
+                    //         controller: controller.visitNoteController,
+                    //         maxLines: 8,
+                    //         decoration: InputDecoration.collapsed(
+                    //             hintText: "Enter your text here"),
+                    //       ),
+                    //     )),
                     SizedBox(height: 10.0),
                     CommonWidget.bodyText(text: "Rencana Tindak Lanjut"),
                     SizedBox(height: 10.0),
-                    Card(
-                        elevation: 0.1,
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0),
-                            side: BorderSide(
-                                color: ColorConstants.mainColor, width: 1)),
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: TextField(
-                            controller: controller.planExecutionController,
-                            maxLines: 8,
-                            decoration: InputDecoration.collapsed(
-                                hintText: "Enter your text here"),
-                          ),
-                        )),
+                    TextAreaField(
+                      controller: controller.planExecutionController,
+                    ),
+                    // Card(
+                    //     elevation: 0.1,
+                    //     color: Colors.white,
+                    //     shape: RoundedRectangleBorder(
+                    //         borderRadius: BorderRadius.circular(15.0),
+                    //         side: BorderSide(
+                    //             color: ColorConstants.mainColor, width: 1)),
+                    //     child: Padding(
+                    //       padding: EdgeInsets.all(8.0),
+                    //       child: TextField(
+                    //         controller: controller.planExecutionController,
+                    //         maxLines: 8,
+                    //         decoration: InputDecoration.collapsed(
+                    //             hintText: "Enter your text here"),
+                    //       ),
+                    //     )),
                     SizedBox(height: 10.0),
                     CommonWidget.minSubtitleText(
                         text: "Silahkan upload bukti Foto kunjungan anda"),

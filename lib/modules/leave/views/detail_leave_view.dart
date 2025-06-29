@@ -3,7 +3,6 @@ import 'package:sales/shared/shared.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:sales/shared/widgets/approval.dart';
 
 class LeaveDetailView extends GetView<LeaveDetailController> {
   final data = Get.arguments;

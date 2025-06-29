@@ -60,8 +60,9 @@ class OvertimeDetailController extends GetxController {
         await apiRepository.showLembur(ShowLemburRequest(id: argm.toString()));
     print(res!.data!);
     detail.value = res.data!.first;
-    statusApproval.value = detail.value.statusLembur ?? '';
-    String idRoleDetail = stringRoletoId(detail.value.levelApproval ?? '');
+    statusApproval.value = detail.value.statusLembur.toString().toLowerCase();
+    String idRoleDetail =
+        stringRoletoId(detail.value.levelApproval.toString().toLowerCase());
     approvalCondition.value = idRoleDetail == groupId.value;
   }
 

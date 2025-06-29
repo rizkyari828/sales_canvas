@@ -3,6 +3,7 @@ import 'package:sales/shared/utils/common_widget.dart';
 import 'package:sales/shared/utils/size_config.dart';
 import 'package:sales/shared/widgets/button.dart';
 import 'package:flutter/material.dart';
+import 'package:sales/shared/widgets/input_field.dart';
 
 class ApprovalFlow {
   static Widget buttonApprovalCnC(controller) {
@@ -105,31 +106,19 @@ class ApprovalFlow {
 
   static Widget buttonApprovalFlow(controller) {
     final sw = SizeConfig().screenWidth;
-    return controller.statusApproval == 'pengajuan' ||
-            controller.statusApproval == 'proses'
+    return controller.statusApproval.toString().toLowerCase() == 'pengajuan' ||
+            controller.statusApproval.toString().toLowerCase() == 'proses'
         ? Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CommonWidget.bodyText(text: "Catatan Approval"),
               SizedBox(height: 10.0),
-              Card(
-                  elevation: 0.1,
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                      side: BorderSide(
-                          color: ColorConstants.mainColor, width: 1)),
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: TextField(
-                      controller: controller.noteApprovalController,
-                      maxLines: 8,
-                      decoration: InputDecoration.collapsed(
-                          hintText: "Enter your text here"),
-                    ),
-                  )),
+              TextAreaField(
+                controller: controller.noteApprovalController,
+              ),
               SizedBox(height: 20.0),
+              SizedBox(height: 50.0),
               Container(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -334,9 +323,10 @@ class ApprovalFlow {
                   color: ColorConstants.black),
               Card(
                   elevation: 0,
-                  color: label == 'aprove'
+                  color: label.toLowerCase() == 'approved'
                       ? Colors.green
-                      : label == 'proses' || label == 'pengajuan'
+                      : label.toLowerCase() == 'proses' ||
+                              label.toLowerCase() == 'pengajuan'
                           ? Colors.yellow[800]
                           : Colors.red,
                   shape: RoundedRectangleBorder(
@@ -347,7 +337,8 @@ class ApprovalFlow {
                     padding: const EdgeInsets.all(8.0),
                     child: Center(
                         child: CommonWidget.bodyText(
-                            text: label.toString(), color: Colors.white)),
+                            text: label.toString().toUpperCase(),
+                            color: Colors.white)),
                   )),
             ],
           ),

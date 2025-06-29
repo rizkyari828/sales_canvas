@@ -2,7 +2,6 @@ import 'package:sales/modules/overtime/controllers/overtime_detail_controller.da
 import 'package:sales/shared/shared.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:sales/shared/widgets/approval.dart';
 
 class OvertimeDetailView extends GetView<OvertimeDetailController> {
@@ -44,7 +43,6 @@ class OvertimeDetailView extends GetView<OvertimeDetailController> {
                       CommonWidget.bodyText(
                           text: controller.detail.value.keperluan ?? ''),
                       SizedBox(height: 20.0),
-                      SizedBox(height: 50.0),
                       Obx(() => ApprovalFlow.buttonApproval(controller)),
                     ],
                   ),

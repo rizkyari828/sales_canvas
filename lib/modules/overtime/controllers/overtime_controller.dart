@@ -78,11 +78,27 @@ class OvertimeController extends GetxController {
   }
 
   void submit() {
-    if (endDate.compareTo(startDate) >= 0) {
-      submitData();
+    // Ambil jam dan menit dari controller
+    final start = startTimeController.text.split(':');
+    final end = endTimeController.text.split(':');
+
+    if (start.length == 2 && end.length == 2) {
+      final startHour = int.tryParse(start[0]) ?? 0;
+      final startMinute = int.tryParse(start[1]) ?? 0;
+      final endHour = int.tryParse(end[0]) ?? 0;
+      final endMinute = int.tryParse(end[1]) ?? 0;
+
+      final startTime = Duration(hours: startHour, minutes: startMinute);
+      final endTime = Duration(hours: endHour, minutes: endMinute);
+
+      if (endTime >= startTime) {
+        submitData();
+      } else {
+        validationDate.value =
+            'Jam selesai tidak boleh lebih awal dari jam mulai';
+      }
     } else {
-      validationDate.value =
-          'Tanggal selesai tidak bisa lebih besar dari tanggal mulai';
+      validationDate.value = 'Format jam tidak valid';
     }
   }
 
@@ -99,7 +115,7 @@ class OvertimeController extends GetxController {
     if (res?.error == false) {
       EasyLoading.showSuccess('Berhasil disimpan');
       EasyLoading.dismiss();
-      Get.back();
+      Get.back(result: true);
     } else {
       EasyLoading.showError('Gagal disimpan');
       EasyLoading.dismiss();

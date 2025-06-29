@@ -63,8 +63,9 @@ class CutiDetailController extends GetxController {
         .showCutiSales(ShowCutiSalesRequest(id: argm.toString()));
     print(res!.data!);
     detail.value = res.data!.first;
-    statusApproval.value = detail.value.statusCuti ?? '';
-    String idRoleDetail = stringRoletoId(detail.value.levelApproval ?? '');
+    statusApproval.value = detail.value.statusCuti.toString().toLowerCase();
+    String idRoleDetail =
+        stringRoletoId(detail.value.levelApproval.toString().toLowerCase());
     approvalCondition.value = idRoleDetail == groupId.value;
   }
 

@@ -5,10 +5,8 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sales/api/api_repository.dart';
-import 'package:sales/models/action.dart';
 import 'package:sales/models/request/attendance/attendance_wrapper.dart';
 import 'package:sales/models/request/leads/submit_lead.dart';
-import 'package:sales/models/response/get_master_response.dart';
 import 'package:sales/models/response/izin/type_izin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -16,7 +14,6 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:sales/models/response/master_data_2_response.dart';
-import 'package:sales/models/response/prospek/master_data_response.dart';
 import 'package:sales/shared/constants/storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -168,7 +165,7 @@ class LeadsController extends GetxController {
     if (res?.error == false) {
       EasyLoading.showSuccess('Berhasil disimpan');
       EasyLoading.dismiss();
-      Get.back();
+      Get.back(result: true);
     } else {
       EasyLoading.showError('Gagal disimpan');
       EasyLoading.dismiss();

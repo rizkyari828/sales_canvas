@@ -77,8 +77,8 @@ class ShowDataCutiSales {
         idCuti: json["id_cuti"],
         user: json["user"],
         keperluan: json["keperluan"],
-        // levelApproval: json["level"],
-        levelApproval: 'Area',
+        levelApproval: json["level"],
+        // levelApproval: 'Area',
       );
 
   Map<String, dynamic> toJson() => {
@@ -91,7 +91,7 @@ class ShowDataCutiSales {
         "id_cuti": idCuti,
         "user": user,
         "keperluan": keperluan,
-        // "level": levelApproval,
-        "level": 'Area',
+        "level": levelApproval,
+        // "level": 'Area',
       };
 }

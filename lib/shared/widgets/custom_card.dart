@@ -106,13 +106,13 @@ class CustomCardView extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Icon(
-                              (approval == "aprove")
+                              (approval == "approved")
                                   ? Icons.check_circle_outlined
                                   : (approval == "pengajuan" ||
                                           approval == "proses")
                                       ? Icons.access_time_outlined
                                       : Icons.close,
-                              color: (approval == "aprove")
+                              color: (approval == "approved")
                                   ? Colors.green
                                   : (approval == "pengajuan" ||
                                           approval == "proses")
@@ -122,7 +122,7 @@ class CustomCardView extends StatelessWidget {
                             ),
                             CommonWidget.captionText(
                               text: approval,
-                              color: (approval == "aprove")
+                              color: (approval == "approved")
                                   ? Colors.green
                                   : (approval == "pengajuan" ||
                                           approval == "proses")
@@ -148,6 +148,7 @@ class CustomExpandedCardView extends StatelessWidget {
   final String thirdParagrafValue;
   final String forthParagraf;
   final String approval;
+  final String levelApproval;
   final bool updateDelete;
   final VoidCallback? onPressedEdit;
   final VoidCallback? onPressedDelete;
@@ -160,6 +161,7 @@ class CustomExpandedCardView extends StatelessWidget {
     this.thirdParagrafLabel = '',
     this.thirdParagrafValue = '',
     this.approval = '',
+    this.levelApproval = '',
     this.forthParagraf = '',
     this.updateDelete = false,
     this.onPressedEdit,
@@ -172,7 +174,11 @@ class CustomExpandedCardView extends StatelessWidget {
     final sh = SizeConfig().screenHeight;
     return Container(
       margin: const EdgeInsets.only(left: 15.0, right: 15.0, top: 15.0),
-      height: name == '' ? sh * .15 : sh * .16,
+      height: levelApproval != ""
+          ? sh * .17
+          : name == ''
+              ? sh * .15
+              : sh * .16,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10.0),
@@ -191,7 +197,7 @@ class CustomExpandedCardView extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.all(15.0),
-        child: Row(
+        child: Column(
           children: [
             Container(
               child: Column(
@@ -209,10 +215,8 @@ class CustomExpandedCardView extends StatelessWidget {
                       ? SizedBox(height: 0)
                       : Row(
                           children: [
-                            Container(
-                                width: sw * 0.2,
-                                child: CommonWidget.subtitleText(
-                                    text: secondParagrafLabel)),
+                            CommonWidget.subtitleText(
+                                text: secondParagrafLabel),
                             CommonWidget.subtitleText(
                                 text: ': ' + secondParagrafValue),
                           ],
@@ -221,10 +225,7 @@ class CustomExpandedCardView extends StatelessWidget {
                       ? SizedBox(height: 0)
                       : Row(
                           children: [
-                            Container(
-                                width: sw * 0.2,
-                                child: CommonWidget.subtitleText(
-                                    text: thirdParagrafLabel)),
+                            CommonWidget.subtitleText(text: thirdParagrafLabel),
                             CommonWidget.subtitleText(
                                 text: ': ' + thirdParagrafValue),
                           ],
@@ -239,7 +240,7 @@ class CustomExpandedCardView extends StatelessWidget {
                 ? updateDelete
                     ? Expanded(
                         child: Align(
-                        alignment: Alignment.centerRight,
+                        alignment: Alignment.bottomCenter,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -250,11 +251,14 @@ class CustomExpandedCardView extends StatelessWidget {
                                   size: 30,
                                 ),
                                 onPressed: onPressedEdit),
+                            SizedBox(
+                              width: 5,
+                            ),
                             IconButton(
                                 icon: Icon(
                                   Icons.restore_from_trash_rounded,
                                   color: Colors.red,
-                                  size: 30,
+                                  size: 20,
                                 ),
                                 onPressed: onPressedDelete),
                           ],
@@ -262,36 +266,67 @@ class CustomExpandedCardView extends StatelessWidget {
                       ))
                     : Expanded(
                         child: Align(
-                            alignment: Alignment.centerRight,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  (approval == "aprove")
-                                      ? Icons.check_circle_outlined
-                                      : (approval == "pengajuan" ||
-                                              approval == "proses")
-                                          ? Icons.access_time_outlined
-                                          : Icons.close,
-                                  color: (approval == "aprove")
-                                      ? Colors.green
-                                      : (approval == "pengajuan" ||
-                                              approval == "proses")
-                                          ? Colors.orange
-                                          : Colors.red,
-                                  size: 30,
+                            alignment: Alignment.bottomCenter,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: approval.toString().toLowerCase() ==
+                                        "approved"
+                                    ? Colors.green[100]
+                                    : approval.toString().toLowerCase() ==
+                                                "pengajuan" ||
+                                            approval.toString().toLowerCase() ==
+                                                "proses"
+                                        ? Colors.yellow[100]
+                                        : Colors.red[100],
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 5.0, right: 5.0, top: 8, bottom: 8),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    levelApproval != ""
+                                        ? CommonWidget.captionText(
+                                            text: levelApproval.toUpperCase(),
+                                            color: ColorConstants.black)
+                                        : SizedBox(),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          (approval.toString().toLowerCase() ==
+                                                  "approved")
+                                              ? Icons.check_circle_outlined
+                                              : (approval
+                                                              .toString()
+                                                              .toLowerCase() ==
+                                                          "pengajuan" ||
+                                                      approval
+                                                              .toString()
+                                                              .toLowerCase() ==
+                                                          "proses")
+                                                  ? Icons.access_time_outlined
+                                                  : Icons.close,
+                                          color: ColorConstants.mainColor,
+                                          size: 20,
+                                        ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        CommonWidget.captionText(
+                                          text: approval.toUpperCase(),
+                                          color: ColorConstants.mainColor,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                                CommonWidget.captionText(
-                                  text: approval,
-                                  color: (approval == "aprove")
-                                      ? Colors.green
-                                      : (approval == "pengajuan" ||
-                                              approval == "proses")
-                                          ? Colors.orange
-                                          : Colors.red,
-                                ),
-                              ],
+                              ),
                             )),
                       )
                 : Container()
@@ -300,6 +335,42 @@ class CustomExpandedCardView extends StatelessWidget {
       ),
     );
   }
+
+//   Widget bottomApproval(String approval, String levelApproval) {
+//     final sw = SizeConfig().screenWidth;
+//     return Column(
+//       children: [
+//         Spacer(),
+//         Container(
+//           width: sw * .85,
+//           decoration: BoxDecoration(
+//             color:
+//                 statusKunjungan == '1' ? Colors.green[100] : Colors.yellow[100],
+//             borderRadius: BorderRadius.circular(10),
+//           ),
+//           padding: const EdgeInsets.all(5),
+//           child: Row(
+//             mainAxisAlignment: MainAxisAlignment.center,
+//             children: [
+//               Icon(
+//                 statusKunjungan == '1'
+//                     ? Icons.check_circle
+//                     : Icons.warning_amber_rounded,
+//                 color: statusKunjungan == '1' ? Colors.green : Colors.orange,
+//               ),
+//               const SizedBox(width: 10),
+//               CommonWidget.captionText(
+//                 text: statusKunjungan == '1'
+//                     ? 'Sudah dikunjungi'
+//                     : 'Belum dikunjungi',
+//                 color: ColorConstants.mainColor,
+//               ),
+//             ],
+//           ),
+//         ),
+//       ],
+//     );
+//   }
 }
 
 class CustomExpandedImageCardView extends StatelessWidget {

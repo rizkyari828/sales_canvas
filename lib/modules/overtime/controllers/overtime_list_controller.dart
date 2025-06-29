@@ -74,7 +74,12 @@ class OvertimeListController extends GetxController {
     Get.toNamed(Routes.DETAIL_OVERTIME, arguments: id);
   }
 
-  void goToAddPages() {
-    Get.toNamed(Routes.ADD_OVERTIME);
+  void goToAddPages() async {
+    var result = await Get.toNamed(Routes.ADD_OVERTIME);
+    if (result == true) {
+      listLembur.clear();
+      page.value = 1;
+      getLembur(page.value);
+    }
   }
 }

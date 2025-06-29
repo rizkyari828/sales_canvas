@@ -23,7 +23,8 @@ class CutiDetailView extends GetView<CutiDetailController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ApprovalFlow.statusApproval(
-                          controller.detail.value.statusCuti, controller.detail.value.levelApproval),
+                          controller.detail.value.statusCuti,
+                          controller.detail.value.levelApproval),
                       SizedBox(height: 20.0),
                       CommonWidget.labelExpanded(
                           label: 'Email',
@@ -44,8 +45,8 @@ class CutiDetailView extends GetView<CutiDetailController> {
                       CommonWidget.bodyText(
                           text: controller.detail.value.keperluan ?? ''),
                       SizedBox(height: 20.0),
-                      SizedBox(height: 50.0),
                       Obx(() => ApprovalFlow.buttonApproval(controller)),
+                      
                     ],
                   ),
           ),

@@ -64,22 +64,23 @@ class AddOvertimeView extends GetView<OvertimeController> {
                     SizedBox(height: 10.0),
                     CommonWidget.bodyText(text: "Keperluan"),
                     SizedBox(height: 10.0),
-                    Card(
-                        elevation: 0.1,
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0),
-                            side: BorderSide(
-                                color: ColorConstants.mainColor, width: 1)),
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: TextField(
-                            controller: controller.noteController,
-                            maxLines: 8,
-                            decoration: InputDecoration.collapsed(
-                                hintText: "Enter your text here"),
-                          ),
-                        )),
+                    TextAreaField(controller: controller.noteController),
+                    // Card(
+                    //     elevation: 0.1,
+                    //     color: Colors.white,
+                    //     shape: RoundedRectangleBorder(
+                    //         borderRadius: BorderRadius.circular(15.0),
+                    //         side: BorderSide(
+                    //             color: ColorConstants.mainColor, width: 1)),
+                    //     child: Padding(
+                    //       padding: EdgeInsets.all(8.0),
+                    //       child: TextField(
+                    //         controller: controller.noteController,
+                    //         maxLines: 8,
+                    //         decoration: InputDecoration.collapsed(
+                    //             hintText: "Enter your text here"),
+                    //       ),
+                    //     )),
                     SizedBox(height: 30.0),
                     // CommonWidget.bodyText(text: "Upload Dokumen*"),
                     // SizedBox(height: 10.0),

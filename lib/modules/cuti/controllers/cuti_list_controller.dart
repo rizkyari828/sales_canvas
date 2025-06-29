@@ -74,7 +74,13 @@ class CutiListController extends GetxController {
     Get.toNamed(Routes.DETAIL_CUTI_SALES, arguments: id);
   }
 
-  void goToAddPages() {
-    Get.toNamed(Routes.ADD_CUTI_SALES);
+  void goToAddPages() async {
+    var result = await Get.toNamed(Routes.ADD_CUTI_SALES);
+    if (result == true) {
+      // Refresh data jika submit sukses
+      listCuti.clear();
+      page.value = 1;
+      getCutiSales(page.value);
+    }
   }
 }
