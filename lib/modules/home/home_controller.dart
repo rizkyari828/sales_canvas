@@ -914,12 +914,6 @@ class HomeController extends BaseController {
                       Colors.amber, onSelected),
                   _moodIcon(context, 'Sedikit Lelah',
                       Icons.sentiment_dissatisfied, Colors.orange, onSelected),
-                  // _moodIcon(
-                  //     context,
-                  //     'Tidak Senang',
-                  //     Icons.sentiment_very_dissatisfied,
-                  //     Colors.red,
-                  //     onSelected),
                 ],
               ),
               SizedBox(height: 12),
@@ -948,6 +942,8 @@ class HomeController extends BaseController {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
         border: Border.all(width: 2.0, color: ColorConstants.borderColor),
+        color: color.withAlpha((0.15 * 255)
+            .toInt()), 
       ),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
