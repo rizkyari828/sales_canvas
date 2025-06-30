@@ -1,8 +1,6 @@
 import 'package:sales/api/api_repository.dart';
-import 'package:sales/models/request/id_request.dart';
 import 'package:sales/models/request/user_id_request.dart';
 import 'package:sales/models/response/Lead/list_lead_respone.dart';
-import 'package:sales/models/response/izin/list_izin.dart';
 import 'package:sales/routes/app_pages.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -75,7 +73,12 @@ class LeadsListController extends GetxController {
     Get.toNamed(Routes.DETAIL_LEADS, arguments: {'data_lead': dataLead});
   }
 
-  void goToAddPages() {
-    Get.toNamed(Routes.ADD_LEADS);
+  void goToAddPages() async {
+    var result = await Get.toNamed(Routes.ADD_LEADS);
+    if (result == true) {
+      list.clear();
+      page.value = 1;
+      getLeads(page.value);
+    }
   }
 }

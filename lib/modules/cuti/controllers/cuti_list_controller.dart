@@ -1,7 +1,6 @@
 import 'package:sales/api/api_repository.dart';
 import 'package:sales/models/request/user_id_request.dart';
 import 'package:sales/models/response/cuti_sales/list_cuti_sales.dart';
-import 'package:sales/models/response/lembur/list_lembur.dart';
 import 'package:sales/routes/app_pages.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -58,7 +57,7 @@ class CutiListController extends GetxController {
 
   void getCutiSales(page) async {
     final res = await apiRepository.listCuti(
-        page: page, data: UserIdRequest(id: userId.value));
+        data: UserIdRequest(id: userId.value, page: page, limit: '10'));
     listCuti.addAll(res?.data ?? []);
   }
 
@@ -74,7 +73,13 @@ class CutiListController extends GetxController {
     Get.toNamed(Routes.DETAIL_CUTI_SALES, arguments: id);
   }
 
-  void goToAddPages() {
-    Get.toNamed(Routes.ADD_CUTI_SALES);
+  void goToAddPages() async {
+    var result = await Get.toNamed(Routes.ADD_CUTI_SALES);
+    if (result == true) {
+      // Refresh data jika submit sukses
+      listCuti.clear();
+      page.value = 1;
+      getCutiSales(page.value);
+    }
   }
 }

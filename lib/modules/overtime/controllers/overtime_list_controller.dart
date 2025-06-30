@@ -58,7 +58,8 @@ class OvertimeListController extends GetxController {
 
   void getLembur(page) async {
     final res = await apiRepository.listLembur(
-        page: page, data: UserIdRequest(id: userId.value));
+        data: UserIdRequest(
+            id: userId.value, page: page.toString(), limit: '10'));
     listLembur.addAll(res?.data ?? []);
   }
 
@@ -74,7 +75,12 @@ class OvertimeListController extends GetxController {
     Get.toNamed(Routes.DETAIL_OVERTIME, arguments: id);
   }
 
-  void goToAddPages() {
-    Get.toNamed(Routes.ADD_OVERTIME);
+  void goToAddPages() async {
+    var result = await Get.toNamed(Routes.ADD_OVERTIME);
+    if (result == true) {
+      listLembur.clear();
+      page.value = 1;
+      getLembur(page.value);
+    }
   }
 }

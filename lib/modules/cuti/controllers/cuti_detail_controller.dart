@@ -1,8 +1,7 @@
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:sales/api/api_repository.dart';
 import 'package:sales/models/request/cuti_sales/detail_request_cuti.dart';
 import 'package:sales/models/request/cuti_sales/update_approval_request.dart';
-import 'package:sales/models/request/lembur/detail_request_lembur.dart';
-import 'package:sales/models/request/lembur/update_approval_request.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sales/models/response/cuti_sales/show_cuti_sales.dart';
@@ -27,6 +26,8 @@ class CutiDetailController extends GetxController {
   RxString nameItem = "".obs;
   RxString groupName = "".obs;
   RxString groupId = "".obs;
+  RxString statusApproval = "".obs;
+  RxBool approvalCondition = false.obs;
 
   @override
   void onInit() {
@@ -62,24 +63,49 @@ class CutiDetailController extends GetxController {
         .showCutiSales(ShowCutiSalesRequest(id: argm.toString()));
     print(res!.data!);
     detail.value = res.data!.first;
+    statusApproval.value = detail.value.statusCuti.toString().toLowerCase();
+    String idRoleDetail =
+        stringRoletoId(detail.value.levelApproval.toString().toLowerCase());
+    approvalCondition.value = idRoleDetail == groupId.value;
+  }
+
+  String stringRoletoId(String role) {
+    switch (role.toLowerCase()) {
+      case 'tad':
+        return '1';
+      case 'cabang':
+        return '2';
+      case 'area':
+        return '3';
+      case 'client':
+        return '4';
+      default:
+        return '1';
+    }
   }
 
   void approval({
     action = "reject",
   }) async {
-    final res = await apiRepository.updateApprovalCutiSales(
-        detail.value.idLembur.toString(),
-        UpdateApprovalCutiSalesRequest(
-          action: action,
-          noteApproval: noteApprovalController.text,
-        ));
-    // if (res?.error == false) {
-    //   EasyLoading.showSuccess('Berhasil disimpan');
-    //   getDetailLembur();
-    //   loadUsers();
-    // } else {
-    //   EasyLoading.showError('Gagal disimpan');
-    // }
+    String id_action = '0';
+    if (action == 'reject') {
+      id_action = '0';
+    } else {
+      id_action = '1';
+    }
+    final res = await apiRepository
+        .updateApprovalCutiSales(UpdateApprovalCutiSalesRequest(
+      id: detail.value.idCuti.toString(),
+      action: id_action,
+      noteApproval: noteApprovalController.text,
+    ));
+    if (res?.error == false) {
+      getDetailCuti();
+      loadUsers();
+      EasyLoading.showSuccess('Berhasil disimpan');
+    } else {
+      EasyLoading.showError('Gagal disimpan');
+    }
   }
 
   selectDate(BuildContext context) async {

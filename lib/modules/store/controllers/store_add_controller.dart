@@ -301,7 +301,7 @@ class StoreAddController extends BaseController {
 
   void _afterSuccess() {
     _clearTempFile();
-    Get.back();
+    Get.back(result: true);
   }
 
   void _clearTempFile() {

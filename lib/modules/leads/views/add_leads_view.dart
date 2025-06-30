@@ -34,7 +34,7 @@ class AddLeadsView extends GetView<LeadsController> {
                     CommonWidget.labelExpanded(
                         label: 'Lokasi dari GPS',
                         value: controller.locationDetail.value),
-                    SizedBox(height: 10.0),
+                    SizedBox(height: 20.0),
                     CustomDropDownSearch(
                       enabled: true,
                       selectedItem: controller.leadSource.value,
@@ -80,23 +80,26 @@ class AddLeadsView extends GetView<LeadsController> {
                     ),
                     CommonWidget.bodyText(text: "Detail Alamat"),
                     SizedBox(height: 10.0),
-                    Card(
-                        elevation: 0.1,
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0),
-                            side: BorderSide(
-                                color: ColorConstants.mainColor, width: 1)),
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: TextField(
-                            controller: controller.alamatController,
-                            maxLines: 8,
-                            decoration: InputDecoration.collapsed(
-                                hintText: "Enter your text here"),
-                          ),
-                        )),
-                    SizedBox(height: 10.0),
+                    TextAreaField(
+                      controller: controller.alamatController,
+                    ),
+                    // Card(
+                    //     elevation: 0.1,
+                    //     color: Colors.white,
+                    //     shape: RoundedRectangleBorder(
+                    //         borderRadius: BorderRadius.circular(15.0),
+                    //         side: BorderSide(
+                    //             color: ColorConstants.mainColor, width: 1)),
+                    //     child: Padding(
+                    //       padding: EdgeInsets.all(8.0),
+                    //       child: TextField(
+                    //         controller: controller.alamatController,
+                    //         maxLines: 8,
+                    //         decoration: InputDecoration.collapsed(
+                    //             hintText: "Enter your text here"),
+                    //       ),
+                    //     )),
+                    SizedBox(height: 20.0),
                     CustomDropDownSearch(
                       enabled: true,
                       selectedItem: controller.leadCategory.value,
@@ -120,7 +123,7 @@ class AddLeadsView extends GetView<LeadsController> {
                       controller: controller.minatProductController,
                       labelText: "Product Minat",
                     ),
-                    SizedBox(height: 10.0),
+                    SizedBox(height: 20.0),
                     CustomDropDownSearch(
                       enabled: true,
                       selectedItem: controller.statusLead.value,
@@ -141,22 +144,23 @@ class AddLeadsView extends GetView<LeadsController> {
                     SizedBox(height: 10.0),
                     CommonWidget.bodyText(text: "Catatan"),
                     SizedBox(height: 10.0),
-                    Card(
-                        elevation: 0.1,
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0),
-                            side: BorderSide(
-                                color: ColorConstants.mainColor, width: 1)),
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: TextField(
-                            controller: controller.noteController,
-                            maxLines: 8,
-                            decoration: InputDecoration.collapsed(
-                                hintText: "Enter your text here"),
-                          ),
-                        )),
+                    TextAreaField(controller: controller.noteController),
+                    // Card(
+                    //     elevation: 0.1,
+                    //     color: Colors.white,
+                    //     shape: RoundedRectangleBorder(
+                    //         borderRadius: BorderRadius.circular(15.0),
+                    //         side: BorderSide(
+                    //             color: ColorConstants.mainColor, width: 1)),
+                    //     child: Padding(
+                    //       padding: EdgeInsets.all(8.0),
+                    //       child: TextField(
+                    //         controller: controller.noteController,
+                    //         maxLines: 8,
+                    //         decoration: InputDecoration.collapsed(
+                    //             hintText: "Enter your text here"),
+                    //       ),
+                    //     )),
                     SizedBox(height: 10.0),
                     CommonWidget.minSubtitleText(
                         text: "Silahkan upload bukti Foto kunjungan anda"),

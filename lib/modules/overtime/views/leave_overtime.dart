@@ -59,10 +59,8 @@ class OvertimeView extends GetView<OvertimeListController> {
             secondParagrafValue: controller.listLembur[i].jamIn ?? '',
             thirdParagrafLabel: "Selesai",
             thirdParagrafValue: controller.listLembur[i].jamOut ?? '',
-            forthParagraf: controller.listLembur[i].statusLembur ?? '',
-            approval: controller.listLembur[i].statusLembur == 'pengajuan'
-                ? 'Waiting'
-                : controller.listLembur[i].statusLembur ?? '',
+            approval: controller.listLembur[i].statusLembur ?? '',
+            levelApproval: controller.listLembur[i].levelApproval ?? '',
           ),
         ),
       ),

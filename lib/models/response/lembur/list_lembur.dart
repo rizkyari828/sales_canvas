@@ -49,6 +49,7 @@ class DataLembur {
   String? statusLembur;
   String? user;
   int? idLembur;
+  String? levelApproval;
 
   DataLembur({
     this.tanggalLembur,
@@ -57,6 +58,7 @@ class DataLembur {
     this.statusLembur,
     this.user,
     this.idLembur,
+    this.levelApproval,
   });
 
   factory DataLembur.fromJson(Map<String, dynamic> json) => DataLembur(
@@ -68,6 +70,7 @@ class DataLembur {
         statusLembur: json["status_lembur"],
         user: json["user"],
         idLembur: json["id_lembur"],
+        levelApproval: json["level"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -78,5 +81,6 @@ class DataLembur {
         "status_lembur": statusLembur,
         "user": user,
         "id_lembur": idLembur,
+        'level': levelApproval
       };
 }

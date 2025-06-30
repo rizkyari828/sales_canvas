@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:sales/models/request/cuti_sales/submit_izin_request.dart';
-import 'package:sales/models/request/lembur/submit_izin_request.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CutiController extends GetxController {
@@ -97,7 +96,7 @@ class CutiController extends GetxController {
     if (res?.error == false) {
       EasyLoading.showSuccess('Berhasil disimpan');
       EasyLoading.dismiss();
-      Get.back();
+      Get.back(result: true);
     } else {
       EasyLoading.showError('Gagal disimpan');
       EasyLoading.dismiss();

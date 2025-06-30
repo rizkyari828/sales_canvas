@@ -34,6 +34,7 @@ import 'package:sales/models/request/reliver/approve_reliver_request.dart';
 import 'package:sales/models/request/reliver/create_reliver_request.dart';
 import 'package:sales/models/request/store/detail_request_leave.dart';
 import 'package:sales/models/request/store/update_qty_request.dart';
+import 'package:sales/models/request/submit_mood_request.dart';
 import 'package:sales/models/request/update_fcm_profile_request.dart';
 import 'package:sales/models/request/update_photo_profile_request.dart';
 import 'package:get/get.dart';
@@ -304,12 +305,17 @@ class ApiProvider extends BaseProvider {
   }
 
   Future<Response> updateLembur(String path, SubmitLemburRequest data) {
-    return patch(path, data.toJson());
+    return post(path, data.toJson());
   }
 
   Future<Response> updateApprovalLembur(
       String path, UpdateApprovalLemburRequest data) {
-    return patch(path, data.toJson());
+    return post(path, data.toJson());
+  }
+
+  Future<Response> submitDialogMood(
+      String path, SubmitDialogMoodRequest data) {
+    return post(path, data.toJson());
   }
   //ENDIZIN
 
@@ -370,12 +376,12 @@ class ApiProvider extends BaseProvider {
   }
 
   Future<Response> updateCutiSales(String path, SubmitCutiSalesRequest data) {
-    return patch(path, data.toJson());
+    return post(path, data.toJson());
   }
 
   Future<Response> updateApprovalCutiSales(
       String path, UpdateApprovalCutiSalesRequest data) {
-    return patch(path, data.toJson());
+    return post(path, data.toJson());
   }
   //ENDIZIN
 }

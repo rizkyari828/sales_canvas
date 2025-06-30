@@ -12,10 +12,10 @@ class ShowCutiSalesRequest {
 
   factory ShowCutiSalesRequest.fromJson(Map<String, dynamic> json) =>
       ShowCutiSalesRequest(
-        id: json["id_lembur"],
+        id: json["id_cuti"],
       );
 
   Map<String, dynamic> toJson() => {
-        "id_lembur": id,
+        "id_cuti": id,
       };
 }

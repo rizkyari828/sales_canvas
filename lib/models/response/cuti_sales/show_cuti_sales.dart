@@ -4,66 +4,94 @@
 
 import 'dart:convert';
 
-ShowCutiSalesResponse showCutiSalesResponseFromJson(String str) => ShowCutiSalesResponse.fromJson(json.decode(str));
+ShowCutiSalesResponse showCutiSalesResponseFromJson(String str) =>
+    ShowCutiSalesResponse.fromJson(json.decode(str));
 
-String showCutiSalesResponseToJson(ShowCutiSalesResponse data) => json.encode(data.toJson());
+String showCutiSalesResponseToJson(ShowCutiSalesResponse data) =>
+    json.encode(data.toJson());
 
 class ShowCutiSalesResponse {
-    String? status;
-    String? message;
-    bool? error;
-    List<ShowDataCutiSales>? data;
+  String? status;
+  String? message;
+  bool? error;
+  List<ShowDataCutiSales>? data;
 
-    ShowCutiSalesResponse({
-        this.status,
-        this.message,
-        this.error,
-        this.data,
-    });
+  ShowCutiSalesResponse({
+    this.status,
+    this.message,
+    this.error,
+    this.data,
+  });
 
-    factory ShowCutiSalesResponse.fromJson(Map<String, dynamic> json) => ShowCutiSalesResponse(
+  factory ShowCutiSalesResponse.fromJson(Map<String, dynamic> json) =>
+      ShowCutiSalesResponse(
         status: json["status"],
         message: json["message"],
         error: json["error"],
-        data: json["Data"] == null ? [] : List<ShowDataCutiSales>.from(json["Data"]!.map((x) => ShowDataCutiSales.fromJson(x))),
-    );
+        data: json["Data"] == null
+            ? []
+            : List<ShowDataCutiSales>.from(
+                json["Data"]!.map((x) => ShowDataCutiSales.fromJson(x))),
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
         "error": error,
-        "Data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
-    };
+        "Data": data == null
+            ? []
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
+      };
 }
 
 class ShowDataCutiSales {
-    DateTime? tanggalLembur;
-    String? jamIn;
-    String? jamOut;
-    String? statusLembur;
-    int? idLembur;
+  dynamic tanggalPengajuan;
+  DateTime? tanggalAwal;
+  DateTime? tanggalAkhir;
+  String? statusCuti;
+  int? idCuti;
+  String? user;
+  String? keperluan;
+  String? levelApproval;
 
-    ShowDataCutiSales({
-        this.tanggalLembur,
-        this.jamIn,
-        this.jamOut,
-        this.statusLembur,
-        this.idLembur,
-    });
+  ShowDataCutiSales(
+      {this.tanggalPengajuan,
+      this.tanggalAwal,
+      this.tanggalAkhir,
+      this.statusCuti,
+      this.idCuti,
+      this.user,
+      this.keperluan,
+      this.levelApproval});
 
-    factory ShowDataCutiSales.fromJson(Map<String, dynamic> json) => ShowDataCutiSales(
-        tanggalLembur: json["tanggal_lembur"] == null ? null : DateTime.parse(json["tanggal_lembur"]),
-        jamIn: json["jam_in"],
-        jamOut: json["jam_out"],
-        statusLembur: json["status_lembur"],
-        idLembur: json["id_lembur"],
-    );
+  factory ShowDataCutiSales.fromJson(Map<String, dynamic> json) =>
+      ShowDataCutiSales(
+        tanggalPengajuan: json["tanggal_pengajuan"],
+        tanggalAwal: json["tanggal_awal"] == null
+            ? null
+            : DateTime.parse(json["tanggal_awal"]),
+        tanggalAkhir: json["tanggal_akhir"] == null
+            ? null
+            : DateTime.parse(json["tanggal_akhir"]),
+        statusCuti: json["status_cuti"],
+        idCuti: json["id_cuti"],
+        user: json["user"],
+        keperluan: json["keperluan"],
+        levelApproval: json["level"],
+        // levelApproval: 'Area',
+      );
 
-    Map<String, dynamic> toJson() => {
-        "tanggal_lembur": "${tanggalLembur!.year.toString().padLeft(4, '0')}-${tanggalLembur!.month.toString().padLeft(2, '0')}-${tanggalLembur!.day.toString().padLeft(2, '0')}",
-        "jam_in": jamIn,
-        "jam_out": jamOut,
-        "status_lembur": statusLembur,
-        "id_lembur": idLembur,
-    };
+  Map<String, dynamic> toJson() => {
+        "tanggal_pengajuan": tanggalPengajuan,
+        "tanggal_awal":
+            "${tanggalAwal!.year.toString().padLeft(4, '0')}-${tanggalAwal!.month.toString().padLeft(2, '0')}-${tanggalAwal!.day.toString().padLeft(2, '0')}",
+        "tanggal_akhir":
+            "${tanggalAkhir!.year.toString().padLeft(4, '0')}-${tanggalAkhir!.month.toString().padLeft(2, '0')}-${tanggalAkhir!.day.toString().padLeft(2, '0')}",
+        "status_cuti": statusCuti,
+        "id_cuti": idCuti,
+        "user": user,
+        "keperluan": keperluan,
+        "level": levelApproval,
+        // "level": 'Area',
+      };
 }

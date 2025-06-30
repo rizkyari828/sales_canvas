@@ -34,15 +34,16 @@ class LoginRespons {
 }
 
 class DataLogin {
-  DataLogin(
-      {this.userId,
-      this.token,
-      this.nama,
-      this.idPegawai,
-      this.username,
-      this.foto,
-      this.groupUser,
-      this.tipe});
+  DataLogin({
+    this.userId,
+    this.token,
+    this.nama,
+    this.idPegawai,
+    this.username,
+    this.foto,
+    this.groupUser,
+    this.tipe,
+  });
 
   int? userId;
   String? token;
@@ -61,7 +62,8 @@ class DataLogin {
         username: json["username"],
         foto: json["foto"],
         groupUser: json["stsUser"],
-        tipe: json["tipe"],
+        // tipe: json["tipe"],
+        tipe: '2',
       );
 
   Map<String, dynamic> toJson() => {
@@ -71,6 +73,7 @@ class DataLogin {
         "idPegawai": idPegawai,
         "foto": foto,
         "stsUser": groupUser,
-        "tipe": tipe
+        // "tipe": tipe,
+        "tipe": '2'
       };
 }

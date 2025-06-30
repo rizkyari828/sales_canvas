@@ -15,29 +15,38 @@ class CutiDetailView extends GetView<CutiDetailController> {
             child: Padding(
           padding: const EdgeInsets.all(25.0),
           child: Obx(
-            () => controller.detail.value.idLembur == null
+            () => controller.detail.value.idCuti == null
                 ? CircularProgressIndicator(
                     backgroundColor: ColorConstants.mainColor,
                   )
                 : Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      ApprovalFlow.statusApproval(
+                          controller.detail.value.statusCuti,
+                          controller.detail.value.levelApproval),
+                      SizedBox(height: 20.0),
+                      CommonWidget.labelExpanded(
+                          label: 'Email',
+                          value: controller.detail.value.user.toString()),
+                      SizedBox(height: 10.0),
                       CommonWidget.labelExpanded(
                           label: 'Jam Mulai',
-                          value: controller.detail.value.jamIn.toString()),
+                          value:
+                              controller.detail.value.tanggalAwal.toString()),
                       SizedBox(height: 10.0),
                       CommonWidget.labelExpanded(
                           label: 'Jam Selesai',
-                          value: controller.detail.value.jamOut.toString()),
+                          value:
+                              controller.detail.value.tanggalAkhir.toString()),
                       SizedBox(height: 20.0),
-                      CommonWidget.bodyText(text: "Keterangan"),
+                      CommonWidget.bodyText(text: "Keperluan"),
                       SizedBox(height: 10.0),
-                      // CommonWidget.bodyText(
-                      //     text: controller.detail.value.keterangan ?? ''),
-                      // SizedBox(height: 20.0),
-                      SizedBox(height: 50.0),
-                      Obx(() =>
-                          ApprovalFlow.buttonApproval(controller, "1", "1")),
+                      CommonWidget.bodyText(
+                          text: controller.detail.value.keperluan ?? ''),
+                      SizedBox(height: 20.0),
+                      Obx(() => ApprovalFlow.buttonApproval(controller)),
+                      
                     ],
                   ),
           ),

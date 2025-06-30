@@ -1,3 +1,4 @@
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:sales/api/api_repository.dart';
 import 'package:sales/models/request/lembur/detail_request_lembur.dart';
 import 'package:sales/models/request/lembur/update_approval_request.dart';
@@ -20,11 +21,10 @@ class OvertimeDetailController extends GetxController {
   final qtyController = TextEditingController();
   final dateController = TextEditingController();
   final dateCnCController = TextEditingController();
-  RxString dateCnC = "".obs;
-  RxString dateGoods = "".obs;
-  RxString nameItem = "".obs;
   RxString groupName = "".obs;
   RxString groupId = "".obs;
+  RxString statusApproval = "".obs;
+  RxBool approvalCondition = false.obs;
 
   @override
   void onInit() {
@@ -60,24 +60,49 @@ class OvertimeDetailController extends GetxController {
         await apiRepository.showLembur(ShowLemburRequest(id: argm.toString()));
     print(res!.data!);
     detail.value = res.data!.first;
+    statusApproval.value = detail.value.statusLembur.toString().toLowerCase();
+    String idRoleDetail =
+        stringRoletoId(detail.value.levelApproval.toString().toLowerCase());
+    approvalCondition.value = idRoleDetail == groupId.value;
+  }
+
+  String stringRoletoId(String role) {
+    switch (role.toLowerCase()) {
+      case 'tad':
+        return '1';
+      case 'cabang':
+        return '2';
+      case 'area':
+        return '3';
+      case 'client':
+        return '4';
+      default:
+        return '1';
+    }
   }
 
   void approval({
     action = "reject",
   }) async {
-    final res = await apiRepository.updateApprovalLembur(
-        detail.value.idLembur.toString(),
-        UpdateApprovalLemburRequest(
-          action: action,
-          noteApproval: noteApprovalController.text,
-        ));
-    // if (res?.error == false) {
-    //   EasyLoading.showSuccess('Berhasil disimpan');
-    //   getDetailLembur();
-    //   loadUsers();
-    // } else {
-    //   EasyLoading.showError('Gagal disimpan');
-    // }
+    String id_action = '0';
+    if (action == 'reject') {
+      id_action = '0';
+    } else {
+      id_action = '1';
+    }
+    final res =
+        await apiRepository.updateApprovalLembur(UpdateApprovalLemburRequest(
+      id: detail.value.idLembur.toString(),
+      action: id_action,
+      noteApproval: noteApprovalController.text,
+    ));
+    if (res?.error == false) {
+      EasyLoading.showSuccess('Berhasil disimpan');
+      getDetailLembur();
+      loadUsers();
+    } else {
+      EasyLoading.showError('Gagal disimpan');
+    }
   }
 
   selectDate(BuildContext context) async {
@@ -88,17 +113,5 @@ class OvertimeDetailController extends GetxController {
       lastDate: DateTime(2028),
     );
     if (selected != null && selected != selectedDate) selectedDate = selected;
-    dateCnC.value = selectedDate.toString();
   }
-
-  void dateSubmit() {
-    dateCnC.value = dateCnCController.text;
-  }
-
-  void updateGoods({name}) {
-    // goods.removeWhere((e) => e.id == id);
-    // goods[goods.indexWhere((element) => element.name == name)] = singleGoods;
-  }
-
-  void deleteGoods({name}) {}
 }

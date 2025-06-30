@@ -23,7 +23,7 @@ class ProspekDetailView extends GetView<ProspekDetailController> {
               children: [
                 stepsIcon(controller.detail.value.status),
                 SizedBox(height: 20.0),
-                ApprovalFlow.statusApproval(controller.status),
+                ApprovalFlow.statusApprovalProspect(controller.status),
                 SizedBox(height: 20.0),
                 CommonWidget.bodyText(
                   text: 'Data Pribadi',

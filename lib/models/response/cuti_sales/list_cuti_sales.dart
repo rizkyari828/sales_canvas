@@ -51,6 +51,7 @@ class DataCutiSales {
   String? statusCuti;
   String? user;
   int? idCuti;
+  String? levelApproval;
 
   DataCutiSales({
     this.tanggalPengajuan,
@@ -59,6 +60,7 @@ class DataCutiSales {
     this.statusCuti,
     this.user,
     this.idCuti,
+    this.levelApproval,
   });
 
   factory DataCutiSales.fromJson(Map<String, dynamic> json) => DataCutiSales(
@@ -72,6 +74,7 @@ class DataCutiSales {
         statusCuti: json["status_cuti"],
         user: json["user"],
         idCuti: json["id_cuti"],
+        levelApproval: json["level"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -83,5 +86,6 @@ class DataCutiSales {
         "status_cuti": statusCuti,
         "user": user,
         "id_cuti": idCuti,
+        'level': levelApproval
       };
 }

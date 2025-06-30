@@ -389,25 +389,6 @@ class CommonWidget {
     );
   }
 
-  static String convertStatus(status) {
-    switch (status) {
-      case '1':
-        return 'Prospek';
-      case '2':
-        return 'Order';
-      case '3':
-        return 'Booking';
-      case '4':
-        return 'Cancle';
-      case '5':
-        return 'Reject';
-      case '6':
-        return 'TBC';
-      default:
-        return '';
-    }
-  }
-
   static Color setOpacity(Color color, double opacity) {
     return color.withAlpha((opacity * 255).round());
   }
@@ -443,4 +424,21 @@ class CommonWidget {
       ],
     );
   }
+
+  static String getRoleLabel(String role) {
+    switch (role.toLowerCase()) {
+      case '1':
+        return 'TAD';
+      case '2':
+        return 'Cabang';
+      case '3':
+        return 'Area';
+      case '4':
+        return 'Client';
+      default:
+        return 'TAD';
+    }
+  }
+
+  
 }

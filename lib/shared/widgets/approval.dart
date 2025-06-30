@@ -1,7 +1,9 @@
+import 'package:sales/shared/constants/colors.dart';
 import 'package:sales/shared/utils/common_widget.dart';
 import 'package:sales/shared/utils/size_config.dart';
 import 'package:sales/shared/widgets/button.dart';
 import 'package:flutter/material.dart';
+import 'package:sales/shared/widgets/input_field.dart';
 
 class ApprovalFlow {
   static Widget buttonApprovalCnC(controller) {
@@ -47,7 +49,7 @@ class ApprovalFlow {
     );
   }
 
-  static Widget buttonApproval(controller, String condition, String levelCondition) {
+  static Widget buttonApprovalProspect(controller, condition, levelCondition) {
     final sw = SizeConfig().screenWidth;
     return Container(
       child: controller.detail.value.status == '1' ||
@@ -92,6 +94,57 @@ class ApprovalFlow {
                       controller, levelCondition, controller.groupId.toString())
           : Container(),
     );
+  }
+
+  static Widget buttonApproval(controller) {
+    return controller.groupId.value != '1'
+        ? controller.approvalCondition.value == true
+            ? buttonApprovalFlow(controller)
+            : Container()
+        : Container();
+  }
+
+  static Widget buttonApprovalFlow(controller) {
+    final sw = SizeConfig().screenWidth;
+    return controller.statusApproval.toString().toLowerCase() == 'pengajuan' ||
+            controller.statusApproval.toString().toLowerCase() == 'proses'
+        ? Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CommonWidget.bodyText(text: "Catatan Approval"),
+              SizedBox(height: 10.0),
+              TextAreaField(
+                controller: controller.noteApprovalController,
+              ),
+              SizedBox(height: 20.0),
+              SizedBox(height: 50.0),
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CustomButton(
+                      buttonColor: Colors.red,
+                      buttonText: 'REJECT',
+                      width: sw / 2.5,
+                      onPressed: () {
+                        controller.approval(action: 'reject');
+                      },
+                    ),
+                    CustomButton(
+                      buttonColor: Colors.green,
+                      buttonText: 'APPROVE',
+                      width: sw / 2.5,
+                      onPressed: () {
+                        controller.approval(action: 'approve');
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          )
+        : Container();
   }
 
   static Widget buttonLevelCondition(controller, levelCondition, groupId) {
@@ -227,7 +280,7 @@ class ApprovalFlow {
                     text: data.statusLabel.toString(), color: Colors.white))));
   }
 
-  static Widget statusApproval(label) {
+  static Widget statusApprovalProspect(label) {
     final sw = SizeConfig().screenWidth;
     final sh = SizeConfig().screenHeight;
     return Container(
@@ -247,6 +300,49 @@ class ApprovalFlow {
             child: Center(
                 child: CommonWidget.bodyText(
                     text: label.toString(), color: Colors.white))));
+  }
+
+  static Widget statusApproval(label, levelApproval) {
+    final sw = SizeConfig().screenWidth;
+    final sh = SizeConfig().screenHeight;
+    return Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10.0),
+          border: Border.all(width: 2.0, color: ColorConstants.borderColor),
+        ),
+        width: sw,
+        height: sh * .07,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              CommonWidget.bodyText(
+                  text: levelApproval.toUpperCase(),
+                  color: ColorConstants.black),
+              Card(
+                  elevation: 0,
+                  color: label.toLowerCase() == 'approved'
+                      ? Colors.green
+                      : label.toLowerCase() == 'proses' ||
+                              label.toLowerCase() == 'pengajuan'
+                          ? Colors.yellow[800]
+                          : Colors.red,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                    Radius.circular(5.0),
+                  )),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Center(
+                        child: CommonWidget.bodyText(
+                            text: label.toString().toUpperCase(),
+                            color: Colors.white)),
+                  )),
+            ],
+          ),
+        ));
   }
 
   static Widget deleteButtonApproval({controller, name}) {

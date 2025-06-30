@@ -28,7 +28,10 @@ class InputField extends StatelessWidget {
     this.fontSize = CommonConstants.bodyText,
     this.password = false,
     this.validator,
-    this.prefixIcon = const Icon(Icons.person),
+    this.prefixIcon = const Icon(
+      Icons.person,
+      color: ColorConstants.black,
+    ),
     this.suffixIcon = const Icon(
       Icons.error_outline,
       size: 30,
@@ -86,7 +89,7 @@ class InputField extends StatelessWidget {
         ),
         controller: this.controller,
         style: TextStyle(
-          // color: color,
+          color: ColorConstants.black,
           fontSize: fontSize,
           fontWeight: FontWeight.normal,
         ),
@@ -101,6 +104,7 @@ class InputField extends StatelessWidget {
   Widget? _suffixIcon() {
     if (isPassword ?? false) {
       return IconButton(
+        color: ColorConstants.black,
         onPressed: isPassword ?? false ? onVisibilityPressed : null,
         icon: textObscured ?? false
             ? Icon(
