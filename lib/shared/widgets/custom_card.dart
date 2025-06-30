@@ -211,7 +211,7 @@ class CustomExpandedCardView extends StatelessWidget {
                       : Row(
                           children: [
                             Container(
-                                width: sw * 0.2,
+                                width: sw * 0.3,
                                 child: CommonWidget.subtitleText(
                                     text: secondParagrafLabel)),
                             CommonWidget.subtitleText(
@@ -223,7 +223,7 @@ class CustomExpandedCardView extends StatelessWidget {
                       : Row(
                           children: [
                             Container(
-                                width: sw * 0.2,
+                                width: sw * 0.3,
                                 child: CommonWidget.subtitleText(
                                     text: thirdParagrafLabel)),
                             CommonWidget.subtitleText(

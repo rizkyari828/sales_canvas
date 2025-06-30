@@ -26,32 +26,35 @@ class AddKuisionerView extends GetView<KusionerController> {
   Widget _buildWidget(BuildContext context) {
     final sw = SizeConfig().screenWidth;
     return Scaffold(
-        appBar: CustomAppBarWithNetwork(
-          title: 'Input Kuisioner',
-          networkStatus: controller.qualityNetwork,
-        ),
-        floatingActionButton: controller.isConnectedToInternetWidget.value
-            ? Padding(
-                padding: EdgeInsets.only(left: sw * 08),
-                child: controller.internetConnection(),
-              )
-            : Padding(
-                padding: EdgeInsets.only(left: sw * .08),
-                child: CustomButton(
-                  buttonText: controller.percentage.value >= 1.0
-                      ? 'SIMPAN'
-                      : 'SELANJUTNYA',
-                  width: MediaQuery.of(context).size.width,
-                  onPressed: () {
-                    if (controller.percentage.value >= 1.0) {
-                      controller.submit(isLast: true);
-                    } else {
-                      controller.submit(isLast: false);
-                    }
-                  },
-                ),
-              ),
-        body: _getItems(controller));
+      appBar: CustomAppBarWithNetwork(
+        title: 'Input Kuisioner',
+        networkStatus: controller.qualityNetwork,
+      ),
+      resizeToAvoidBottomInset: true, // tambahkan ini
+      body: Column(
+        children: [
+          Expanded(child: _getItems(controller)),
+          Padding(
+            padding: EdgeInsets.only(left: sw * .08, right: 20, bottom: 20),
+            child: controller.isConnectedToInternetWidget.value
+                ? controller.internetConnection()
+                : CustomButton(
+                    buttonText: controller.percentage.value >= 1.0
+                        ? 'SIMPAN'
+                        : 'SELANJUTNYA',
+                    width: MediaQuery.of(context).size.width,
+                    onPressed: () {
+                      if (controller.percentage.value >= 1.0) {
+                        controller.submit(isLast: true);
+                      } else {
+                        controller.submit(isLast: false);
+                      }
+                    },
+                  ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _getItems(KusionerController controller) {
