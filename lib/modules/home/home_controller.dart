@@ -971,7 +971,6 @@ class HomeController extends BaseController {
     final today = DateTime.now().toIso8601String().substring(0, 10);
     final lastShown = storage.read('lastMoodDialogDate');
     if (lastShown != today) {
-      // Tampilkan dialog
       Future.delayed(Duration.zero, () {
         showMoodDialog(context, (selectedMood) {
           // Simpan mood jika perlu
@@ -981,7 +980,7 @@ class HomeController extends BaseController {
       });
       storage.write('lastMoodDialogDate', today);
     }
-    storage.remove('lastMoodDialogDate');
+    // storage.remove('lastMoodDialogDate');
   }
 
   void submitDialogMood(String value) async {

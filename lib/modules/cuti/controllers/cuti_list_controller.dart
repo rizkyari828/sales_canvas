@@ -57,7 +57,8 @@ class CutiListController extends GetxController {
 
   void getCutiSales(page) async {
     final res = await apiRepository.listCuti(
-        data: UserIdRequest(id: userId.value, page: page, limit: '10'));
+        data: UserIdRequest(
+            id: userId.value, page: page.toString(), limit: '10'));
     listCuti.addAll(res?.data ?? []);
   }
 
