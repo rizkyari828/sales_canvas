@@ -27,7 +27,7 @@ class OvertimeDetailView extends GetView<OvertimeDetailController> {
                           controller.detail.value.levelApproval),
                       SizedBox(height: 20.0),
                       CommonWidget.labelExpanded(
-                          label: 'Email',
+                          label: 'Username',
                           value: controller.detail.value.user.toString()),
                       SizedBox(height: 10.0),
                       CommonWidget.labelExpanded(

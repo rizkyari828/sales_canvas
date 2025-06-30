@@ -27,16 +27,16 @@ class CutiDetailView extends GetView<CutiDetailController> {
                           controller.detail.value.levelApproval),
                       SizedBox(height: 20.0),
                       CommonWidget.labelExpanded(
-                          label: 'Email',
+                          label: 'Usename',
                           value: controller.detail.value.user.toString()),
                       SizedBox(height: 10.0),
                       CommonWidget.labelExpanded(
-                          label: 'Jam Mulai',
+                          label: 'Tanggal Mulai',
                           value:
                               controller.detail.value.tanggalAwal.toString()),
                       SizedBox(height: 10.0),
                       CommonWidget.labelExpanded(
-                          label: 'Jam Selesai',
+                          label: 'Tanggal Selesai',
                           value:
                               controller.detail.value.tanggalAkhir.toString()),
                       SizedBox(height: 20.0),
@@ -46,7 +46,6 @@ class CutiDetailView extends GetView<CutiDetailController> {
                           text: controller.detail.value.keperluan ?? ''),
                       SizedBox(height: 20.0),
                       Obx(() => ApprovalFlow.buttonApproval(controller)),
-                      
                     ],
                   ),
           ),

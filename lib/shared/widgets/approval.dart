@@ -334,7 +334,7 @@ class ApprovalFlow {
                     Radius.circular(5.0),
                   )),
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(10.0),
                     child: Center(
                         child: CommonWidget.bodyText(
                             text: label.toString().toUpperCase(),
