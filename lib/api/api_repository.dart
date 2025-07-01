@@ -48,6 +48,8 @@ import 'package:sales/models/response/benefit/show_benefit.dart';
 import 'package:sales/models/response/benefit/type_cuti.dart';
 import 'package:sales/models/response/cuti_sales/list_cuti_sales.dart';
 import 'package:sales/models/response/cuti_sales/show_cuti_sales.dart';
+import 'package:sales/models/response/dashboard/dashboard_kunjungan_response.dart';
+import 'package:sales/models/response/dashboard/dashboard_response.dart';
 import 'package:sales/models/response/izin/list_izin.dart';
 import 'package:sales/models/response/izin/show_izin.dart';
 import 'package:sales/models/response/izin/type_izin.dart';
@@ -1261,6 +1263,41 @@ class ApiRepository {
           .timeout(Duration(seconds: timeout));
       if (res.statusCode == 200 || res.statusCode == 401) {
         return ErrorResponse.fromJson(res.body);
+      }
+    } on TimeoutException catch (_) {
+      EasyLoading.showError('Connection Timeout. Please try again later');
+      EasyLoading.dismiss();
+    } catch (exception) {
+      print(exception);
+    }
+    return null;
+  }
+
+  Future<DashboardResponse?> getDashboard(String userId) async {
+    try {
+      final res = await apiProvider
+          .getDashboard('/api/listEvent?user_id=' + userId)
+          .timeout(Duration(seconds: timeout));
+      if (res.statusCode == 200 || res.statusCode == 401) {
+        return DashboardResponse.fromJson(res.body);
+      }
+    } on TimeoutException catch (_) {
+      EasyLoading.showError('Connection Timeout. Please try again later');
+      EasyLoading.dismiss();
+    } catch (exception) {
+      print(exception);
+    }
+    return null;
+  }
+
+  Future<DashboardKunjunganResponse?> getDashboardKunjungan(
+      String userId) async {
+    try {
+      final res = await apiProvider
+          .getDashboardKunjungan('/api/listEvent?user_id=' + userId)
+          .timeout(Duration(seconds: timeout));
+      if (res.statusCode == 200 || res.statusCode == 401) {
+        return DashboardKunjunganResponse.fromJson(res.body);
       }
     } on TimeoutException catch (_) {
       EasyLoading.showError('Connection Timeout. Please try again later');

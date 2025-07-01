@@ -893,7 +893,9 @@ class MainTab extends GetView<HomeController> {
                       Row(
                         children: [
                           CommonWidget.bigText(
-                              text: ' 2 / 5', color: Colors.black),
+                              text:
+                                  ' ${controller.detailDashboard.value.dailyActualProgress ?? 0} / ${controller.detailDashboard.value.dailyPlanProgress ?? 0}',
+                              color: Colors.black),
                           SizedBox(width: 10),
                           CommonWidget.subtitleText(
                             text: 'Kunjungan',
@@ -910,7 +912,8 @@ class MainTab extends GetView<HomeController> {
                       animation: true,
                       percent: 0.7,
                       center: CommonWidget.subtitleText(
-                        text: '70%',
+                        text:
+                            '${controller.detailDashboard.value.monthlyPercentageAttendance ?? 0}%',
                         color: Colors.black,
                       ))
                 ],
@@ -969,7 +972,9 @@ class MainTab extends GetView<HomeController> {
                       Row(
                         children: [
                           CommonWidget.bigText(
-                              text: ' 2 / 5', color: Colors.black),
+                              text:
+                                  ' ${controller.detailDashboard.value.monthlyActualAttendance ?? 0} / ${controller.detailDashboard.value.monthlyPlanAttendance ?? 0}',
+                              color: Colors.black),
                           SizedBox(width: 10),
                           CommonWidget.subtitleText(
                             text: 'Absensi',
@@ -986,7 +991,8 @@ class MainTab extends GetView<HomeController> {
                       animation: true,
                       percent: 0.7,
                       center: CommonWidget.subtitleText(
-                        text: '70%',
+                        text:
+                            '${controller.detailDashboard.value.monthlyPercentageAttendance ?? 0}%',
                         color: Colors.black,
                       ))
                 ],

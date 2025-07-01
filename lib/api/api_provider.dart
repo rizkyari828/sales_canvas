@@ -313,8 +313,7 @@ class ApiProvider extends BaseProvider {
     return post(path, data.toJson());
   }
 
-  Future<Response> submitDialogMood(
-      String path, SubmitDialogMoodRequest data) {
+  Future<Response> submitDialogMood(String path, SubmitDialogMoodRequest data) {
     return post(path, data.toJson());
   }
   //ENDIZIN
@@ -384,4 +383,12 @@ class ApiProvider extends BaseProvider {
     return post(path, data.toJson());
   }
   //ENDIZIN
+
+  Future<Response> getDashboard(String path) {
+    return get(path);
+  }
+
+  Future<Response> getDashboardKunjungan(String path) {
+    return get(path);
+  }
 }

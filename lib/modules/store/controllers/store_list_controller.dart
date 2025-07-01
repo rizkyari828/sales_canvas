@@ -1,6 +1,8 @@
 import 'package:get_storage/get_storage.dart';
 import 'package:sales/api/api_repository.dart';
 import 'package:sales/models/request/user_id_request.dart';
+import 'package:sales/models/response/dashboard/dashboard_kunjungan_response.dart';
+import 'package:sales/models/response/dashboard/dashboard_response.dart';
 import 'package:sales/models/response/store/list_store.dart';
 import 'package:sales/modules/home/base_controller.dart';
 import 'package:sales/routes/app_pages.dart';
@@ -21,6 +23,8 @@ class StoreListController extends BaseController {
   RxInt page = 1.obs;
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
+
+  var detailDashboard = DashbooardKunjunganData().obs;
 
   void goToKunjunganPages() {
     Get.toNamed(
@@ -137,5 +141,11 @@ class StoreListController extends BaseController {
       page.value = 1;
       getStore(page.value);
     }
+  }
+
+  void getDataDashboard() async {
+    final res = await apiRepository.getDashboardKunjungan(userId.value);
+    print(res!.data!);
+    detailDashboard.value = res.data!.first;
   }
 }

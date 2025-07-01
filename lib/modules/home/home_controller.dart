@@ -11,6 +11,7 @@ import 'package:sales/models/request/update_fcm_profile_request.dart';
 import 'package:sales/models/request/update_photo_profile_request.dart';
 import 'package:sales/models/request/user_id_request.dart';
 import 'package:sales/models/response/benefit/benefit_dashboard_response.dart';
+import 'package:sales/models/response/dashboard/dashboard_response.dart';
 import 'package:sales/models/response/rate/show_rate_review_response.dart';
 import 'dart:io' as Io;
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -102,6 +103,8 @@ class HomeController extends BaseController {
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
 
+  var detailDashboard = DashbooardData().obs;
+
   void goToKunjunganPages() {
     Get.toNamed(
       Routes.RESULT_KUNJUNGAN,
@@ -125,9 +128,7 @@ class HomeController extends BaseController {
     getDataEvent(1);
     getDataBenefit();
     getStore(page.value);
-    // } else {
-    //   listStore.add(DataStore(tokoId: 0));
-    // }
+    getDataDashboard();
   }
 
   @override
@@ -821,12 +822,6 @@ class HomeController extends BaseController {
     benefitDashboard.value = res?.data!.first;
   }
 
-  // void getStore(page) async {
-  //   final res = await apiRepository.listStore(
-  //       page: page, data: UserIdRequest(id: userId.value));
-  //   listStore.addAll(res?.data ?? []);
-  // }
-
   void getStore(page) async {
     try {
       final res = await apiRepository.listStore(
@@ -999,6 +994,12 @@ class HomeController extends BaseController {
       EasyLoading.dismiss();
       Get.toNamed(Routes.HOME);
     }
+  }
+
+  void getDataDashboard() async {
+    final res = await apiRepository.getDashboard(userId.value);
+    print(res!.data!);
+    detailDashboard.value = res.data!.first;
   }
 
   @override
