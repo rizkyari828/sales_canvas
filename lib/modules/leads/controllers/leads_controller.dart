@@ -14,12 +14,13 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:sales/models/response/master_data_2_response.dart';
+import 'package:sales/modules/home/base_controller.dart';
 import 'package:sales/shared/constants/storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LeadsController extends GetxController {
-  final ApiRepository apiRepository;
-  LeadsController({required this.apiRepository});
+class LeadsController extends BaseController {
+  LeadsController({required ApiRepository apiRepository})
+      : super(apiRepository: apiRepository);
   var imageFileList = <XFile>[].obs;
 
   set _imageFile(XFile? value) {
@@ -120,6 +121,16 @@ class LeadsController extends GetxController {
   }
 
   void submit() async {
+    if (nameController.text.isEmpty ||
+        emailController.text.isEmpty ||
+        noHpController.text.isEmpty ||
+        alamatController.text.isEmpty ||
+        minatProductController.text.isEmpty) {
+      showInputError.value = true;
+      EasyLoading.showError('Semua field wajib diisi');
+      return;
+    }
+    
     if (imageFileList.isEmpty) {
       EasyLoading.showError('Foto belum tersedia');
       return;

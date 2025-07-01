@@ -5,11 +5,12 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:sales/models/request/cuti_sales/submit_izin_request.dart';
+import 'package:sales/modules/home/base_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class CutiController extends GetxController {
-  final ApiRepository apiRepository;
-  CutiController({required this.apiRepository});
+class CutiController extends BaseController {
+  CutiController({required ApiRepository apiRepository})
+      : super(apiRepository: apiRepository);
   var imageFileList = <XFile>[].obs;
 
   set _imageFile(XFile? value) {
@@ -85,6 +86,13 @@ class CutiController extends GetxController {
   }
 
   void submitData() async {
+    if (startDateController.text.isEmpty ||
+        endDateController.text.isEmpty ||
+        noteController.text.isEmpty) {
+      EasyLoading.showError('Semua field wajib diisi');
+      return;
+    }
+
     final res = await apiRepository.submitCutiSales(
       SubmitCutiSalesRequest(
         idUser: idUser.value,

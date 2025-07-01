@@ -5,11 +5,12 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:sales/models/request/lembur/submit_izin_request.dart';
+import 'package:sales/modules/home/base_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class OvertimeController extends GetxController {
-  final ApiRepository apiRepository;
-  OvertimeController({required this.apiRepository});
+class OvertimeController extends BaseController {
+  OvertimeController({required ApiRepository apiRepository})
+      : super(apiRepository: apiRepository);
   var imageFileList = <XFile>[].obs;
 
   set _imageFile(XFile? value) {
@@ -103,6 +104,15 @@ class OvertimeController extends GetxController {
   }
 
   void submitData() async {
+    if (startTimeController.text.isEmpty ||
+        endTimeController.text.isEmpty ||
+        dateController.text.isEmpty ||
+        noteController.text.isEmpty) {
+      showInputError.value = true;
+      EasyLoading.showError('Semua field wajib diisi');
+      return;
+    }
+
     final res = await apiRepository.submitLembur(
       SubmitLemburRequest(
         idUser: idUser.value,

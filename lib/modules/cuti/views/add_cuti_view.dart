@@ -1,7 +1,5 @@
 import 'package:intl/intl.dart';
 import 'package:sales/modules/cuti/controllers/cuti_controller.dart';
-import 'package:sales/modules/overtime/controllers/overtime_controller.dart';
-import 'package:sales/shared/constants/colors.dart';
 import 'package:sales/shared/utils/utils.dart';
 import 'package:sales/shared/widgets/button.dart';
 import 'package:sales/shared/widgets/input_field.dart';
@@ -33,6 +31,8 @@ class AddCutiView extends GetView<CutiController> {
                       suffixIcon: Icon(Icons.calendar_today_rounded),
                       controller: controller.startDateController,
                       labelText: "Tanggal Mulai",
+                      isRequired: true,
+                      showError: controller.showInputError.value,
                       onSuffixPressed: () {
                         controller.selectDateStart(
                             context, controller.startDateController);
@@ -43,6 +43,8 @@ class AddCutiView extends GetView<CutiController> {
                       suffixIcon: Icon(Icons.calendar_today_rounded),
                       controller: controller.endDateController,
                       labelText: "Tanggal Selesai",
+                      isRequired: true,
+                      showError: controller.showInputError.value,
                       onSuffixPressed: () {
                         controller.selectDateStart(
                             context, controller.endDateController);
@@ -56,79 +58,12 @@ class AddCutiView extends GetView<CutiController> {
                     SizedBox(height: 10.0),
                     CommonWidget.bodyText(text: "Keperluan"),
                     SizedBox(height: 10.0),
-                    TextAreaField(controller: controller.noteController),
-                    // Card(
-                    //     elevation: 0.1,
-                    //     color: Colors.white,
-                    //     shape: RoundedRectangleBorder(
-                    //         borderRadius: BorderRadius.circular(15.0),
-                    //         side: BorderSide(
-                    //             color: ColorConstants.mainColor, width: 1)),
-                    //     child: Padding(
-                    //       padding: EdgeInsets.all(8.0),
-                    //       child: TextField(
-                    //         controller: controller.noteController,
-                    //         maxLines: 8,
-                    //         decoration: InputDecoration.collapsed(
-                    //             hintText: "Enter your text here"),
-                    //       ),
-                    //     )),
+                    TextAreaField(
+                      controller: controller.noteController,
+                      isRequired: true,
+                      showError: controller.showInputError.value,
+                    ),
                     SizedBox(height: 30.0),
-                    // CommonWidget.bodyText(text: "Upload Dokumen*"),
-                    // SizedBox(height: 10.0),
-                    // // Padding(
-                    // //   padding: const EdgeInsets.only(top: 16.0),
-                    // //   child: FloatingActionButton(
-                    // //     onPressed: () {
-                    // //       controller.onImageButtonPressed(
-                    // //         ImageSource.gallery,
-                    // //         context: context,
-                    // //         isMultiImage: true,
-                    // //       );
-                    // //     },
-                    // //     heroTag: 'image1',
-                    // //     tooltip: 'Pick Multiple Image from gallery',
-                    // //     child: const Icon(Icons.photo_library),
-                    // //   ),
-                    // // ),
-                    // Padding(
-                    //   padding: EdgeInsets.all(8.0),
-                    //   child: Obx(() =>
-                    //       CustomImagePicker.previewGridImages(controller)),
-                    // ),
-                    // InkWell(
-                    //   onTap: () {
-                    //     controller.onImageButtonPressed(ImageSource.camera,
-                    //         context: context);
-                    //   },
-                    //   child: DottedBorder(
-                    //     radius: Radius.circular(100.0),
-                    //     color: Colors.grey,
-                    //     dashPattern: [8, 4],
-                    //     strokeWidth: 1,
-                    //     child: Container(
-                    //       height: 50,
-                    //       width: sw,
-                    //       child: Row(
-                    //         mainAxisAlignment: MainAxisAlignment.center,
-                    //         children: [
-                    //           Icon(
-                    //             Icons.camera_alt,
-                    //             color: Colors.grey,
-                    //             size: 30,
-                    //           ),
-                    //           SizedBox(width: 10.0),
-                    //           CommonWidget.bodyText(
-                    //               text: "Ambil Photo", color: Colors.grey),
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
-                    // SizedBox(height: 10.0),
-                    // CommonWidget.captionText(
-                    //     text: "Lampiran yang diizinkan PDF, PNG, JPG, JPEG"),
-                    // SizedBox(height: 30.0),
                     CustomButton(
                       buttonText: 'SIMPAN',
                       width: MediaQuery.of(context).size.width,

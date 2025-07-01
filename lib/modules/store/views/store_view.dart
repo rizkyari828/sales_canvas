@@ -47,15 +47,11 @@ class StoreView extends GetView<StoreListController> {
                         children: [
                           Expanded(
                               child: pendingTask(
-                                  controller
-                                      .detailDashboard.value.dailyActualProgress
-                                      .toString(),
+                                  '${controller.detailDashboard.value.dailyActualProgress ?? 0}',
                                   'Kunjungan hari ini')),
                           Expanded(
                               child: pendingTask(
-                                  controller.detailDashboard.value
-                                      .monthlyActualAttendance
-                                      .toString(),
+                                  '${controller.detailDashboard.value.monthlyActualAttendance ?? 0}',
                                   'Kunjungan bulan ini')),
                           SizedBox(width: 20),
                         ],

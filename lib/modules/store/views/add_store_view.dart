@@ -2,7 +2,6 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:sales/modules/store/controllers/store_add_controller.dart';
-import 'package:sales/shared/constants/colors.dart';
 import 'package:sales/shared/utils/utils.dart';
 import 'package:sales/shared/widgets/button.dart';
 import 'package:sales/shared/widgets/custom_appbar.dart';
@@ -43,29 +42,17 @@ class AddStoreView extends GetView<StoreAddController> {
                       keyboardType: TextInputType.text,
                       controller: controller.nameController,
                       labelText: "Nama yang dikunjungi",
+                      isRequired: true,
+                      showError: controller.showInputError.value,
                     ),
                     SizedBox(height: 10.0),
                     CommonWidget.bodyText(text: "Detail Alamat"),
                     SizedBox(height: 10.0),
                     TextAreaField(
                       controller: controller.alamatController,
+                      isRequired: true,
+                      showError: controller.showInputError.value,
                     ),
-                    // Card(
-                    //     elevation: 0.1,
-                    //     color: Colors.white,
-                    //     shape: RoundedRectangleBorder(
-                    //         borderRadius: BorderRadius.circular(15.0),
-                    //         side: BorderSide(
-                    //             color: ColorConstants.mainColor, width: 1)),
-                    //     child: Padding(
-                    //       padding: EdgeInsets.all(8.0),
-                    //       child: TextField(
-                    //         controller: controller.alamatController,
-                    //         maxLines: 8,
-                    //         decoration: InputDecoration.collapsed(
-                    //             hintText: "Enter your text here"),
-                    //       ),
-                    //     )),
                     SizedBox(height: 20.0),
                     CustomDropDownSearch(
                       enabled: true,
@@ -80,14 +67,6 @@ class AddStoreView extends GetView<StoreAddController> {
                         controller.changeStatus(value);
                       },
                     ),
-                    // SizedBox(height: 10.0),
-                    // if (controller.optionalText.value) ...[
-                    //   InputInputField(
-                    //     keyboardType: TextInputType.text,
-                    //     controller: controller.agendaController,
-                    //     labelText: "Input Kegiatan",
-                    //   ),
-                    // ],
                     SizedBox(height: 20.0),
                     CustomDropDownSearch(
                       enabled: true,
@@ -107,45 +86,17 @@ class AddStoreView extends GetView<StoreAddController> {
                     SizedBox(height: 10.0),
                     TextAreaField(
                       controller: controller.visitNoteController,
+                      isRequired: true,
+                      showError: controller.showInputError.value,
                     ),
-                    // Card(
-                    //     elevation: 0.1,
-                    //     color: Colors.white,
-                    //     shape: RoundedRectangleBorder(
-                    //         borderRadius: BorderRadius.circular(15.0),
-                    //         side: BorderSide(
-                    //             color: ColorConstants.mainColor, width: 1)),
-                    //     child: Padding(
-                    //       padding: EdgeInsets.all(8.0),
-                    //       child: TextField(
-                    //         controller: controller.visitNoteController,
-                    //         maxLines: 8,
-                    //         decoration: InputDecoration.collapsed(
-                    //             hintText: "Enter your text here"),
-                    //       ),
-                    //     )),
                     SizedBox(height: 10.0),
                     CommonWidget.bodyText(text: "Rencana Tindak Lanjut"),
                     SizedBox(height: 10.0),
                     TextAreaField(
                       controller: controller.planExecutionController,
+                      isRequired: true,
+                      showError: controller.showInputError.value,
                     ),
-                    // Card(
-                    //     elevation: 0.1,
-                    //     color: Colors.white,
-                    //     shape: RoundedRectangleBorder(
-                    //         borderRadius: BorderRadius.circular(15.0),
-                    //         side: BorderSide(
-                    //             color: ColorConstants.mainColor, width: 1)),
-                    //     child: Padding(
-                    //       padding: EdgeInsets.all(8.0),
-                    //       child: TextField(
-                    //         controller: controller.planExecutionController,
-                    //         maxLines: 8,
-                    //         decoration: InputDecoration.collapsed(
-                    //             hintText: "Enter your text here"),
-                    //       ),
-                    //     )),
                     SizedBox(height: 10.0),
                     CommonWidget.minSubtitleText(
                         text: "Silahkan upload bukti Foto kunjungan anda"),

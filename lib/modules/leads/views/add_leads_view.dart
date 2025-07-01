@@ -2,7 +2,6 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:sales/modules/leads/controllers/leads_controller.dart';
-import 'package:sales/shared/constants/colors.dart';
 import 'package:sales/shared/utils/utils.dart';
 import 'package:sales/shared/widgets/button.dart';
 import 'package:sales/shared/widgets/image_picker.dart';
@@ -58,6 +57,8 @@ class AddLeadsView extends GetView<LeadsController> {
                         keyboardType: TextInputType.text,
                         controller: controller.agendaController,
                         labelText: "Input Kegiatan",
+                        isRequired: true,
+                        showError: controller.showInputError.value,
                       ),
                     ],
                     SizedBox(height: 10.0),
@@ -65,40 +66,32 @@ class AddLeadsView extends GetView<LeadsController> {
                       keyboardType: TextInputType.text,
                       controller: controller.nameController,
                       labelText: "Nama Orang / Perusahaan",
+                      isRequired: true,
+                      showError: controller.showInputError.value,
                     ),
                     SizedBox(height: 10.0),
                     InputInputField(
                       keyboardType: TextInputType.text,
                       controller: controller.emailController,
                       labelText: "Email Kontak",
+                      isRequired: true,
+                      showError: controller.showInputError.value,
                     ),
                     SizedBox(height: 10.0),
                     InputInputField(
                       keyboardType: TextInputType.number,
                       controller: controller.noHpController,
                       labelText: "Nomor Telephone",
+                      isRequired: true,
+                      showError: controller.showInputError.value,
                     ),
                     CommonWidget.bodyText(text: "Detail Alamat"),
                     SizedBox(height: 10.0),
                     TextAreaField(
                       controller: controller.alamatController,
+                      isRequired: true,
+                      showError: controller.showInputError.value,
                     ),
-                    // Card(
-                    //     elevation: 0.1,
-                    //     color: Colors.white,
-                    //     shape: RoundedRectangleBorder(
-                    //         borderRadius: BorderRadius.circular(15.0),
-                    //         side: BorderSide(
-                    //             color: ColorConstants.mainColor, width: 1)),
-                    //     child: Padding(
-                    //       padding: EdgeInsets.all(8.0),
-                    //       child: TextField(
-                    //         controller: controller.alamatController,
-                    //         maxLines: 8,
-                    //         decoration: InputDecoration.collapsed(
-                    //             hintText: "Enter your text here"),
-                    //       ),
-                    //     )),
                     SizedBox(height: 20.0),
                     CustomDropDownSearch(
                       enabled: true,
@@ -122,6 +115,8 @@ class AddLeadsView extends GetView<LeadsController> {
                       keyboardType: TextInputType.text,
                       controller: controller.minatProductController,
                       labelText: "Product Minat",
+                      isRequired: true,
+                      showError: controller.showInputError.value,
                     ),
                     SizedBox(height: 20.0),
                     CustomDropDownSearch(
@@ -144,23 +139,11 @@ class AddLeadsView extends GetView<LeadsController> {
                     SizedBox(height: 10.0),
                     CommonWidget.bodyText(text: "Catatan"),
                     SizedBox(height: 10.0),
-                    TextAreaField(controller: controller.noteController),
-                    // Card(
-                    //     elevation: 0.1,
-                    //     color: Colors.white,
-                    //     shape: RoundedRectangleBorder(
-                    //         borderRadius: BorderRadius.circular(15.0),
-                    //         side: BorderSide(
-                    //             color: ColorConstants.mainColor, width: 1)),
-                    //     child: Padding(
-                    //       padding: EdgeInsets.all(8.0),
-                    //       child: TextField(
-                    //         controller: controller.noteController,
-                    //         maxLines: 8,
-                    //         decoration: InputDecoration.collapsed(
-                    //             hintText: "Enter your text here"),
-                    //       ),
-                    //     )),
+                    TextAreaField(
+                      controller: controller.noteController,
+                      isRequired: true,
+                      showError: controller.showInputError.value,
+                    ),
                     SizedBox(height: 10.0),
                     CommonWidget.minSubtitleText(
                         text: "Silahkan upload bukti Foto kunjungan anda"),

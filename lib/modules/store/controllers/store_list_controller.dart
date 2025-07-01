@@ -2,7 +2,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:sales/api/api_repository.dart';
 import 'package:sales/models/request/user_id_request.dart';
 import 'package:sales/models/response/dashboard/dashboard_kunjungan_response.dart';
-import 'package:sales/models/response/dashboard/dashboard_response.dart';
 import 'package:sales/models/response/store/list_store.dart';
 import 'package:sales/modules/home/base_controller.dart';
 import 'package:sales/routes/app_pages.dart';

@@ -239,6 +239,17 @@ class StoreAddController extends BaseController {
   }
 
   void submit() async {
+    if (nameController.text.isEmpty ||
+        alamatController.text.isEmpty ||
+        agendaId.value.isEmpty ||
+        statusId.value.isEmpty ||
+        visitNoteController.text.isEmpty ||
+        planExecutionController.text.isEmpty) {
+      showInputError.value = true;
+      EasyLoading.showError('Semua field wajib diisi');
+      return;
+    }
+
     if (imageFileList.isEmpty) {
       EasyLoading.showError('Foto belum tersedia');
       return;

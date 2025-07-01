@@ -141,7 +141,9 @@ class InputInputField extends StatelessWidget {
   final bool? textObscured;
   final Function()? onSuffixPressed;
   final VoidCallback? onChanged;
-  final isDisabled;
+  final bool isDisabled;
+  final bool isRequired;
+  final bool showError;
 
   InputInputField({
     required this.controller,
@@ -159,60 +161,76 @@ class InputInputField extends StatelessWidget {
     this.suffixIcon,
     this.onChanged,
     this.isDisabled = false,
+    this.isRequired = false,
+    this.showError = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-      child: TextField(
-          readOnly: isDisabled,
-          enableInteractiveSelection: isDisabled,
-          keyboardType: this.keyboardType,
-          autocorrect: false,
-          controller: this.controller,
-          onChanged: (text) {
-            onChanged;
-          },
-          decoration: InputDecoration(
-            labelStyle: TextStyle(
-                fontWeight: FontWeight.normal,
-                fontSize: 14,
-                letterSpacing: 0.5,
-                color: const Color.fromARGB(255, 20, 22, 24),
-                fontFamily: 'Poppins'),
-            prefixStyle: TextStyle(
-                color: ColorConstants.black,
-                fontWeight: FontWeight.normal,
-                fontSize: 14,
-                letterSpacing: 0.5,
-                fontFamily: 'Poppins'),
-            suffixStyle: TextStyle(
-                color: ColorConstants.black,
-                fontWeight: FontWeight.normal,
-                fontSize: 14,
-                letterSpacing: 0.5,
-                fontFamily: 'Poppins'),
-            labelText: labelText,
-            hintText: placeholder,
-            filled: true,
-            fillColor: isDisabled
-                ? Colors.grey[200]
-                : ColorConstants.backgroundTextField,
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide(
-                color: ColorConstants.mainColor,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextField(
+            readOnly: isDisabled,
+            enableInteractiveSelection: isDisabled,
+            keyboardType: this.keyboardType,
+            autocorrect: false,
+            controller: this.controller,
+            onChanged: (text) {
+              if (onChanged != null) onChanged!();
+            },
+            decoration: InputDecoration(
+              labelStyle: TextStyle(
+                  fontWeight: FontWeight.normal,
+                  fontSize: 14,
+                  letterSpacing: 0.5,
+                  color: const Color.fromARGB(255, 20, 22, 24),
+                  fontFamily: 'Poppins'),
+              prefixStyle: TextStyle(
+                  color: ColorConstants.black,
+                  fontWeight: FontWeight.normal,
+                  fontSize: 14,
+                  letterSpacing: 0.5,
+                  fontFamily: 'Poppins'),
+              suffixStyle: TextStyle(
+                  color: ColorConstants.black,
+                  fontWeight: FontWeight.normal,
+                  fontSize: 14,
+                  letterSpacing: 0.5,
+                  fontFamily: 'Poppins'),
+              labelText: labelText,
+              hintText: placeholder,
+              filled: true,
+              fillColor: isDisabled
+                  ? Colors.grey[200]
+                  : ColorConstants.backgroundTextField,
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: BorderSide(
+                  color: ColorConstants.mainColor,
+                ),
+              ),
+              suffixIcon: _suffixIcon(),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: BorderSide(
+                  color: Colors.grey[200] ?? Colors.grey,
+                ),
               ),
             ),
-            suffixIcon: _suffixIcon(),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide(
-                color: Colors.grey[200] ?? Colors.grey,
+          ),
+          if (isRequired && showError && controller.text.isEmpty)
+            Padding(
+              padding: const EdgeInsets.only(top: 4.0, left: 4.0),
+              child: Text(
+                'Harus diisi',
+                style: TextStyle(color: Colors.red, fontSize: 12),
               ),
             ),
-          )),
+        ],
+      ),
     );
   }
 
@@ -229,53 +247,73 @@ class InputInputField extends StatelessWidget {
 
 class TextAreaField extends StatelessWidget {
   final TextEditingController controller;
-  final isDisabled;
+  final bool isDisabled;
   final ValueChanged<String>? onChanged;
+  final bool isRequired;
+  final bool showError;
 
   TextAreaField(
-      {required this.controller, this.isDisabled = false, this.onChanged});
+      {required this.controller,
+      this.isDisabled = false,
+      this.onChanged,
+      this.isRequired = false,
+      this.showError = false,
+      s});
 
   @override
   Widget build(BuildContext context) {
     return Card(
-        elevation: 0.1,
-        color:
-            isDisabled ? Colors.grey[200] : ColorConstants.backgroundTextField,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: Padding(
-          padding: EdgeInsets.all(8.0),
-          child: TextField(
-            readOnly: isDisabled,
-            enableInteractiveSelection: isDisabled,
-            style: TextStyle(
-                color: ColorConstants.black,
-                fontWeight: FontWeight.normal,
-                fontSize: 14,
-                letterSpacing: 0.5,
-                fontFamily: 'Poppins'),
-            controller: controller,
-            maxLines: 8,
-            onChanged: onChanged,
-            decoration: InputDecoration.collapsed(
-              hintText: "Masukkan text disini",
-              hintStyle: TextStyle(
+      elevation: 0.1,
+      color: isDisabled ? Colors.grey[200] : ColorConstants.backgroundTextField,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              readOnly: isDisabled,
+              enableInteractiveSelection: isDisabled,
+              style: TextStyle(
                   color: ColorConstants.black,
                   fontWeight: FontWeight.normal,
                   fontSize: 14,
                   letterSpacing: 0.5,
                   fontFamily: 'Poppins'),
-              filled: true,
-              fillColor: isDisabled
-                  ? Colors.grey[200]
-                  : ColorConstants.backgroundTextField,
-              focusColor: isDisabled
-                  ? Colors.grey[200]
-                  : ColorConstants.backgroundTextField,
+              controller: controller,
+              maxLines: 8,
+              onChanged: onChanged,
+              decoration: InputDecoration.collapsed(
+                hintText: "Masukkan text disini",
+                hintStyle: TextStyle(
+                    color: ColorConstants.black,
+                    fontWeight: FontWeight.normal,
+                    fontSize: 14,
+                    letterSpacing: 0.5,
+                    fontFamily: 'Poppins'),
+                filled: true,
+                fillColor: isDisabled
+                    ? Colors.grey[200]
+                    : ColorConstants.backgroundTextField,
+                focusColor: isDisabled
+                    ? Colors.grey[200]
+                    : ColorConstants.backgroundTextField,
+              ),
             ),
-          ),
-        ));
+            if (isRequired && showError && controller.text.isEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 4.0, left: 4.0),
+                child: Text(
+                  'Harus diisi',
+                  style: TextStyle(color: Colors.red, fontSize: 12),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
   }
 }
 

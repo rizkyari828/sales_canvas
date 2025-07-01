@@ -36,6 +36,8 @@ class BaseController extends GetxController {
   RxString tipeUser = "".obs;
   RxString groupId = "".obs;
 
+  RxBool showInputError = false.obs;
+
   @override
   void onInit() async {
     super.onInit();
