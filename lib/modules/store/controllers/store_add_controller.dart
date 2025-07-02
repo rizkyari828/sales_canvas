@@ -355,6 +355,7 @@ class StoreAddController extends BaseController {
     } else {
       _savePendingAttendance(wrapper);
       EasyLoading.showInfo('Tidak ada koneksi. Data disimpan sementara.');
+      Get.back(result: true);
       // _clearTempFile();
     }
   }
