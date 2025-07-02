@@ -31,7 +31,7 @@ class StoreView extends GetView<StoreListController> {
   SmartRefresher _getItems(StoreListController controller) {
     return SmartRefresher(
       enablePullDown: true,
-      enablePullUp: true,
+      enablePullUp: false,
       header: WaterDropHeader(),
       controller: controller.refreshController,
       onRefresh: controller.onRefresh,
