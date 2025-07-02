@@ -76,22 +76,68 @@ class StoreAddController extends BaseController {
   void onInit() {
     super.onInit();
     determinePosition();
-    getMasterData();
+    _checkInitialConnection().then((_) {
+      getMasterData();
+    });
+    ever(isConnectedToInternet, (bool connected) {
+      getMasterData();
+    });
+  }
+
+  Future<void> _checkInitialConnection() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        isConnectedToInternet.value = true;
+      } else {
+        isConnectedToInternet.value = false;
+      }
+    } on SocketException catch (_) {
+      isConnectedToInternet.value = false;
+    }
   }
 
   void getMasterData() async {
+    final storage = GetStorage();
     masterData.clear();
-    final resListAgenda = await apiRepository.getMasterData2('status 1');
-    masterData.value = resListAgenda!.data!;
-    for (var element in masterData) {
-      listAgenda.add(element);
-    }
 
-    masterData.clear();
-    final resListStatus = await apiRepository.getMasterData2('status 2');
-    masterData.value = resListStatus!.data!;
-    for (var element in masterData) {
-      listStatus.add(element);
+    if (isConnectedToInternet.value == true) {
+      // Ambil dari API dan simpan ke storage
+      final resListAgenda = await apiRepository.getMasterData2('status 1');
+      if (resListAgenda?.data != null) {
+        masterData.value = resListAgenda!.data!;
+        listAgenda.assignAll(masterData);
+        // Simpan ke storage
+        storage.write('listAgenda', masterData.map((e) => e.toJson()).toList());
+      }
+
+      masterData.clear();
+      final resListStatus = await apiRepository.getMasterData2('status 2');
+      if (resListStatus?.data != null) {
+        masterData.value = resListStatus!.data!;
+        listStatus.assignAll(masterData);
+        // Simpan ke storage
+        storage.write('listStatus', masterData.map((e) => e.toJson()).toList());
+      }
+    } else {
+      // Ambil dari storage jika offline
+      final agendaJson = storage.read<List>('listAgenda');
+      if (agendaJson != null) {
+        listAgenda.assignAll(
+          agendaJson
+              .map((e) => MasterData2.fromJson(Map<String, dynamic>.from(e)))
+              .toList(),
+        );
+      }
+
+      final statusJson = storage.read<List>('listStatus');
+      if (statusJson != null) {
+        listStatus.assignAll(
+          statusJson
+              .map((e) => MasterData2.fromJson(Map<String, dynamic>.from(e)))
+              .toList(),
+        );
+      }
     }
   }
 
@@ -99,6 +145,9 @@ class StoreAddController extends BaseController {
   void onReady() {
     super.onReady();
     loadUsers();
+    // ever(isConnectedToInternet, (bool connected) {
+    //   getMasterData();
+    // });
   }
 
   loadUsers() async {

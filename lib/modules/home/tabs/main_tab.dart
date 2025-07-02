@@ -118,9 +118,11 @@ class MainTab extends GetView<HomeController> {
                           CommonWidget.rowWidth(width: sw * .03),
                           _cardMenu(Icons.airplane_ticket_rounded, "Cuti",
                               controller.goToCutiPages, Colors.indigo),
-                          CommonWidget.rowWidth(width: sw * .03),
-                          _cardMenu(Icons.assignment, "Kuisioner",
-                              controller.goToKuisionerPages, Colors.indigo),
+                          if (controller.groupId == '1') ...[
+                            CommonWidget.rowWidth(width: sw * .03),
+                            _cardMenu(Icons.assignment, "Kuisioner",
+                                controller.goToKuisionerPages, Colors.indigo),
+                          ]
                         ],
                       ),
                       CommonWidget.rowHeight(),
@@ -525,7 +527,7 @@ class MainTab extends GetView<HomeController> {
     final sw = SizeConfig().screenWidth;
     return SmartRefresher(
       enablePullDown: true,
-      enablePullUp: false,
+      enablePullUp: true,
       header: WaterDropHeader(),
       controller: controller.refreshController,
       onRefresh: controller.onRefresh,

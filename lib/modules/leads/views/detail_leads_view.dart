@@ -2,7 +2,6 @@ import 'package:sales/modules/leads/controllers/leads_detail_controller.dart';
 import 'package:sales/shared/shared.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:sales/shared/widgets/image_picker.dart';
 
 class LeadsDetailView extends GetView<LeadsDetailController> {
@@ -28,7 +27,7 @@ class LeadsDetailView extends GetView<LeadsDetailController> {
                       CommonWidget.labelExpanded(
                           label: 'Sumber Leads',
                           value: controller.detail.value.sumberLeadsId
-                                      .toString() ==
+                                      .toString() !=
                                   ''
                               ? controller.detail.value.sumberLeadsValue
                                   .toString()
