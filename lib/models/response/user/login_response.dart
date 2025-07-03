@@ -63,7 +63,6 @@ class DataLogin {
         foto: json["foto"],
         groupUser: json["stsUser"],
         tipe: json["tipe"],
-        // tipe: '2',
       );
 
   Map<String, dynamic> toJson() => {
@@ -74,6 +73,5 @@ class DataLogin {
         "foto": foto,
         "stsUser": groupUser,
         "tipe": tipe,
-        // "tipe": '2'
       };
 }
