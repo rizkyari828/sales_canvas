@@ -54,7 +54,12 @@ class MainTab extends GetView<HomeController> {
                           CommonWidget.rowWidth(width: sw * .03),
                           _cardMenu(Icons.handshake_rounded, "Prospek",
                               controller.goToProspekDialogPages, Colors.indigo),
-                          CommonWidget.rowWidth(width: sw * .03),
+                        ],
+                      ),
+                      CommonWidget.rowHeight(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
                           _cardMenu(Icons.edit, "Input",
                               controller.goToInputPages, Colors.green),
                           CommonWidget.rowWidth(width: sw * .03),

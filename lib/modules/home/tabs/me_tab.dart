@@ -170,9 +170,9 @@ class MeTab extends GetView<HomeController> {
               listCard(Icons.verified_user_rounded, 'ID',
                   controller.idPegawai.value),
               SizedBox(height: 20),
-              listCard(
-                  Icons.business_center, 'Tipe', controller.tipeUser.value),
-              SizedBox(height: 20),
+              // listCard(
+              //     Icons.business_center, 'Tipe', controller.tipeUser.value),
+              // SizedBox(height: 20),
               listCard(getRoleIcon(controller.groupId.value), 'Role',
                   CommonWidget.getRoleLabel(controller.groupId.value)),
               SizedBox(height: 20),
@@ -195,8 +195,6 @@ class MeTab extends GetView<HomeController> {
         return Icons.person_outline;
     }
   }
-
-
 
   Widget listCard(IconData icon, String label, String value) {
     final sw = SizeConfig().screenWidth;
