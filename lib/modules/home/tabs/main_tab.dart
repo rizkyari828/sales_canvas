@@ -527,7 +527,7 @@ class MainTab extends GetView<HomeController> {
     final sw = SizeConfig().screenWidth;
     return SmartRefresher(
       enablePullDown: true,
-      enablePullUp: true,
+      enablePullUp: false,
       header: WaterDropHeader(),
       controller: controller.refreshController,
       onRefresh: controller.onRefresh,
