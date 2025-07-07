@@ -406,8 +406,11 @@ class StoreDetailView extends GetView<StoreDetailController> {
                 SizedBox(
                   width: 20,
                 ),
-                CommonWidget.minHeadText(
-                    text: controller.detail.value.namaToko ?? ''),
+                Container(
+                  width: SizeConfig().screenWidth * .60,
+                  child: CommonWidget.minHeadText(
+                      text: controller.detail.value.namaToko ?? ''),
+                ),
               ],
             ),
             SizedBox(

@@ -35,7 +35,7 @@ class AddKuisionerView extends GetView<KusionerController> {
         children: [
           Expanded(child: _getItems(controller)),
           Padding(
-            padding: EdgeInsets.only(left: sw * .08, right: 20, bottom: 20),
+            padding: EdgeInsets.only(left: sw * .06, right: 20, bottom: 20),
             child: controller.isConnectedToInternetWidget.value
                 ? controller.internetConnection()
                 : CustomButton(
@@ -130,7 +130,7 @@ Widget soalEssay(int no, String question, int idSoal, int idKategori,
   }
   final textController = controller.essayControllers[idSoalStr]!;
   return Container(
-    height: sh * .30,
+    height: sh * .40,
     decoration: BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.circular(10.0),
@@ -181,7 +181,7 @@ class SingleChoice extends GetView<KusionerController> {
   ) {
     final sh = SizeConfig().screenHeight;
     return Container(
-      height: sh * .36,
+      height: sh * .40,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10.0),

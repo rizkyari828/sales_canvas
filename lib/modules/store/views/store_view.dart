@@ -224,19 +224,20 @@ class StoreView extends GetView<StoreListController> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            CommonWidget.minHeadText(text: name),
+                            Container(
+                              child: CommonWidget.subtitleText(
+                                  text: name, fontWeight: FontWeight.bold),
+                            ),
                             // CommonWidget.subtitleText(text: type),
                             SizedBox(
                               height: 5,
                             ),
-                            Row(
-                              children: [
-                                CommonWidget.subtitleText(text: 'Alamat : '),
-                                CommonWidget.subtitleText(
-                                    text: address,
-                                    // fontWeight: FontWeight.bold,
-                                    color: ColorConstants.mainColor),
-                              ],
+                            Container(
+                              width: SizeConfig().screenWidth * .50,
+                              child: CommonWidget.subtitleText(
+                                  text: 'Alamat : ' + address,
+                                  // fontWeight: FontWeight.bold,
+                                  color: ColorConstants.mainColor),
                             ),
                             SizedBox(
                               height: 5,

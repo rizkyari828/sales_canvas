@@ -866,9 +866,17 @@ class HomeController extends BaseController {
     refreshController.refreshCompleted();
   }
 
-  void goToDetailPages({String id = "", String storeName = ''}) {
-    Get.toNamed(Routes.DETAIL_STORE,
-        arguments: {'id': id, 'storeName': storeName});
+  void goToDetailPages(
+      {String id = "",
+      String type = '',
+      String storeName = '',
+      String statusKunjungan = ''}) {
+    Get.toNamed(Routes.DETAIL_STORE, arguments: {
+      'id': id,
+      'type': type,
+      'storeName': storeName,
+      'status_kunjungan': statusKunjungan
+    });
   }
 
   void goToAddPages() {

@@ -88,6 +88,7 @@ class CommonWidget {
   }) {
     return Text(
       text,
+      maxLines: 2,
       textAlign: align,
       style: TextStyle(
           color: color,
@@ -103,6 +104,25 @@ class CommonWidget {
       FontWeight fontWeight = FontWeight.normal,
       textAlign = TextAlign.start}) {
     return Text(
+      text,
+      textAlign: textAlign,
+      style: TextStyle(
+          color: color,
+          fontWeight: fontWeight,
+          fontSize: 13,
+          letterSpacing: 0.15,
+          fontFamily: 'Poppins',
+          overflow: TextOverflow.ellipsis),
+    );
+  }
+
+  static Text subtitleMultilineText(
+      {String text = "",
+      Color color = ColorConstants.black,
+      FontWeight fontWeight = FontWeight.normal,
+      textAlign = TextAlign.start}) {
+    return Text(
+      maxLines: 2,
       text,
       textAlign: textAlign,
       style: TextStyle(
@@ -178,7 +198,7 @@ class CommonWidget {
       {String text = "", Color color = ColorConstants.black}) {
     return Text(
       text,
-      maxLines: 2,
+      maxLines: 5,
       style: TextStyle(
           color: color,
           fontWeight: FontWeight.normal,
@@ -439,6 +459,4 @@ class CommonWidget {
         return 'TAD';
     }
   }
-
-  
 }

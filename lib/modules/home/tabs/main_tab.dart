@@ -588,14 +588,20 @@ class MainTab extends GetView<HomeController> {
                     onTap: () {
                       controller.goToDetailPages(
                           id: controller.listStore[i].tokoId.toString(),
-                          storeName: controller.listStore[i].namaToko ?? '');
+                          type: controller.listStore[i].typList.toString(),
+                          storeName: controller.listStore[i].namaToko ?? '',
+                          statusKunjungan:
+                              controller.listStore[i].statusKunjungan ?? '');
                     },
-                    child: customKunjungankExpandedCard(
-                      name: controller.listStore[i].namaToko ?? '',
-                      photo: controller.listStore[i].pathToko ?? '',
-                      type: '',
-                      address: controller.listStore[i].alamatToko ?? '',
-                    ),
+                    child: customStockExpandedCard(
+                        name: controller.listStore[i].namaToko ?? '',
+                        photo: controller.listStore[i].pathToko ?? '',
+                        type: controller.listStore[i].typList == '1'
+                            ? 'Kunjungan Terjadwal'
+                            : 'Kunjungan Tidak Terjadwal',
+                        address: controller.listStore[i].alamatToko ?? '',
+                        statusKunjungan:
+                            controller.listStore[i].statusKunjungan ?? ''),
                   )
                 : Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -737,6 +743,151 @@ class MainTab extends GetView<HomeController> {
     );
   }
 
+  Widget customStockExpandedCard({
+    String photo = '',
+    String name = '',
+    String type = '',
+    String address = '',
+    String statusKunjungan = '',
+    VoidCallback? onPressed,
+  }) {
+    final sh = SizeConfig().screenHeight;
+    final sw = SizeConfig().screenWidth;
+    return Container(
+      margin: const EdgeInsets.only(left: 15.0, right: 15.0, top: 15.0),
+      height: name == '' ? sh * .15 : sh * .16,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10.0),
+        border: Border.all(width: 2.0, color: ColorConstants.borderColor),
+      ),
+      child: InkWell(
+        onTap: onPressed,
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        photo == ''
+                            ? Container(
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10)),
+                                  color: Colors.red,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(3.0),
+                                  child: Icon(
+                                    Icons.store_rounded,
+                                    color: Colors.white,
+                                    size: 60,
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                height: 70,
+                                width: 70,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.blueAccent,
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.network(
+                                    photo,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Center(
+                                        child: Icon(Icons.store_rounded,
+                                            color: Colors.white, size: 65),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CommonWidget.subtitleText(
+                                text: name, fontWeight: FontWeight.bold),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Container(
+                              width: SizeConfig().screenWidth * .50,
+                              child: CommonWidget.subtitleText(
+                                  text: 'Alamat : ' + address,
+                                  // fontWeight: FontWeight.bold,
+                                  color: ColorConstants.mainColor),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            CommonWidget.subtitleText(
+                                text: type,
+                                // fontWeight: FontWeight.bold,
+                                color: ColorConstants.mainColor),
+                            SizedBox(
+                              height: 5,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Spacer(),
+                    Container(
+                      width: sw * .85,
+                      decoration: BoxDecoration(
+                        color: statusKunjungan == '1'
+                            ? Colors.green[100]
+                            : Colors.yellow[100],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: const EdgeInsets.all(5),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            statusKunjungan == '1'
+                                ? Icons.check_circle
+                                : Icons.warning_amber_rounded,
+                            color: statusKunjungan == '1'
+                                ? Colors.green
+                                : Colors.orange,
+                          ),
+                          const SizedBox(width: 10),
+                          CommonWidget.captionText(
+                            text: statusKunjungan == '1'
+                                ? 'Sudah dikunjungi'
+                                : 'Belum dikunjungi',
+                            color: ColorConstants.mainColor,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget customKunjungankExpandedCard({
     String photo = '',
     String name = '',
@@ -810,14 +961,12 @@ class MainTab extends GetView<HomeController> {
                     children: [
                       CommonWidget.minHeadText(text: name),
                       // CommonWidget.subtitleText(text: type),
-                      Row(
-                        children: [
-                          CommonWidget.subtitleText(text: 'alamat : '),
-                          CommonWidget.subtitleText(
-                              text: address,
-                              // fontWeight: FontWeight.bold,
-                              color: ColorConstants.mainColor),
-                        ],
+                      Container(
+                        width: SizeConfig().screenWidth * .50,
+                        child: CommonWidget.subtitleText(
+                            text: 'Alamat : ' + address,
+                            // fontWeight: FontWeight.bold,
+                            color: ColorConstants.mainColor),
                       ),
                     ],
                   ),

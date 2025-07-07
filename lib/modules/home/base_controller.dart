@@ -89,7 +89,7 @@ class BaseController extends GetxController {
           isConnectedToInternet.value = true;
           isConnectedToInternetWidget.value = true;
 
-          await submitPendingAttendance();
+          // await submitPendingAttendance();
         }
       }
     } on SocketException catch (_) {
