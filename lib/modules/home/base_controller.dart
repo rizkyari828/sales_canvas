@@ -191,20 +191,18 @@ class BaseController extends GetxController {
                   ),
                   InkWell(
                     onTap: () => closeWidget(),
-                    child: Expanded(
-                      flex: 1,
-                      child: Container(
-                          width: 30, // Diameter lingkaran
-                          height: 30,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[400],
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            Icons.close,
-                            size: 20.0, // Ukuran ikon
-                            color: Colors.white, // Warna ikon
-                          )),
+                    child: Container(
+                      width: 30, // Diameter lingkaran
+                      height: 30,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[400],
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.close,
+                        size: 20.0,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ],
@@ -315,8 +313,6 @@ class BaseController extends GetxController {
     tipeUser.value = prefs.getString('tipe') ?? "";
     groupId.value = prefs.getString('groupId') ?? "";
   }
-
-
 
   @override
   void onClose() {
