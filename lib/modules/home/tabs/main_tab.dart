@@ -1002,159 +1002,155 @@ class MainTab extends GetView<HomeController> {
   Widget dailyProgress() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10, top: 10),
-      child: InkWell(
-          onTap: () => controller.goToKunjunganPages(),
-          child: Container(
-            height: 150,
-            decoration: BoxDecoration(
-              color: ColorConstants.blueBackground,
-              borderRadius: BorderRadius.circular(10.0),
-              // border: Border.all(width: 2.0, color: ColorConstants.borderColor),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.center,
+      child: Container(
+        height: 150,
+        decoration: BoxDecoration(
+          color: ColorConstants.blueBackground,
+          borderRadius: BorderRadius.circular(10.0),
+          // border: Border.all(width: 2.0, color: ColorConstants.borderColor),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(
-                            decoration: new BoxDecoration(
-                              color: ColorConstants.mainColor,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: Icon(
-                                Icons.assignment_turned_in,
-                                color: Colors.white,
-                                size: SizeConfig().screenWidth * .05,
-                              ),
-                            ),
+                      Container(
+                        decoration: new BoxDecoration(
+                          color: ColorConstants.mainColor,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Icon(
+                            Icons.assignment_turned_in,
+                            color: Colors.white,
+                            size: SizeConfig().screenWidth * .05,
                           ),
-                          SizedBox(width: 10),
-                          CommonWidget.subtitlePlusText(
-                              text: 'Progress Harian',
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold),
-                        ],
+                        ),
                       ),
-                      CommonWidget.rowHeight(),
-                      Row(
-                        children: [
-                          CommonWidget.bigText(
-                              text:
-                                  ' ${controller.detailDashboard.value.dailyActualProgress ?? 0} / ${controller.detailDashboard.value.dailyPlanProgress ?? 0}',
-                              color: Colors.black),
-                          SizedBox(width: 10),
-                          CommonWidget.subtitleText(
-                            text: 'Kunjungan',
-                            color: Colors.black,
-                          ),
-                        ],
+                      SizedBox(width: 10),
+                      CommonWidget.subtitlePlusText(
+                          text: 'Progress Harian',
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
+                    ],
+                  ),
+                  CommonWidget.rowHeight(),
+                  Row(
+                    children: [
+                      CommonWidget.bigText(
+                          text:
+                              ' ${controller.detailDashboard.value.dailyActualProgress ?? 0} / ${controller.detailDashboard.value.dailyPlanProgress ?? 0}',
+                          color: Colors.black),
+                      SizedBox(width: 10),
+                      CommonWidget.subtitleText(
+                        text: 'Kunjungan',
+                        color: Colors.black,
                       ),
                     ],
                   ),
-                  CircularPercentIndicator(
-                      progressColor: ColorConstants.mainColor,
-                      radius: 50.0,
-                      lineWidth: 13.0,
-                      animation: true,
-                      percent: 0.7,
-                      center: CommonWidget.subtitleText(
-                        text:
-                            '${controller.detailDashboard.value.monthlyPercentageAttendance ?? 0}%',
-                        color: Colors.black,
-                      ))
                 ],
               ),
-            ),
-          )),
+              CircularPercentIndicator(
+                  progressColor: ColorConstants.mainColor,
+                  radius: 50.0,
+                  lineWidth: 13.0,
+                  animation: true,
+                  percent: 0.7,
+                  center: CommonWidget.subtitleText(
+                    text:
+                        '${controller.detailDashboard.value.monthlyPercentageAttendance ?? 0}%',
+                    color: Colors.black,
+                  ))
+            ],
+          ),
+        ),
+      ),
     );
   }
 
   Widget attendanceTask() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10, top: 10),
-      child: InkWell(
-          onTap: () => controller.goToKunjunganPages(),
-          child: Container(
-            height: 150,
-            decoration: BoxDecoration(
-              color: Colors.green[100],
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.center,
+      child: Container(
+        height: 150,
+        decoration: BoxDecoration(
+          color: Colors.green[100],
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(
-                            decoration: new BoxDecoration(
-                              color: Colors.green,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: Icon(
-                                Icons.calendar_month,
-                                color: Colors.white,
-                                size: SizeConfig().screenWidth * .05,
-                              ),
-                            ),
+                      Container(
+                        decoration: new BoxDecoration(
+                          color: Colors.green,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Icon(
+                            Icons.calendar_month,
+                            color: Colors.white,
+                            size: SizeConfig().screenWidth * .05,
                           ),
-                          SizedBox(width: 10),
-                          CommonWidget.subtitlePlusText(
-                              text: 'Absensi Bulanan',
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold),
-                        ],
+                        ),
                       ),
-                      CommonWidget.rowHeight(),
-                      Row(
-                        children: [
-                          CommonWidget.bigText(
-                              text:
-                                  ' ${controller.detailDashboard.value.monthlyActualAttendance ?? 0} / ${controller.detailDashboard.value.monthlyPlanAttendance ?? 0}',
-                              color: Colors.black),
-                          SizedBox(width: 10),
-                          CommonWidget.subtitleText(
-                            text: 'Absensi',
-                            color: Colors.black,
-                          ),
-                        ],
+                      SizedBox(width: 10),
+                      CommonWidget.subtitlePlusText(
+                          text: 'Absensi Bulanan',
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
+                    ],
+                  ),
+                  CommonWidget.rowHeight(),
+                  Row(
+                    children: [
+                      CommonWidget.bigText(
+                          text:
+                              ' ${controller.detailDashboard.value.monthlyActualAttendance ?? 0} / ${controller.detailDashboard.value.monthlyPlanAttendance ?? 0}',
+                          color: Colors.black),
+                      SizedBox(width: 10),
+                      CommonWidget.subtitleText(
+                        text: 'Absensi',
+                        color: Colors.black,
                       ),
                     ],
                   ),
-                  CircularPercentIndicator(
-                      progressColor: Colors.green,
-                      radius: 50.0,
-                      lineWidth: 13.0,
-                      animation: true,
-                      percent: 0.7,
-                      center: CommonWidget.subtitleText(
-                        text:
-                            '${controller.detailDashboard.value.monthlyPercentageAttendance ?? 0}%',
-                        color: Colors.black,
-                      ))
                 ],
               ),
-            ),
-          )),
+              CircularPercentIndicator(
+                  progressColor: Colors.green,
+                  radius: 50.0,
+                  lineWidth: 13.0,
+                  animation: true,
+                  percent: 0.7,
+                  center: CommonWidget.subtitleText(
+                    text:
+                        '${controller.detailDashboard.value.monthlyPercentageAttendance ?? 0}%',
+                    color: Colors.black,
+                  ))
+            ],
+          ),
+        ),
+      ),
     );
   }
 
