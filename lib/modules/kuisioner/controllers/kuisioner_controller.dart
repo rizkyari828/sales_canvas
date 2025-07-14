@@ -1,5 +1,10 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:image_picker/image_picker.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sales/api/api_repository.dart';
+import 'package:sales/models/request/attendance/attendance_wrapper.dart';
 import 'package:sales/models/request/kuisioner/kuisioner_request.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -18,6 +23,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 class KusionerController extends BaseController {
   KusionerController({required ApiRepository apiRepository})
       : super(apiRepository: apiRepository);
+
+  var imageFileList = <XFile>[].obs;
+
+  set _imageFile(XFile? value) {
+    imageFileList.addAll((value == null ? null : <XFile>[value])!);
+  }
+
+  final ImagePicker _picker = ImagePicker();
 
   final startDateController = TextEditingController();
   final endDateController = TextEditingController();
@@ -43,6 +56,9 @@ class KusionerController extends BaseController {
   var submitKuisioner = <SubmitKuisioner>[].obs;
 
   final selectedAnswer = ''.obs;
+
+  dynamic pickImageError;
+  RxString? retrieveDataError;
 
   // Tambahkan penampung jawaban
   var answers = <String, String>{}.obs; // key: idSoal, value: jawaban
@@ -76,16 +92,101 @@ class KusionerController extends BaseController {
     }
   }
 
+  var imageFileMap = <String, List<XFile>>{}.obs; // key: idSoal
+
+  void addImageFile(String idSoal, XFile file) {
+    if (!imageFileMap.containsKey(idSoal)) {
+      imageFileMap[idSoal] = [];
+    }
+    imageFileMap[idSoal]!.add(file);
+    imageFileMap.refresh();
+  }
+
+  void clearImageFile(String idSoal) {
+    imageFileMap[idSoal] = [];
+    imageFileMap.refresh();
+  }
+
+  Future<void> onImageButtonPressed(
+    ImageSource source, {
+    BuildContext? context,
+    bool isMultiImage = false,
+    String? idSoal, // tambahkan ini
+  }) async {
+    if (isMultiImage) {
+      await _displayPickImageDialog(context!,
+          (double? maxWidth, double? maxHeight, int? quality) async {
+        try {
+          final List<XFile>? pickedFileList = await _picker.pickMultiImage(
+            maxWidth: maxWidth,
+            maxHeight: maxHeight,
+            imageQuality: quality,
+          );
+
+          imageFileList.addAll(pickedFileList!);
+        } catch (e) {
+          pickImageError = e;
+        }
+      });
+    } else {
+      await _displayPickImageDialog(context!,
+          (double? maxWidth, double? maxHeight, int? quality) async {
+        try {
+          final XFile? pickedFile = await _picker.pickImage(
+            source: source,
+            maxWidth: maxWidth,
+            maxHeight: maxHeight,
+            imageQuality: quality,
+          );
+          if (pickedFile != null && idSoal != null) {
+            addImageFile(idSoal, pickedFile);
+          }
+        } catch (e) {
+          pickImageError = e;
+        }
+      });
+    }
+  }
+
+  Future<void> _displayPickImageDialog(BuildContext context, onPick) async {
+    return onPick(200.0, 200.0, 50);
+  }
+
   void submit({bool isLast = false}) async {
     // Kumpulkan jawaban ke dalam List<SubmitKuisioner>
-    List<SubmitKuisioner> dataToSend = listKuisioner
-        .map((item) => SubmitKuisioner(
-              idSoal: item.idSoal.toString(),
-              idKategori: item.idKategori.toString(),
-              jawaban: answers[item.idSoal.toString()] ?? "",
-              idTrans: idKuisioner.value,
-            ))
-        .toList();
+    List<SubmitKuisioner> dataToSend = [];
+
+    for (var item in listKuisioner) {
+      final idSoalStr = item.idSoal.toString();
+      List<PhotoAttachment> attachments = [];
+
+      final files = imageFileMap[idSoalStr] ?? [];
+      for (var file in files) {
+        if (!(await File(file.path).exists())) {
+          EasyLoading.showError('Salah satu foto tidak ditemukan');
+          return;
+        }
+        final photoBytes = await File(file.path).readAsBytes();
+        final photoBase64 = base64Encode(photoBytes);
+
+        attachments.add(
+          PhotoAttachment(
+            img: photoBase64,
+            filename: file.path.split('/').last,
+          ),
+        );
+      }
+
+      dataToSend.add(
+        SubmitKuisioner(
+          idSoal: idSoalStr,
+          idKategori: item.idKategori.toString(),
+          jawaban: answers[idSoalStr] ?? "",
+          idTrans: idKuisioner.value,
+          photos: attachments,
+        ),
+      );
+    }
 
     final req = SubmitKuisionerRequest(data: dataToSend);
     final res = await apiRepository.submitKuisioner(req);

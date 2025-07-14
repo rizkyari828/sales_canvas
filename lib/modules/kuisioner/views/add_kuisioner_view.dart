@@ -1,9 +1,14 @@
+import 'dart:io';
+
+import 'package:dotted_border/dotted_border.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sales/modules/kuisioner/controllers/kuisioner_controller.dart';
 import 'package:sales/shared/constants/colors.dart';
 import 'package:sales/shared/utils/custom_pop_scope.dart';
 import 'package:sales/shared/utils/utils.dart';
 import 'package:sales/shared/widgets/button.dart';
 import 'package:sales/shared/widgets/custom_appbar.dart';
+import 'package:sales/shared/widgets/image_picker.dart';
 import 'package:sales/shared/widgets/input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -33,7 +38,7 @@ class AddKuisionerView extends GetView<KusionerController> {
       resizeToAvoidBottomInset: true, // tambahkan ini
       body: Column(
         children: [
-          Expanded(child: _getItems(controller)),
+          Expanded(child: _getItems(context, controller)),
           Padding(
             padding: EdgeInsets.only(left: sw * .06, right: 20, bottom: 20),
             child: controller.isConnectedToInternetWidget.value
@@ -57,7 +62,7 @@ class AddKuisionerView extends GetView<KusionerController> {
     );
   }
 
-  Widget _getItems(KusionerController controller) {
+  Widget _getItems(BuildContext context, KusionerController controller) {
     return SingleChildScrollView(
       padding: EdgeInsets.only(
         top: 0,
@@ -84,10 +89,12 @@ class AddKuisionerView extends GetView<KusionerController> {
                     ),
                   controller.listKuisioner[i].idKategori == 2
                       ? soalEssay(
+                          context,
                           controller.currentProgress.value + i + 1,
                           controller.listKuisioner[i].soal ?? '',
                           controller.listKuisioner[i].idSoal ?? 0,
                           controller.listKuisioner[i].idKategori ?? 0,
+                          controller.listKuisioner[i].isUpload ?? 0,
                           controller,
                           initialValue: controller.answers[controller
                                       .listKuisioner[i].idSoal
@@ -107,6 +114,7 @@ class AddKuisionerView extends GetView<KusionerController> {
                             controller.listKuisioner[i].pilihan3 ?? '',
                             controller.listKuisioner[i].pilihan4 ?? '',
                           ],
+                          isUpload: controller.listKuisioner[i].isUpload ?? 0,
                         ),
                 ],
               ),
@@ -118,10 +126,88 @@ class AddKuisionerView extends GetView<KusionerController> {
   }
 }
 
-Widget soalEssay(int no, String question, int idSoal, int idKategori,
-    KusionerController controller,
+Widget uploadFile(
+    BuildContext context, KusionerController controller, String idSoal) {
+  final sw = SizeConfig().screenWidth;
+  final imageFiles = controller.imageFileMap[idSoal] ?? [];
+
+  return Column(
+    children: [
+      SizedBox(height: 10.0),
+      Divider(color: ColorConstants.borderColor),
+      SizedBox(height: 20.0),
+      CommonWidget.minSubtitleText(text: "Silahkan upload disini"),
+      SizedBox(height: 10.0),
+      Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Obx(() {
+          final files = controller.imageFileMap[idSoal] ?? [];
+          if (files.isEmpty) return SizedBox();
+          return Wrap(
+            spacing: 8,
+            children: files.map((file) {
+              return Stack(
+                alignment: Alignment.topRight,
+                children: [
+                  Image.file(
+                    File(file.path),
+                    width: 80,
+                    height: 80,
+                    fit: BoxFit.cover,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      files.remove(file);
+                      controller.imageFileMap[idSoal] = List<XFile>.from(files);
+                      controller.imageFileMap.refresh();
+                    },
+                    child: Icon(Icons.cancel, color: Colors.red, size: 20),
+                  ),
+                ],
+              );
+            }).toList(),
+          );
+        }),
+      ),
+      imageFiles.length < 1
+          ? InkWell(
+              onTap: () async {
+                await controller.onImageButtonPressed(
+                  ImageSource.camera,
+                  context: context,
+                  isMultiImage: false,
+                  idSoal: idSoal,
+                );
+              },
+              child:  DottedBorder(
+                options: RectDottedBorderOptions(
+                  color: Colors.grey,
+                  dashPattern: [8, 4],
+                  strokeWidth: 1,
+                ),
+                child: Container(
+                  height: 50,
+                  width: sw,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.camera_alt, color: Colors.grey, size: 30),
+                      SizedBox(width: 10.0),
+                      CommonWidget.bodyText(
+                          text: "Ambil Photos", color: Colors.grey),
+                    ],
+                  ),
+                ),
+              ),
+            )
+          : Container(),
+    ],
+  );
+}
+
+Widget soalEssay(BuildContext context, int no, String question, int idSoal,
+    int idKategori, int isUpload, KusionerController controller,
     {String initialValue = ""}) {
-  final sh = SizeConfig().screenHeight;
   final idSoalStr = idSoal.toString();
   if (!controller.essayControllers.containsKey(idSoalStr)) {
     controller.essayControllers[idSoalStr] = TextEditingController(
@@ -130,7 +216,6 @@ Widget soalEssay(int no, String question, int idSoal, int idKategori,
   }
   final textController = controller.essayControllers[idSoalStr]!;
   return Container(
-    height: sh * .40,
     decoration: BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.circular(10.0),
@@ -153,6 +238,10 @@ Widget soalEssay(int no, String question, int idSoal, int idKategori,
               );
             },
           ),
+          SizedBox(height: 20.0),
+          if (isUpload == 0) ...[
+            uploadFile(context, controller, idSoal.toString())
+          ]
         ],
       ),
     ),
@@ -165,6 +254,7 @@ class SingleChoice extends GetView<KusionerController> {
   final int idSoal;
   final int idKategori;
   final List<String> options;
+  final int isUpload;
 
   const SingleChoice({
     Key? key,
@@ -173,15 +263,14 @@ class SingleChoice extends GetView<KusionerController> {
     required this.idSoal,
     required this.idKategori,
     required this.options,
+    required this.isUpload,
   }) : super(key: key);
 
   @override
   Widget build(
     BuildContext context,
   ) {
-    final sh = SizeConfig().screenHeight;
     return Container(
-      height: sh * .40,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10.0),
@@ -213,6 +302,9 @@ class SingleChoice extends GetView<KusionerController> {
                 }).toList(),
               );
             }),
+            if (isUpload == 0) ...[
+              uploadFile(context, controller, idSoal.toString())
+            ]
           ],
         ),
       ),

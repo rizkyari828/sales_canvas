@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:sales/models/request/attendance/attendance_wrapper.dart';
+
 SubmitKuisionerRequest submitKuisionerRequestFromJson(String str) =>
     SubmitKuisionerRequest.fromJson(json.decode(str));
 
@@ -37,12 +39,14 @@ class SubmitKuisioner {
   String? idKategori;
   String? jawaban;
   int? idTrans;
+  final List<PhotoAttachment>? photos;
 
   SubmitKuisioner({
     this.idSoal,
     this.idKategori,
     this.jawaban,
     this.idTrans,
+    this.photos,
   });
 
   factory SubmitKuisioner.fromJson(Map<String, dynamic> json) =>
@@ -51,6 +55,9 @@ class SubmitKuisioner {
         idKategori: json["id_kategori"],
         jawaban: json["jawaban"],
         idTrans: json["id_trans"],
+        photos: (json['foto'] as List? ?? [])
+            .map((e) => PhotoAttachment.fromJson(e))
+            .toList(),
       );
 
   Map<String, dynamic> toJson() => {
@@ -58,5 +65,6 @@ class SubmitKuisioner {
         "id_kategori": idKategori,
         "jawaban": jawaban,
         "id_trans": idTrans,
+        'foto': photos?.map((e) => e.toJson()).toList(),
       };
 }

@@ -53,17 +53,18 @@ class DataKuisioner {
   String? pilihan2;
   String? pilihan3;
   String? pilihan4;
+  int? isUpload;
 
-  DataKuisioner({
-    this.no,
-    this.idSoal,
-    this.idKategori,
-    this.soal,
-    this.pilihan1,
-    this.pilihan2,
-    this.pilihan3,
-    this.pilihan4,
-  });
+  DataKuisioner(
+      {this.no,
+      this.idSoal,
+      this.idKategori,
+      this.soal,
+      this.pilihan1,
+      this.pilihan2,
+      this.pilihan3,
+      this.pilihan4,
+      this.isUpload});
 
   factory DataKuisioner.fromJson(Map<String, dynamic> json) => DataKuisioner(
         no: json["no"],
@@ -74,6 +75,7 @@ class DataKuisioner {
         pilihan2: json["pilihan_2"],
         pilihan3: json["pilihan_3"],
         pilihan4: json["pilihan_4"],
+        isUpload: json["is_upload"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -85,5 +87,6 @@ class DataKuisioner {
         "pilihan_2": pilihan2,
         "pilihan_3": pilihan3,
         "pilihan_4": pilihan4,
+        "is_upload": isUpload
       };
 }
