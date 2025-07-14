@@ -32,6 +32,38 @@ class MainTab extends GetView<HomeController> {
 
   Widget _buildGridView(scaleWidth, context, HomeController controller) {
     final sw = SizeConfig().screenWidth;
+    List<Widget> rows = [];
+    final menus = controller.visibleMenus;
+    const cardsPerRow = 3;
+    final spacing = CommonWidget.rowWidth(width: sw * .03);
+
+    for (int i = 0; i < menus.length; i += cardsPerRow) {
+      final rowMenus = menus.skip(i).take(cardsPerRow).toList();
+
+      // Sisipkan spacer di antara card menu
+      List<Widget> rowChildren = [];
+      for (int j = 0; j < rowMenus.length; j++) {
+        rowChildren.add(_cardMenu(
+          rowMenus[j]['icon'],
+          rowMenus[j]['title'],
+          rowMenus[j]['onPressed'],
+          rowMenus[j]['color'],
+        ));
+        // Tambahkan spacer kecuali setelah card terakhir
+        if (j != rowMenus.length - 1) {
+          rowChildren.add(spacing);
+        }
+      }
+
+      rows.add(
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: rowChildren,
+        ),
+      );
+      rows.add(CommonWidget.rowHeight());
+    }
+
     final sh = SizeConfig().screenHeight;
     return SingleChildScrollView(
       child: Stack(
@@ -46,27 +78,63 @@ class MainTab extends GetView<HomeController> {
                       header(controller),
                       Container(
                           height: sh * .26, child: _getSlideImage(controller)),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          _cardMenu(Icons.airplane_ticket_rounded, "Leave",
-                              controller.goToLeavePages, Colors.blue),
-                          CommonWidget.rowWidth(width: sw * .03),
-                          _cardMenu(Icons.handshake_rounded, "Prospek",
-                              controller.goToProspekDialogPages, Colors.indigo),
-                        ],
-                      ),
-                      CommonWidget.rowHeight(),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          _cardMenu(Icons.edit, "Input",
-                              controller.goToInputPages, Colors.green),
-                          CommonWidget.rowWidth(width: sw * .03),
-                          _cardMenu(Icons.attach_money_rounded, "Benefit",
-                              controller.goToBenefitPages, Colors.orange),
-                        ],
-                      ),
+                      ...rows,
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: [
+                      //     _cardMenu(Icons.airplane_ticket_rounded, "Leave",
+                      //         controller.goToLeavePages, Colors.blue),
+                      //     CommonWidget.rowWidth(width: sw * .03),
+                      //     _cardMenu(Icons.handshake_rounded, "Prospek",
+                      //         controller.goToProspekDialogPages, Colors.indigo),
+                      //   ],
+                      // ),
+                      // CommonWidget.rowHeight(),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: [
+                      //     _cardMenu(Icons.edit, "Input",
+                      //         controller.goToInputPages, Colors.green),
+                      //     CommonWidget.rowWidth(width: sw * .03),
+                      //     _cardMenu(Icons.attach_money_rounded, "Benefit",
+                      //         controller.goToBenefitPages, Colors.orange),
+                      //   ],
+                      // ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: [
+                      //     _cardMenu(Icons.store, "Kunjungan",
+                      //         controller.goToStorePages, Colors.indigo),
+                      //     CommonWidget.rowWidth(width: sw * .03),
+                      //     _cardMenu(Icons.search_rounded, "Leads",
+                      //         controller.goToLeadsPages, Colors.indigo),
+                      //     CommonWidget.rowWidth(width: sw * .03),
+                      //     _cardMenu(Icons.handshake_rounded, "Prospek",
+                      //         controller.goToProspekV2, Colors.indigo),
+                      //     CommonWidget.rowWidth(width: sw * .03),
+                      //     _cardMenu(Icons.work_rounded, "Agent",
+                      //         controller.goToOvertimePages, Colors.indigo),
+                      //   ],
+                      // ),
+                      // CommonWidget.rowHeight(),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: [
+                      //     _cardMenu(Icons.attach_money_rounded, "Benefit",
+                      //         controller.goToBenefitPages, Colors.orange),
+                      //     CommonWidget.rowWidth(width: sw * .03),
+                      //     _cardMenu(Icons.work_rounded, "Lembur",
+                      //         controller.goToOvertimePages, Colors.indigo),
+                      //     CommonWidget.rowWidth(width: sw * .03),
+                      //     _cardMenu(Icons.airplane_ticket_rounded, "Cuti",
+                      //         controller.goToCutiPages, Colors.indigo),
+                      //     if (controller.groupId == '1') ...[
+                      //       CommonWidget.rowWidth(width: sw * .03),
+                      //       _cardMenu(Icons.assignment, "Kuisioner",
+                      //           controller.goToKuisionerPages, Colors.indigo),
+                      //     ]
+                      //   ],
+                      // ),
                       CommonWidget.rowHeight(height: sh * 0.02),
                       Align(
                         alignment: Alignment.centerLeft,

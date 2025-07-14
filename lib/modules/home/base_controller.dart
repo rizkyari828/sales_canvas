@@ -38,6 +38,15 @@ class BaseController extends GetxController {
 
   RxBool showInputError = false.obs;
 
+  RxBool menuKunjungan = false.obs;
+  RxBool menuLeads = false.obs;
+  RxBool menuProspek = false.obs;
+  RxBool menuAgent = false.obs;
+  RxBool menuBenefit = false.obs;
+  RxBool menuLembur = false.obs;
+  RxBool menuCuti = false.obs;
+  RxBool menuKuisioner = false.obs;
+
   @override
   void onInit() async {
     super.onInit();
@@ -312,6 +321,15 @@ class BaseController extends GetxController {
     userId.value = prefs.getString('userId') ?? "";
     tipeUser.value = prefs.getString('tipe') ?? "";
     groupId.value = prefs.getString('groupId') ?? "";
+
+    menuKunjungan.value = prefs.getBool('menu_kunjungan') ?? false;
+    menuLeads.value = prefs.getBool('menu_leads') ?? false;
+    menuProspek.value = prefs.getBool('menu_prospek') ?? false;
+    menuAgent.value = prefs.getBool('menu_agent') ?? false;
+    menuBenefit.value = prefs.getBool('menu_benefit') ?? false;
+    menuLembur.value = prefs.getBool('menu_lembur') ?? false;
+    menuCuti.value = prefs.getBool('menu_cuti') ?? false;
+    menuKuisioner.value = prefs.getBool('menu_kuisioner') ?? false;
   }
 
   @override

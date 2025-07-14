@@ -525,6 +525,10 @@ class HomeController extends BaseController {
     Get.toNamed(Routes.OVERTIME);
   }
 
+  void goToAgentPages() {
+    Get.toNamed(Routes.AGENT);
+  }
+
   void goToCutiPages() {
     Get.toNamed(Routes.CUTI);
   }
@@ -544,6 +548,10 @@ class HomeController extends BaseController {
     }
     Get.toNamed(Routes.PROSPEK,
         arguments: {'month': month, 'type': type, 'status': status});
+  }
+
+  void goToProspekV2() {
+    Get.toNamed(Routes.PROSPEK_V2);
   }
 
   void goToBenefitPages() {
@@ -1008,6 +1016,68 @@ class HomeController extends BaseController {
     final res = await apiRepository.getDashboard(userId.value);
     print(res!.data!);
     detailDashboard.value = res.data!.first;
+  }
+
+  List<Map<String, dynamic>> get visibleMenus {
+    final List<Map<String, dynamic>> allMenus = [
+      {
+        'show': menuKunjungan.value,
+        'icon': Icons.store,
+        'title': 'Kunjungan',
+        'onPressed': goToStorePages,
+        'color': Colors.indigo,
+      },
+      {
+        'show': menuLeads.value,
+        'icon': Icons.search_rounded,
+        'title': 'Leads',
+        'onPressed': goToLeadsPages,
+        'color': Colors.indigo,
+      },
+      {
+        'show': menuProspek.value,
+        'icon': Icons.handshake_rounded,
+        'title': 'Prospek',
+        'onPressed': goToProspekV2,
+        'color': Colors.indigo,
+      },
+      {
+        'show': menuAgent.value,
+        'icon': Icons.work_rounded,
+        'title': 'Agent',
+        'onPressed': goToAgentPages,
+        'color': Colors.indigo,
+      },
+      {
+        'show': menuBenefit.value,
+        'icon': Icons.attach_money_rounded,
+        'title': 'Benefit',
+        'onPressed': goToBenefitPages,
+        'color': Colors.orange,
+      },
+      {
+        'show': menuLembur.value,
+        'icon': Icons.work_rounded,
+        'title': 'Lembur',
+        'onPressed': goToOvertimePages,
+        'color': Colors.indigo,
+      },
+      {
+        'show': menuCuti.value,
+        'icon': Icons.airplane_ticket_rounded,
+        'title': 'Cuti',
+        'onPressed': goToCutiPages,
+        'color': Colors.indigo,
+      },
+      {
+        'show': menuKuisioner.value,
+        'icon': Icons.assignment,
+        'title': 'Kuisioner',
+        'onPressed': goToKuisionerPages,
+        'color': Colors.indigo,
+      },
+    ];
+    return allMenus.where((menu) => menu['show'] == true).toList();
   }
 
   @override

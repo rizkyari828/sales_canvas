@@ -1,4 +1,8 @@
 import 'package:get/get.dart';
+import 'package:sales/modules/agent/bindings/agent_binding.dart';
+import 'package:sales/modules/agent/views/add_agent_view.dart';
+import 'package:sales/modules/agent/views/agent_view.dart';
+import 'package:sales/modules/agent/views/detail_agent_view.dart';
 import 'package:sales/modules/benefit/bindings/benefit_binding.dart';
 import 'package:sales/modules/benefit/views/benefit_add_view.dart';
 import 'package:sales/modules/benefit/views/benefit_detail_view.dart';
@@ -28,6 +32,10 @@ import 'package:sales/modules/prospek/bindings/prospek_binding.dart';
 import 'package:sales/modules/prospek/views/add_prospek_view.dart';
 import 'package:sales/modules/prospek/views/detail_prospek_view.dart';
 import 'package:sales/modules/prospek/views/prospek_view.dart';
+import 'package:sales/modules/prospek_v2/bindings/prospek_v2_binding.dart';
+import 'package:sales/modules/prospek_v2/views/add_prospek_view.dart';
+import 'package:sales/modules/prospek_v2/views/detail_prospek_view.dart';
+import 'package:sales/modules/prospek_v2/views/prospek_view.dart';
 import 'package:sales/modules/store/bindings/store_binding.dart';
 import 'package:sales/modules/store/views/add_store_view.dart';
 import 'package:sales/modules/store/views/detail_store_view.dart';
@@ -232,6 +240,36 @@ class AppPages {
       name: Routes.DETAIL_CUTI_SALES,
       page: () => CutiDetailView(),
       binding: CutiBinding(),
+    ),
+    GetPage(
+      name: Routes.PROSPEK_V2,
+      page: () => ProspekV2View(),
+      binding: ProspekV2Binding(),
+    ),
+    GetPage(
+      name: Routes.ADD_PROSPEK_V2,
+      page: () => ProspekV2AddView(),
+      binding: ProspekV2Binding(),
+    ),
+    GetPage(
+      name: Routes.DETAIL_PROSPEK_V2,
+      page: () => ProspekV2DetailView(),
+      binding: ProspekV2Binding(),
+    ),
+    GetPage(
+      name: Routes.AGENT,
+      page: () => AgentView(),
+      binding: AgentBinding(),
+    ),
+    GetPage(
+      name: Routes.ADD_AGENT,
+      page: () => AddAgentView(),
+      binding: AgentBinding(),
+    ),
+    GetPage(
+      name: Routes.DETAIL_AGENT,
+      page: () => AgentDetailView(),
+      binding: AgentBinding(),
     ),
   ];
 }

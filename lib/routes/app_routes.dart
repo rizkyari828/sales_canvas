@@ -38,4 +38,10 @@ abstract class Routes {
   static const CUTI = '/cuti-sales';
   static const DETAIL_CUTI_SALES = '/detail-cuti-sales';
   static const ADD_CUTI_SALES = '/add-cuti-sales';
+  static const PROSPEK_V2 = '/prospek-v2';
+  static const DETAIL_PROSPEK_V2 = '/detail-prospek-v2';
+  static const ADD_PROSPEK_V2 = '/add-prospek-v2';
+  static const AGENT = '/agent';
+  static const DETAIL_AGENT = '/detail-agent';
+  static const ADD_AGENT = '/add-agent';
 }

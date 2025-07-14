@@ -1,39 +1,58 @@
 // To parse this JSON data, do
 //
-//     final loginRespons = loginResponsFromJson(jsonString);
+//     final LoginRespons = LoginResponsFromJson(jsonString);
 
 import 'dart:convert';
 
-LoginRespons loginResponsFromJson(String str) =>
+LoginRespons LoginResponsFromJson(String str) =>
     LoginRespons.fromJson(json.decode(str));
 
-String loginResponsToJson(LoginRespons data) => json.encode(data.toJson());
+String LoginResponsToJson(LoginRespons data) => json.encode(data.toJson());
 
 class LoginRespons {
-  LoginRespons({this.status, this.message, this.data, this.error});
-
   String? status;
   String? message;
   bool? error;
   List<DataLogin>? data;
 
+  LoginRespons({
+    this.status,
+    this.message,
+    this.error,
+    this.data,
+  });
+
   factory LoginRespons.fromJson(Map<String, dynamic> json) => LoginRespons(
         status: json["status"],
         message: json["message"],
         error: json["error"],
-        data: List<DataLogin>.from(
-            json["Data"].map((x) => DataLogin.fromJson(x))),
+        data: json["Data"] == null
+            ? []
+            : List<DataLogin>.from(
+                json["Data"]!.map((x) => DataLogin.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
         "error": error,
-        "Data": List<dynamic>.from(data!.map((x) => x.toJson())),
+        "Data": data == null
+            ? []
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
       };
 }
 
 class DataLogin {
+  int? userId;
+  String? token;
+  String? nama;
+  String? idPegawai;
+  String? username;
+  String? foto;
+  int? stsUser;
+  String? tipe;
+  Menus? menus;
+
   DataLogin({
     this.userId,
     this.token,
@@ -41,18 +60,10 @@ class DataLogin {
     this.idPegawai,
     this.username,
     this.foto,
-    this.groupUser,
+    this.stsUser,
     this.tipe,
+    this.menus,
   });
-
-  int? userId;
-  String? token;
-  String? nama;
-  String? idPegawai;
-  String? username;
-  String? foto;
-  int? groupUser;
-  String? tipe;
 
   factory DataLogin.fromJson(Map<String, dynamic> json) => DataLogin(
         userId: json["user_id"],
@@ -61,8 +72,20 @@ class DataLogin {
         idPegawai: json["idPegawai"],
         username: json["username"],
         foto: json["foto"],
-        groupUser: json["stsUser"],
+        stsUser: json["stsUser"],
         tipe: json["tipe"],
+        menus: json["menus"] != null
+            ? Menus.fromJson(json["menus"])
+            : Menus(
+                kunjungan: true,
+                leads: true,
+                prospek: true,
+                agent: true,
+                benefit: true,
+                lembur: true,
+                cuti: true,
+                kuisioner: true,
+              ),
       );
 
   Map<String, dynamic> toJson() => {
@@ -70,8 +93,54 @@ class DataLogin {
         "token": token,
         "nama": nama,
         "idPegawai": idPegawai,
+        "username": username,
         "foto": foto,
-        "stsUser": groupUser,
+        "stsUser": stsUser,
         "tipe": tipe,
+        "menus": menus?.toJson(),
+      };
+}
+
+class Menus {
+  bool? kunjungan;
+  bool? leads;
+  bool? prospek;
+  bool? agent;
+  bool? benefit;
+  bool? lembur;
+  bool? cuti;
+  bool? kuisioner;
+
+  Menus({
+    this.kunjungan,
+    this.leads,
+    this.prospek,
+    this.agent,
+    this.benefit,
+    this.lembur,
+    this.cuti,
+    this.kuisioner,
+  });
+
+  factory Menus.fromJson(Map<String, dynamic> json) => Menus(
+        kunjungan: json["kunjungan"],
+        leads: json["leads"],
+        prospek: json["prospek"],
+        agent: json["agent"],
+        benefit: json["benefit"],
+        lembur: json["lembur"],
+        cuti: json["cuti"],
+        kuisioner: json["kuisioner"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "kunjungan": kunjungan,
+        "leads": leads,
+        "prospek": prospek,
+        "agent": agent,
+        "benefit": benefit,
+        "lembur": lembur,
+        "cuti": cuti,
+        "kuisioner": kuisioner,
       };
 }

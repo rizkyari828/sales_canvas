@@ -1,17 +1,17 @@
-import 'package:sales/modules/leads/controllers/leads_detail_controller.dart';
+import 'package:sales/modules/agent/controllers/agent_detail_controller.dart';
 import 'package:sales/shared/shared.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sales/shared/widgets/button.dart';
 import 'package:sales/shared/widgets/image_picker.dart';
 
-class LeadsDetailView extends GetView<LeadsDetailController> {
+class AgentDetailView extends GetView<AgentDetailController> {
   final data = Get.arguments;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: CommonWidget.appBar(title: 'Detail Leads'),
+        appBar: CommonWidget.appBar(title: 'Detail Agent'),
         body: SingleChildScrollView(
             child: Padding(
           padding: const EdgeInsets.all(25.0),

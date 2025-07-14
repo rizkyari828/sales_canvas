@@ -64,9 +64,22 @@ class AuthController extends GetxController {
           prefs.setString(
               StorageConstants.profilePhoto, res?.data?.first.foto ?? "");
           prefs.setString(StorageConstants.groupId,
-              res?.data?.first.groupUser.toString() ?? "");
+              res?.data?.first.stsUser.toString() ?? "");
           prefs.setString(
               StorageConstants.tipe, res?.data?.first.tipe.toString() ?? "");
+          final menus = res?.data?.first.menus;
+
+          if (menus != null) {
+            prefs.setBool('menu_kunjungan', menus.kunjungan ?? false);
+            prefs.setBool('menu_leads', menus.leads ?? false);
+            prefs.setBool('menu_prospek', menus.prospek ?? false);
+            prefs.setBool('menu_agent', menus.agent ?? false);
+            prefs.setBool('menu_benefit', menus.benefit ?? false);
+            prefs.setBool('menu_lembur', menus.lembur ?? false);
+            prefs.setBool('menu_cuti', menus.cuti ?? false);
+            prefs.setBool('menu_kuisioner', menus.kuisioner ?? false);
+          }
+
           Get.offAllNamed(Routes.HOME);
         }
       }
