@@ -1,5 +1,6 @@
 import 'package:sales/api/base_provider.dart';
 import 'package:sales/models/models.dart';
+import 'package:sales/models/request/agent/submit_agent.dart';
 import 'package:sales/models/request/attendance/attendance_wrapper.dart';
 import 'package:sales/models/request/attendance/submit_attendance.dart';
 import 'package:sales/models/request/attendance/validate_attenance.dart';
@@ -29,6 +30,7 @@ import 'package:sales/models/request/overtime/submit_overtime_client_request.dar
 import 'package:sales/models/request/overtime/submit_request_overtime.dart';
 import 'package:sales/models/request/overtime/update_approval_overtime_request.dart';
 import 'package:sales/models/request/pagination_request.dart';
+import 'package:sales/models/request/prospek_v2/submit_request_prospek_v2.dart';
 import 'package:sales/models/request/rate/submit_rate_request.dart';
 import 'package:sales/models/request/reliver/approve_reliver_request.dart';
 import 'package:sales/models/request/reliver/create_reliver_request.dart';
@@ -390,5 +392,22 @@ class ApiProvider extends BaseProvider {
 
   Future<Response> getDashboardKunjungan(String path) {
     return get(path);
+  }
+
+  Future<Response> getShowProspekV2(String path, GetListRequest data) {
+    return post(path, data.toJson());
+  }
+
+  Future<Response> submitProspectV2(String path, SubmitProspekV2Request data) {
+    print(data.toJson());
+    return post(path, data.toJson());
+  }
+
+  Future<Response> submitAgent(String path, SubmitAgentRequest data) {
+    return post(path, data.toJson());
+  }
+
+  Future<Response> getAgent(String path, UserIdRequest data) {
+    return post(path, data.toJson());
   }
 }

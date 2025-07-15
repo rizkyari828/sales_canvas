@@ -1,7 +1,5 @@
 import 'package:get/get.dart';
 import 'package:sales/modules/prospek_v2/controllers/prospek_add_controller.dart';
-import 'package:sales/modules/prospek_v2/controllers/prospek_detail_controller.dart';
-
 import '../controllers/prospek_controller.dart';
 
 class ProspekV2Binding extends Bindings {
@@ -10,11 +8,7 @@ class ProspekV2Binding extends Bindings {
     Get.lazyPut<ProspekV2Controller>(
       () => ProspekV2Controller(apiRepository: Get.find()),
     );
-
-    Get.lazyPut<ProspekV2DetailController>(
-      () => ProspekV2DetailController(apiRepository: Get.find()),
-    );
-
+    
     Get.lazyPut<ProspekV2AddController>(
       () => ProspekV2AddController(apiRepository: Get.find()),
     );

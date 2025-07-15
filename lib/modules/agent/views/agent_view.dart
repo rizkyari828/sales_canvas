@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:sales/modules/agent/controllers/agent_list_controller.dart';
 import 'package:sales/shared/constants/constants.dart';
 import 'package:sales/shared/widgets/approval.dart';
@@ -46,15 +47,16 @@ class AgentView extends GetView<AgentListController> {
         itemCount: controller.list.length,
         itemBuilder: (context, i) => InkWell(
           onTap: () {
-            controller.goToDetailPages(dataLead: controller.list[i]);
+            controller.goToDetailPages(dataAgent: controller.list[i]);
           },
           child: CustomExpandedCardView(
-            name: controller.list[i].nama ?? '',
+            name: controller.list[i].fullName ?? '',
             firstParagraf: controller.list[i].email ?? '',
-            secondParagrafLabel: "Telepon",
-            secondParagrafValue: controller.list[i].telphone ?? '',
-            thirdParagrafLabel: "Product Minat",
-            thirdParagrafValue: controller.list[i].productMinat ?? '',
+            secondParagrafLabel: "Tanggal Bergabung",
+            secondParagrafValue:
+                '${DateFormat("EEEE, d MMMM yyyy", "id_ID").format(controller.list[i].joinDate ?? DateTime.now())}',
+            thirdParagrafLabel: "Penempatan",
+            thirdParagrafValue: controller.list[i].placement ?? '',
           ),
         ),
       ),

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:sales/models/models.dart';
+import 'package:sales/models/request/agent/submit_agent.dart';
 import 'package:sales/models/request/attendance/attendance_wrapper.dart';
 import 'package:sales/models/request/attendance/submit_attendance.dart';
 import 'package:sales/models/request/attendance/validate_attenance.dart';
@@ -29,6 +30,7 @@ import 'package:sales/models/request/overtime/submit_overtime_client_request.dar
 import 'package:sales/models/request/overtime/submit_request_overtime.dart';
 import 'package:sales/models/request/overtime/update_approval_overtime_request.dart';
 import 'package:sales/models/request/pagination_request.dart';
+import 'package:sales/models/request/prospek_v2/submit_request_prospek_v2.dart';
 import 'package:sales/models/request/rate/submit_rate_request.dart';
 import 'package:sales/models/request/reliver/approve_reliver_request.dart';
 import 'package:sales/models/request/reliver/create_reliver_request.dart';
@@ -39,6 +41,7 @@ import 'package:sales/models/request/update_fcm_profile_request.dart';
 import 'package:sales/models/request/update_photo_profile_request.dart';
 import 'package:sales/models/request/user_id_request.dart';
 import 'package:sales/models/response/Lead/list_lead_respone.dart';
+import 'package:sales/models/response/agent/list_agent_response.dart';
 import 'package:sales/models/response/attendance/attendance_submit.dart';
 import 'package:sales/models/response/attendance/attendance_validate.dart';
 import 'package:sales/models/response/benefit/benefit_dashboard_response.dart';
@@ -64,6 +67,8 @@ import 'package:sales/models/response/prospek/master_data_response.dart';
 import 'package:sales/models/response/prospek/master_id_response.dart';
 import 'package:sales/models/response/prospek/master_status_response.dart';
 import 'package:sales/models/response/prospek/show.dart';
+import 'package:sales/models/response/prospek_v2/detail_prospek_v2_response.dart';
+import 'package:sales/models/response/prospek_v2/list_prospek_v2_response.dart';
 import 'package:sales/models/response/rate/show_rate_review_response.dart';
 import 'package:sales/models/response/recap_history.dart';
 import 'package:sales/models/response/reliver/list_reliver_response.dart';
@@ -1298,6 +1303,98 @@ class ApiRepository {
           .timeout(Duration(seconds: timeout));
       if (res.statusCode == 200 || res.statusCode == 401) {
         return DashboardKunjunganResponse.fromJson(res.body);
+      }
+    } on TimeoutException catch (_) {
+      EasyLoading.showError('Connection Timeout. Please try again later');
+      EasyLoading.dismiss();
+    } catch (exception) {
+      print(exception);
+    }
+    return null;
+  }
+
+  Future<ShowProspekV2Response?> showProspekV2(
+      String id, GetListRequest data) async {
+    try {
+      final res = await apiProvider
+          .getShowProspekV2('/api/getdataDetail?noTrans=' + id, data)
+          .timeout(Duration(seconds: timeout));
+      if (res.statusCode == 200 || res.statusCode == 401) {
+        return ShowProspekV2Response.fromJson(res.body);
+      }
+    } on TimeoutException catch (_) {
+      EasyLoading.showError('Connection Timeout. Please try again later');
+      EasyLoading.dismiss();
+    } catch (exception) {
+      print(exception);
+    }
+    return null;
+  }
+
+  Future<ErrorResponse?> submitProspectV2(SubmitProspekV2Request data) async {
+    try {
+      final res = await apiProvider
+          .submitProspectV2('/api/saveProspek', data)
+          .timeout(Duration(seconds: timeout));
+      if (res.statusCode == 200) {
+        return ErrorResponse.fromJson(res.body);
+      }
+    } on TimeoutException catch (_) {
+      EasyLoading.showError('Connection Timeout. Please try again later');
+      EasyLoading.dismiss();
+    } catch (exception) {
+      print(exception);
+    }
+    return null;
+  }
+
+  Future<ProspekV2Response?> listProspekV2(GetListRequest data,
+      {int page = 1, int limit = 10}) async {
+    try {
+      final res = await apiProvider
+          .getProspek(
+              '/api/getdata?page=' +
+                  page.toString() +
+                  '&limit=' +
+                  limit.toString(),
+              data)
+          .timeout(Duration(seconds: timeout));
+      if (res.statusCode == 200 || res.statusCode == 401) {
+        return ProspekV2Response.fromJson(res.body);
+      }
+    } on TimeoutException catch (_) {
+      EasyLoading.showError('Connection Timeout. Please try again later');
+      EasyLoading.dismiss();
+    } catch (exception) {
+      print(exception);
+    }
+    return null;
+  }
+
+  Future<ErrorResponse?> submitAgent(SubmitAgentRequest data) async {
+    try {
+      final res = await apiProvider
+          .submitAgent('/api/simpan_leads', data)
+          .timeout(Duration(seconds: timeout));
+      if (res.statusCode == 200 || res.statusCode == 401) {
+        return ErrorResponse.fromJson(res.body);
+      }
+    } on TimeoutException catch (_) {
+      EasyLoading.showError('Connection Timeout. Please try again later');
+      EasyLoading.dismiss();
+    } catch (exception) {
+      print(exception);
+    }
+    return null;
+  }
+
+  Future<AgentResponse?> listAgent({required UserIdRequest data}) async {
+    try {
+      final res = await apiProvider
+          .getAgent('/api/get_leads', data)
+          .timeout(Duration(seconds: timeout));
+      if (res.statusCode == 200 || res.statusCode == 401) {
+        return AgentResponse.fromJson(res.body);
       }
     } on TimeoutException catch (_) {
       EasyLoading.showError('Connection Timeout. Please try again later');

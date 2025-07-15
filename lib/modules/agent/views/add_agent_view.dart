@@ -139,13 +139,6 @@ class AddAgentView extends GetView<AgentController> {
                         backgroundColor: Colors.white,
                       ),
                     ),
-                    // InputInputField(
-                    //   keyboardType: TextInputType.text,
-                    //   controller: controller.signatureController,
-                    //   labelText: "TTD Digital",
-                    //   isRequired: true,
-                    //   showError: controller.showInputError.value,
-                    // ),
                     SizedBox(height: 20.0),
                     CommonWidget.minSubtitleText(
                         text: "Silahkan upload bukti Foto"),

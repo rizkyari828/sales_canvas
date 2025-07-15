@@ -84,6 +84,50 @@ class CustomImagePicker {
     }
   }
 
+  static Widget singlePreviewGridImages(List imageFileList, {String? label}) {
+    if (imageFileList.isNotEmpty) {
+      return Semantics(
+        child: GridView.count(
+          key: UniqueKey(),
+          crossAxisCount: 2,
+          crossAxisSpacing: 10.0,
+          mainAxisSpacing: 10.0,
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          children: List.generate(
+            imageFileList.length,
+            (index) {
+              final item = imageFileList[index];
+              if (item is Foto && (item.img == null || item.img!.isEmpty)) {
+                return const Icon(Icons.broken_image);
+              } else if (item is Foto && item.img!.startsWith('http')) {
+                return Semantics(
+                  label: label ?? 'image_picker_example_picked_image',
+                  child: Image.network(item.img!),
+                );
+              } else if (item.path != null) {
+                return Semantics(
+                  label: label ?? 'image_picker_example_picked_image',
+                  child: kIsWeb
+                      ? Image.network(item.path)
+                      : Image.file(File(item.path)),
+                );
+              } else {
+                return const Icon(Icons.broken_image);
+              }
+            },
+          ),
+        ),
+        label: label ?? 'image_picker_example_picked_images',
+      );
+    } else {
+      return const Text(
+        '',
+        textAlign: TextAlign.center,
+      );
+    }
+  }
+
   static Text? _getRetrieveErrorWidget(controller) {
     if (controller.retrieveDataError != null) {
       final Text result = Text(controller.retrieveDataError?.value ?? "");

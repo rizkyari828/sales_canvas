@@ -1,10 +1,12 @@
 import 'package:intl/intl.dart';
 import 'package:sales/api/api_repository.dart';
-import 'package:sales/models/request/overtime/submit_request_overtime.dart';
+import 'package:sales/models/request/overtime/get_list.dart';
+import 'package:sales/models/request/prospek_v2/submit_request_prospek_v2.dart';
 import 'package:sales/models/response/prospek/master_data_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:sales/models/response/prospek_v2/detail_prospek_v2_response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProspekV2AddController extends GetxController {
@@ -24,9 +26,17 @@ class ProspekV2AddController extends GetxController {
   RxInt idMediaCommunication = 0.obs;
   RxDouble latitude = 0.0.obs;
   RxDouble longitude = 0.0.obs;
+  RxString status = "".obs;
+  RxString sourceOrderValue = "".obs;
+  RxString statusProspectValue = "".obs;
+  RxString mediaCommunicationValue = "".obs;
+  RxBool isFilled = true.obs;
+  RxBool disabled = false.obs;
+  RxBool enabled = true.obs;
 
   RxBool showInputError = false.obs;
-  final nickname = TextEditingController();
+  final prospectNameController = TextEditingController();
+  final productNameController = TextEditingController();
   final dateLastUpdate = TextEditingController();
   final dateCalled = TextEditingController();
   final dateFu = TextEditingController();
@@ -38,6 +48,11 @@ class ProspekV2AddController extends GetxController {
   var listMediaCommuncation = <MasterData>[].obs;
   var listStatusProspect = <MasterData>[].obs;
 
+  final argm = Get.arguments;
+  var detail = ProspekDetailV2().obs;
+
+  RxBool isEdit = false.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -48,6 +63,46 @@ class ProspekV2AddController extends GetxController {
     super.onReady();
     loadUsers();
     loadMaster();
+    if (argm != null) {
+      getDetailProspek();
+    }
+  }
+
+  void getDetailProspek() async {
+    final res = await apiRepository.showProspekV2(
+        argm.toString(), GetListRequest(id: '0', token: ''));
+    detail.value = res?.data!.first ?? ProspekDetailV2();
+
+    // Set controller dan Rx variabel dari detail
+    prospectNameController.text = detail.value.prospectName ?? '';
+    productNameController.text = detail.value.productName ?? '';
+    totalTransaction.text = detail.value.totalTransaction ?? '';
+    dateCalled.text = detail.value.dateCalled ?? '';
+    dateFu.text = detail.value.dateFu ?? '';
+    noteCommunication.text = detail.value.noteCommunication ?? '';
+    reasonNotOrder.text = detail.value.reasonNotOrder ?? '';
+    dateLastUpdate.text = detail.value.dateLastUpdate ?? '';
+
+    idStatusProspect.value = detail.value.idStatusProspect ?? 0;
+    idMediaCommunication.value = detail.value.idMediaCommunication ?? 0;
+    idSource.value = detail.value.idSource ?? 0;
+
+    statusProspectValue.value = detail.value.statusProspectValue ?? '';
+    mediaCommunicationValue.value = detail.value.mediaCommunicationValue ?? '';
+    sourceOrderValue.value = detail.value.sourceOrderValue ?? '';
+
+    // Jika ada status/logic lain
+    status.value = detail.value.statusProspectValue ?? '';
+
+    // Disable input jika status tertentu
+    if (detail.value.statusProspectValue == "3" ||
+        detail.value.statusProspectValue == "4" ||
+        detail.value.statusProspectValue == "5") {
+      disabled.value = true;
+      enabled.value = false;
+    }
+
+    isEdit.value = true;
   }
 
   selectDate(BuildContext context, TextEditingController controller) async {
@@ -94,16 +149,22 @@ class ProspekV2AddController extends GetxController {
   }
 
   void submitProspek() async {
-    final res = await apiRepository.submitOvertime(
-      SubmitOvertimeRequest(
-          userId: int.parse(userId.value),
-          name: nickname.text,
-          sourceId: idSource.value,
-          token: token.value,
-          latitude: latitude.value.toString(),
-          longitude: longitude.value.toString(),
-          note: noteController.text),
+    final req = SubmitProspekV2Request(
+      userId: int.tryParse(userId.value) ?? 0,
+      prospectName: prospectNameController.text,
+      productName: productNameController.text,
+      totalTransaction: totalTransaction.text,
+      idStatusProspect: idStatusProspect.value,
+      dateCalled: dateCalled.text,
+      idMediaCommunication: idMediaCommunication.value,
+      dateFu: dateFu.text,
+      noteCommunication: noteCommunication.text,
+      idSource: idSource.value,
+      reasonNotOrder: reasonNotOrder.text,
+      dateLastUpdate: dateLastUpdate.text,
     );
+
+    final res = await apiRepository.submitProspectV2(req);
 
     if (res?.error == false) {
       EasyLoading.showSuccess('Berhasil disimpan');

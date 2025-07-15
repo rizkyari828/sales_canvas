@@ -1,6 +1,6 @@
 import 'package:sales/api/api_repository.dart';
-import 'package:sales/models/response/Lead/list_lead_respone.dart';
 import 'package:get/get.dart';
+import 'package:sales/models/response/agent/list_agent_response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AgentDetailController extends GetxController {
@@ -8,13 +8,14 @@ class AgentDetailController extends GetxController {
   AgentDetailController({required this.apiRepository});
 
   final argm = Get.arguments;
-  var detail = DataLead().obs;
+  var detail = DataAgent().obs;
   String date = "";
   DateTime selectedDate = DateTime.now();
   RxString groupName = "".obs;
   RxString groupId = "".obs;
 
   RxList<Foto> imageFileList = (List<Foto>.of([])).obs;
+  RxList<Foto> signatureFile = (List<Foto>.of([])).obs;
 
   RxString? retrieveDataError;
 
@@ -29,6 +30,7 @@ class AgentDetailController extends GetxController {
     detail.value = argm['data_lead'];
     // getDetailIzin();
     imageFileList.addAll(detail.value.foto ?? []);
+    signatureFile.addAll(detail.value.signature ?? []);
     loadUsers();
   }
 

@@ -1,6 +1,6 @@
 import 'package:sales/api/api_repository.dart';
 import 'package:sales/models/request/user_id_request.dart';
-import 'package:sales/models/response/Lead/list_lead_respone.dart';
+import 'package:sales/models/response/agent/list_agent_response.dart';
 import 'package:sales/routes/app_pages.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -10,7 +10,7 @@ class AgentListController extends GetxController {
   final ApiRepository apiRepository;
   AgentListController({required this.apiRepository});
 
-  var list = <DataLead>[].obs;
+  var list = <DataAgent>[].obs;
   RxString groupName = "".obs;
   RxString groupId = "".obs;
   RxString userId = "".obs;
@@ -25,7 +25,7 @@ class AgentListController extends GetxController {
 
     // monitor network fetch
     await Future.delayed(Duration(milliseconds: 1000));
-    getLeads(page.value);
+    getAgent(page.value);
     refreshController.loadComplete();
   }
 
@@ -39,7 +39,7 @@ class AgentListController extends GetxController {
   void onReady() {
     super.onReady();
     loadUsers();
-    getLeads(page.value);
+    getAgent(page.value);
   }
 
   loadUsers() async {
@@ -55,9 +55,9 @@ class AgentListController extends GetxController {
     super.onClose();
   }
 
-  void getLeads(page) async {
+  void getAgent(page) async {
     final res =
-        await apiRepository.listLeads(data: UserIdRequest(id: userId.value));
+        await apiRepository.listAgent(data: UserIdRequest(id: userId.value));
     list.addAll(res?.data ?? []);
   }
 
@@ -65,12 +65,12 @@ class AgentListController extends GetxController {
     await Future.delayed(Duration(milliseconds: 1000));
     list.clear();
     page.value = 1;
-    getLeads(page.value);
+    getAgent(page.value);
     refreshController.refreshCompleted();
   }
 
-  void goToDetailPages({DataLead? dataLead}) {
-    Get.toNamed(Routes.DETAIL_AGENT, arguments: {'data_lead': dataLead});
+  void goToDetailPages({DataAgent? dataAgent}) {
+    Get.toNamed(Routes.DETAIL_AGENT, arguments: {'data_lead': dataAgent});
   }
 
   void goToAddPages() async {
@@ -78,7 +78,7 @@ class AgentListController extends GetxController {
     if (result == true) {
       list.clear();
       page.value = 1;
-      getLeads(page.value);
+      getAgent(page.value);
     }
   }
 }

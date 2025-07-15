@@ -16,7 +16,7 @@ class AgentDetailView extends GetView<AgentDetailController> {
             child: Padding(
           padding: const EdgeInsets.all(25.0),
           child: Obx(
-            () => controller.detail.value.nama == null
+            () => controller.detail.value.fullName == null
                 ? Center(
                     child: CircularProgressIndicator(
                       backgroundColor: ColorConstants.mainColor,
@@ -26,17 +26,11 @@ class AgentDetailView extends GetView<AgentDetailController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CommonWidget.labelExpanded(
-                          label: 'Sumber Leads',
-                          value: controller.detail.value.sumberLeadsId
-                                      .toString() !=
-                                  ''
-                              ? controller.detail.value.sumberLeadsValue
-                                  .toString()
-                              : controller.detail.value.sumberLeads2
-                                  .toString()),
+                          label: 'Nama Lengkap',
+                          value: controller.detail.value.fullName),
                       SizedBox(height: 10.0),
                       CommonWidget.labelExpanded(
-                          label: 'Nama',
+                          label: 'Nama Agent',
                           value: controller.detail.value.email.toString()),
                       SizedBox(height: 10.0),
                       CommonWidget.labelExpanded(
@@ -44,52 +38,47 @@ class AgentDetailView extends GetView<AgentDetailController> {
                           value: controller.detail.value.email.toString()),
                       SizedBox(height: 10.0),
                       CommonWidget.labelExpanded(
-                          label: 'Telephone',
-                          value: controller.detail.value.telphone.toString()),
-                      // SizedBox(height: 10.0),
-                      // CommonWidget.labelExpanded(
-                      //     label: 'Alamat',
-                      //     value: controller.detail.value.alamat.toString()),
+                          label: 'Alamat Lengkap',
+                          value: controller.detail.value.alamat.toString()),
                       SizedBox(height: 10.0),
-                      // CommonWidget.labelExpanded(
-                      //     label: 'Titik Kordinat',
-                      //     value: controller.detail.value.nama),
-                      //      SizedBox(height: 10.0),
-                      // CommonWidget.labelExpanded(
-                      //     label: 'Kategori Lead',
-                      //     value: controller.detail.value.),
-                      //      SizedBox(height: 10.0),
                       CommonWidget.labelExpanded(
-                          label: 'Product Minat',
-                          value:
-                              controller.detail.value.productMinat.toString()),
+                          label: 'Wilayah Penempatan',
+                          value: controller.detail.value.placement.toString()),
                       SizedBox(height: 10.0),
-                      // CommonWidget.labelExpanded(
-                      //     label: 'Status Lead',
-                      //     value: controller.detail.value.nama),
-                      // SizedBox(height: 10.0),
-                      // CommonWidget.labelExpanded(
-                      //     label: 'Catatan',
-                      //     value: controller.detail.value.catatan.toString()),
-                      // SizedBox(height: 20.0),
-                      CommonWidget.bodyText(text: "Alamat"),
+                      CommonWidget.labelExpanded(
+                          label: 'Tanggal Bergabung',
+                          value: controller.detail.value.joinDate),
+                      SizedBox(height: 10.0),
+                      CommonWidget.labelExpanded(
+                          label: 'Jenis Agent',
+                          value: controller.detail.value.typeAgentId),
+                      SizedBox(height: 10.0),
+                      CommonWidget.labelExpanded(
+                          label: 'Didaftarkan Oleh',
+                          value: controller.detail.value.registerBy.toString()),
+                      SizedBox(height: 10.0),
+                      CommonWidget.bodyText(text: "Status Aktif"),
                       SizedBox(height: 10.0),
                       CommonWidget.bodyText(
                           text: controller.detail.value.alamat ?? ''),
                       SizedBox(height: 10.0),
-                      CommonWidget.bodyText(text: "Catatan"),
-                      SizedBox(height: 10.0),
-                      CommonWidget.bodyText(
-                          text: controller.detail.value.catatan ?? ''),
+                      CommonWidget.bodyText(text: "Tanda Tangan"),
                       SizedBox(height: 10.0),
                       Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Obx(() =>
-                            CustomImagePicker.previewGridImages(controller)),
+                        child: Obx(() => CustomImagePicker.previewGridImages(
+                            controller.signatureFile)),
+                      ),
+                      CommonWidget.bodyText(text: "Foto"),
+                      SizedBox(height: 10.0),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Obx(() => CustomImagePicker.previewGridImages(
+                            controller.imageFileList)),
                       ),
                       SizedBox(height: 20.0),
                       CustomButton(
-                        buttonText: 'UBAH KE PROSPEK',
+                        buttonText: 'SIMPAN',
                         width: MediaQuery.of(context).size.width,
                         onPressed: () {
                           // controller.submit();

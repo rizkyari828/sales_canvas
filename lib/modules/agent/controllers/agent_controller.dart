@@ -5,8 +5,8 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sales/api/api_repository.dart';
+import 'package:sales/models/request/agent/submit_agent.dart';
 import 'package:sales/models/request/attendance/attendance_wrapper.dart';
-import 'package:sales/models/request/leads/submit_lead.dart';
 import 'package:sales/models/response/izin/type_izin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -122,39 +122,30 @@ class AgentController extends BaseController {
   }
 
   void submit() async {
+    // Validasi signature
     final signatureBytes = await signatureController.toPngBytes();
     if (signatureBytes == null || signatureBytes.isEmpty) {
       EasyLoading.showError('Tanda tangan belum diisi');
       return;
     }
     final signatureBase64 = base64Encode(signatureBytes);
-    // if (nameController.text.isEmpty ||
-    //     emailController.text.isEmpty ||
-    //     noHpController.text.isEmpty ||
-    //     alamatController.text.isEmpty ||
-    //     minatProductController.text.isEmpty) {
-    //   showInputError.value = true;
-    //   EasyLoading.showError('Semua field wajib diisi');
-    //   return;
-    // }
 
+    // Validasi foto
     if (imageFileList.isEmpty) {
       EasyLoading.showError('Foto belum tersedia');
       return;
     }
 
-    List<PhotoAttachment> attachments = [];
-
+    // Siapkan lampiran foto
+    List<PhotoAttachment> photoAttachments = [];
     for (var file in imageFileList) {
       if (!(await File(file.path).exists())) {
         EasyLoading.showError('Salah satu foto tidak ditemukan');
         return;
       }
-
       final photoBytes = await File(file.path).readAsBytes();
       final photoBase64 = base64Encode(photoBytes);
-
-      attachments.add(
+      photoAttachments.add(
         PhotoAttachment(
           img: photoBase64,
           filename: file.path.split('/').last,
@@ -162,32 +153,40 @@ class AgentController extends BaseController {
       );
     }
 
-    // final res = await apiRepository.submitLead(
-    //   SubmitLeadRequest(
-    //       idUser: idUser.value,
-    //       date: DateFormat("yyyy-MM-dd", "id_ID").format(dateNow).toString(),
-    //       latitude: myLocation.latitude.toString(),
-    //       longitude: myLocation.longitude.toString(),
-    //       email: emailController.text,
-    //       name: nameController.text,
-    //       noHp: noHpController.text,
-    //       leadSource: leadSourceId.value,
-    //       optionLeadSource: optionalTextValue.value,
-    //       leadCategory: leadCategoryId.value,
-    //       minatProduct: minatProductController.text,
-    //       leadStatus: statusLeadId.value,
-    //       note: noteController.text,
-    //       photos: attachments,
-    //       alamat: alamatController.text),
-    // );
-    // if (res?.error == false) {
-    //   EasyLoading.showSuccess('Berhasil disimpan');
-    //   EasyLoading.dismiss();
-    //   Get.back(result: true);
-    // } else {
-    //   EasyLoading.showError('Gagal disimpan');
-    //   EasyLoading.dismiss();
-    // }
+    // Siapkan lampiran signature
+    List<PhotoAttachment> signatureAttachments = [
+      PhotoAttachment(
+        img: signatureBase64,
+        filename: "signature.png",
+      ),
+    ];
+
+    // Submit request
+    final res = await apiRepository.submitAgent(
+      SubmitAgentRequest(
+        idUser: userId.value,
+        fullName: fullNameController.text,
+        agentName: agentNameController.text,
+        email: emailController.text,
+        alamat: alamatController.text,
+        placement: placementController.text,
+        joinDate: joinDateController.text,
+        typeAgentId: typeAgentId.value,
+        registerBy: registerByController.text,
+        statusActiveId: statusActiveId.value,
+        signature: signatureAttachments,
+        photos: photoAttachments,
+      ),
+    );
+
+    if (res?.error == false) {
+      EasyLoading.showSuccess('Berhasil disimpan');
+      EasyLoading.dismiss();
+      Get.back(result: true);
+    } else {
+      EasyLoading.showError('Gagal disimpan');
+      EasyLoading.dismiss();
+    }
   }
 
   Future<void> determinePosition() async {

@@ -34,7 +34,6 @@ import 'package:sales/modules/prospek/views/detail_prospek_view.dart';
 import 'package:sales/modules/prospek/views/prospek_view.dart';
 import 'package:sales/modules/prospek_v2/bindings/prospek_v2_binding.dart';
 import 'package:sales/modules/prospek_v2/views/add_prospek_view.dart';
-import 'package:sales/modules/prospek_v2/views/detail_prospek_view.dart';
 import 'package:sales/modules/prospek_v2/views/prospek_view.dart';
 import 'package:sales/modules/store/bindings/store_binding.dart';
 import 'package:sales/modules/store/views/add_store_view.dart';
@@ -249,11 +248,6 @@ class AppPages {
     GetPage(
       name: Routes.ADD_PROSPEK_V2,
       page: () => ProspekV2AddView(),
-      binding: ProspekV2Binding(),
-    ),
-    GetPage(
-      name: Routes.DETAIL_PROSPEK_V2,
-      page: () => ProspekV2DetailView(),
       binding: ProspekV2Binding(),
     ),
     GetPage(
