@@ -179,7 +179,7 @@ Widget uploadFile(
                   idSoal: idSoal,
                 );
               },
-              child:  DottedBorder(
+              child: DottedBorder(
                 options: RectDottedBorderOptions(
                   color: Colors.grey,
                   dashPattern: [8, 4],
@@ -239,7 +239,7 @@ Widget soalEssay(BuildContext context, int no, String question, int idSoal,
             },
           ),
           SizedBox(height: 20.0),
-          if (isUpload == 0) ...[
+          if (isUpload == 1) ...[
             uploadFile(context, controller, idSoal.toString())
           ]
         ],
@@ -302,7 +302,7 @@ class SingleChoice extends GetView<KusionerController> {
                 }).toList(),
               );
             }),
-            if (isUpload == 0) ...[
+            if (isUpload == 1) ...[
               uploadFile(context, controller, idSoal.toString())
             ]
           ],

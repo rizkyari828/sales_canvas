@@ -183,7 +183,7 @@ class KusionerController extends BaseController {
           idKategori: item.idKategori.toString(),
           jawaban: answers[idSoalStr] ?? "",
           idTrans: idKuisioner.value,
-          photos: attachments,
+          photos: attachments.isEmpty ? null : attachments,
         ),
       );
     }

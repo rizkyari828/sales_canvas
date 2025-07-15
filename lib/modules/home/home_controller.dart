@@ -526,7 +526,7 @@ class HomeController extends BaseController {
   }
 
   void goToAgentPages() {
-    Get.toNamed(Routes.AGENT);
+    // Get.toNamed(Routes.AGENT);
   }
 
   void goToCutiPages() {
@@ -551,7 +551,7 @@ class HomeController extends BaseController {
   }
 
   void goToProspekV2() {
-    Get.toNamed(Routes.PROSPEK_V2);
+    // Get.toNamed(Routes.PROSPEK_V2);
   }
 
   void goToBenefitPages() {
@@ -1043,7 +1043,7 @@ class HomeController extends BaseController {
       },
       {
         'show': menuAgent.value,
-        'icon': Icons.work_rounded,
+        'icon': Icons.person_2_rounded,
         'title': 'Agent',
         'onPressed': goToAgentPages,
         'color': Colors.indigo,
@@ -1053,7 +1053,7 @@ class HomeController extends BaseController {
         'icon': Icons.attach_money_rounded,
         'title': 'Benefit',
         'onPressed': goToBenefitPages,
-        'color': Colors.orange,
+        'color': Colors.indigo,
       },
       {
         'show': menuLembur.value,
