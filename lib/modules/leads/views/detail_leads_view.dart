@@ -2,6 +2,7 @@ import 'package:sales/modules/leads/controllers/leads_detail_controller.dart';
 import 'package:sales/shared/shared.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sales/shared/widgets/approval.dart';
 import 'package:sales/shared/widgets/button.dart';
 import 'package:sales/shared/widgets/image_picker.dart';
 
@@ -25,6 +26,9 @@ class LeadsDetailView extends GetView<LeadsDetailController> {
                 : Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      ApprovalFlow.statusApprovalProspect(
+                          controller.detail.value.statusLead),
+                      SizedBox(height: 20.0),
                       CommonWidget.labelExpanded(
                           label: 'Sumber Leads',
                           value: controller.detail.value.sumberLeadsId
@@ -68,10 +72,6 @@ class LeadsDetailView extends GetView<LeadsDetailController> {
                       //     label: 'Status Lead',
                       //     value: controller.detail.value.nama),
                       // SizedBox(height: 10.0),
-                      // CommonWidget.labelExpanded(
-                      //     label: 'Catatan',
-                      //     value: controller.detail.value.catatan.toString()),
-                      // SizedBox(height: 20.0),
                       CommonWidget.bodyText(text: "Alamat"),
                       SizedBox(height: 10.0),
                       CommonWidget.bodyText(
@@ -82,17 +82,35 @@ class LeadsDetailView extends GetView<LeadsDetailController> {
                       CommonWidget.bodyText(
                           text: controller.detail.value.catatan ?? ''),
                       SizedBox(height: 10.0),
+                      CommonWidget.bodyText(text: "Foto"),
+                      SizedBox(height: 10.0),
                       Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Obx(() =>
                             CustomImagePicker.previewGridImages(controller)),
                       ),
+                      CustomDropDownSearch(
+                        enabled: true,
+                        selectedItem: controller.statusLead.value,
+                        listItem: controller.listStatusLead.map((item) {
+                          return item.nama.toString();
+                        }).toList(),
+                        labelText: "Status Lead",
+                        onChanged: (value) async {
+                          controller.statusLead.value = value;
+                          for (var f in controller.listStatusLead) {
+                            if (f.nama == value) {
+                              controller.statusLeadId.value = f.id.toString();
+                            }
+                          }
+                        },
+                      ),
                       SizedBox(height: 20.0),
                       CustomButton(
-                        buttonText: 'UBAH KE PROSPEK',
+                        buttonText: 'UPDATE STATUS',
                         width: MediaQuery.of(context).size.width,
                         onPressed: () {
-                          // controller.submit();
+                          controller.submit();
                         },
                       ),
                     ],

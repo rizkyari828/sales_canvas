@@ -102,7 +102,7 @@ class LoginScreen extends GetView<AuthController> {
               alignment: Alignment.centerLeft,
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 15.0, left: 10),
-                child: CommonWidget.subtitleText(
+                child: CommonWidget.subtitleMultilineText(
                     text: 'Masukkan username dan password untuk melanjutkan',
                     color: ColorConstants.black),
               ),

@@ -135,7 +135,7 @@ class MainTab extends GetView<HomeController> {
                       //     ]
                       //   ],
                       // ),
-                      CommonWidget.rowHeight(height: sh * 0.02),
+                      CommonWidget.rowHeight(height: sh * 0.01),
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
@@ -152,8 +152,8 @@ class MainTab extends GetView<HomeController> {
                           _eventMenu(context),
                         ],
                       ),
-                      CommonWidget.rowHeight(height: sh * 0.01),
-                      _statusTaskBar(),
+                      // CommonWidget.rowHeight(height: sh * 0.01),
+                      // _statusTaskBar(),
                       CommonWidget.rowHeight(),
                     ],
                   ),

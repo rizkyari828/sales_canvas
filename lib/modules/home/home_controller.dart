@@ -1044,7 +1044,7 @@ class HomeController extends BaseController {
       {
         'show': menuAgent.value,
         'icon': Icons.person_2_rounded,
-        'title': 'Agent',
+        'title': 'My Agent',
         'onPressed': goToAgentPages,
         'color': Colors.indigo,
       },

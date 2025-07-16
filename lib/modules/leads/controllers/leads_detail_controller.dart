@@ -1,11 +1,16 @@
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:sales/api/api_repository.dart';
+import 'package:sales/models/request/leads/submit_lead.dart';
+import 'package:sales/models/request/leads/submit_status_lead.dart';
 import 'package:sales/models/response/Lead/list_lead_respone.dart';
 import 'package:get/get.dart';
+import 'package:sales/models/response/master_data_2_response.dart';
+import 'package:sales/modules/home/base_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LeadsDetailController extends GetxController {
-  final ApiRepository apiRepository;
-  LeadsDetailController({required this.apiRepository});
+class LeadsDetailController extends BaseController {
+  LeadsDetailController({required ApiRepository apiRepository})
+      : super(apiRepository: apiRepository);
 
   final argm = Get.arguments;
   var detail = DataLead().obs;
@@ -17,6 +22,10 @@ class LeadsDetailController extends GetxController {
   RxList<Foto> imageFileList = (List<Foto>.of([])).obs;
 
   RxString? retrieveDataError;
+  var listStatusLead = <MasterData2>[].obs;
+  var masterData = <MasterData2>[].obs;
+  RxString statusLead = "".obs;
+  RxString statusLeadId = "".obs;
 
   @override
   void onInit() {
@@ -27,7 +36,7 @@ class LeadsDetailController extends GetxController {
   void onReady() {
     super.onReady();
     detail.value = argm['data_lead'];
-    // getDetailIzin();
+    getMasterData();
     imageFileList.addAll(detail.value.foto ?? []);
     loadUsers();
   }
@@ -37,9 +46,41 @@ class LeadsDetailController extends GetxController {
     super.onClose();
   }
 
+  void getMasterData() async {
+    masterData.clear();
+    final resListStatusLead = await apiRepository.getMasterData2('Status Lead');
+    masterData.value = resListStatusLead!.data!;
+    for (var element in masterData) {
+      listStatusLead.add(element);
+    }
+  }
+
   loadUsers() async {
     var prefs = Get.find<SharedPreferences>();
     groupName.value = prefs.getString('groupName') ?? "";
     groupId.value = prefs.getString('groupId') ?? "";
+  }
+
+  void submit() async {
+    if (statusLeadId.isEmpty) {
+      showInputError.value = true;
+      EasyLoading.showError('Semua field wajib diisi');
+      return;
+    }
+
+    final res = await apiRepository.submitStatusLead(
+      SubmitStatusLeadRequest(
+        idUser: userId.value,
+        idStatusLead: statusLeadId.value,
+      ),
+    );
+    if (res?.error == false) {
+      EasyLoading.showSuccess('Berhasil disimpan');
+      EasyLoading.dismiss();
+      Get.back(result: true);
+    } else {
+      EasyLoading.showError('Gagal disimpan');
+      EasyLoading.dismiss();
+    }
   }
 }

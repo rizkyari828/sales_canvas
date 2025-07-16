@@ -92,7 +92,7 @@ class ProspekV2View extends GetView<ProspekV2Controller> {
                   controller.type.value == "now"
                       ? CustomDropDownSearch(
                           listItem: controller.listStatusOrder.map((item) {
-                            return item.namaCat.toString();
+                            return item.nama.toString();
                           }).toList(),
                           labelText: "Filter Status",
                           onChanged: (value) async {
@@ -103,7 +103,7 @@ class ProspekV2View extends GetView<ProspekV2Controller> {
                             } else {
                               // controller.nameItem.value = value;
                               for (var f in controller.listStatusOrder) {
-                                if (f.namaCat == value) {
+                                if (f.nama == value) {
                                   controller.status.value = f.id.toString();
                                   controller.listProspek.clear();
                                   controller.getProspek(1);
@@ -137,14 +137,14 @@ class ProspekV2View extends GetView<ProspekV2Controller> {
                                           CustomDropDownSearch(
                                             listItem: controller.listStatusOrder
                                                 .map((item) {
-                                              return item.namaCat.toString();
+                                              return item.nama.toString();
                                             }).toList(),
                                             labelText: "Filter Status",
                                             onChanged: (value) async {
                                               // controller.nameItem.value = value;
                                               for (var f in controller
                                                   .listStatusOrder) {
-                                                if (f.namaCat == value) {
+                                                if (f.nama == value) {
                                                   controller.status.value =
                                                       f.id.toString();
                                                   controller.listProspek

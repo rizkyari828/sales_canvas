@@ -57,6 +57,7 @@ class LeadsView extends GetView<LeadsListController> {
             secondParagrafValue: controller.list[i].telphone ?? '',
             thirdParagrafLabel: "Product Minat",
             thirdParagrafValue: controller.list[i].productMinat ?? '',
+            forthParagraf: controller.list[i].statusLead ?? '',
           ),
         ),
       ),

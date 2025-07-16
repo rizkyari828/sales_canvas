@@ -1,8 +1,7 @@
 import 'package:intl/intl.dart';
 import 'package:sales/api/api_repository.dart';
 import 'package:sales/models/request/overtime/get_list.dart';
-import 'package:sales/models/response/prospek/list.dart';
-import 'package:sales/models/response/prospek/master_status_response.dart';
+import 'package:sales/models/response/master_data_2_response.dart';
 import 'package:sales/models/response/prospek_v2/list_prospek_v2_response.dart';
 import 'package:sales/routes/app_pages.dart';
 import 'package:get/get.dart';
@@ -30,31 +29,30 @@ class ProspekV2Controller extends GetxController {
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
   RxString monthLabel = "".obs;
-  var masterStatus = <MasterStatus>[].obs;
-  var listStatusOrder = <MasterStatus>[].obs;
 
-  
+  var masterData = <MasterData2>[].obs;
+  var masterStatus = <MasterData2>[].obs;
+  var listStatusOrder = <MasterData2>[].obs;
 
   void onLoading() async {
     page.value = page.value + 1;
     // monitor network fetch
     await Future.delayed(Duration(milliseconds: 1000));
     getProspek(page.value);
-    getMasterStatusProspek();
+    getMasterData();
     refreshController.loadComplete();
   }
 
   @override
   void onInit() {
     super.onInit();
-
   }
 
   @override
   void onReady() {
     super.onReady();
     loadUsers();
-    getMasterStatusProspek();
+    getMasterData();
     type.value = argm['type'].toString();
     status.value = argm['status'].toString();
 
@@ -119,11 +117,21 @@ class ProspekV2Controller extends GetxController {
     refreshController.refreshCompleted();
   }
 
-  void getMasterStatusProspek() async {
-    // final res = await apiRepository.getMasterStatus();
-    // masterStatus.value = res!.data!;
-    // listStatusOrder.add(MasterStatus(id: 0, namaCat: "All"));
-    // listStatusOrder.addAll(res.data!);
+  void getMasterData() async {
+    masterData.clear();
+    final resListLeadCategory =
+        await apiRepository.getMasterData2('Kategori Lead');
+    masterData.value = resListLeadCategory!.data!;
+    for (var element in masterData) {
+      masterStatus.add(element);
+    }
+
+    masterData.clear();
+    final resListStatusLead = await apiRepository.getMasterData2('Status Lead');
+    masterData.value = resListStatusLead!.data!;
+    for (var element in masterData) {
+      listStatusOrder.add(element);
+    }
   }
 
   void goToDetailPages({String id = ""}) {

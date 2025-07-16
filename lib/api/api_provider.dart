@@ -20,6 +20,7 @@ import 'package:sales/models/request/kuisioner/kuisioner_input_data_request.dart
 import 'package:sales/models/request/kuisioner/kuisioner_request.dart';
 import 'package:sales/models/request/kunjungan/non_schedule_request.dart';
 import 'package:sales/models/request/leads/submit_lead.dart';
+import 'package:sales/models/request/leads/submit_status_lead.dart';
 import 'package:sales/models/request/lembur/detail_request_lembur.dart';
 import 'package:sales/models/request/lembur/submit_izin_request.dart';
 import 'package:sales/models/request/lembur/update_approval_request.dart';
@@ -349,6 +350,10 @@ class ApiProvider extends BaseProvider {
   }
 
   Future<Response> submitLead(String path, SubmitLeadRequest data) {
+    return post(path, data.toJson());
+  }
+
+  Future<Response> submitStatusLead(String path, SubmitStatusLeadRequest data) {
     return post(path, data.toJson());
   }
 

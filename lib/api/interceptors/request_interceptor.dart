@@ -32,7 +32,7 @@ FutureOr<Request?> requestInterceptor(Request request) async {
       Get.dialog(
         AlertDialog(
           title: CommonWidget.bodyText(text: 'Fake Location Terdeteksi'),
-          content: CommonWidget.subtitleText(
+          content: CommonWidget.subtitleMultilineText(
               text: 'Matikan aplikasi lokasi palsu untuk melanjutkan.'),
           actions: [
             CustomButton(
