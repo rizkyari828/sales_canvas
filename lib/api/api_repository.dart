@@ -1349,16 +1349,10 @@ class ApiRepository {
     return null;
   }
 
-  Future<ProspekV2Response?> listProspekV2(GetListRequest data,
-      {int page = 1, int limit = 10}) async {
+  Future<ProspekV2Response?> listProspekV2(UserIdRequest data) async {
     try {
       final res = await apiProvider
-          .getProspek(
-              '/api/getdata?page=' +
-                  page.toString() +
-                  '&limit=' +
-                  limit.toString(),
-              data)
+          .getProspekV2('/api/list_prospek', data)
           .timeout(Duration(seconds: timeout));
       if (res.statusCode == 200 || res.statusCode == 401) {
         return ProspekV2Response.fromJson(res.body);

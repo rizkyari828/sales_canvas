@@ -5,7 +5,6 @@ import 'package:sales/shared/widgets/custom_card.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class LeadsView extends GetView<LeadsListController> {

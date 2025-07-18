@@ -408,6 +408,11 @@ class ApiProvider extends BaseProvider {
     return post(path, data.toJson());
   }
 
+  Future<Response> getProspekV2(String path, UserIdRequest data) {
+    print(data.toJson());
+    return post(path, data.toJson());
+  }
+
   Future<Response> submitAgent(String path, SubmitAgentRequest data) {
     return post(path, data.toJson());
   }

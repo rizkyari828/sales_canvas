@@ -46,13 +46,29 @@ class ProspekV2AddView extends GetView<ProspekV2AddController> {
                       controller: controller.prospectNameController,
                       labelText: "Nama Prospek",
                     ),
-                    SizedBox(height: 10.0),
-                    InputInputField(
-                      keyboardType: TextInputType.text,
-                      controller: controller.productNameController,
-                      labelText: "Produk yang Diminati",
+                    SizedBox(height: 20.0),
+                    // InputInputField(
+                    //   keyboardType: TextInputType.text,
+                    //   controller: controller.productNameController,
+                    //   labelText: "Produk yang Diminati",
+                    // ),
+                    CustomDropDownSearch(
+                      enabled: true,
+                      selectedItem: controller.minatProduct.value,
+                      listItem: controller.listMinatProduct.map((item) {
+                        return item.nama.toString();
+                      }).toList(),
+                      labelText: "Minat Product",
+                      onChanged: (value) async {
+                        controller.minatProduct.value = value;
+                        for (var f in controller.listMinatProduct) {
+                          if (f.nama == value) {
+                            controller.minatProductId.value = f.id.toString();
+                          }
+                        }
+                      },
                     ),
-                    SizedBox(height: 10.0),
+                    SizedBox(height: 20.0),
                   ],
                   InputInputField(
                     keyboardType: TextInputType.text,
@@ -135,26 +151,17 @@ class ProspekV2AddView extends GetView<ProspekV2AddController> {
                           controller.idSource.value = f.id ?? 0;
                         }
                       }
+                      controller.changeStatus(value);
                     },
                   ),
                   SizedBox(height: 20.0),
-                  CommonWidget.bodyText(text: "Alasan Tidak Order"),
-                  SizedBox(height: 10.0),
-                  TextAreaField(
-                    controller: controller.reasonNotOrder,
-                  ),
-                  SizedBox(height: 10.0),
-                  InputInputField(
-                    isSuffixIcon: true,
-                    suffixIcon: Icon(Icons.calendar_today_rounded),
-                    controller: controller.dateLastUpdate,
-                    labelText: "Tanggal Update Terakhir",
-                    isRequired: true,
-                    showError: controller.showInputError.value,
-                    onSuffixPressed: () {
-                      controller.selectDate(context, controller.dateLastUpdate);
-                    },
-                  ),
+                  if (controller.optionalText.value) ...[
+                    CommonWidget.bodyText(text: "Alasan Tidak Order"),
+                    SizedBox(height: 10.0),
+                    TextAreaField(
+                      controller: controller.reasonNotOrder,
+                    ),
+                  ],
                   SizedBox(height: 100.0),
                 ],
               ),

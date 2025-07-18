@@ -22,8 +22,7 @@ class SubmitProspekV2Request {
       this.dateFu,
       this.noteCommunication,
       this.idSource,
-      this.reasonNotOrder,
-      this.dateLastUpdate});
+      this.reasonNotOrder});
 
   String? prospectName,
       productName,
@@ -48,7 +47,6 @@ class SubmitProspekV2Request {
         noteCommunication: json["note_communication"],
         idSource: json["id_source"],
         reasonNotOrder: json["reason_not_order"],
-        dateLastUpdate: json["date_last_update"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -63,6 +61,5 @@ class SubmitProspekV2Request {
         "note_communication": noteCommunication,
         "id_source": idSource,
         "reason_not_order": reasonNotOrder,
-        "date_last_update": dateLastUpdate,
       };
 }

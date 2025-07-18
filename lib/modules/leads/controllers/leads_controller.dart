@@ -65,13 +65,16 @@ class LeadsController extends BaseController {
   var listLeadSource = <MasterData2>[].obs;
   var listLeadCategory = <MasterData2>[].obs;
   var listStatusLead = <MasterData2>[].obs;
+  var listMinatProduct = <MasterData2>[].obs;
   var masterData = <MasterData2>[].obs;
   RxString leadCategory = "".obs;
   RxString statusLead = "".obs;
   RxString leadSource = "".obs;
+  RxString minatProduct = "".obs;
   RxString leadCategoryId = "".obs;
   RxString statusLeadId = "".obs;
   RxString leadSourceId = "".obs;
+  RxString minatProductId = "".obs;
 
   RxString actionStatus = "".obs;
   RxString reason = "".obs;
@@ -130,7 +133,7 @@ class LeadsController extends BaseController {
       EasyLoading.showError('Semua field wajib diisi');
       return;
     }
-    
+
     if (imageFileList.isEmpty) {
       EasyLoading.showError('Foto belum tersedia');
       return;
@@ -302,6 +305,14 @@ class LeadsController extends BaseController {
     masterData.value = resListStatusLead!.data!;
     for (var element in masterData) {
       listStatusLead.add(element);
+    }
+
+    masterData.clear();
+    final resListMinatProduct =
+        await apiRepository.getMasterData2('Status Lead');
+    masterData.value = resListMinatProduct!.data!;
+    for (var element in masterData) {
+      listMinatProduct.add(element);
     }
   }
 

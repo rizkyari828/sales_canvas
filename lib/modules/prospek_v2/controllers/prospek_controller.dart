@@ -1,8 +1,8 @@
 import 'package:intl/intl.dart';
 import 'package:sales/api/api_repository.dart';
-import 'package:sales/models/request/overtime/get_list.dart';
+import 'package:sales/models/request/user_id_request.dart';
 import 'package:sales/models/response/master_data_2_response.dart';
-import 'package:sales/models/response/prospek_v2/list_prospek_v2_response.dart';
+import 'package:sales/models/response/prospek_v2/detail_prospek_v2_response.dart';
 import 'package:sales/routes/app_pages.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -12,7 +12,7 @@ class ProspekV2Controller extends GetxController {
   final ApiRepository apiRepository;
   ProspekV2Controller({required this.apiRepository});
 
-  var listProspek = <ListProspekV2>[].obs;
+  var listProspek = <ProspekDetailV2>[].obs;
   final argm = Get.arguments;
   RxString groupName = "".obs;
   RxString groupId = "".obs;
@@ -99,13 +99,7 @@ class ProspekV2Controller extends GetxController {
         DateFormat("MMMM yyyy", "id_ID").format(formattedDate).toString();
 
     final res = await apiRepository.listProspekV2(
-        GetListRequest(
-            id: userId.value,
-            token: token.value,
-            month: _month,
-            status: status.value,
-            type: type.value),
-        page: page);
+        UserIdRequest(id: userId.value, page: page.toString(), limit: '10'));
     listProspek.addAll(res?.data ?? []);
   }
 
@@ -134,8 +128,8 @@ class ProspekV2Controller extends GetxController {
     }
   }
 
-  void goToDetailPages({String id = ""}) {
-    Get.toNamed(Routes.ADD_PROSPEK_V2, arguments: id);
+  void goToDetailPages({ProspekDetailV2? dataProspect}) {
+    Get.toNamed(Routes.ADD_PROSPEK_V2, arguments: {'data_lead': dataProspect});
   }
 
   void goToAddPages() {

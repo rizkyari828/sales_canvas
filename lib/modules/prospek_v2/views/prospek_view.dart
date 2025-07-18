@@ -166,20 +166,21 @@ class ProspekV2View extends GetView<ProspekV2Controller> {
                     onTap: () {
                       if (controller.groupId.value == "1") {
                         controller.goToDetailPages(
-                            id: controller.listProspek[i].noTrans.toString());
+                            dataProspect: controller.listProspek[i]);
                       }
                     },
                     child: CustomExpandedCardView(
                       firstParagraf:
-                          controller.listProspek[i].noTrans.toString(),
-                      secondParagrafLabel: "Nickname",
+                          controller.listProspek[i].prospectName.toString(),
+                      secondParagrafLabel: "Nama Prospect",
                       secondParagrafValue:
-                          controller.listProspek[i].nama.toString(),
+                          controller.listProspek[i].prospectName.toString(),
                       thirdParagrafLabel: "Pengajuan",
                       thirdParagrafValue:
-                          '${DateFormat("EEEE, d MMMM yyyy", "id_ID").format(controller.listProspek[i].cdate ?? DateTime.now())}',
+                          '${DateFormat("EEEE, d MMMM yyyy", "id_ID").format(controller.listProspek[i].dateCalled ?? DateTime.now())}',
                       // forthParagraf: controller.listOvertime[i].branchName.toString(),
-                      approval: controller.listProspek[i].status.toString(),
+                      approval:
+                          controller.listProspek[i].idStatusProspect.toString(),
                     ),
                   ),
                 ],

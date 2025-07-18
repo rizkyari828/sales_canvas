@@ -56,8 +56,9 @@ class LeadsListController extends GetxController {
   }
 
   void getLeads(page) async {
-    final res =
-        await apiRepository.listLeads(data: UserIdRequest(id: userId.value));
+    final res = await apiRepository.listLeads(
+        data: UserIdRequest(
+            id: userId.value, page: page.toString(), limit: '10'));
     list.addAll(res?.data ?? []);
   }
 

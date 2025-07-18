@@ -1,8 +1,7 @@
 import 'package:intl/intl.dart';
 import 'package:sales/api/api_repository.dart';
-import 'package:sales/models/request/overtime/get_list.dart';
 import 'package:sales/models/request/prospek_v2/submit_request_prospek_v2.dart';
-import 'package:sales/models/response/prospek/master_data_response.dart';
+import 'package:sales/models/response/master_data_2_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
@@ -33,6 +32,9 @@ class ProspekV2AddController extends GetxController {
   RxBool isFilled = true.obs;
   RxBool disabled = false.obs;
   RxBool enabled = true.obs;
+  RxString minatProductId = "".obs;
+  RxString minatProduct = "".obs;
+  var listMinatProduct = <MasterData2>[].obs;
 
   RxBool showInputError = false.obs;
   final prospectNameController = TextEditingController();
@@ -43,37 +45,41 @@ class ProspekV2AddController extends GetxController {
   final noteCommunication = TextEditingController();
   final reasonNotOrder = TextEditingController();
   final totalTransaction = TextEditingController();
-  var masterData = <MasterData>[].obs;
-  var listSourceOfOrder = <MasterData>[].obs;
-  var listMediaCommuncation = <MasterData>[].obs;
-  var listStatusProspect = <MasterData>[].obs;
+  var masterData = <MasterData2>[].obs;
+  var listSourceOfOrder = <MasterData2>[].obs;
+  var listMediaCommuncation = <MasterData2>[].obs;
+  var listStatusProspect = <MasterData2>[].obs;
 
   final argm = Get.arguments;
   var detail = ProspekDetailV2().obs;
+
+  RxBool optionalText = false.obs;
+  RxString optionalTextValue = ''.obs;
 
   RxBool isEdit = false.obs;
 
   @override
   void onInit() {
     super.onInit();
+    getMasterData();
   }
 
   @override
   void onReady() {
     super.onReady();
     loadUsers();
-    loadMaster();
+
     if (argm != null) {
       getDetailProspek();
     }
   }
 
   void getDetailProspek() async {
-    final res = await apiRepository.showProspekV2(
-        argm.toString(), GetListRequest(id: '0', token: ''));
-    detail.value = res?.data!.first ?? ProspekDetailV2();
+    // final res = await apiRepository.showProspekV2(
+    //     argm.toString(), GetListRequest(id: '0', token: ''));
+    // detail.value = res?.data!.first ?? ProspekDetailV2();
+    detail.value = argm['data_lead'];
 
-    // Set controller dan Rx variabel dari detail
     prospectNameController.text = detail.value.prospectName ?? '';
     productNameController.text = detail.value.productName ?? '';
     totalTransaction.text = detail.value.totalTransaction ?? '';
@@ -91,7 +97,6 @@ class ProspekV2AddController extends GetxController {
     mediaCommunicationValue.value = detail.value.mediaCommunicationValue ?? '';
     sourceOrderValue.value = detail.value.sourceOrderValue ?? '';
 
-    // Jika ada status/logic lain
     status.value = detail.value.statusProspectValue ?? '';
 
     // Disable input jika status tertentu
@@ -161,7 +166,6 @@ class ProspekV2AddController extends GetxController {
       noteCommunication: noteCommunication.text,
       idSource: idSource.value,
       reasonNotOrder: reasonNotOrder.text,
-      dateLastUpdate: dateLastUpdate.text,
     );
 
     final res = await apiRepository.submitProspectV2(req);
@@ -173,18 +177,51 @@ class ProspekV2AddController extends GetxController {
       EasyLoading.showError('Gagal disimpan');
     }
   }
+  // void getMasterDataProspek() async {
+  //   final res = await apiRepository.getMasterData();
+  //   masterData.value = res!.data!;
+  //   for (var element in masterData) {
+  //     if (element.flag == "1") {
+  //       listSourceOfOrder.add(element);
+  //     }
+  //   }
+  // }
 
-  void loadMaster() {
-    getMasterDataProspek();
+  void getMasterData() async {
+    masterData.clear();
+    final resListLeadSource = await apiRepository.getMasterData2('Sumber Lead');
+    masterData.value = resListLeadSource!.data!;
+    for (var element in masterData) {
+      listMinatProduct.add(element);
+    }
+
+    masterData.clear();
+    final resListLeadCategory =
+        await apiRepository.getMasterData2('Kategori Lead');
+    masterData.value = resListLeadCategory!.data!;
+    for (var element in masterData) {
+      listStatusProspect.add(element);
+    }
+
+    masterData.clear();
+    final resListStatusLead = await apiRepository.getMasterData2('Status Lead');
+    masterData.value = resListStatusLead!.data!;
+    for (var element in masterData) {
+      listMediaCommuncation.add(element);
+    }
+
+    masterData.clear();
+    final resListMinatProduct =
+        await apiRepository.getMasterData2('Status Lead');
+    masterData.value = resListMinatProduct!.data!;
+    for (var element in masterData) {
+      listSourceOfOrder.add(element);
+    }
   }
 
-  void getMasterDataProspek() async {
-    final res = await apiRepository.getMasterData();
-    masterData.value = res!.data!;
-    for (var element in masterData) {
-      if (element.flag == "1") {
-        listSourceOfOrder.add(element);
-      }
+  void changeStatus(value) {
+    if (value == 'Dll') {
+      optionalText.value = true;
     }
   }
 

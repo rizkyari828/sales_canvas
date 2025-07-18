@@ -41,8 +41,8 @@ class ProspekDetailV2 {
   String? prospectName;
   String? productName;
   String? totalTransaction;
-  String? dateCalled;
-  String? dateFu;
+  dynamic dateCalled;
+  dynamic dateFu;
   String? noteCommunication;
   String? reasonNotOrder;
   String? dateLastUpdate;
@@ -74,11 +74,14 @@ class ProspekDetailV2 {
   factory ProspekDetailV2.fromJson(Map<String, dynamic> json) =>
       ProspekDetailV2(
         id: json["id"],
-        prospectName: json["prospect_name"],
+        prospectName: json["nama"],
         productName: json["product_name"],
-        totalTransaction: json["total_transaction"],
-        dateCalled: json["date_called"],
-        dateFu: json["date_fu"],
+        totalTransaction: json["estimasi_pinjaman"],
+        dateCalled: json["date_called"] == null
+            ? null
+            : DateTime.parse(json["date_called"]),
+        dateFu:
+            json["date_fu"] == null ? null : DateTime.parse(json["date_fu"]),
         noteCommunication: json["note_communication"],
         reasonNotOrder: json["reason_not_order"],
         dateLastUpdate: json["date_last_update"],
@@ -92,14 +95,15 @@ class ProspekDetailV2 {
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "prospect_name": prospectName,
+        "nama": prospectName,
         "product_name": productName,
-        "total_transaction": totalTransaction,
-        "date_called": dateCalled,
-        "date_fu": dateFu,
+        "estimasi_pinjaman": totalTransaction,
+        "date_called":
+            "${dateCalled!.year.toString().padLeft(4, '0')}-${dateCalled!.month.toString().padLeft(2, '0')}-${dateCalled!.day.toString().padLeft(2, '0')}",
+        "date_fu":
+            "${dateFu!.year.toString().padLeft(4, '0')}-${dateFu!.month.toString().padLeft(2, '0')}-${dateFu!.day.toString().padLeft(2, '0')}",
         "note_communication": noteCommunication,
         "reason_not_order": reasonNotOrder,
-        "date_last_update": dateLastUpdate,
         "source_order_value": sourceOrderValue,
         "media_communication_value": mediaCommunicationValue,
         "status_prospect_value": statusProspectValue,
