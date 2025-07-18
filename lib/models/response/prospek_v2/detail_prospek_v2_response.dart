@@ -51,7 +51,7 @@ class ProspekDetailV2 {
   String? statusProspectValue;
   int? idStatusProspect;
   int? idMediaCommunication;
-  int? idSource;
+  int? idStatusOrder;
 
   ProspekDetailV2({
     this.id,
@@ -68,47 +68,47 @@ class ProspekDetailV2 {
     this.statusProspectValue,
     this.idStatusProspect,
     this.idMediaCommunication,
-    this.idSource,
+    this.idStatusOrder,
   });
 
   factory ProspekDetailV2.fromJson(Map<String, dynamic> json) =>
       ProspekDetailV2(
         id: json["id"],
         prospectName: json["nama"],
-        productName: json["product_name"],
+        productName: json["produk"],
         totalTransaction: json["estimasi_pinjaman"],
         dateCalled: json["date_called"] == null
             ? null
             : DateTime.parse(json["date_called"]),
         dateFu:
-            json["date_fu"] == null ? null : DateTime.parse(json["date_fu"]),
-        noteCommunication: json["note_communication"],
+            json["date_next"] == null ? null : DateTime.parse(json["date_next"]),
+        noteCommunication: json["alasan"],
         reasonNotOrder: json["reason_not_order"],
         dateLastUpdate: json["date_last_update"],
         sourceOrderValue: json["source_order_value"],
         mediaCommunicationValue: json["media_communication_value"],
         statusProspectValue: json["status_prospect_value"],
-        idStatusProspect: json["id_status_prospect"],
-        idMediaCommunication: json["id_media_communication"],
-        idSource: json["id_source"],
+        idStatusProspect: json["status_prospek"],
+        idMediaCommunication: json["media"],
+        idStatusOrder: json["status_order"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "nama": prospectName,
-        "product_name": productName,
+        "produk": productName,
         "estimasi_pinjaman": totalTransaction,
         "date_called":
             "${dateCalled!.year.toString().padLeft(4, '0')}-${dateCalled!.month.toString().padLeft(2, '0')}-${dateCalled!.day.toString().padLeft(2, '0')}",
-        "date_fu":
+        "date_next":
             "${dateFu!.year.toString().padLeft(4, '0')}-${dateFu!.month.toString().padLeft(2, '0')}-${dateFu!.day.toString().padLeft(2, '0')}",
-        "note_communication": noteCommunication,
+        "alasan": noteCommunication,
         "reason_not_order": reasonNotOrder,
         "source_order_value": sourceOrderValue,
         "media_communication_value": mediaCommunicationValue,
         "status_prospect_value": statusProspectValue,
-        "id_status_prospect": idStatusProspect,
-        "id_media_communication": idMediaCommunication,
-        "id_source": idSource,
+        "status_prospek": idStatusProspect,
+        "media": idMediaCommunication,
+        "status_order": idStatusOrder,
       };
 }

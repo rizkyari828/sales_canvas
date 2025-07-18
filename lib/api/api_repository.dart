@@ -1335,7 +1335,7 @@ class ApiRepository {
   Future<ErrorResponse?> submitProspectV2(SubmitProspekV2Request data) async {
     try {
       final res = await apiProvider
-          .submitProspectV2('/api/saveProspek', data)
+          .submitProspectV2('/api/simpan_prospek', data)
           .timeout(Duration(seconds: timeout));
       if (res.statusCode == 200) {
         return ErrorResponse.fromJson(res.body);

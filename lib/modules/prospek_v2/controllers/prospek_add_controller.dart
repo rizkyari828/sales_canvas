@@ -6,20 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:sales/models/response/prospek_v2/detail_prospek_v2_response.dart';
+import 'package:sales/modules/home/base_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ProspekV2AddController extends GetxController {
-  final ApiRepository apiRepository;
-  ProspekV2AddController({required this.apiRepository});
+class ProspekV2AddController extends BaseController {
+  ProspekV2AddController({required ApiRepository apiRepository})
+      : super(apiRepository: apiRepository);
 
   String date = "";
   DateTime selectedDate = DateTime.now();
   final noteController = TextEditingController();
-  RxString groupName = "".obs;
-  RxString groupId = "".obs;
-  RxString userId = "".obs;
-  RxString token = "".obs;
-  RxInt idUser = 0.obs;
+
   RxInt idSource = 0.obs;
   RxInt idStatusProspect = 0.obs;
   RxInt idMediaCommunication = 0.obs;
@@ -67,7 +64,6 @@ class ProspekV2AddController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    loadUsers();
 
     if (argm != null) {
       getDetailProspek();
@@ -91,7 +87,7 @@ class ProspekV2AddController extends GetxController {
 
     idStatusProspect.value = detail.value.idStatusProspect ?? 0;
     idMediaCommunication.value = detail.value.idMediaCommunication ?? 0;
-    idSource.value = detail.value.idSource ?? 0;
+    idSource.value = detail.value.idStatusOrder ?? 0;
 
     statusProspectValue.value = detail.value.statusProspectValue ?? '';
     mediaCommunicationValue.value = detail.value.mediaCommunicationValue ?? '';
@@ -143,28 +139,18 @@ class ProspekV2AddController extends GetxController {
     }
   }
 
-  loadUsers() async {
-    var prefs = Get.find<SharedPreferences>();
-    groupName.value = prefs.getString('groupName') ?? "";
-    groupId.value = prefs.getString('groupId') ?? "";
-    token.value = prefs.getString('token') ?? "";
-    userId.value = prefs.getString('userId') ?? "";
-    latitude.value = prefs.getDouble('initLatitude') ?? 0.0;
-    longitude.value = prefs.getDouble('initLongitude') ?? 0.0;
-  }
-
   void submitProspek() async {
     final req = SubmitProspekV2Request(
-      userId: int.tryParse(userId.value) ?? 0,
+      userId: userId.value,
       prospectName: prospectNameController.text,
       productName: productNameController.text,
       totalTransaction: totalTransaction.text,
-      idStatusProspect: idStatusProspect.value,
+      idStatusProspect: idStatusProspect.value.toString(),
       dateCalled: dateCalled.text,
-      idMediaCommunication: idMediaCommunication.value,
+      idMediaCommunication: idMediaCommunication.value.toString(),
       dateFu: dateFu.text,
       noteCommunication: noteCommunication.text,
-      idSource: idSource.value,
+      statusOrder: idSource.value.toString(),
       reasonNotOrder: reasonNotOrder.text,
     );
 
@@ -177,15 +163,6 @@ class ProspekV2AddController extends GetxController {
       EasyLoading.showError('Gagal disimpan');
     }
   }
-  // void getMasterDataProspek() async {
-  //   final res = await apiRepository.getMasterData();
-  //   masterData.value = res!.data!;
-  //   for (var element in masterData) {
-  //     if (element.flag == "1") {
-  //       listSourceOfOrder.add(element);
-  //     }
-  //   }
-  // }
 
   void getMasterData() async {
     masterData.clear();

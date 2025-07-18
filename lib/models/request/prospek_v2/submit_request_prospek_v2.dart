@@ -21,7 +21,7 @@ class SubmitProspekV2Request {
       this.idMediaCommunication,
       this.dateFu,
       this.noteCommunication,
-      this.idSource,
+      this.statusOrder,
       this.reasonNotOrder});
 
   String? prospectName,
@@ -32,34 +32,34 @@ class SubmitProspekV2Request {
       noteCommunication,
       reasonNotOrder,
       dateLastUpdate;
-  int? idStatusProspect, userId, idMediaCommunication, idSource;
+  String? idStatusProspect, userId, idMediaCommunication, statusOrder;
 
   factory SubmitProspekV2Request.fromJson(Map<String, dynamic> json) =>
       SubmitProspekV2Request(
         userId: json["user_id"],
-        prospectName: json["prospect_name"],
-        productName: json["product_name"],
-        totalTransaction: json["total_transaction"],
-        idStatusProspect: json["id_status_prospect"],
+        prospectName: json["nama"],
+        productName: json["produk"],
+        totalTransaction: json["estimasi_pinjaman"],
+        idStatusProspect: json["status_prospek"],
         dateCalled: json["date_called"],
-        idMediaCommunication: json["id_media_communication"],
-        dateFu: json["date_fu"],
-        noteCommunication: json["note_communication"],
-        idSource: json["id_source"],
+        idMediaCommunication: json["media"],
+        dateFu: json["date_next"],
+        noteCommunication: json["alasan"],
+        statusOrder: json["status_order"],
         reasonNotOrder: json["reason_not_order"],
       );
 
   Map<String, dynamic> toJson() => {
         "user_id": userId,
-        "prospect_name": prospectName,
-        "product_name": productName,
-        "total_transaction": totalTransaction,
-        "id_status_prospect": idStatusProspect,
+        "nama": prospectName,
+        "produk": productName,
+        "estimasi_pinjaman": totalTransaction,
+        "status_prospek": idStatusProspect,
         "date_called": dateCalled,
-        "id_media_communication": idMediaCommunication,
-        "date_fu": dateFu,
-        "note_communication": noteCommunication,
-        "id_source": idSource,
+        "media": idMediaCommunication,
+        "date_next": dateFu,
+        "alasan": noteCommunication,
+        "status_order": statusOrder,
         "reason_not_order": reasonNotOrder,
       };
 }
