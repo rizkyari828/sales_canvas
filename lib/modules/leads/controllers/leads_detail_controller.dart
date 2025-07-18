@@ -4,7 +4,9 @@ import 'package:sales/models/request/leads/submit_status_lead.dart';
 import 'package:sales/models/response/Lead/list_lead_respone.dart';
 import 'package:get/get.dart';
 import 'package:sales/models/response/master_data_2_response.dart';
+import 'package:sales/models/response/prospek_v2/detail_prospek_v2_response.dart';
 import 'package:sales/modules/home/base_controller.dart';
+import 'package:sales/routes/app_pages.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LeadsDetailController extends BaseController {
@@ -69,17 +71,21 @@ class LeadsDetailController extends BaseController {
 
     final res = await apiRepository.submitStatusLead(
       SubmitStatusLeadRequest(
-        idUser: userId.value,
-        idStatusLead: statusLeadId.value,
-      ),
+          idUser: userId.value,
+          idStatusLead: statusLeadId.value,
+          idLead: detail.value.idLead),
     );
     if (res?.error == false) {
       EasyLoading.showSuccess('Berhasil disimpan');
       EasyLoading.dismiss();
-      Get.back(result: true);
+      goToDetailPages();
     } else {
       EasyLoading.showError('Gagal disimpan');
       EasyLoading.dismiss();
     }
+  }
+
+  void goToDetailPages({ProspekDetailV2? dataProspect}) {
+    Get.toNamed(Routes.ADD_PROSPEK_V2, arguments: {'data_lead': dataProspect});
   }
 }

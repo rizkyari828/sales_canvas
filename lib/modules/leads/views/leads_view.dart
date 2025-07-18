@@ -53,9 +53,10 @@ class LeadsView extends GetView<LeadsListController> {
             firstParagraf: controller.list[i].nama ?? '',
             secondParagraf: 'Email',
             secondParagrafValue: controller.list[i].email ?? '',
-            thirdParagraf: controller.list[i].telphone ?? '',
-            thirdParagrafValue: 'No Telepon',
+            thirdParagraf: 'No Telepon',
+            thirdParagrafValue: controller.list[i].telphone ?? '',
             status: controller.list[i].statusLead ?? '',
+            typeStatus: 'lead'
           ),
         ),
       ),

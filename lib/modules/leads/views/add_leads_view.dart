@@ -111,29 +111,12 @@ class AddLeadsView extends GetView<LeadsController> {
                       },
                     ),
                     SizedBox(height: 10.0),
-                    // InputInputField(
-                    //   keyboardType: TextInputType.text,
-                    //   controller: controller.minatProductController,
-                    //   labelText: "Product Minat",
-                    //   isRequired: true,
-                    //   showError: controller.showInputError.value,
-                    // ),
-                    CustomDropDownSearch(
-                      enabled: true,
-                      selectedItem: controller.minatProduct.value,
-                      listItem: controller.listMinatProduct.map((item) {
-                        return item.nama.toString();
-                      }).toList(),
-                      labelText: "Minat Product",
-                      onChanged: (value) async {
-                        controller.minatProduct.value = value;
-                        for (var f in controller.listMinatProduct) {
-                          if (f.nama == value) {
-                            controller.minatProductId.value = f.id.toString();
-                          }
-                        }
-                        controller.changeStatus(value);
-                      },
+                    InputInputField(
+                      keyboardType: TextInputType.text,
+                      controller: controller.minatProductController,
+                      labelText: "Product Minat",
+                      isRequired: true,
+                      showError: controller.showInputError.value,
                     ),
                     SizedBox(height: 20.0),
                     CustomDropDownSearch(

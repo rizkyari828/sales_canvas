@@ -551,7 +551,7 @@ class HomeController extends BaseController {
   }
 
   void goToProspekV2() {
-    // Get.toNamed(Routes.PROSPEK_V2);
+    Get.toNamed(Routes.PROSPEK_V2);
   }
 
   void goToBenefitPages() {

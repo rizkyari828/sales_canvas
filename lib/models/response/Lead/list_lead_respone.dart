@@ -53,6 +53,7 @@ class DataLead {
   String? productMinat;
   String? catatan;
   String? statusLead;
+  String? idLead;
   List<Foto>? foto;
 
   DataLead({
@@ -66,6 +67,7 @@ class DataLead {
     this.productMinat,
     this.catatan,
     this.statusLead,
+    this.idLead,
     this.foto,
   });
 
@@ -80,6 +82,7 @@ class DataLead {
         productMinat: json["product_minat"],
         catatan: json["catatan"],
         statusLead: json["status_lead"],
+        idLead: json["id_lead"],
         foto: json["Foto"] == null
             ? []
             : List<Foto>.from(json["Foto"]!.map((x) => Foto.fromJson(x))),
@@ -96,6 +99,7 @@ class DataLead {
         "product_minat": productMinat,
         "catatan": catatan,
         "status_lead": statusLead,
+        "id_lead": idLead,
         "Foto": foto == null
             ? []
             : List<dynamic>.from(foto!.map((x) => x.toJson())),

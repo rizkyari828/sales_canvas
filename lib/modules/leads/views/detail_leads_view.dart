@@ -41,7 +41,7 @@ class LeadsDetailView extends GetView<LeadsDetailController> {
                       SizedBox(height: 10.0),
                       CommonWidget.labelExpanded(
                           label: 'Nama',
-                          value: controller.detail.value.email.toString()),
+                          value: controller.detail.value.nama.toString()),
                       SizedBox(height: 10.0),
                       CommonWidget.labelExpanded(
                           label: 'Email',

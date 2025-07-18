@@ -40,6 +40,7 @@ class ProspekV2AddController extends BaseController {
   final dateFu = TextEditingController();
   final noteCommunication = TextEditingController();
   final reasonNotOrder = TextEditingController();
+  final otherProduct = TextEditingController();
   final totalTransaction = TextEditingController();
   var masterData = <MasterData2>[].obs;
   var listSourceOfOrder = <MasterData2>[].obs;
@@ -49,8 +50,8 @@ class ProspekV2AddController extends BaseController {
   final argm = Get.arguments;
   var detail = ProspekDetailV2().obs;
 
-  RxBool optionalText = false.obs;
-  RxString optionalTextValue = ''.obs;
+  RxBool optionalTextOrder = false.obs;
+  RxBool optionalTextProduk = false.obs;
 
   RxBool isEdit = false.obs;
   RxString statusBar = "Prospek".obs;
@@ -144,10 +145,39 @@ class ProspekV2AddController extends BaseController {
   }
 
   void submitProspek() async {
+    if (prospectNameController.text.isEmpty ||
+        productNameController.text.isEmpty ||
+        totalTransaction.text.isEmpty ||
+        idStatusProspect.value == 0 ||
+        dateCalled.text.isEmpty ||
+        idMediaCommunication.value == 0 ||
+        dateFu.text.isEmpty ||
+        noteCommunication.text.isEmpty ||
+        idSource.value == 0) {
+      showInputError.value = true;
+      EasyLoading.showError('Semua field wajib diisi');
+      return;
+    }
+
+    if (sourceOrderValue.value.toLowerCase() == 'tidak order') {
+      if (reasonNotOrder.text.isEmpty) {
+        showInputError.value = true;
+        EasyLoading.showError('Semua field wajib diisi');
+      }
+    }
+
+    if (minatProduct.value.toLowerCase() == 'others') {
+      if (otherProduct.text.isEmpty) {
+        showInputError.value = true;
+        EasyLoading.showError('Semua field wajib diisi');
+      }
+    }
+
     final req = SubmitProspekV2Request(
       userId: userId.value,
       prospectName: prospectNameController.text,
       productName: productNameController.text,
+      otherProduct: otherProduct.text,
       totalTransaction: totalTransaction.text,
       idStatusProspect: idStatusProspect.value.toString(),
       dateCalled: dateCalled.text,
@@ -170,22 +200,24 @@ class ProspekV2AddController extends BaseController {
 
   void getMasterData() async {
     masterData.clear();
-    final resListLeadSource = await apiRepository.getMasterData2('Sumber Lead');
+    final resListLeadSource =
+        await apiRepository.getMasterData2('Status Order');
     masterData.value = resListLeadSource!.data!;
     for (var element in masterData) {
-      listMinatProduct.add(element);
+      listSourceOfOrder.add(element);
     }
 
     masterData.clear();
     final resListLeadCategory =
-        await apiRepository.getMasterData2('Kategori Lead');
+        await apiRepository.getMasterData2('Status Prospek');
     masterData.value = resListLeadCategory!.data!;
     for (var element in masterData) {
       listStatusProspect.add(element);
     }
 
     masterData.clear();
-    final resListStatusLead = await apiRepository.getMasterData2('Status Lead');
+    final resListStatusLead =
+        await apiRepository.getMasterData2('Media Prospek');
     masterData.value = resListStatusLead!.data!;
     for (var element in masterData) {
       listMediaCommuncation.add(element);
@@ -193,16 +225,26 @@ class ProspekV2AddController extends BaseController {
 
     masterData.clear();
     final resListMinatProduct =
-        await apiRepository.getMasterData2('Status Lead');
+        await apiRepository.getMasterData2('Produk', userId: userId.value);
     masterData.value = resListMinatProduct!.data!;
     for (var element in masterData) {
-      listSourceOfOrder.add(element);
+      listMinatProduct.add(element);
     }
   }
 
-  void changeStatus(value) {
-    if (value == 'Dll') {
-      optionalText.value = true;
+  void changeStatus(String value, String type) {
+    if (type == 'produk') {
+      if (value.toLowerCase() == 'tidak order') {
+        optionalTextProduk.value = true;
+      } else {
+        optionalTextProduk.value = false;
+      }
+    } else {
+      if (value.toLowerCase() == 'tidak order') {
+        optionalTextOrder.value = true;
+      } else {
+        optionalTextOrder.value = false;
+      }
     }
   }
 

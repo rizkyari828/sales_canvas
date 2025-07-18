@@ -65,7 +65,7 @@ class LeadsController extends BaseController {
   var listLeadSource = <MasterData2>[].obs;
   var listLeadCategory = <MasterData2>[].obs;
   var listStatusLead = <MasterData2>[].obs;
-  var listMinatProduct = <MasterData2>[].obs;
+
   var masterData = <MasterData2>[].obs;
   RxString leadCategory = "".obs;
   RxString statusLead = "".obs;
@@ -305,14 +305,6 @@ class LeadsController extends BaseController {
     masterData.value = resListStatusLead!.data!;
     for (var element in masterData) {
       listStatusLead.add(element);
-    }
-
-    masterData.clear();
-    final resListMinatProduct =
-        await apiRepository.getMasterData2('Status Lead');
-    masterData.value = resListMinatProduct!.data!;
-    for (var element in masterData) {
-      listMinatProduct.add(element);
     }
   }
 

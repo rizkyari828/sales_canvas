@@ -467,10 +467,25 @@ class CommonWidget {
     String secondParagrafValue = '',
     String thirdParagrafValue = '',
     String status = '',
+    String typeStatus = '',
     VoidCallback? onPressed,
   }) {
     final sh = SizeConfig().screenHeight;
     final sw = SizeConfig().screenWidth;
+    String finalStatus;
+    if (typeStatus == 'lead') {
+      if (status.toLowerCase() == 'follow up') {
+        finalStatus = '1';
+      } else {
+        finalStatus = '0';
+      }
+    } else {
+      if (status.toLowerCase() == 'follow up') {
+        finalStatus = '1';
+      } else {
+        finalStatus = '0';
+      }
+    }
     return Container(
       margin: const EdgeInsets.only(left: 15.0, right: 15.0, top: 15.0),
       height: firstParagraf == '' ? sh * .15 : sh * .16,
@@ -493,8 +508,7 @@ class CommonWidget {
                   children: [
                     Container(
                       child: CommonWidget.subtitleText(
-                          text: firstParagraf + ": " + secondParagrafValue,
-                          fontWeight: FontWeight.bold),
+                          text: firstParagraf, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(
                       height: 5,
@@ -502,14 +516,14 @@ class CommonWidget {
                     Container(
                       width: SizeConfig().screenWidth * .50,
                       child: CommonWidget.subtitleText(
-                          text: secondParagraf,
+                          text: secondParagraf + " : " + secondParagrafValue,
                           color: ColorConstants.mainColor),
                     ),
                     SizedBox(
                       height: 5,
                     ),
                     CommonWidget.subtitleText(
-                        text: thirdParagraf + ": " + thirdParagrafValue,
+                        text: thirdParagraf + " : " + thirdParagrafValue,
                         color: ColorConstants.mainColor),
                     SizedBox(
                       height: 5,
@@ -518,7 +532,7 @@ class CommonWidget {
                     Container(
                       width: sw * .85,
                       decoration: BoxDecoration(
-                        color: status == '1'
+                        color: finalStatus == '1'
                             ? Colors.green[100]
                             : Colors.yellow[100],
                         borderRadius: BorderRadius.circular(10),
@@ -528,16 +542,16 @@ class CommonWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
-                            status == '1'
+                            finalStatus == '1'
                                 ? Icons.check_circle
                                 : Icons.warning_amber_rounded,
-                            color: status == '1' ? Colors.green : Colors.orange,
+                            color: finalStatus == '1'
+                                ? Colors.green
+                                : Colors.orange,
                           ),
                           const SizedBox(width: 10),
                           CommonWidget.captionText(
-                            text: status == '1'
-                                ? 'Sudah dikunjungi'
-                                : 'Belum dikunjungi',
+                            text: status,
                             color: ColorConstants.mainColor,
                           ),
                         ],

@@ -14,17 +14,20 @@ class ShowProspekV2Response {
   ShowProspekV2Response({
     this.status,
     this.message,
+    this.error,
     this.data,
   });
 
   String? status;
   String? message;
+  bool? error;
   List<ProspekDetailV2>? data;
 
   factory ShowProspekV2Response.fromJson(Map<String, dynamic> json) =>
       ShowProspekV2Response(
         status: json["status"],
         message: json["message"],
+        error: json['error'],
         data: List<ProspekDetailV2>.from(
             json["Data"].map((x) => ProspekDetailV2.fromJson(x))),
       );
@@ -32,6 +35,7 @@ class ShowProspekV2Response {
   Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
+        'error': error,
         "Data": List<dynamic>.from(data!.map((x) => x.toJson())),
       };
 }
@@ -80,8 +84,9 @@ class ProspekDetailV2 {
         dateCalled: json["date_called"] == null
             ? null
             : DateTime.parse(json["date_called"]),
-        dateFu:
-            json["date_next"] == null ? null : DateTime.parse(json["date_next"]),
+        dateFu: json["date_next"] == null
+            ? null
+            : DateTime.parse(json["date_next"]),
         noteCommunication: json["alasan"],
         reasonNotOrder: json["reason_not_order"],
         dateLastUpdate: json["date_last_update"],

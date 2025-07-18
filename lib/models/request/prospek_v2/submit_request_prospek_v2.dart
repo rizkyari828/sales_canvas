@@ -15,6 +15,7 @@ class SubmitProspekV2Request {
       {this.userId,
       this.prospectName,
       this.productName,
+      this.otherProduct,
       this.totalTransaction,
       this.idStatusProspect,
       this.dateCalled,
@@ -31,7 +32,8 @@ class SubmitProspekV2Request {
       dateFu,
       noteCommunication,
       reasonNotOrder,
-      dateLastUpdate;
+      dateLastUpdate,
+      otherProduct;
   String? idStatusProspect, userId, idMediaCommunication, statusOrder;
 
   factory SubmitProspekV2Request.fromJson(Map<String, dynamic> json) =>
@@ -39,6 +41,7 @@ class SubmitProspekV2Request {
         userId: json["user_id"],
         prospectName: json["nama"],
         productName: json["produk"],
+        otherProduct: json["produk_lainnya"],
         totalTransaction: json["estimasi_pinjaman"],
         idStatusProspect: json["status_prospek"],
         dateCalled: json["date_called"],
@@ -53,6 +56,7 @@ class SubmitProspekV2Request {
         "user_id": userId,
         "nama": prospectName,
         "produk": productName,
+        "produk_lainnya": otherProduct,
         "estimasi_pinjaman": totalTransaction,
         "status_prospek": idStatusProspect,
         "date_called": dateCalled,

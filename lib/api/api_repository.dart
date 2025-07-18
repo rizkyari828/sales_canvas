@@ -1136,10 +1136,17 @@ class ApiRepository {
     return null;
   }
 
-  Future<MasterData2Response?> getMasterData2(String filter) async {
+  Future<MasterData2Response?> getMasterData2(String filter,
+      {String userId = '0'}) async {
     try {
+      String url = '';
+      if (userId != '0') {
+        url = '/api/getMaster?flag=' + filter + '&user_id' + userId;
+      } else {
+        url = '/api/getMaster?flag=' + filter;
+      }
       final res = await apiProvider
-          .getMasterData('/api/getMaster?flag=' + filter)
+          .getMasterData(url)
           .timeout(Duration(seconds: timeout));
       if (res.statusCode == 200 || res.statusCode == 401) {
         return MasterData2Response.fromJson(res.body);
@@ -1400,13 +1407,13 @@ class ApiRepository {
     return null;
   }
 
-  Future<ErrorResponse?> submitStatusLead(SubmitStatusLeadRequest data) async {
+  Future<ShowProspekV2Response?> submitStatusLead(SubmitStatusLeadRequest data) async {
     try {
       final res = await apiProvider
           .submitStatusLead('/api/simpan_leads', data)
           .timeout(Duration(seconds: timeout));
       if (res.statusCode == 200 || res.statusCode == 401) {
-        return ErrorResponse.fromJson(res.body);
+        return ShowProspekV2Response.fromJson(res.body);
       }
     } on TimeoutException catch (_) {
       EasyLoading.showError('Connection Timeout. Please try again later');

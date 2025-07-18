@@ -23,7 +23,8 @@ class ProspekV2AddView extends GetView<ProspekV2AddController> {
               stepsIcon(controller.statusBar.value),
               SizedBox(height: 20.0),
               if (controller.isEdit.value) ...[
-                ApprovalFlow.statusApprovalProspectV2(controller.detail.value.sourceOrderValue),
+                ApprovalFlow.statusApprovalProspectV2(
+                    controller.detail.value.sourceOrderValue),
                 SizedBox(height: 20.0),
                 CommonWidget.labelExpanded(label: 'ID Leads', value: ''),
                 SizedBox(height: 10.0),
@@ -31,10 +32,10 @@ class ProspekV2AddView extends GetView<ProspekV2AddController> {
                     label: 'Nama Prospek',
                     value: controller.prospectNameController.text),
                 SizedBox(height: 10.0),
-                CommonWidget.labelExpanded(
-                    label: 'Produk yang Diminati',
-                    value: controller.productNameController.text),
-                SizedBox(height: 10.0),
+                // CommonWidget.labelExpanded(
+                //     label: 'Produk yang Diminati',
+                //     value: controller.productNameController.text),
+                // SizedBox(height: 10.0),
               ],
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,13 +46,10 @@ class ProspekV2AddView extends GetView<ProspekV2AddController> {
                       keyboardType: TextInputType.text,
                       controller: controller.prospectNameController,
                       labelText: "Nama Prospek",
+                      isRequired: true,
+                      showError: controller.showInputError.value,
                     ),
                     SizedBox(height: 20.0),
-                    // InputInputField(
-                    //   keyboardType: TextInputType.text,
-                    //   controller: controller.productNameController,
-                    //   labelText: "Produk yang Diminati",
-                    // ),
                     CustomDropDownSearch(
                       enabled: true,
                       selectedItem: controller.minatProduct.value,
@@ -69,11 +67,22 @@ class ProspekV2AddView extends GetView<ProspekV2AddController> {
                       },
                     ),
                     SizedBox(height: 20.0),
+                    if (controller.optionalTextProduk.value) ...[
+                      CommonWidget.bodyText(text: "Minat Product"),
+                      SizedBox(height: 10.0),
+                      TextAreaField(
+                        controller: controller.otherProduct,
+                        isRequired: true,
+                        showError: controller.showInputError.value,
+                      ),
+                    ],
                   ],
                   InputInputField(
                     keyboardType: TextInputType.text,
                     controller: controller.totalTransaction,
                     labelText: "Estimasi Nilai Transaksi",
+                    isRequired: true,
+                    showError: controller.showInputError.value,
                   ),
                   SizedBox(height: 20.0),
                   CustomDropDownSearch(
@@ -89,6 +98,7 @@ class ProspekV2AddView extends GetView<ProspekV2AddController> {
                           controller.idStatusProspect.value = f.id ?? 0;
                         }
                       }
+                      controller.changeStatus(value, 'produk');
                     },
                   ),
                   SizedBox(height: 20.0),
@@ -136,6 +146,8 @@ class ProspekV2AddView extends GetView<ProspekV2AddController> {
                   SizedBox(height: 10.0),
                   TextAreaField(
                     controller: controller.noteCommunication,
+                    isRequired: true,
+                    showError: controller.showInputError.value,
                   ),
                   SizedBox(height: 20.0),
                   CustomDropDownSearch(
@@ -151,15 +163,17 @@ class ProspekV2AddView extends GetView<ProspekV2AddController> {
                           controller.idSource.value = f.id ?? 0;
                         }
                       }
-                      controller.changeStatus(value);
+                      controller.changeStatus(value, 'status order');
                     },
                   ),
                   SizedBox(height: 20.0),
-                  if (controller.optionalText.value) ...[
+                  if (controller.optionalTextOrder.value) ...[
                     CommonWidget.bodyText(text: "Alasan Tidak Order"),
                     SizedBox(height: 10.0),
                     TextAreaField(
                       controller: controller.reasonNotOrder,
+                      isRequired: true,
+                      showError: controller.showInputError.value,
                     ),
                   ],
                   SizedBox(height: 100.0),
@@ -202,20 +216,22 @@ class ProspekV2AddView extends GetView<ProspekV2AddController> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         step(
-          status.toLowerCase() == 'lead' ? true : false,
+          status.toLowerCase() == 'lead' || status.toLowerCase() == 'prospek'
+              ? true
+              : false,
           'Lead',
-          Icons.handshake_rounded,
+          Icons.person_add_alt_1,
         ),
         divLine(),
         step(
           status.toLowerCase() == 'prospek' ? true : false,
           'Prospek',
-          Icons.playlist_add_circle,
+          Icons.handshake_rounded,
         ),
         divLine(),
         Divider(color: Colors.black),
         step(status.toLowerCase() == 'order' ? true : false, 'Order',
-            Icons.playlist_add_check_circle)
+            Icons.assignment_turned_in)
       ],
     );
   }
@@ -223,27 +239,12 @@ class ProspekV2AddView extends GetView<ProspekV2AddController> {
   Widget step(bool active, String status, IconData icon) {
     final sw = SizeConfig().screenWidth;
     return Container(
-      height: active ? sw * .23 : sw * .21,
-      width: active ? sw * .23 : sw * .21,
+      height: active ? sw * .22 : sw * .21,
+      width: active ? sw * .22 : sw * .21,
       decoration: BoxDecoration(
         color: active ? ColorConstants.mainColor : Colors.grey,
         shape: BoxShape.circle,
         border: Border.all(width: 2.0, color: ColorConstants.borderColor),
-        // boxShadow: [
-        //   active
-        //       ? BoxShadow(
-        //           color: CommonWidget.setOpacity(Colors.black, 0.3),
-        //           blurRadius: 20.0,
-        //           spreadRadius: 4.0,
-        //           offset: Offset(
-        //             -10.0,
-        //             10.0,
-        //           ),
-        //         )
-        //       : BoxShadow(
-        //           color: CommonWidget.setOpacity(Colors.grey, 0.0),
-        //         ),
-        // ],
       ),
       child: Padding(
         padding: const EdgeInsets.all(15.0),
