@@ -1,6 +1,5 @@
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:sales/api/api_repository.dart';
-import 'package:sales/models/request/leads/submit_lead.dart';
 import 'package:sales/models/request/leads/submit_status_lead.dart';
 import 'package:sales/models/response/Lead/list_lead_respone.dart';
 import 'package:get/get.dart';

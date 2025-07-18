@@ -20,10 +20,10 @@ class ProspekV2AddView extends GetView<ProspekV2AddController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              stepsIcon(controller.detail.value.statusProspectValue),
+              stepsIcon(controller.statusBar.value),
               SizedBox(height: 20.0),
               if (controller.isEdit.value) ...[
-                ApprovalFlow.statusApprovalProspect(controller.status),
+                ApprovalFlow.statusApprovalProspectV2(controller.detail.value.sourceOrderValue),
                 SizedBox(height: 20.0),
                 CommonWidget.labelExpanded(label: 'ID Leads', value: ''),
                 SizedBox(height: 10.0),
@@ -197,24 +197,24 @@ class ProspekV2AddView extends GetView<ProspekV2AddController> {
         ));
   }
 
-  Widget stepsIcon(status) {
+  Widget stepsIcon(String status) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         step(
-          status == '1' ? true : false,
-          'Prospek',
+          status.toLowerCase() == 'lead' ? true : false,
+          'Lead',
           Icons.handshake_rounded,
         ),
         divLine(),
         step(
-          status == '2' ? true : false,
-          'Order',
+          status.toLowerCase() == 'prospek' ? true : false,
+          'Prospek',
           Icons.playlist_add_circle,
         ),
         divLine(),
         Divider(color: Colors.black),
-        step(status == '3' ? true : false, 'Booking',
+        step(status.toLowerCase() == 'order' ? true : false, 'Order',
             Icons.playlist_add_check_circle)
       ],
     );

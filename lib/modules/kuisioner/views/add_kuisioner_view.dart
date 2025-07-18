@@ -8,7 +8,6 @@ import 'package:sales/shared/utils/custom_pop_scope.dart';
 import 'package:sales/shared/utils/utils.dart';
 import 'package:sales/shared/widgets/button.dart';
 import 'package:sales/shared/widgets/custom_appbar.dart';
-import 'package:sales/shared/widgets/image_picker.dart';
 import 'package:sales/shared/widgets/input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

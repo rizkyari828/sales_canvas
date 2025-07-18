@@ -2,7 +2,6 @@ import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'package:sales/modules/prospek_v2/controllers/prospek_controller.dart';
 import 'package:sales/shared/constants/constants.dart';
 import 'package:sales/shared/widgets/approval.dart';
-import 'package:sales/shared/widgets/custom_card.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -169,18 +168,17 @@ class ProspekV2View extends GetView<ProspekV2Controller> {
                             dataProspect: controller.listProspek[i]);
                       }
                     },
-                    child: CustomExpandedCardView(
+                    child: CommonWidget.customStatusCard(
                       firstParagraf:
-                          controller.listProspek[i].prospectName.toString(),
-                      secondParagrafLabel: "Nama Prospect",
+                          controller.listProspek[i].prospectName ?? '',
+                      secondParagraf: 'Nama Product',
                       secondParagrafValue:
-                          controller.listProspek[i].prospectName.toString(),
-                      thirdParagrafLabel: "Pengajuan",
+                          controller.listProspek[i].productName ?? '',
+                      thirdParagraf: 'Status Order',
                       thirdParagrafValue:
-                          '${DateFormat("EEEE, d MMMM yyyy", "id_ID").format(controller.listProspek[i].dateCalled ?? DateTime.now())}',
-                      // forthParagraf: controller.listOvertime[i].branchName.toString(),
-                      approval:
-                          controller.listProspek[i].idStatusProspect.toString(),
+                          controller.listProspek[i].sourceOrderValue ?? '',
+                      status:
+                          controller.listProspek[i].statusProspectValue ?? '',
                     ),
                   ),
                 ],

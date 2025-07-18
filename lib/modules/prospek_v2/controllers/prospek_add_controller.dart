@@ -7,7 +7,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:sales/models/response/prospek_v2/detail_prospek_v2_response.dart';
 import 'package:sales/modules/home/base_controller.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ProspekV2AddController extends BaseController {
   ProspekV2AddController({required ApiRepository apiRepository})
@@ -54,6 +53,7 @@ class ProspekV2AddController extends BaseController {
   RxString optionalTextValue = ''.obs;
 
   RxBool isEdit = false.obs;
+  RxString statusBar = "Prospek".obs;
 
   @override
   void onInit() {
@@ -67,6 +67,10 @@ class ProspekV2AddController extends BaseController {
 
     if (argm != null) {
       getDetailProspek();
+    }
+
+    if (detail.value.statusProspectValue == 'Order') {
+      statusBar.value = 'Order';
     }
   }
 

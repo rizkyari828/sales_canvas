@@ -236,6 +236,7 @@ class CustomExpandedCardView extends StatelessWidget {
                 ],
               ),
             ),
+            
             approval != ''
                 ? updateDelete
                     ? Expanded(

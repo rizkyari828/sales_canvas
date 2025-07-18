@@ -459,4 +459,97 @@ class CommonWidget {
         return 'TAD';
     }
   }
+
+  static Widget customStatusCard({
+    String firstParagraf = '',
+    String secondParagraf = '',
+    String thirdParagraf = '',
+    String secondParagrafValue = '',
+    String thirdParagrafValue = '',
+    String status = '',
+    VoidCallback? onPressed,
+  }) {
+    final sh = SizeConfig().screenHeight;
+    final sw = SizeConfig().screenWidth;
+    return Container(
+      margin: const EdgeInsets.only(left: 15.0, right: 15.0, top: 15.0),
+      height: firstParagraf == '' ? sh * .15 : sh * .16,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10.0),
+        border: Border.all(width: 2.0, color: ColorConstants.borderColor),
+      ),
+      child: InkWell(
+        onTap: onPressed,
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      child: CommonWidget.subtitleText(
+                          text: firstParagraf + ": " + secondParagrafValue,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Container(
+                      width: SizeConfig().screenWidth * .50,
+                      child: CommonWidget.subtitleText(
+                          text: secondParagraf,
+                          color: ColorConstants.mainColor),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    CommonWidget.subtitleText(
+                        text: thirdParagraf + ": " + thirdParagrafValue,
+                        color: ColorConstants.mainColor),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Spacer(),
+                    Container(
+                      width: sw * .85,
+                      decoration: BoxDecoration(
+                        color: status == '1'
+                            ? Colors.green[100]
+                            : Colors.yellow[100],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: const EdgeInsets.all(5),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            status == '1'
+                                ? Icons.check_circle
+                                : Icons.warning_amber_rounded,
+                            color: status == '1' ? Colors.green : Colors.orange,
+                          ),
+                          const SizedBox(width: 10),
+                          CommonWidget.captionText(
+                            text: status == '1'
+                                ? 'Sudah dikunjungi'
+                                : 'Belum dikunjungi',
+                            color: ColorConstants.mainColor,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }

@@ -16,7 +16,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sales/models/response/store/detail_store_response.dart';
 import 'package:sales/modules/home/base_controller.dart';
-import 'package:sales/routes/app_pages.dart';
 import 'package:sales/shared/constants/colors.dart';
 import 'package:sales/shared/constants/storage.dart';
 import 'package:sales/shared/utils/common_widget.dart';

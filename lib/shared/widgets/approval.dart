@@ -346,6 +346,28 @@ class ApprovalFlow {
         ));
   }
 
+  static Widget statusApprovalProspectV2(label) {
+    final sw = SizeConfig().screenWidth;
+    final sh = SizeConfig().screenHeight;
+    return Container(
+        width: sw,
+        height: sh * .05,
+        child: Card(
+            elevation: 0,
+            color: label == 'Booking'
+                ? Colors.green
+                : label == 'Order' || label == 'Prospek'
+                    ? Colors.yellow[800]
+                    : Colors.red,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+              Radius.circular(5.0),
+            )),
+            child: Center(
+                child: CommonWidget.bodyText(
+                    text: label.toString(), color: Colors.white))));
+  }
+
   static Widget deleteButtonApproval({controller, name}) {
     return controller.groupId.toString() != '3'
         ? IconButton(
