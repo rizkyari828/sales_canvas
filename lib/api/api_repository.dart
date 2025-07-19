@@ -31,6 +31,7 @@ import 'package:sales/models/request/overtime/submit_overtime_client_request.dar
 import 'package:sales/models/request/overtime/submit_request_overtime.dart';
 import 'package:sales/models/request/overtime/update_approval_overtime_request.dart';
 import 'package:sales/models/request/pagination_request.dart';
+import 'package:sales/models/request/prospek_v2/detail_request_cuti.dart';
 import 'package:sales/models/request/prospek_v2/submit_request_prospek_v2.dart';
 import 'package:sales/models/request/rate/submit_rate_request.dart';
 import 'package:sales/models/request/reliver/approve_reliver_request.dart';
@@ -1141,7 +1142,7 @@ class ApiRepository {
     try {
       String url = '';
       if (userId != '0') {
-        url = '/api/getMaster?flag=' + filter + '&user_id' + userId;
+        url = '/api/getMaster?flag=' + filter + '&user_id=' + userId;
       } else {
         url = '/api/getMaster?flag=' + filter;
       }
@@ -1322,10 +1323,10 @@ class ApiRepository {
   }
 
   Future<ShowProspekV2Response?> showProspekV2(
-      String id, GetListRequest data) async {
+      ShowProspectV2Request data) async {
     try {
       final res = await apiProvider
-          .getShowProspekV2('/api/getdataDetail?noTrans=' + id, data)
+          .getShowProspekV2('/api/detail_prospek', data)
           .timeout(Duration(seconds: timeout));
       if (res.statusCode == 200 || res.statusCode == 401) {
         return ShowProspekV2Response.fromJson(res.body);
@@ -1407,7 +1408,8 @@ class ApiRepository {
     return null;
   }
 
-  Future<ShowProspekV2Response?> submitStatusLead(SubmitStatusLeadRequest data) async {
+  Future<ShowProspekV2Response?> submitStatusLead(
+      SubmitStatusLeadRequest data) async {
     try {
       final res = await apiProvider
           .submitStatusLead('/api/simpan_leads', data)

@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:sales/api/api_repository.dart';
+import 'package:sales/models/request/prospek_v2/detail_request_cuti.dart';
 import 'package:sales/models/request/prospek_v2/submit_request_prospek_v2.dart';
 import 'package:sales/models/response/master_data_2_response.dart';
 import 'package:flutter/material.dart';
@@ -76,14 +77,16 @@ class ProspekV2AddController extends BaseController {
   }
 
   void getDetailProspek() async {
-    // final res = await apiRepository.showProspekV2(
-    //     argm.toString(), GetListRequest(id: '0', token: ''));
-    // detail.value = res?.data!.first ?? ProspekDetailV2();
-    detail.value = argm['data_lead'];
+    var argmLead = argm['data_lead'];
+    print(argmLead.id);
+    final res = await apiRepository
+        .showProspekV2(ShowProspectV2Request(id: argmLead.id.toString()));
+    detail.value = res?.data!.first ?? ProspekDetailV2();
+    // detail.value = argm['data_lead'];
 
     prospectNameController.text = detail.value.prospectName ?? '';
     productNameController.text = detail.value.productName ?? '';
-    totalTransaction.text = detail.value.totalTransaction ?? '';
+    totalTransaction.text = detail.value.totalTransaction.toString();
     dateCalled.text = detail.value.dateCalled ?? '';
     dateFu.text = detail.value.dateFu ?? '';
     noteCommunication.text = detail.value.noteCommunication ?? '';
@@ -146,7 +149,7 @@ class ProspekV2AddController extends BaseController {
 
   void submitProspek() async {
     if (prospectNameController.text.isEmpty ||
-        productNameController.text.isEmpty ||
+        minatProductId.value == 0 ||
         totalTransaction.text.isEmpty ||
         idStatusProspect.value == 0 ||
         dateCalled.text.isEmpty ||

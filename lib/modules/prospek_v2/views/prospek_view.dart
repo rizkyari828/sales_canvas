@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:sales/shared/widgets/input_field.dart';
 
 import '../../../shared/utils/common_widget.dart';
 
@@ -34,37 +33,8 @@ class ProspekV2View extends GetView<ProspekV2Controller> {
           backgroundColor: ColorConstants.lightScaffoldBackgroundColor,
           elevation: 0.0,
           actions: [
-            Obx(() => controller.type.value == "now"
-                ? IconButton(
-                    onPressed: () {
-                      showMonthPicker(
-                        context: context,
-                        firstDate: DateTime(DateTime.now().year - 1, 5),
-                        lastDate: DateTime(DateTime.now().year + 1, 9),
-                        initialDate: controller.selectedDate ?? DateTime.now(),
-                      ).then((date) {
-                        if (date != null) {
-                          controller.listProspek.clear();
-                          controller.selectedDate = date;
-                          controller.monthV.value =
-                              DateFormat("MMMM yyyy", "id_ID")
-                                  .format(date)
-                                  .toString();
-                          controller.getProspek(1);
-                        }
-                      });
-                    },
-                    tooltip: 'Pilih Bulan',
-                    icon: Icon(Icons.calendar_month_rounded, size: 20),
-                  )
-                : Container()),
             Obx(() => ApprovalFlow.addButtonApproval(
                 controller: controller, onPressed: controller.goToAddPages))
-            // IconButton(
-            //   onPressed: controller.goToAddPages,
-            //   tooltip: 'Tambah',
-            //   icon: Icon(Icons.add_box_rounded, size: 20),
-            // )
           ],
         ),
         body: Obx(() => _getItems(controller)));
@@ -78,112 +48,31 @@ class ProspekV2View extends GetView<ProspekV2Controller> {
       controller: controller.refreshController,
       onRefresh: controller.onRefresh,
       onLoading: controller.onLoading,
-      child: controller.listProspek.isEmpty
-          ? Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                children: [
-                  CommonWidget.minHeadText(
-                    text: controller.monthLabel.value,
-                    color: ColorConstants.black,
-                  ),
-                  SizedBox(height: 20.0),
-                  controller.type.value == "now"
-                      ? CustomDropDownSearch(
-                          listItem: controller.listStatusOrder.map((item) {
-                            return item.nama.toString();
-                          }).toList(),
-                          labelText: "Filter Status",
-                          onChanged: (value) async {
-                            if (value == "All") {
-                              controller.status.value = "";
-                              controller.listProspek.clear();
-                              controller.getProspek(1);
-                            } else {
-                              // controller.nameItem.value = value;
-                              for (var f in controller.listStatusOrder) {
-                                if (f.nama == value) {
-                                  controller.status.value = f.id.toString();
-                                  controller.listProspek.clear();
-                                  controller.getProspek(1);
-                                }
-                              }
-                            }
-                          },
-                        )
-                      : Container(),
-                ],
-              ),
-            )
-          : ListView.builder(
-              itemCount: controller.listProspek.length,
-              itemBuilder: (context, i) => Column(
-                children: [
-                  i == 0
-                      ? Obx(
-                          () => Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Column(
-                              children: [
-                                CommonWidget.minHeadText(
-                                  text: controller.monthLabel.value,
-                                  color: ColorConstants.black,
-                                ),
-                                controller.type.value == "now"
-                                    ? Column(
-                                        children: [
-                                          SizedBox(height: 20.0),
-                                          CustomDropDownSearch(
-                                            listItem: controller.listStatusOrder
-                                                .map((item) {
-                                              return item.nama.toString();
-                                            }).toList(),
-                                            labelText: "Filter Status",
-                                            onChanged: (value) async {
-                                              // controller.nameItem.value = value;
-                                              for (var f in controller
-                                                  .listStatusOrder) {
-                                                if (f.nama == value) {
-                                                  controller.status.value =
-                                                      f.id.toString();
-                                                  controller.listProspek
-                                                      .clear();
-                                                  controller.getProspek(1);
-                                                }
-                                              }
-                                            },
-                                          ),
-                                        ],
-                                      )
-                                    : Container(),
-                              ],
-                            ),
-                          ),
-                        )
-                      : Container(),
-                  InkWell(
-                    onTap: () {
-                      if (controller.groupId.value == "1") {
-                        controller.goToDetailPages(
-                            dataProspect: controller.listProspek[i]);
-                      }
-                    },
-                    child: CommonWidget.customStatusCard(
-                      firstParagraf:
-                          controller.listProspek[i].prospectName ?? '',
-                      secondParagraf: 'Nama Product',
-                      secondParagrafValue:
-                          controller.listProspek[i].productName ?? '',
-                      thirdParagraf: 'Status Order',
-                      thirdParagrafValue:
-                          controller.listProspek[i].sourceOrderValue ?? '',
-                      status:
-                          controller.listProspek[i].statusProspectValue ?? '',
-                    ),
-                  ),
-                ],
+      child: ListView.builder(
+        itemCount: controller.listProspek.length,
+        itemBuilder: (context, i) => Column(
+          children: [
+            InkWell(
+              onTap: () {
+                if (controller.groupId.value == "1") {
+                  controller.goToDetailPages(
+                      dataProspect: controller.listProspek[i]);
+                }
+              },
+              child: CommonWidget.customStatusCard(
+                firstParagraf: controller.listProspek[i].prospectName ?? '',
+                secondParagraf: 'Nama Product',
+                secondParagrafValue:
+                    controller.listProspek[i].productName ?? '',
+                thirdParagraf: 'Status Order',
+                thirdParagrafValue:
+                    controller.listProspek[i].sourceOrderValue ?? '',
+                status: controller.listProspek[i].statusProspectValue ?? '',
               ),
             ),
+          ],
+        ),
+      ),
     );
   }
 }

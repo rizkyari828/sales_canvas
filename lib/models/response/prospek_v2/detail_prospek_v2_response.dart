@@ -44,7 +44,7 @@ class ProspekDetailV2 {
   int? id;
   String? prospectName;
   String? productName;
-  String? totalTransaction;
+  int? totalTransaction;
   dynamic dateCalled;
   dynamic dateFu;
   String? noteCommunication;
@@ -56,34 +56,34 @@ class ProspekDetailV2 {
   int? idStatusProspect;
   int? idMediaCommunication;
   int? idStatusOrder;
+  String? idProduct;
 
-  ProspekDetailV2({
-    this.id,
-    this.prospectName,
-    this.productName,
-    this.totalTransaction,
-    this.dateCalled,
-    this.dateFu,
-    this.noteCommunication,
-    this.reasonNotOrder,
-    this.dateLastUpdate,
-    this.sourceOrderValue,
-    this.mediaCommunicationValue,
-    this.statusProspectValue,
-    this.idStatusProspect,
-    this.idMediaCommunication,
-    this.idStatusOrder,
-  });
+  ProspekDetailV2(
+      {this.id,
+      this.prospectName,
+      this.productName,
+      this.totalTransaction,
+      this.dateCalled,
+      this.dateFu,
+      this.noteCommunication,
+      this.reasonNotOrder,
+      this.dateLastUpdate,
+      this.sourceOrderValue,
+      this.mediaCommunicationValue,
+      this.statusProspectValue,
+      this.idStatusProspect,
+      this.idMediaCommunication,
+      this.idStatusOrder,
+      this.idProduct});
 
   factory ProspekDetailV2.fromJson(Map<String, dynamic> json) =>
       ProspekDetailV2(
-        id: json["id"],
+        id: json["id_prospek"],
         prospectName: json["nama"],
         productName: json["produk"],
         totalTransaction: json["estimasi_pinjaman"],
-        dateCalled: json["date_called"] == null
-            ? null
-            : DateTime.parse(json["date_called"]),
+        dateCalled:
+            json["cdate"] == null ? null : DateTime.parse(json["cdate"]),
         dateFu: json["date_next"] == null
             ? null
             : DateTime.parse(json["date_next"]),
@@ -96,14 +96,15 @@ class ProspekDetailV2 {
         idStatusProspect: json["status_prospek"],
         idMediaCommunication: json["media"],
         idStatusOrder: json["status_order"],
+        idProduct: json["produk"],
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
+        "id_prospek": id,
         "nama": prospectName,
-        "produk": productName,
+        "produk_value": productName,
         "estimasi_pinjaman": totalTransaction,
-        "date_called":
+        "cdate":
             "${dateCalled!.year.toString().padLeft(4, '0')}-${dateCalled!.month.toString().padLeft(2, '0')}-${dateCalled!.day.toString().padLeft(2, '0')}",
         "date_next":
             "${dateFu!.year.toString().padLeft(4, '0')}-${dateFu!.month.toString().padLeft(2, '0')}-${dateFu!.day.toString().padLeft(2, '0')}",
@@ -115,5 +116,6 @@ class ProspekDetailV2 {
         "status_prospek": idStatusProspect,
         "media": idMediaCommunication,
         "status_order": idStatusOrder,
+        "produk": idProduct
       };
 }

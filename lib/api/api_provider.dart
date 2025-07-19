@@ -31,6 +31,7 @@ import 'package:sales/models/request/overtime/submit_overtime_client_request.dar
 import 'package:sales/models/request/overtime/submit_request_overtime.dart';
 import 'package:sales/models/request/overtime/update_approval_overtime_request.dart';
 import 'package:sales/models/request/pagination_request.dart';
+import 'package:sales/models/request/prospek_v2/detail_request_cuti.dart';
 import 'package:sales/models/request/prospek_v2/submit_request_prospek_v2.dart';
 import 'package:sales/models/request/rate/submit_rate_request.dart';
 import 'package:sales/models/request/reliver/approve_reliver_request.dart';
@@ -399,7 +400,7 @@ class ApiProvider extends BaseProvider {
     return get(path);
   }
 
-  Future<Response> getShowProspekV2(String path, GetListRequest data) {
+  Future<Response> getShowProspekV2(String path, ShowProspectV2Request data) {
     return post(path, data.toJson());
   }
 

@@ -40,21 +40,18 @@ class AddKuisionerView extends GetView<KusionerController> {
           Expanded(child: _getItems(context, controller)),
           Padding(
             padding: EdgeInsets.only(left: sw * .06, right: 20, bottom: 20),
-            child: controller.isConnectedToInternetWidget.value
-                ? controller.internetConnection()
-                : CustomButton(
-                    buttonText: controller.percentage.value >= 1.0
-                        ? 'SIMPAN'
-                        : 'SELANJUTNYA',
-                    width: MediaQuery.of(context).size.width,
-                    onPressed: () {
-                      if (controller.percentage.value >= 1.0) {
-                        controller.submit(isLast: true);
-                      } else {
-                        controller.submit(isLast: false);
-                      }
-                    },
-                  ),
+            child: CustomButton(
+              buttonText:
+                  controller.percentage.value >= 1.0 ? 'SIMPAN' : 'SELANJUTNYA',
+              width: MediaQuery.of(context).size.width,
+              onPressed: () {
+                if (controller.percentage.value >= 1.0) {
+                  controller.submit(isLast: true);
+                } else {
+                  controller.submit(isLast: false);
+                }
+              },
+            ),
           ),
         ],
       ),
@@ -266,9 +263,8 @@ class SingleChoice extends GetView<KusionerController> {
   }) : super(key: key);
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
+  Widget build(BuildContext context) {
+    final answer = controller.answers[idSoal.toString()] ?? '';
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -280,27 +276,40 @@ class SingleChoice extends GetView<KusionerController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CommonWidget.bodyMultilineText(text: "${no}. $question"),
-            const SizedBox(height: 10),
-            Obx(() {
-              return Column(
-                children: options.map((option) {
-                  return RadioListTile<String>(
-                      title: CommonWidget.bodyText(text: option),
-                      value: option,
-                      groupValue: controller.answers[idSoal.toString()],
-                      onChanged: (value) {
-                        if (value != null) {
-                          controller.setAnswer(
-                            idSoal.toString(),
-                            idKategori.toString(),
-                            value,
-                          );
-                        }
-                      });
-                }).toList(),
-              );
-            }),
+            if (question != '') ...[
+              CommonWidget.bodyMultilineText(text: "${no}. $question"),
+              const SizedBox(height: 10),
+              // Hanya tampilkan pilihan jika answer masih kosong
+              if (answer == '')
+                Obx(() {
+                  return Column(
+                    children: options
+                        .where((option) => option.trim().isNotEmpty)
+                        .map((option) {
+                      return RadioListTile<String>(
+                        title: CommonWidget.bodyText(text: option),
+                        value: option,
+                        groupValue: controller.answers[idSoal.toString()],
+                        onChanged: (value) {
+                          if (value != null) {
+                            controller.setAnswer(
+                              idSoal.toString(),
+                              idKategori.toString(),
+                              value,
+                            );
+                          }
+                        },
+                      );
+                    }).toList(),
+                  );
+                }),
+              // Jika sudah ada jawaban, bisa tampilkan info jawaban atau kosongkan saja
+              if (answer != '')
+                CommonWidget.bodyText(
+                  text: "Jawaban: $answer",
+                  color: ColorConstants.mainColor,
+                ),
+            ],
             if (isUpload == 1) ...[
               uploadFile(context, controller, idSoal.toString())
             ]

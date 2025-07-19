@@ -20,26 +20,17 @@ class ProspekV2Controller extends GetxController {
   RxString token = "".obs;
   RxString status = "".obs;
   DateTime? selectedDate;
-  RxString monthV =
-      DateFormat("MMMM yyyy", "id_ID").format(DateTime.now()).toString().obs;
-  RxString monthSubmit =
-      DateFormat("MM", "id_ID").format(DateTime.now()).toString().obs;
+
   RxInt page = 1.obs;
-  RxString type = "".obs;
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
   RxString monthLabel = "".obs;
-
-  var masterData = <MasterData2>[].obs;
-  var masterStatus = <MasterData2>[].obs;
-  var listStatusOrder = <MasterData2>[].obs;
 
   void onLoading() async {
     page.value = page.value + 1;
     // monitor network fetch
     await Future.delayed(Duration(milliseconds: 1000));
     getProspek(page.value);
-    getMasterData();
     refreshController.loadComplete();
   }
 
@@ -52,9 +43,6 @@ class ProspekV2Controller extends GetxController {
   void onReady() {
     super.onReady();
     loadUsers();
-    getMasterData();
-    type.value = argm['type'].toString();
-    status.value = argm['status'].toString();
 
     getProspek(page.value);
   }
@@ -73,31 +61,6 @@ class ProspekV2Controller extends GetxController {
   }
 
   void getProspek(page) async {
-    String _month = DateFormat("MM", "id_ID")
-        .format(selectedDate ?? DateTime.now())
-        .toString();
-
-    if (selectedDate != null) {
-      _month = _month;
-    } else {
-      if (argm['month'].toString() == '') {
-        _month = DateFormat("MM", "id_ID")
-            .format(selectedDate ?? DateTime.now())
-            .toString();
-      } else {
-        _month = argm['month'].toString();
-      }
-    }
-
-    var now = new DateTime.now();
-    var formatter = new DateFormat('yyyy');
-    String formattedDateS = formatter.format(now);
-    var dateString = _month + ', ' + formattedDateS;
-    DateFormat format = new DateFormat("MM, yyyy");
-    var formattedDate = format.parse(dateString);
-    monthLabel.value =
-        DateFormat("MMMM yyyy", "id_ID").format(formattedDate).toString();
-
     final res = await apiRepository.listProspekV2(
         UserIdRequest(id: userId.value, page: page.toString(), limit: '10'));
     listProspek.addAll(res?.data ?? []);
@@ -109,23 +72,6 @@ class ProspekV2Controller extends GetxController {
     page.value = 1;
     getProspek(page.value);
     refreshController.refreshCompleted();
-  }
-
-  void getMasterData() async {
-    masterData.clear();
-    final resListLeadCategory =
-        await apiRepository.getMasterData2('Kategori Lead');
-    masterData.value = resListLeadCategory!.data!;
-    for (var element in masterData) {
-      masterStatus.add(element);
-    }
-
-    masterData.clear();
-    final resListStatusLead = await apiRepository.getMasterData2('Status Lead');
-    masterData.value = resListStatusLead!.data!;
-    for (var element in masterData) {
-      listStatusOrder.add(element);
-    }
   }
 
   void goToDetailPages({ProspekDetailV2? dataProspect}) {
