@@ -14,7 +14,7 @@ class SubmitProspekV2Request {
   SubmitProspekV2Request(
       {this.userId,
       this.prospectName,
-      this.productName,
+      this.idProductName,
       this.otherProduct,
       this.totalTransaction,
       this.idStatusProspect,
@@ -24,10 +24,11 @@ class SubmitProspekV2Request {
       this.noteCommunication,
       this.statusOrder,
       this.reasonNotOrder,
-      this.id});
+      this.id,
+      this.idLead});
 
   String? prospectName,
-      productName,
+      // productName,
       totalTransaction,
       // dateCalled,
       dateFu,
@@ -35,13 +36,19 @@ class SubmitProspekV2Request {
       reasonNotOrder,
       dateLastUpdate,
       otherProduct;
-  String? idStatusProspect, userId, idMediaCommunication, statusOrder, id;
+  String? idStatusProspect,
+      userId,
+      idMediaCommunication,
+      statusOrder,
+      id,
+      idLead,
+      idProductName;
 
   factory SubmitProspekV2Request.fromJson(Map<String, dynamic> json) =>
       SubmitProspekV2Request(
           userId: json["user_id"],
           prospectName: json["nama"],
-          productName: json["produk"],
+          idProductName: json["produk"],
           otherProduct: json["produk_lainnya"],
           totalTransaction: json["estimasi_pinjaman"],
           idStatusProspect: json["status_prospek"],
@@ -51,12 +58,13 @@ class SubmitProspekV2Request {
           noteCommunication: json["catatan"],
           statusOrder: json["status_order"],
           reasonNotOrder: json["alasan"],
-          id: json["id_leads"]);
+          id: json["id_prospek"],
+          idLead: json["id_leads"]);
 
   Map<String, dynamic> toJson() => {
         "user_id": userId,
         "nama": prospectName,
-        "produk": productName,
+        "produk": idProductName,
         "produk_lainnya": otherProduct,
         "estimasi_pinjaman": totalTransaction,
         "status_prospek": idStatusProspect,
@@ -66,6 +74,7 @@ class SubmitProspekV2Request {
         "catatan": noteCommunication,
         "status_order": statusOrder,
         "alasan": reasonNotOrder,
-        "id_leads": id
+        "id_prospek": id,
+        "id_leads": idLead
       };
 }

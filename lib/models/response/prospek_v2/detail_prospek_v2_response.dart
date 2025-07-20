@@ -57,7 +57,7 @@ class ProspekDetailV2 {
   int? idStatusProspect;
   int? idMediaCommunication;
   int? idStatusOrder;
-  String? idProduct;
+  int? idProduct;
 
   ProspekDetailV2(
       {this.id,
@@ -78,29 +78,30 @@ class ProspekDetailV2 {
       this.idStatusOrder,
       this.idProduct});
 
-  factory ProspekDetailV2.fromJson(Map<String, dynamic> json) =>
-      ProspekDetailV2(
-        id: json["id_prospek"],
-        idLead: json["id_leads"],
-        prospectName: json["nama"],
-        productName: json["produk_value"],
-        totalTransaction: json["estimasi_pinjaman"],
-        dateCalled:
-            json["cdate"] == null ? null : DateTime.parse(json["cdate"]),
-        dateFu: json["date_next"] == null
-            ? null
-            : DateTime.parse(json["date_next"]),
-        noteCommunication: json["catatan"],
-        reasonNotOrder: json["alasan"],
-        dateLastUpdate: json["date_last_update"],
-        sourceOrderValue: json["status_order_value"],
-        mediaCommunicationValue: json["media_communication_value"],
-        statusProspectValue: json["status_prospek_value"],
-        idStatusProspect: json["status_prospek"],
-        idMediaCommunication: json["media"],
-        idStatusOrder: json["status_order"],
-        idProduct: json["produk"],
-      );
+  factory ProspekDetailV2.fromJson(Map<String, dynamic> json) {
+    print(json); // Untuk debug
+    return ProspekDetailV2(
+      id: json["id_prospek"],
+      idLead: json["id_leads"], // Akan null jika tidak ada di response
+      prospectName: json["nama"],
+      productName: json["produk_value"],
+      totalTransaction: json["estimasi_pinjaman"],
+      dateCalled: json["cdate"] == null ? null : DateTime.parse(json["cdate"]),
+      dateFu:
+          json["date_next"] == null ? null : DateTime.parse(json["date_next"]),
+      noteCommunication: json["catatan"],
+      reasonNotOrder: json["alasan"],
+      dateLastUpdate: json["date_last_update"],
+      sourceOrderValue: json["status_order_value"],
+      mediaCommunicationValue: json["media_value"],
+      statusProspectValue: json["status_prospek_value"] ??
+          json["status_prospek_new"], // <-- cek dua key
+      idStatusProspect: json["status_prospek"],
+      idMediaCommunication: json["media"],
+      idStatusOrder: json["status_order"],
+      idProduct: json["produk"],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "id_prospek": id,
@@ -115,7 +116,7 @@ class ProspekDetailV2 {
         "catatan": noteCommunication,
         "alasan": reasonNotOrder,
         "status_order_value": sourceOrderValue,
-        "media_communication_value": mediaCommunicationValue,
+        "media_value": mediaCommunicationValue,
         "status_prospek_value": statusProspectValue,
         "status_prospek": idStatusProspect,
         "media": idMediaCommunication,

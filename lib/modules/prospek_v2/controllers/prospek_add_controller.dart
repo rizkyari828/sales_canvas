@@ -28,7 +28,7 @@ class ProspekV2AddController extends BaseController {
   RxString mediaCommunicationValue = "".obs;
   RxBool isFilled = true.obs;
   RxBool disabled = false.obs;
-  RxString minatProductId = "".obs;
+  RxInt minatProductId = 0.obs;
   RxString minatProduct = "".obs;
   var listMinatProduct = <MasterData2>[].obs;
 
@@ -86,8 +86,12 @@ class ProspekV2AddController extends BaseController {
     prospectNameController.text = detail.value.prospectName ?? '';
     productNameController.text = detail.value.productName ?? '';
     totalTransaction.text = detail.value.totalTransaction.toString();
-    dateCalled.text = detail.value.dateCalled ?? '';
-    dateFu.text = detail.value.dateFu ?? '';
+    dateCalled.text = detail.value.dateCalled != null
+        ? DateFormat('yyyy-MM-dd').format(detail.value.dateCalled!)
+        : '';
+    dateFu.text = detail.value.dateFu != null
+        ? DateFormat('yyyy-MM-dd').format(detail.value.dateFu!)
+        : '';
     noteCommunication.text = detail.value.noteCommunication ?? '';
     reasonNotOrder.text = detail.value.reasonNotOrder ?? '';
     dateLastUpdate.text = detail.value.dateLastUpdate ?? '';
@@ -95,6 +99,7 @@ class ProspekV2AddController extends BaseController {
     idStatusProspect.value = detail.value.idStatusProspect ?? 0;
     idMediaCommunication.value = detail.value.idMediaCommunication ?? 0;
     idSource.value = detail.value.idStatusOrder ?? 0;
+    minatProductId.value = detail.value.idProduct ?? 0;
 
     statusProspectValue.value = detail.value.statusProspectValue ?? '';
     mediaCommunicationValue.value = detail.value.mediaCommunicationValue ?? '';
@@ -149,7 +154,7 @@ class ProspekV2AddController extends BaseController {
         minatProductId.value == 0 ||
         totalTransaction.text.isEmpty ||
         idStatusProspect.value == 0 ||
-        dateCalled.text.isEmpty ||
+        // dateCalled.text.isEmpty ||
         idMediaCommunication.value == 0 ||
         dateFu.text.isEmpty ||
         noteCommunication.text.isEmpty ||
@@ -177,7 +182,7 @@ class ProspekV2AddController extends BaseController {
       id: detail.value.id == null ? '0' : detail.value.id.toString(),
       userId: userId.value,
       prospectName: prospectNameController.text,
-      productName: productNameController.text,
+      idProductName: minatProductId.value.toString(),
       otherProduct: otherProduct.text,
       totalTransaction: totalTransaction.text,
       idStatusProspect: idStatusProspect.value.toString(),
@@ -187,6 +192,8 @@ class ProspekV2AddController extends BaseController {
       noteCommunication: noteCommunication.text,
       statusOrder: idSource.value.toString(),
       reasonNotOrder: reasonNotOrder.text,
+      idLead:
+          detail.value.idLead == null ? '0' : detail.value.idLead.toString(),
     );
 
     final res = await apiRepository.submitProspectV2(req);

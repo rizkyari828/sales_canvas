@@ -354,9 +354,9 @@ class ApprovalFlow {
         height: sh * .05,
         child: Card(
             elevation: 0,
-            color: label == 'Booking'
+            color: label == 'Sudah Order'
                 ? Colors.green
-                : label == 'Order' || label == 'Prospek'
+                : label == 'Belum Order'
                     ? Colors.yellow[800]
                     : Colors.red,
             shape: RoundedRectangleBorder(

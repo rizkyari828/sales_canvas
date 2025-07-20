@@ -35,7 +35,7 @@ class ProspekV2AddView extends GetView<ProspekV2AddController> {
                 CommonWidget.labelExpanded(
                     label: 'Nama Prospek',
                     value: controller.prospectNameController.text),
-                SizedBox(height: 10.0),
+                SizedBox(height: 20.0),
               ],
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,33 +51,33 @@ class ProspekV2AddView extends GetView<ProspekV2AddController> {
                       showError: controller.showInputError.value,
                     ),
                     SizedBox(height: 20.0),
-                    CustomDropDownSearch(
-                      enabled: !controller.disabled.value,
-                      selectedItem: controller.minatProduct.value,
-                      listItem: controller.listMinatProduct.map((item) {
-                        return item.nama.toString();
-                      }).toList(),
-                      labelText: "Minat Product",
-                      onChanged: (value) async {
-                        controller.minatProduct.value = value;
-                        for (var f in controller.listMinatProduct) {
-                          if (f.nama == value) {
-                            controller.minatProductId.value = f.id.toString();
-                          }
+                  ],
+                  CustomDropDownSearch(
+                    enabled: !controller.disabled.value,
+                    selectedItem: controller.minatProduct.value,
+                    listItem: controller.listMinatProduct.map((item) {
+                      return item.nama.toString();
+                    }).toList(),
+                    labelText: "Minat Product",
+                    onChanged: (value) async {
+                      controller.minatProduct.value = value;
+                      for (var f in controller.listMinatProduct) {
+                        if (f.nama == value) {
+                          controller.minatProductId.value = f.id ?? 0;
                         }
-                      },
+                      }
+                    },
+                  ),
+                  SizedBox(height: 20.0),
+                  if (controller.optionalTextProduk.value) ...[
+                    CommonWidget.bodyText(text: "Minat Product"),
+                    SizedBox(height: 10.0),
+                    TextAreaField(
+                      controller: controller.otherProduct,
+                      isRequired: true,
+                      showError: controller.showInputError.value,
+                      isDisabled: controller.disabled.value,
                     ),
-                    SizedBox(height: 20.0),
-                    if (controller.optionalTextProduk.value) ...[
-                      CommonWidget.bodyText(text: "Minat Product"),
-                      SizedBox(height: 10.0),
-                      TextAreaField(
-                        controller: controller.otherProduct,
-                        isRequired: true,
-                        showError: controller.showInputError.value,
-                        isDisabled: controller.disabled.value,
-                      ),
-                    ],
                   ],
                   InputInputField(
                     keyboardType: TextInputType.text,
