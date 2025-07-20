@@ -23,7 +23,8 @@ class SubmitProspekV2Request {
       this.dateFu,
       this.noteCommunication,
       this.statusOrder,
-      this.reasonNotOrder});
+      this.reasonNotOrder,
+      this.id});
 
   String? prospectName,
       productName,
@@ -34,23 +35,23 @@ class SubmitProspekV2Request {
       reasonNotOrder,
       dateLastUpdate,
       otherProduct;
-  String? idStatusProspect, userId, idMediaCommunication, statusOrder;
+  String? idStatusProspect, userId, idMediaCommunication, statusOrder, id;
 
   factory SubmitProspekV2Request.fromJson(Map<String, dynamic> json) =>
       SubmitProspekV2Request(
-        userId: json["user_id"],
-        prospectName: json["nama"],
-        productName: json["produk"],
-        otherProduct: json["produk_lainnya"],
-        totalTransaction: json["estimasi_pinjaman"],
-        idStatusProspect: json["status_prospek"],
-        dateCalled: json["date_called"],
-        idMediaCommunication: json["media"],
-        dateFu: json["date_next"],
-        noteCommunication: json["alasan"],
-        statusOrder: json["status_order"],
-        reasonNotOrder: json["reason_not_order"],
-      );
+          userId: json["user_id"],
+          prospectName: json["nama"],
+          productName: json["produk"],
+          otherProduct: json["produk_lainnya"],
+          totalTransaction: json["estimasi_pinjaman"],
+          idStatusProspect: json["status_prospek"],
+          dateCalled: json["date_called"],
+          idMediaCommunication: json["media"],
+          dateFu: json["date_next"],
+          noteCommunication: json["alasan"],
+          statusOrder: json["status_order"],
+          reasonNotOrder: json["reason_not_order"],
+          id: json["id_leads"]);
 
   Map<String, dynamic> toJson() => {
         "user_id": userId,
@@ -65,5 +66,6 @@ class SubmitProspekV2Request {
         "alasan": noteCommunication,
         "status_order": statusOrder,
         "reason_not_order": reasonNotOrder,
+        "id_leads": id
       };
 }

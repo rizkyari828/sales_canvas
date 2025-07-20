@@ -81,7 +81,7 @@ class DataLogin {
                 leads: true,
                 prospek: true,
                 agent: true,
-                benefit: true,
+                benefit: false,
                 lembur: true,
                 cuti: true,
                 kuisioner: true,

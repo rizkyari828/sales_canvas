@@ -1048,13 +1048,13 @@ class HomeController extends BaseController {
         'onPressed': goToAgentPages,
         'color': Colors.indigo,
       },
-      // {
-      //   'show': menuBenefit.value,
-      //   'icon': Icons.attach_money_rounded,
-      //   'title': 'Benefit',
-      //   'onPressed': goToBenefitPages,
-      //   'color': Colors.indigo,
-      // },
+      {
+        'show': menuBenefit.value,
+        'icon': Icons.attach_money_rounded,
+        'title': 'Benefit',
+        'onPressed': goToBenefitPages,
+        'color': Colors.indigo,
+      },
       {
         'show': menuLembur.value,
         'icon': Icons.work_rounded,

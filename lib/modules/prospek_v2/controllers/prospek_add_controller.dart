@@ -174,6 +174,7 @@ class ProspekV2AddController extends BaseController {
     }
 
     final req = SubmitProspekV2Request(
+      id: detail.value.id == null ? '0' : detail.value.id.toString(),
       userId: userId.value,
       prospectName: prospectNameController.text,
       productName: productNameController.text,
