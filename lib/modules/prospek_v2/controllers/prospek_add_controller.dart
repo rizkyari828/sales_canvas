@@ -181,7 +181,7 @@ class ProspekV2AddController extends BaseController {
       otherProduct: otherProduct.text,
       totalTransaction: totalTransaction.text,
       idStatusProspect: idStatusProspect.value.toString(),
-      dateCalled: dateCalled.text,
+      // dateCalled: dateCalled.text,
       idMediaCommunication: idMediaCommunication.value.toString(),
       dateFu: dateFu.text,
       noteCommunication: noteCommunication.text,

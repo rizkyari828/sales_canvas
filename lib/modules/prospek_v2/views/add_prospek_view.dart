@@ -26,16 +26,16 @@ class ProspekV2AddView extends GetView<ProspekV2AddController> {
                 ApprovalFlow.statusApprovalProspectV2(
                     controller.detail.value.sourceOrderValue),
                 SizedBox(height: 20.0),
-                CommonWidget.labelExpanded(label: 'ID Leads', value: ''),
+                controller.detail.value.idLead != 0
+                    ? CommonWidget.labelExpanded(
+                        label: 'ID Leads',
+                        value: controller.detail.value.idLead)
+                    : Container(),
                 SizedBox(height: 10.0),
                 CommonWidget.labelExpanded(
                     label: 'Nama Prospek',
                     value: controller.prospectNameController.text),
                 SizedBox(height: 10.0),
-                // CommonWidget.labelExpanded(
-                //     label: 'Produk yang Diminati',
-                //     value: controller.productNameController.text),
-                // SizedBox(height: 10.0),
               ],
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,19 +104,19 @@ class ProspekV2AddView extends GetView<ProspekV2AddController> {
                       controller.changeStatus(value, 'produk');
                     },
                   ),
-                  SizedBox(height: 20.0),
-                  InputInputField(
-                    isSuffixIcon: true,
-                    suffixIcon: Icon(Icons.calendar_today_rounded),
-                    controller: controller.dateCalled,
-                    labelText: "Tanggal Dihubungi",
-                    isRequired: true,
-                    showError: controller.showInputError.value,
-                    onSuffixPressed: () {
-                      controller.selectDate(context, controller.dateCalled);
-                    },
-                    isDisabled: controller.disabled.value,
-                  ),
+                  // SizedBox(height: 20.0),
+                  // InputInputField(
+                  //   isSuffixIcon: true,
+                  //   suffixIcon: Icon(Icons.calendar_today_rounded),
+                  //   controller: controller.dateCalled,
+                  //   labelText: "Tanggal Dihubungi",
+                  //   isRequired: true,
+                  //   showError: controller.showInputError.value,
+                  //   onSuffixPressed: () {
+                  //     controller.selectDate(context, controller.dateCalled);
+                  //   },
+                  //   isDisabled: controller.disabled.value,
+                  // ),
                   SizedBox(height: 20.0),
                   CustomDropDownSearch(
                     listItem: controller.listMediaCommuncation.map((item) {

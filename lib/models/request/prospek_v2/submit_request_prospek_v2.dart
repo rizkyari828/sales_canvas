@@ -18,7 +18,7 @@ class SubmitProspekV2Request {
       this.otherProduct,
       this.totalTransaction,
       this.idStatusProspect,
-      this.dateCalled,
+      // this.dateCalled,
       this.idMediaCommunication,
       this.dateFu,
       this.noteCommunication,
@@ -29,7 +29,7 @@ class SubmitProspekV2Request {
   String? prospectName,
       productName,
       totalTransaction,
-      dateCalled,
+      // dateCalled,
       dateFu,
       noteCommunication,
       reasonNotOrder,
@@ -45,12 +45,12 @@ class SubmitProspekV2Request {
           otherProduct: json["produk_lainnya"],
           totalTransaction: json["estimasi_pinjaman"],
           idStatusProspect: json["status_prospek"],
-          dateCalled: json["date_called"],
+          // dateCalled: json["date_called"],
           idMediaCommunication: json["media"],
           dateFu: json["date_next"],
-          noteCommunication: json["alasan"],
+          noteCommunication: json["catatan"],
           statusOrder: json["status_order"],
-          reasonNotOrder: json["reason_not_order"],
+          reasonNotOrder: json["alasan"],
           id: json["id_leads"]);
 
   Map<String, dynamic> toJson() => {
@@ -60,12 +60,12 @@ class SubmitProspekV2Request {
         "produk_lainnya": otherProduct,
         "estimasi_pinjaman": totalTransaction,
         "status_prospek": idStatusProspect,
-        "date_called": dateCalled,
+        // "date_called": dateCalled,
         "media": idMediaCommunication,
         "date_next": dateFu,
-        "alasan": noteCommunication,
+        "catatan": noteCommunication,
         "status_order": statusOrder,
-        "reason_not_order": reasonNotOrder,
+        "alasan": reasonNotOrder,
         "id_leads": id
       };
 }

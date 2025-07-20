@@ -42,6 +42,7 @@ class ShowProspekV2Response {
 
 class ProspekDetailV2 {
   int? id;
+  int? idLead;
   String? prospectName;
   String? productName;
   int? totalTransaction;
@@ -60,6 +61,7 @@ class ProspekDetailV2 {
 
   ProspekDetailV2(
       {this.id,
+      this.idLead,
       this.prospectName,
       this.productName,
       this.totalTransaction,
@@ -79,6 +81,7 @@ class ProspekDetailV2 {
   factory ProspekDetailV2.fromJson(Map<String, dynamic> json) =>
       ProspekDetailV2(
         id: json["id_prospek"],
+        idLead: json["id_leads"],
         prospectName: json["nama"],
         productName: json["produk_value"],
         totalTransaction: json["estimasi_pinjaman"],
@@ -101,6 +104,7 @@ class ProspekDetailV2 {
 
   Map<String, dynamic> toJson() => {
         "id_prospek": id,
+        'id_leads': idLead,
         "nama": prospectName,
         "produk_value": productName,
         "estimasi_pinjaman": totalTransaction,
