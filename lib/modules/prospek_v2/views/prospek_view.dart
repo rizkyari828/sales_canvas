@@ -64,10 +64,11 @@ class ProspekV2View extends GetView<ProspekV2Controller> {
                 secondParagraf: 'Nama Product',
                 secondParagrafValue:
                     controller.listProspek[i].productName ?? '',
-                thirdParagraf: 'Status Order',
+                thirdParagraf: 'Status Prospek',
                 thirdParagrafValue:
-                    controller.listProspek[i].sourceOrderValue ?? '',
-                status: controller.listProspek[i].statusProspectValue ?? '',
+                    controller.listProspek[i].statusProspectValue ?? '',
+                status: controller.listProspek[i].sourceOrderValue ?? '',
+                typeStatus: 'prospect'
               ),
             ),
           ],

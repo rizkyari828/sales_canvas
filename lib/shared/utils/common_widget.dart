@@ -479,6 +479,12 @@ class CommonWidget {
       } else {
         finalStatus = '0';
       }
+    } else if (typeStatus == 'prospect') {
+      if (status.toLowerCase() == 'sudah order') {
+        finalStatus = '1';
+      } else {
+        finalStatus = '0';
+      }
     } else {
       if (status.toLowerCase() == 'follow up') {
         finalStatus = '1';

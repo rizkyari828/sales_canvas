@@ -43,6 +43,7 @@ class ProspekV2AddView extends GetView<ProspekV2AddController> {
                   if (!controller.isEdit.value) ...[
                     SizedBox(height: 10.0),
                     InputInputField(
+                      isDisabled: controller.disabled.value,
                       keyboardType: TextInputType.text,
                       controller: controller.prospectNameController,
                       labelText: "Nama Prospek",
@@ -51,7 +52,7 @@ class ProspekV2AddView extends GetView<ProspekV2AddController> {
                     ),
                     SizedBox(height: 20.0),
                     CustomDropDownSearch(
-                      enabled: true,
+                      enabled: !controller.disabled.value,
                       selectedItem: controller.minatProduct.value,
                       listItem: controller.listMinatProduct.map((item) {
                         return item.nama.toString();
@@ -74,6 +75,7 @@ class ProspekV2AddView extends GetView<ProspekV2AddController> {
                         controller: controller.otherProduct,
                         isRequired: true,
                         showError: controller.showInputError.value,
+                        isDisabled: controller.disabled.value,
                       ),
                     ],
                   ],
@@ -83,6 +85,7 @@ class ProspekV2AddView extends GetView<ProspekV2AddController> {
                     labelText: "Estimasi Nilai Transaksi",
                     isRequired: true,
                     showError: controller.showInputError.value,
+                    isDisabled: controller.disabled.value,
                   ),
                   SizedBox(height: 20.0),
                   CustomDropDownSearch(
@@ -112,6 +115,7 @@ class ProspekV2AddView extends GetView<ProspekV2AddController> {
                     onSuffixPressed: () {
                       controller.selectDate(context, controller.dateCalled);
                     },
+                    isDisabled: controller.disabled.value,
                   ),
                   SizedBox(height: 20.0),
                   CustomDropDownSearch(
@@ -140,6 +144,7 @@ class ProspekV2AddView extends GetView<ProspekV2AddController> {
                     onSuffixPressed: () {
                       controller.selectDate(context, controller.dateFu);
                     },
+                    isDisabled: controller.disabled.value,
                   ),
                   SizedBox(height: 10.0),
                   CommonWidget.bodyText(text: "Catatan Komunikasi"),
@@ -148,6 +153,7 @@ class ProspekV2AddView extends GetView<ProspekV2AddController> {
                     controller: controller.noteCommunication,
                     isRequired: true,
                     showError: controller.showInputError.value,
+                    isDisabled: controller.disabled.value,
                   ),
                   SizedBox(height: 20.0),
                   CustomDropDownSearch(
@@ -174,6 +180,7 @@ class ProspekV2AddView extends GetView<ProspekV2AddController> {
                       controller: controller.reasonNotOrder,
                       isRequired: true,
                       showError: controller.showInputError.value,
+                      isDisabled: controller.disabled.value,
                     ),
                   ],
                   SizedBox(height: 100.0),
@@ -182,16 +189,18 @@ class ProspekV2AddView extends GetView<ProspekV2AddController> {
             ],
           ),
         )),
-        floatingActionButton: Padding(
-          padding: EdgeInsets.only(left: sw * .08),
-          child: CustomButton(
-            buttonText: 'SIMPAN',
-            width: MediaQuery.of(context).size.width,
-            onPressed: () {
-              controller.submitProspek();
-            },
-          ),
-        ),
+        floatingActionButton: controller.disabled.value
+            ? Container()
+            : Padding(
+                padding: EdgeInsets.only(left: sw * .08),
+                child: CustomButton(
+                  buttonText: 'SIMPAN',
+                  width: MediaQuery.of(context).size.width,
+                  onPressed: () {
+                    controller.submitProspek();
+                  },
+                ),
+              ),
       ),
     );
   }

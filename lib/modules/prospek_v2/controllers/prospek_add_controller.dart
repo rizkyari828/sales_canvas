@@ -28,7 +28,6 @@ class ProspekV2AddController extends BaseController {
   RxString mediaCommunicationValue = "".obs;
   RxBool isFilled = true.obs;
   RxBool disabled = false.obs;
-  RxBool enabled = true.obs;
   RxString minatProductId = "".obs;
   RxString minatProduct = "".obs;
   var listMinatProduct = <MasterData2>[].obs;
@@ -104,11 +103,9 @@ class ProspekV2AddController extends BaseController {
     status.value = detail.value.statusProspectValue ?? '';
 
     // Disable input jika status tertentu
-    if (detail.value.statusProspectValue == "3" ||
-        detail.value.statusProspectValue == "4" ||
-        detail.value.statusProspectValue == "5") {
+    if (detail.value.sourceOrderValue.toString().toLowerCase() ==
+        "sudah order") {
       disabled.value = true;
-      enabled.value = false;
     }
 
     isEdit.value = true;

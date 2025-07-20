@@ -145,13 +145,14 @@ class MainTab extends GetView<HomeController> {
                               text: 'Ringkasan', color: ColorConstants.black),
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          _benefitMenu(context),
-                          _eventMenu(context),
-                        ],
-                      ),
+                      _eventMenu(context, multipleColumn: false),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: [
+                      //     // _benefitMenu(context),
+                      //     _eventMenu(context, multipleColumn: false),
+                      //   ],
+                      // ),
                       // CommonWidget.rowHeight(height: sh * 0.01),
                       // _statusTaskBar(),
                       CommonWidget.rowHeight(),
@@ -363,41 +364,86 @@ class MainTab extends GetView<HomeController> {
     );
   }
 
-  Widget _eventMenu(context) {
+  Widget _eventMenu(context, {bool multipleColumn = true}) {
     final sw = SizeConfig().screenWidth;
     return InkWell(
       onTap: () => controller.goToEventPages(),
-      child: Container(
-          width: sw / 2.3,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10.0),
-            border: Border.all(width: 2.0, color: ColorConstants.borderColor),
-          ),
-          child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CommonWidget.bodyText(
-                        text: 'Event'.toUpperCase(),
-                        color: ColorConstants.black),
-                    CommonWidget.rowHeight(),
-                    Icon(
-                      Icons.calendar_month_rounded,
-                      size: 50,
-                      color: Colors.cyan,
-                    ),
-                    CommonWidget.rowHeight(),
-                    CommonWidget.subtitleText(
-                        text: controller.benefitDashboard.value?.event == ""
-                            ? 'Tidak ada event'
-                            : controller.benefitDashboard.value?.event ??
-                                'Tidak ada event'),
-                    CommonWidget.rowHeight(height: 8.0),
-                    CommonWidget.subtitleText(text: controller.dateNow.value),
-                    CommonWidget.rowHeight(),
-                  ]))),
+      child: Expanded(
+          child: Container(
+              decoration: BoxDecoration(
+                color: ColorConstants.white,
+                borderRadius: BorderRadius.circular(10.0),
+                border:
+                    Border.all(width: 2.0, color: ColorConstants.borderColor),
+              ),
+              child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: multipleColumn == true
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                              CommonWidget.bodyText(
+                                  text: 'Event'.toUpperCase(),
+                                  color: ColorConstants.black),
+                              CommonWidget.rowHeight(),
+                              Icon(
+                                Icons.calendar_month_rounded,
+                                size: 50,
+                                color: Colors.cyan,
+                              ),
+                              CommonWidget.rowHeight(),
+                              CommonWidget.subtitleText(
+                                  text: controller
+                                              .benefitDashboard.value?.event ==
+                                          ""
+                                      ? 'Tidak ada event'
+                                      : controller
+                                              .benefitDashboard.value?.event ??
+                                          'Tidak ada event'),
+                              CommonWidget.rowHeight(height: 8.0),
+                              CommonWidget.subtitleText(
+                                  text: controller.dateNow.value),
+                              CommonWidget.rowHeight(),
+                            ])
+                      : Column(
+                          children: [
+                            CommonWidget.bodyText(
+                                text: 'Event'.toUpperCase(),
+                                color: ColorConstants.black),
+                            // CommonWidget.rowHeight(height: 5),
+                            Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Column(
+                                    children: [
+                                      Icon(
+                                        Icons.calendar_month_rounded,
+                                        size: 50,
+                                        color: Colors.cyan,
+                                      ),
+                                    ],
+                                  ),
+                                  CommonWidget.rowWidth(),
+                                  Column(
+                                    children: [
+                                      CommonWidget.rowHeight(),
+                                      CommonWidget.subtitleText(
+                                          text: controller.benefitDashboard
+                                                      .value?.event ==
+                                                  ""
+                                              ? 'Tidak ada event'
+                                              : controller.benefitDashboard
+                                                      .value?.event ??
+                                                  'Tidak ada event'),
+                                      CommonWidget.rowHeight(height: 8.0),
+                                      CommonWidget.subtitleText(
+                                          text: controller.dateNow.value),
+                                      CommonWidget.rowHeight(),
+                                    ],
+                                  ),
+                                ]),
+                          ],
+                        )))),
     );
   }
 
