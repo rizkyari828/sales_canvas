@@ -1,5 +1,7 @@
 import 'package:sales/modules/prospek_v2/controllers/prospek_add_controller.dart';
+import 'package:sales/routes/app_pages.dart';
 import 'package:sales/shared/shared.dart';
+import 'package:sales/shared/utils/custom_pop_scope.dart';
 import 'package:sales/shared/widgets/approval.dart';
 import 'package:sales/shared/widgets/button.dart';
 import 'package:flutter/material.dart';
@@ -8,9 +10,18 @@ import 'package:get/get.dart';
 class ProspekV2AddView extends GetView<ProspekV2AddController> {
   @override
   Widget build(BuildContext context) {
+    return CustomPopScope(
+      onWillPop: () async {
+        Get.offAllNamed(Routes.PROSPEK_V2);
+        return false;
+      },
+      child: Obx(() => _buildWidget(context)),
+    );
+  }
+
+  Widget _buildWidget(BuildContext context) {
     final sw = SizeConfig().screenWidth;
-    return Obx(
-      () => Scaffold(
+    return Scaffold(
         backgroundColor: Colors.white,
         appBar: CommonWidget.appBar(
             title: controller.isEdit.value ? 'Edit Propek' : 'Tambah Prospek'),
@@ -200,9 +211,7 @@ class ProspekV2AddView extends GetView<ProspekV2AddController> {
                     controller.submitProspek();
                   },
                 ),
-              ),
-      ),
-    );
+              ));
   }
 
   Widget divLine() {

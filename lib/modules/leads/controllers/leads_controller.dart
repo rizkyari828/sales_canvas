@@ -71,9 +71,9 @@ class LeadsController extends BaseController {
   RxString statusLead = "".obs;
   RxString leadSource = "".obs;
   RxString minatProduct = "".obs;
-  RxString leadCategoryId = "".obs;
-  RxString statusLeadId = "".obs;
-  RxString leadSourceId = "".obs;
+  RxInt leadCategoryId = 0.obs;
+  RxInt statusLeadId = 0.obs;
+  RxInt leadSourceId = 0.obs;
   RxString minatProductId = "".obs;
 
   RxString actionStatus = "".obs;

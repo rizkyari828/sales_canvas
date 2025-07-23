@@ -46,8 +46,7 @@ class LeadsDetailView extends GetView<LeadsDetailController> {
                                   controller.statusLead.value = value;
                                   for (var f in controller.listStatusLead) {
                                     if (f.nama == value) {
-                                      controller.statusLeadId.value =
-                                          f.id.toString();
+                                      controller.statusLeadId.value = f.id ?? 0;
                                     }
                                   }
                                 },

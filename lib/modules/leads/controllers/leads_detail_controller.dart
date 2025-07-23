@@ -26,7 +26,7 @@ class LeadsDetailController extends BaseController {
   var listStatusLead = <MasterData2>[].obs;
   var masterData = <MasterData2>[].obs;
   RxString statusLead = "".obs;
-  RxString statusLeadId = "".obs;
+  RxInt statusLeadId = 0.obs;
   RxBool isEdit = false.obs;
 
   @override
@@ -38,6 +38,8 @@ class LeadsDetailController extends BaseController {
   void onReady() {
     super.onReady();
     detail.value = argm['data_lead'];
+    statusLeadId.value = detail.value.idStatusLead ?? 0;
+    statusLead.value = detail.value.statusLead ?? '';
     if (detail.value.statusLead != 'Prospek') {
       isEdit.value = true;
     }
@@ -67,7 +69,7 @@ class LeadsDetailController extends BaseController {
   }
 
   void submit() async {
-    if (statusLeadId.isEmpty) {
+    if (statusLeadId.value == 0) {
       showInputError.value = true;
       EasyLoading.showError('Semua field wajib diisi');
       return;
@@ -75,15 +77,17 @@ class LeadsDetailController extends BaseController {
 
     final res = await apiRepository.submitStatusLead(
       SubmitStatusLeadRequest(
-          idUser: userId.value,
-          idStatusLead: statusLeadId.value,
-          idLead: detail.value.idLead),
+          idStatusLead: statusLeadId.value, idLead: detail.value.idLead),
     );
     if (res?.error == false) {
       EasyLoading.showSuccess('Berhasil disimpan');
       EasyLoading.dismiss();
       if (statusLead.value == 'Prospek') {
-        goToDetailPages();
+        goToDetailPages(dataProspect: res?.data?.first ?? ProspekDetailV2());
+      } else {
+        detail.value.statusLead = statusLead.value;
+        print(detail);
+        detail.refresh();
       }
     } else {
       EasyLoading.showError('Gagal disimpan');

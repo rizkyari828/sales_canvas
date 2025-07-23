@@ -45,7 +45,7 @@ class AddLeadsView extends GetView<LeadsController> {
                         controller.leadSource.value = value;
                         for (var f in controller.listLeadSource) {
                           if (f.nama == value) {
-                            controller.leadSourceId.value = f.id.toString();
+                            controller.leadSourceId.value = f.id ?? 0;
                           }
                         }
                         controller.changeStatus(value);
@@ -104,7 +104,7 @@ class AddLeadsView extends GetView<LeadsController> {
                         controller.leadCategory.value = value;
                         for (var f in controller.listLeadCategory) {
                           if (f.nama == value) {
-                            controller.leadCategoryId.value = f.id.toString();
+                            controller.leadCategoryId.value = f.id ?? 0;
                           }
                         }
                         controller.changeStatus(value);
@@ -130,7 +130,7 @@ class AddLeadsView extends GetView<LeadsController> {
                         controller.statusLead.value = value;
                         for (var f in controller.listStatusLead) {
                           if (f.nama == value) {
-                            controller.statusLeadId.value = f.id.toString();
+                            controller.statusLeadId.value = f.id ?? 0;
                           }
                         }
                         controller.changeStatus(value);

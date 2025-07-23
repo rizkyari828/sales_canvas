@@ -1412,7 +1412,7 @@ class ApiRepository {
       SubmitStatusLeadRequest data) async {
     try {
       final res = await apiProvider
-          .submitStatusLead('/api/simpan_leads', data)
+          .submitStatusLead('/api/update_leads', data)
           .timeout(Duration(seconds: timeout));
       if (res.statusCode == 200 || res.statusCode == 401) {
         return ShowProspekV2Response.fromJson(res.body);

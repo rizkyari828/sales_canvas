@@ -80,7 +80,7 @@ class ProspekV2AddController extends BaseController {
     print(argmLead.id);
     final res = await apiRepository
         .showProspekV2(ShowProspectV2Request(id: argmLead.id.toString()));
-    detail.value = res?.data!.first ?? ProspekDetailV2();
+    detail.value = res?.data?.first ?? ProspekDetailV2();
     // detail.value = argm['data_lead'];
     if (detail.value.sourceOrderValue == 'tidak order') {
       optionalTextOrder.value = true;

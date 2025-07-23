@@ -1,20 +1,29 @@
-import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'package:sales/modules/prospek_v2/controllers/prospek_controller.dart';
+import 'package:sales/routes/app_pages.dart';
 import 'package:sales/shared/constants/constants.dart';
+import 'package:sales/shared/utils/custom_pop_scope.dart';
 import 'package:sales/shared/widgets/approval.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../shared/utils/common_widget.dart';
 
 class ProspekV2View extends GetView<ProspekV2Controller> {
   final data = Get.arguments;
-
   @override
   Widget build(BuildContext context) {
+    return CustomPopScope(
+      onWillPop: () async {
+        Get.offAllNamed(Routes.HOME);
+        return false;
+      },
+      child: _buildWidget(context),
+    );
+  }
+
+  Widget _buildWidget(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           iconTheme:
@@ -60,16 +69,15 @@ class ProspekV2View extends GetView<ProspekV2Controller> {
                 }
               },
               child: CommonWidget.customStatusCard(
-                firstParagraf: controller.listProspek[i].prospectName ?? '',
-                secondParagraf: 'Nama Product',
-                secondParagrafValue:
-                    controller.listProspek[i].productName ?? '',
-                thirdParagraf: 'Status Prospek',
-                thirdParagrafValue:
-                    controller.listProspek[i].statusProspectValue ?? '',
-                status: controller.listProspek[i].sourceOrderValue ?? '',
-                typeStatus: 'prospect'
-              ),
+                  firstParagraf: controller.listProspek[i].prospectName ?? '',
+                  secondParagraf: 'Nama Product',
+                  secondParagrafValue:
+                      controller.listProspek[i].productName ?? '',
+                  thirdParagraf: 'Status Prospek',
+                  thirdParagrafValue:
+                      controller.listProspek[i].statusProspectValue ?? '',
+                  status: controller.listProspek[i].sourceOrderValue ?? '',
+                  typeStatus: 'prospect'),
             ),
           ],
         ),

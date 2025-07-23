@@ -288,11 +288,11 @@ class ApprovalFlow {
         height: sh * .05,
         child: Card(
             elevation: 0,
-            color: label == 'Booking'
+            color: label.toString().toLowerCase() == 'prospek'
                 ? Colors.green
-                : label == 'Order' || label == 'Prospek'
-                    ? Colors.yellow[800]
-                    : Colors.red,
+                : label.toString().toLowerCase() == 'tidak tertarik'
+                    ? Colors.red
+                    : Colors.yellow[800],
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
               Radius.circular(5.0),
@@ -354,9 +354,9 @@ class ApprovalFlow {
         height: sh * .05,
         child: Card(
             elevation: 0,
-            color: label == 'Sudah Order'
+            color: label.toString().toLowerCase() == 'sudah order'
                 ? Colors.green
-                : label == 'Belum Order'
+                : label.toString().toLowerCase() == 'belum order'
                     ? Colors.yellow[800]
                     : Colors.red,
             shape: RoundedRectangleBorder(

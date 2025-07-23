@@ -32,16 +32,16 @@ class SubmitLeadRequest {
 
   String? idUser;
   String? date;
-  String? leadSource;
+  int? leadSource;
   String? optionLeadSource;
   String? email;
   String? name;
   String? noHp;
   String? latitude;
   String? longitude;
-  String? leadCategory;
+  int? leadCategory;
   String? minatProduct;
-  String? leadStatus;
+  int? leadStatus;
   String? note;
   String? alamat;
   final List<PhotoAttachment>? photos;

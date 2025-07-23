@@ -18,7 +18,7 @@ class AddAgentView extends GetView<AgentController> {
     final sw = SizeConfig().screenWidth;
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: CommonWidget.appBar(title: 'Tambah Leads'),
+        appBar: CommonWidget.appBar(title: 'Tambah Agent'),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(25.0),

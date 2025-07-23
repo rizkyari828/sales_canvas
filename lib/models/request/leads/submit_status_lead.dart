@@ -11,18 +11,15 @@ String SubmitStatusLeadRequestToJson(SubmitStatusLeadRequest data) =>
     json.encode(data.toJson());
 
 class SubmitStatusLeadRequest {
-  SubmitStatusLeadRequest({this.idUser, this.idStatusLead, this.idLead});
+  SubmitStatusLeadRequest({this.idStatusLead, this.idLead});
 
-  String? idUser;
-  String? idStatusLead;
-  String? idLead;
+  int? idStatusLead;
+  int? idLead;
 
   factory SubmitStatusLeadRequest.fromJson(Map<String, dynamic> json) =>
       SubmitStatusLeadRequest(
-          idUser: json["user_id"],
-          idStatusLead: json["id_status_lead"],
-          idLead: json["id_lead"]);
+          idStatusLead: json["status_leads"], idLead: json["id_leads"]);
 
   Map<String, dynamic> toJson() =>
-      {'user_id': idUser, 'id_status_lead': idStatusLead, 'id_lead': idLead};
+      {'status_leads': idStatusLead, 'id_leads': idLead};
 }
