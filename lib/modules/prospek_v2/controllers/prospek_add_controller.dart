@@ -82,9 +82,14 @@ class ProspekV2AddController extends BaseController {
         .showProspekV2(ShowProspectV2Request(id: argmLead.id.toString()));
     detail.value = res?.data!.first ?? ProspekDetailV2();
     // detail.value = argm['data_lead'];
+    if (detail.value.sourceOrderValue == 'tidak order') {
+      optionalTextOrder.value = true;
+    } else {
+      optionalTextOrder.value = false;
+    }
 
     prospectNameController.text = detail.value.prospectName ?? '';
-    productNameController.text = detail.value.productName ?? '';
+    minatProduct.value = detail.value.productName ?? '';
     totalTransaction.text = detail.value.totalTransaction.toString();
     dateCalled.text = detail.value.dateCalled != null
         ? DateFormat('yyyy-MM-dd').format(detail.value.dateCalled!)
@@ -200,7 +205,7 @@ class ProspekV2AddController extends BaseController {
 
     if (res?.error == false) {
       EasyLoading.showSuccess('Berhasil disimpan');
-      Get.back();
+      Get.back(result: true);
     } else {
       EasyLoading.showError('Gagal disimpan');
     }

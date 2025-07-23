@@ -1,7 +1,5 @@
-import 'package:intl/intl.dart';
 import 'package:sales/api/api_repository.dart';
 import 'package:sales/models/request/user_id_request.dart';
-import 'package:sales/models/response/master_data_2_response.dart';
 import 'package:sales/models/response/prospek_v2/detail_prospek_v2_response.dart';
 import 'package:sales/routes/app_pages.dart';
 import 'package:get/get.dart';
@@ -78,7 +76,12 @@ class ProspekV2Controller extends GetxController {
     Get.toNamed(Routes.ADD_PROSPEK_V2, arguments: {'data_lead': dataProspect});
   }
 
-  void goToAddPages() {
-    Get.toNamed(Routes.ADD_PROSPEK_V2);
+  void goToAddPages() async {
+    var result = await Get.toNamed(Routes.ADD_PROSPEK_V2);
+    if (result == true) {
+      listProspek.clear();
+      page.value = 1;
+      getProspek(page.value);
+    }
   }
 }

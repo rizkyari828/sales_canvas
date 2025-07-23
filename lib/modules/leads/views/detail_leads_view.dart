@@ -29,6 +29,43 @@ class LeadsDetailView extends GetView<LeadsDetailController> {
                       ApprovalFlow.statusApprovalProspect(
                           controller.detail.value.statusLead),
                       SizedBox(height: 20.0),
+                      if (controller.isEdit.value) ...[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width / 1.9,
+                              child: CustomDropDownSearch(
+                                enabled: true,
+                                selectedItem: controller.statusLead.value,
+                                listItem: controller.listStatusLead.map((item) {
+                                  return item.nama.toString();
+                                }).toList(),
+                                labelText: "Status Lead",
+                                onChanged: (value) async {
+                                  controller.statusLead.value = value;
+                                  for (var f in controller.listStatusLead) {
+                                    if (f.nama == value) {
+                                      controller.statusLeadId.value =
+                                          f.id.toString();
+                                    }
+                                  }
+                                },
+                              ),
+                            ),
+                            CustomButton(
+                              buttonText: 'UPDATE',
+                              width: MediaQuery.of(context).size.width / 3,
+                              onPressed: () {
+                                controller.submit();
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                      SizedBox(height: 20.0),
+                      Divider(color: ColorConstants.borderColor),
+                      SizedBox(height: 10.0),
                       CommonWidget.labelExpanded(
                           label: 'Sumber Leads',
                           value: controller.detail.value.sumberLeadsId
@@ -88,30 +125,6 @@ class LeadsDetailView extends GetView<LeadsDetailController> {
                         padding: EdgeInsets.all(8.0),
                         child: Obx(() =>
                             CustomImagePicker.previewGridImages(controller)),
-                      ),
-                      CustomDropDownSearch(
-                        enabled: true,
-                        selectedItem: controller.statusLead.value,
-                        listItem: controller.listStatusLead.map((item) {
-                          return item.nama.toString();
-                        }).toList(),
-                        labelText: "Status Lead",
-                        onChanged: (value) async {
-                          controller.statusLead.value = value;
-                          for (var f in controller.listStatusLead) {
-                            if (f.nama == value) {
-                              controller.statusLeadId.value = f.id.toString();
-                            }
-                          }
-                        },
-                      ),
-                      SizedBox(height: 20.0),
-                      CustomButton(
-                        buttonText: 'UPDATE STATUS',
-                        width: MediaQuery.of(context).size.width,
-                        onPressed: () {
-                          controller.submit();
-                        },
                       ),
                     ],
                   ),

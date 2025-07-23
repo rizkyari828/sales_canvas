@@ -27,6 +27,7 @@ class LeadsDetailController extends BaseController {
   var masterData = <MasterData2>[].obs;
   RxString statusLead = "".obs;
   RxString statusLeadId = "".obs;
+  RxBool isEdit = false.obs;
 
   @override
   void onInit() {
@@ -37,6 +38,9 @@ class LeadsDetailController extends BaseController {
   void onReady() {
     super.onReady();
     detail.value = argm['data_lead'];
+    if (detail.value.statusLead != 'Prospek') {
+      isEdit.value = true;
+    }
     getMasterData();
     imageFileList.addAll(detail.value.foto ?? []);
     loadUsers();
@@ -78,7 +82,9 @@ class LeadsDetailController extends BaseController {
     if (res?.error == false) {
       EasyLoading.showSuccess('Berhasil disimpan');
       EasyLoading.dismiss();
-      goToDetailPages();
+      if (statusLead.value == 'Prospek') {
+        goToDetailPages();
+      }
     } else {
       EasyLoading.showError('Gagal disimpan');
       EasyLoading.dismiss();
