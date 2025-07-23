@@ -40,7 +40,7 @@ class ProspekV2AddView extends GetView<ProspekV2AddController> {
                 controller.detail.value.idLead != 0
                     ? CommonWidget.labelExpanded(
                         label: 'ID Leads',
-                        value: controller.detail.value.idLead)
+                        value: controller.detail.value.idLead.toString())
                     : Container(),
                 SizedBox(height: 10.0),
                 CommonWidget.labelExpanded(
