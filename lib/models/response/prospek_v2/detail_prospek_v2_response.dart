@@ -58,6 +58,8 @@ class ProspekDetailV2 {
   int? idMediaCommunication;
   int? idStatusOrder;
   int? idProduct;
+  String? gender;
+  String? age;
 
   ProspekDetailV2(
       {this.id,
@@ -76,7 +78,9 @@ class ProspekDetailV2 {
       this.idStatusProspect,
       this.idMediaCommunication,
       this.idStatusOrder,
-      this.idProduct});
+      this.idProduct,
+      this.age,
+      this.gender});
 
   factory ProspekDetailV2.fromJson(Map<String, dynamic> json) {
     print(json); // Untuk debug
@@ -100,6 +104,8 @@ class ProspekDetailV2 {
       idMediaCommunication: json["media"],
       idStatusOrder: json["status_order"],
       idProduct: json["produk"],
+      gender: json["jenis_kelamin"],
+      age: json["umur"],
     );
   }
 
@@ -121,6 +127,8 @@ class ProspekDetailV2 {
         "status_prospek": idStatusProspect,
         "media": idMediaCommunication,
         "status_order": idStatusOrder,
-        "produk": idProduct
+        "produk": idProduct,
+        'jenis_kelamin': gender,
+        'age': age
       };
 }

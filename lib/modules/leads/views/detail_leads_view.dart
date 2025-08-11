@@ -61,10 +61,10 @@ class LeadsDetailView extends GetView<LeadsDetailController> {
                             ),
                           ],
                         ),
+                        SizedBox(height: 20.0),
+                        Divider(color: ColorConstants.borderColor),
+                        SizedBox(height: 10.0),
                       ],
-                      SizedBox(height: 20.0),
-                      Divider(color: ColorConstants.borderColor),
-                      SizedBox(height: 10.0),
                       CommonWidget.labelExpanded(
                           label: 'Sumber Leads',
                           value: controller.detail.value.sumberLeadsId

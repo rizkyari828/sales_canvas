@@ -25,7 +25,9 @@ class SubmitProspekV2Request {
       this.statusOrder,
       this.reasonNotOrder,
       this.id,
-      this.idLead});
+      this.idLead,
+      this.gender,
+      this.age});
 
   String? prospectName,
       // productName,
@@ -42,7 +44,9 @@ class SubmitProspekV2Request {
       statusOrder,
       id,
       idLead,
-      idProductName;
+      idProductName,
+      gender,
+      age;
 
   factory SubmitProspekV2Request.fromJson(Map<String, dynamic> json) =>
       SubmitProspekV2Request(
@@ -59,7 +63,9 @@ class SubmitProspekV2Request {
           statusOrder: json["status_order"],
           reasonNotOrder: json["alasan"],
           id: json["id_prospek"],
-          idLead: json["id_leads"]);
+          idLead: json["id_leads"],
+          gender: json["jenis_kelamin"],
+          age: json["umur"]);
 
   Map<String, dynamic> toJson() => {
         "user_id": userId,
@@ -75,6 +81,8 @@ class SubmitProspekV2Request {
         "status_order": statusOrder,
         "alasan": reasonNotOrder,
         "id_prospek": id,
-        "id_leads": idLead
+        "id_leads": idLead,
+        "jenis_kelamin": gender,
+        "umur": age
       };
 }

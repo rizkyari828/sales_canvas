@@ -20,12 +20,14 @@ class ProspekV2AddController extends BaseController {
   RxInt idSource = 0.obs;
   RxInt idStatusProspect = 0.obs;
   RxInt idMediaCommunication = 0.obs;
+  RxString idGender = ''.obs;
   RxDouble latitude = 0.0.obs;
   RxDouble longitude = 0.0.obs;
   RxString status = "".obs;
   RxString sourceOrderValue = "".obs;
   RxString statusProspectValue = "".obs;
   RxString mediaCommunicationValue = "".obs;
+  RxString genderValue = "".obs;
   RxBool isFilled = true.obs;
   RxBool disabled = false.obs;
   RxInt minatProductId = 0.obs;
@@ -42,10 +44,12 @@ class ProspekV2AddController extends BaseController {
   final reasonNotOrder = TextEditingController();
   final otherProduct = TextEditingController();
   final totalTransaction = TextEditingController();
+  final ageController = TextEditingController();
   var masterData = <MasterData2>[].obs;
   var listSourceOfOrder = <MasterData2>[].obs;
   var listMediaCommuncation = <MasterData2>[].obs;
   var listStatusProspect = <MasterData2>[].obs;
+  var listGender = <MasterData2>[].obs;
 
   final argm = Get.arguments;
   var detail = ProspekDetailV2().obs;
@@ -60,6 +64,9 @@ class ProspekV2AddController extends BaseController {
   void onInit() {
     super.onInit();
     getMasterData();
+
+    listGender.add(MasterData2(id: 1, nama: 'Laki-Laki', flag: 'gender'));
+    listGender.add(MasterData2(id: 2, nama: 'Perempuan', flag: 'gender'));
   }
 
   @override
@@ -184,22 +191,23 @@ class ProspekV2AddController extends BaseController {
     }
 
     final req = SubmitProspekV2Request(
-      id: detail.value.id == null ? '0' : detail.value.id.toString(),
-      userId: userId.value,
-      prospectName: prospectNameController.text,
-      idProductName: minatProductId.value.toString(),
-      otherProduct: otherProduct.text,
-      totalTransaction: totalTransaction.text,
-      idStatusProspect: idStatusProspect.value.toString(),
-      // dateCalled: dateCalled.text,
-      idMediaCommunication: idMediaCommunication.value.toString(),
-      dateFu: dateFu.text,
-      noteCommunication: noteCommunication.text,
-      statusOrder: idSource.value.toString(),
-      reasonNotOrder: reasonNotOrder.text,
-      idLead:
-          detail.value.idLead == null ? '0' : detail.value.idLead.toString(),
-    );
+        id: detail.value.id == null ? '0' : detail.value.id.toString(),
+        userId: userId.value,
+        prospectName: prospectNameController.text,
+        idProductName: minatProductId.value.toString(),
+        otherProduct: otherProduct.text,
+        totalTransaction: totalTransaction.text,
+        idStatusProspect: idStatusProspect.value.toString(),
+        // dateCalled: dateCalled.text,
+        idMediaCommunication: idMediaCommunication.value.toString(),
+        dateFu: dateFu.text,
+        noteCommunication: noteCommunication.text,
+        statusOrder: idSource.value.toString(),
+        reasonNotOrder: reasonNotOrder.text,
+        idLead:
+            detail.value.idLead == null ? '0' : detail.value.idLead.toString(),
+        gender: idGender.value,
+        age: ageController.text);
 
     final res = await apiRepository.submitProspectV2(req);
 
@@ -251,6 +259,12 @@ class ProspekV2AddController extends BaseController {
         optionalTextProduk.value = true;
       } else {
         optionalTextProduk.value = false;
+      }
+    } else if (type == 'gender') {
+      if (value.toLowerCase() == 'laki-laki') {
+        idGender.value = 'L';
+      } else {
+        idGender.value = 'P';
       }
     } else {
       if (value.toLowerCase() == 'tidak order') {

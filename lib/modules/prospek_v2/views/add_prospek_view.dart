@@ -24,7 +24,7 @@ class ProspekV2AddView extends GetView<ProspekV2AddController> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: CommonWidget.appBar(
-            title: controller.isEdit.value ? 'Edit Propek' : 'Tambah Prospek'),
+            title: controller.isEdit.value ? 'Edit Prospek' : 'Tambah Prospek'),
         body: SingleChildScrollView(
             child: Padding(
           padding: const EdgeInsets.all(25.0),
@@ -35,7 +35,8 @@ class ProspekV2AddView extends GetView<ProspekV2AddController> {
               SizedBox(height: 20.0),
               if (controller.isEdit.value) ...[
                 ApprovalFlow.statusApprovalProspectV2(
-                    controller.detail.value.sourceOrderValue),
+                    controller.detail.value.sourceOrderValue ??
+                        'Belum ada Status'),
                 SizedBox(height: 20.0),
                 controller.detail.value.idLead != 0
                     ? CommonWidget.labelExpanded(
@@ -63,6 +64,33 @@ class ProspekV2AddView extends GetView<ProspekV2AddController> {
                     ),
                     SizedBox(height: 20.0),
                   ],
+
+                  CustomDropDownSearch(
+                    listItem: controller.listGender.map((item) {
+                      return item.nama;
+                    }).toList(),
+                    selectedItem: controller.genderValue.value,
+                    labelText: "Jenis Kelamin",
+                    onChanged: (value) async {
+                      controller.genderValue.value = value;
+                      // for (var f in controller.listGender) {
+                      //   if (f.nama == value) {
+                      //     controller.idGender.value = f.id ?? 0;
+                      //   }
+                      // }
+                      controller.changeStatus(value, 'gender');
+                    },
+                  ),
+                  SizedBox(height: 20.0),
+                  InputInputField(
+                    isDisabled: controller.disabled.value,
+                    keyboardType: TextInputType.number,
+                    controller: controller.ageController,
+                    labelText: "Umur",
+                    isRequired: true,
+                    showError: controller.showInputError.value,
+                  ),
+                  SizedBox(height: 20.0),
                   CustomDropDownSearch(
                     enabled: !controller.disabled.value,
                     selectedItem: controller.minatProduct.value,

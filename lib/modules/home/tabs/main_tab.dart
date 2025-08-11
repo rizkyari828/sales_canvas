@@ -75,9 +75,14 @@ class MainTab extends GetView<HomeController> {
                   child: Column(
                     children: [
                       CommonWidget.rowHeight(),
-                      header(controller),
-                      Container(
-                          height: sh * .26, child: _getSlideImage(controller)),
+                      controller.pendingAttendanceCount != 0
+                          ? pendingTask()
+                          : SizedBox(),
+                      dailyProgress(),
+                      attendanceTask(),
+                      // CommonWidget.rowHeight(),
+                      // Container(
+                      //     height: sh * .26, child: _getSlideImage(controller)),
                       ...rows,
                       // Row(
                       //   mainAxisAlignment: MainAxisAlignment.spaceBetween,

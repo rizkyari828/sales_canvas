@@ -76,7 +76,8 @@ class ProspekV2View extends GetView<ProspekV2Controller> {
                   thirdParagraf: 'Status Prospek',
                   thirdParagrafValue:
                       controller.listProspek[i].statusProspectValue ?? '',
-                  status: controller.listProspek[i].sourceOrderValue ?? '',
+                  status: controller.listProspek[i].sourceOrderValue ??
+                      'Belum ada Status',
                   typeStatus: 'prospect'),
             ),
           ],

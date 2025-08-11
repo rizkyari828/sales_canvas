@@ -40,7 +40,7 @@ class LeadsDetailController extends BaseController {
     detail.value = argm['data_lead'];
     statusLeadId.value = detail.value.idStatusLead ?? 0;
     statusLead.value = detail.value.statusLead ?? '';
-    if (detail.value.statusLead != 'Prospek') {
+    if (detail.value.statusLead.toString().toLowerCase() != 'prospek') {
       isEdit.value = true;
     }
     getMasterData();
@@ -82,7 +82,7 @@ class LeadsDetailController extends BaseController {
     if (res?.error == false) {
       EasyLoading.showSuccess('Berhasil disimpan');
       EasyLoading.dismiss();
-      if (statusLead.value == 'Prospek') {
+      if (statusLead.value.toString().toLowerCase() == 'prospek') {
         goToDetailPages(dataProspect: res?.data?.first ?? ProspekDetailV2());
       } else {
         detail.value.statusLead = statusLead.value;

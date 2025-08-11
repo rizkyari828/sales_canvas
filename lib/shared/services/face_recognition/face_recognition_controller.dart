@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:face_camera/face_camera.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:sales/api/api_repository.dart';
 import 'package:sales/modules/home/base_controller.dart';
@@ -10,6 +11,7 @@ class FaceRecognitionController extends BaseController {
       : super(apiRepository: apiRepository);
 
   Rx<File>? faceCameraCapture = Rx<File>(File(""));
+  RxBool isFaceDetected = false.obs;
 
   late FaceCameraController faceCameraController;
 
@@ -21,10 +23,14 @@ class FaceRecognitionController extends BaseController {
       autoCapture: false,
       defaultCameraLens: CameraLens.front,
       onCapture: (File? image) {
-        faceCameraCapture?.value = image ?? File('');
+        if (isFaceDetected.value == true) {
+          faceCameraCapture?.value = image ?? File('');
+        } else {
+          EasyLoading.showError('Wajah tidak ditemukan');
+        }
       },
       onFaceDetected: (Face? face) {
-        //Do something
+        isFaceDetected.value = true;
       },
     );
   }
