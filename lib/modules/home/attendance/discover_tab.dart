@@ -92,7 +92,7 @@ class DiscoverTab extends GetView<AttendanceController> {
                                                   controller.isClockIn.value ==
                                                           true
                                                       ? false
-                                                      : false,
+                                                      : s,
                                               borderColor:
                                                   ColorConstants.mainColor,
                                               buttonColor: Colors.white,

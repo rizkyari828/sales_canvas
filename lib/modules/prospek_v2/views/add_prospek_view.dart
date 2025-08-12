@@ -64,32 +64,31 @@ class ProspekV2AddView extends GetView<ProspekV2AddController> {
                     ),
                     SizedBox(height: 20.0),
                   ],
-
-                  CustomDropDownSearch(
-                    listItem: controller.listGender.map((item) {
-                      return item.nama;
-                    }).toList(),
-                    selectedItem: controller.genderValue.value,
-                    labelText: "Jenis Kelamin",
-                    onChanged: (value) async {
-                      controller.genderValue.value = value;
-                      // for (var f in controller.listGender) {
-                      //   if (f.nama == value) {
-                      //     controller.idGender.value = f.id ?? 0;
-                      //   }
-                      // }
-                      controller.changeStatus(value, 'gender');
-                    },
-                  ),
-                  SizedBox(height: 20.0),
-                  InputInputField(
-                    isDisabled: controller.disabled.value,
-                    keyboardType: TextInputType.number,
-                    controller: controller.ageController,
-                    labelText: "Umur",
-                    isRequired: true,
-                    showError: controller.showInputError.value,
-                  ),
+                  // CustomDropDownSearch(
+                  //   listItem: controller.listGender.map((item) {
+                  //     return item.nama;
+                  //   }).toList(),
+                  //   selectedItem: controller.genderValue.value,
+                  //   labelText: "Jenis Kelamin",
+                  //   onChanged: (value) async {
+                  //     controller.genderValue.value = value;
+                  //     // for (var f in controller.listGender) {
+                  //     //   if (f.nama == value) {
+                  //     //     controller.idGender.value = f.id ?? 0;
+                  //     //   }
+                  //     // }
+                  //     controller.changeStatus(value, 'gender');
+                  //   },
+                  // ),
+                  // SizedBox(height: 20.0),
+                  // InputInputField(
+                  //   isDisabled: controller.disabled.value,
+                  //   keyboardType: TextInputType.number,
+                  //   controller: controller.ageController,
+                  //   labelText: "Umur",
+                  //   isRequired: true,
+                  //   showError: controller.showInputError.value,
+                  // ),
                   SizedBox(height: 20.0),
                   CustomDropDownSearch(
                     enabled: !controller.disabled.value,
