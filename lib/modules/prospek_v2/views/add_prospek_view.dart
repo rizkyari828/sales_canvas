@@ -64,7 +64,6 @@ class ProspekV2AddView extends GetView<ProspekV2AddController> {
                     ),
                     SizedBox(height: 20.0),
                   ],
-
                   CustomDropDownSearch(
                     listItem: controller.listGender.map((item) {
                       return item.nama;
