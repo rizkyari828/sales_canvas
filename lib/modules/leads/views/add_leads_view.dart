@@ -85,6 +85,31 @@ class AddLeadsView extends GetView<LeadsController> {
                       isRequired: true,
                       showError: controller.showInputError.value,
                     ),
+                    CustomDropDownSearch(
+                      listItem: controller.listGender.map((item) {
+                        return item.nama;
+                      }).toList(),
+                      selectedItem: controller.genderValue.value,
+                      labelText: "Jenis Kelamin",
+                      onChanged: (value) async {
+                        controller.genderValue.value = value;
+                        // for (var f in controller.listGender) {
+                        //   if (f.nama == value) {
+                        //     controller.idGender.value = f.id ?? 0;
+                        //   }
+                        // }
+                        controller.changeStatus(value, type: 'gender');
+                      },
+                    ),
+                    SizedBox(height: 20.0),
+                    InputInputField(
+                      keyboardType: TextInputType.number,
+                      controller: controller.ageController,
+                      labelText: "Umur",
+                      isRequired: true,
+                      showError: controller.showInputError.value,
+                    ),
+                    SizedBox(height: 20.0),
                     CommonWidget.bodyText(text: "Detail Alamat"),
                     SizedBox(height: 10.0),
                     TextAreaField(

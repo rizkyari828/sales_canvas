@@ -47,6 +47,7 @@ class LeadsController extends BaseController {
   final TextEditingController noHpController = TextEditingController();
   final TextEditingController alamatController = TextEditingController();
   final TextEditingController minatProductController = TextEditingController();
+  final ageController = TextEditingController();
 
   RxString groupName = "".obs;
   RxString groupId = "".obs;
@@ -67,6 +68,9 @@ class LeadsController extends BaseController {
   var listStatusLead = <MasterData2>[].obs;
 
   var masterData = <MasterData2>[].obs;
+  var listGender = <MasterData2>[].obs;
+  RxString genderValue = "".obs;
+  RxString idGender = ''.obs;
   RxString leadCategory = "".obs;
   RxString statusLead = "".obs;
   RxString leadSource = "".obs;
@@ -81,9 +85,17 @@ class LeadsController extends BaseController {
   RxBool optionalText = false.obs;
   RxString optionalTextValue = ''.obs;
 
-  void changeStatus(value) {
+  void changeStatus(value, {String type = ''}) {
     if (value == 'Dll') {
       optionalText.value = true;
+    }
+
+    if (type == 'gender') {
+      if (value.toLowerCase() == 'laki-laki') {
+        idGender.value = 'L';
+      } else {
+        idGender.value = 'P';
+      }
     }
   }
 
@@ -174,7 +186,9 @@ class LeadsController extends BaseController {
           leadStatus: statusLeadId.value,
           note: noteController.text,
           photos: attachments,
-          alamat: alamatController.text),
+          alamat: alamatController.text,
+          gender: idGender.value,
+          age: ageController.text),
     );
     if (res?.error == false) {
       EasyLoading.showSuccess('Berhasil disimpan');
@@ -280,6 +294,8 @@ class LeadsController extends BaseController {
   void onInit() {
     super.onInit();
 
+    listGender.add(MasterData2(id: 1, nama: 'Laki-Laki', flag: 'gender'));
+    listGender.add(MasterData2(id: 2, nama: 'Perempuan', flag: 'gender'));
     determinePosition();
     getMasterData();
   }
