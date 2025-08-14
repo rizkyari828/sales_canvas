@@ -85,6 +85,7 @@ class AddLeadsView extends GetView<LeadsController> {
                       isRequired: true,
                       showError: controller.showInputError.value,
                     ),
+                    SizedBox(height: 20.0),
                     CustomDropDownSearch(
                       listItem: controller.listGender.map((item) {
                         return item.nama;
@@ -99,6 +100,23 @@ class AddLeadsView extends GetView<LeadsController> {
                         //   }
                         // }
                         controller.changeStatus(value, type: 'gender');
+                      },
+                    ),
+                    SizedBox(height: 40.0),
+                    CustomDropDownSearch(
+                      listItem: controller.listStatusPekerjaan.map((item) {
+                        return item.nama;
+                      }).toList(),
+                      selectedItem: controller.statusPekerjaan.value,
+                      labelText: "Status Pekerjaan",
+                      onChanged: (value) async {
+                        controller.statusPekerjaan.value = value;
+                        for (var f in controller.listGender) {
+                          if (f.nama == value) {
+                            controller.statusPekerjaanId.value = f.id ?? 0;
+                          }
+                        }
+                        controller.changeStatus(value);
                       },
                     ),
                     SizedBox(height: 20.0),

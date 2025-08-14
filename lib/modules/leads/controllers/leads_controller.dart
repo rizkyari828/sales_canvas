@@ -69,8 +69,11 @@ class LeadsController extends BaseController {
 
   var masterData = <MasterData2>[].obs;
   var listGender = <MasterData2>[].obs;
+  var listStatusPekerjaan = <MasterData2>[].obs;
   RxString genderValue = "".obs;
+  RxString statusPekerjaan = "".obs;
   RxString idGender = ''.obs;
+
   RxString leadCategory = "".obs;
   RxString statusLead = "".obs;
   RxString leadSource = "".obs;
@@ -78,6 +81,7 @@ class LeadsController extends BaseController {
   RxInt leadCategoryId = 0.obs;
   RxInt statusLeadId = 0.obs;
   RxInt leadSourceId = 0.obs;
+  RxInt statusPekerjaanId = 0.obs;
   RxString minatProductId = "".obs;
 
   RxString actionStatus = "".obs;
@@ -188,7 +192,8 @@ class LeadsController extends BaseController {
           photos: attachments,
           alamat: alamatController.text,
           gender: idGender.value,
-          age: ageController.text),
+          age: ageController.text,
+          statusPekerjaan: statusPekerjaanId.toString()),
     );
     if (res?.error == false) {
       EasyLoading.showSuccess('Berhasil disimpan');
@@ -322,6 +327,58 @@ class LeadsController extends BaseController {
     for (var element in masterData) {
       listStatusLead.add(element);
     }
+
+    listStatusPekerjaan.add(
+        MasterData2(id: 1, nama: 'Karyawan Swasta', flag: 'status_pekerjaan'));
+    listStatusPekerjaan.add(MasterData2(
+        id: 2, nama: 'Pegawai Negeri Sipil (PNS)', flag: 'status_pekerjaan'));
+    listStatusPekerjaan
+        .add(MasterData2(id: 3, nama: 'TNI / Polri', flag: 'status_pekerjaan'));
+    listStatusPekerjaan
+        .add(MasterData2(id: 4, nama: 'Wirausaha', flag: 'status_pekerjaan'));
+    listStatusPekerjaan
+        .add(MasterData2(id: 5, nama: 'Freelancer', flag: 'status_pekerjaan'));
+    listStatusPekerjaan
+        .add(MasterData2(id: 6, nama: 'Mahasiswa', flag: 'status_pekerjaan'));
+    listStatusPekerjaan
+        .add(MasterData2(id: 7, nama: 'Pelajar', flag: 'status_pekerjaan'));
+    listStatusPekerjaan.add(
+        MasterData2(id: 8, nama: 'Ibu Rumah Tangga', flag: 'status_pekerjaan'));
+    listStatusPekerjaan.add(
+        MasterData2(id: 9, nama: 'Tidak Bekerja', flag: 'status_pekerjaan'));
+    listStatusPekerjaan
+        .add(MasterData2(id: 10, nama: 'Pensiunan', flag: 'status_pekerjaan'));
+    // listStatusPekerjaan
+    // masterData.clear();
+    // final resListStatusPekerjaan =
+    //     await apiRepository.getMasterData2('status_pekerjaan');
+    // if (resListStatusPekerjaan!.data != null) {
+    //   masterData.value = resListStatusPekerjaan!.data!;
+    //   for (var element in masterData) {
+    //     listStatusPekerjaan.add(element);
+    //   }
+    // } else {
+    //   listStatusPekerjaan.add(MasterData2(
+    //       id: 1, nama: 'Karyawan Swasta', flag: 'status_pekerjaan'));
+    //   listStatusPekerjaan.add(MasterData2(
+    //       id: 2, nama: 'Pegawai Negeri Sipil (PNS)', flag: 'status_pekerjaan'));
+    //   listStatusPekerjaan.add(
+    //       MasterData2(id: 3, nama: 'TNI / Polri', flag: 'status_pekerjaan'));
+    //   listStatusPekerjaan
+    //       .add(MasterData2(id: 4, nama: 'Wirausaha', flag: 'status_pekerjaan'));
+    //   listStatusPekerjaan.add(
+    //       MasterData2(id: 5, nama: 'Freelancer', flag: 'status_pekerjaan'));
+    //   listStatusPekerjaan
+    //       .add(MasterData2(id: 6, nama: 'Mahasiswa', flag: 'status_pekerjaan'));
+    //   listStatusPekerjaan
+    //       .add(MasterData2(id: 7, nama: 'Pelajar', flag: 'status_pekerjaan'));
+    //   listStatusPekerjaan.add(MasterData2(
+    //       id: 8, nama: 'Ibu Rumah Tangga', flag: 'status_pekerjaan'));
+    //   listStatusPekerjaan.add(
+    //       MasterData2(id: 9, nama: 'Tidak Bekerja', flag: 'status_pekerjaan'));
+    //   listStatusPekerjaan.add(
+    //       MasterData2(id: 10, nama: 'Pensiunan', flag: 'status_pekerjaan'));
+    // }
   }
 
   @override

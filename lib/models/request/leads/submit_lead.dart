@@ -30,7 +30,8 @@ class SubmitLeadRequest {
       this.photos,
       this.alamat,
       this.gender,
-      this.age});
+      this.age,
+      this.statusPekerjaan});
 
   String? idUser;
   String? date;
@@ -47,7 +48,7 @@ class SubmitLeadRequest {
   String? note;
   String? alamat;
   final List<PhotoAttachment>? photos;
-  String? age, gender;
+  String? age, gender, statusPekerjaan;
 
   factory SubmitLeadRequest.fromJson(Map<String, dynamic> json) =>
       SubmitLeadRequest(
@@ -67,6 +68,7 @@ class SubmitLeadRequest {
         alamat: json["alamat"],
         gender: json["jenis_kelamin"],
         age: json["umur"],
+        statusPekerjaan: json["status_pekerjaan"],
         photos: (json['foto'] as List? ?? [])
             .map((e) => PhotoAttachment.fromJson(e))
             .toList(),
@@ -89,6 +91,7 @@ class SubmitLeadRequest {
         'alamat': alamat,
         'jenis_kelamin': gender,
         'umur': age,
+        'status_pekerjaan': statusPekerjaan,
         'foto': photos?.map((e) => e.toJson()).toList(),
       };
 }

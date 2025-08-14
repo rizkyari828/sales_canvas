@@ -103,8 +103,8 @@ class StoreAddController extends BaseController {
 
     if (isConnectedToInternet.value == true) {
       // Ambil dari API dan simpan ke storage
-      final resListAgenda =
-          await apiRepository.getMasterData2('status 1', userId: userId.value);
+      final resListAgenda = await apiRepository
+          .getMasterData2('aktifitas_kunjungan', userId: userId.value);
       if (resListAgenda?.data != null) {
         masterData.value = resListAgenda!.data!;
         listAgenda.assignAll(masterData);
@@ -113,8 +113,8 @@ class StoreAddController extends BaseController {
       }
 
       masterData.clear();
-      final resListStatus =
-          await apiRepository.getMasterData2('status 2', userId: userId.value);
+      final resListStatus = await apiRepository
+          .getMasterData2('status_kunjungan', userId: userId.value);
       if (resListStatus?.data != null) {
         masterData.value = resListStatus!.data!;
         listStatus.assignAll(masterData);
