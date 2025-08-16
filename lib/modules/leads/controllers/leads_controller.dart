@@ -328,35 +328,36 @@ class LeadsController extends BaseController {
       listStatusLead.add(element);
     }
 
-    listStatusPekerjaan.add(
-        MasterData2(id: 1, nama: 'Karyawan Swasta', flag: 'status_pekerjaan'));
-    listStatusPekerjaan.add(MasterData2(
-        id: 2, nama: 'Pegawai Negeri Sipil (PNS)', flag: 'status_pekerjaan'));
-    listStatusPekerjaan
-        .add(MasterData2(id: 3, nama: 'TNI / Polri', flag: 'status_pekerjaan'));
-    listStatusPekerjaan
-        .add(MasterData2(id: 4, nama: 'Wirausaha', flag: 'status_pekerjaan'));
-    listStatusPekerjaan
-        .add(MasterData2(id: 5, nama: 'Freelancer', flag: 'status_pekerjaan'));
-    listStatusPekerjaan
-        .add(MasterData2(id: 6, nama: 'Mahasiswa', flag: 'status_pekerjaan'));
-    listStatusPekerjaan
-        .add(MasterData2(id: 7, nama: 'Pelajar', flag: 'status_pekerjaan'));
-    listStatusPekerjaan.add(
-        MasterData2(id: 8, nama: 'Ibu Rumah Tangga', flag: 'status_pekerjaan'));
-    listStatusPekerjaan.add(
-        MasterData2(id: 9, nama: 'Tidak Bekerja', flag: 'status_pekerjaan'));
-    listStatusPekerjaan
-        .add(MasterData2(id: 10, nama: 'Pensiunan', flag: 'status_pekerjaan'));
+    // listStatusPekerjaan.add(
+    //     MasterData2(id: 1, nama: 'Karyawan Swasta', flag: 'status_pekerjaan'));
+    // listStatusPekerjaan.add(MasterData2(
+    //     id: 2, nama: 'Pegawai Negeri Sipil (PNS)', flag: 'status_pekerjaan'));
     // listStatusPekerjaan
-    // masterData.clear();
-    // final resListStatusPekerjaan =
-    //     await apiRepository.getMasterData2('status_pekerjaan');
-    // if (resListStatusPekerjaan!.data != null) {
-    //   masterData.value = resListStatusPekerjaan!.data!;
-    //   for (var element in masterData) {
-    //     listStatusPekerjaan.add(element);
-    //   }
+    //     .add(MasterData2(id: 3, nama: 'TNI / Polri', flag: 'status_pekerjaan'));
+    // listStatusPekerjaan
+    //     .add(MasterData2(id: 4, nama: 'Wirausaha', flag: 'status_pekerjaan'));
+    // listStatusPekerjaan
+    //     .add(MasterData2(id: 5, nama: 'Freelancer', flag: 'status_pekerjaan'));
+    // listStatusPekerjaan
+    //     .add(MasterData2(id: 6, nama: 'Mahasiswa', flag: 'status_pekerjaan'));
+    // listStatusPekerjaan
+    //     .add(MasterData2(id: 7, nama: 'Pelajar', flag: 'status_pekerjaan'));
+    // listStatusPekerjaan.add(
+    //     MasterData2(id: 8, nama: 'Ibu Rumah Tangga', flag: 'status_pekerjaan'));
+    // listStatusPekerjaan.add(
+    //     MasterData2(id: 9, nama: 'Tidak Bekerja', flag: 'status_pekerjaan'));
+    // listStatusPekerjaan
+    //     .add(MasterData2(id: 10, nama: 'Pensiunan', flag: 'status_pekerjaan'));
+    // listStatusPekerjaan
+    masterData.clear();
+    final resListStatusPekerjaan =
+        await apiRepository.getMasterData2('Status Kerja Leads');
+    if (resListStatusPekerjaan!.data != null) {
+      masterData.value = resListStatusPekerjaan!.data!;
+      for (var element in masterData) {
+        listStatusPekerjaan.add(element);
+      }
+    }
     // } else {
     //   listStatusPekerjaan.add(MasterData2(
     //       id: 1, nama: 'Karyawan Swasta', flag: 'status_pekerjaan'));

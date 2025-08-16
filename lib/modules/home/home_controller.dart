@@ -898,7 +898,7 @@ class HomeController extends BaseController {
       builder: (context) {
         return AlertDialog(
           title: Center(
-            child: CommonWidget.subtitleText(
+            child: CommonWidget.subtitleMultilineText(
               text:
                   'Sebelum mulai hari ini, beri tahu kamu bagaimana perasaan mu!',
               color: ColorConstants.black,
@@ -1041,13 +1041,13 @@ class HomeController extends BaseController {
         'onPressed': goToProspekV2,
         'color': Colors.indigo,
       },
-      {
-        'show': menuAgent.value,
-        'icon': Icons.person_2_rounded,
-        'title': 'My Agent',
-        'onPressed': goToAgentPages,
-        'color': Colors.indigo,
-      },
+      // {
+      //   'show': menuAgent.value,
+      //   'icon': Icons.person_2_rounded,
+      //   'title': 'My Agent',
+      //   'onPressed': goToAgentPages,
+      //   'color': Colors.indigo,
+      // },
       {
         'show': menuBenefit.value,
         'icon': Icons.attach_money_rounded,

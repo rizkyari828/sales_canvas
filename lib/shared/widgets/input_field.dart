@@ -329,64 +329,71 @@ class CustomDropDownSearch extends StatelessWidget {
     this.labelText = '',
     this.onChanged,
     this.enabled = true,
-    // ignore: avoid_init_to_null
     this.selectedItem = null,
   });
 
   @override
   Widget build(BuildContext context) {
+    // Hitung tinggi popup agar tidak terlalu panjang jika item sedikit
+    final int itemCount = listItem.length;
+    final double itemHeight = 48.0; // tinggi item dropdown
+    final double maxPopupHeight = itemCount * itemHeight + 16.0; // padding
+
     return Container(
-      // width: MediaQuery.of(context).size.width,
-      // height: MediaQuery.of(context).size.height / 11,
       child: DropdownSearch<dynamic>(
         compareFn: (a, b) => a == b,
         decoratorProps: DropDownDecoratorProps(
-            decoration: InputDecoration(
-          labelStyle: TextStyle(
-              fontWeight: FontWeight.normal,
-              fontSize: 14,
-              letterSpacing: 0.5,
-              color: ColorConstants.black,
-              fontFamily: 'Poppins'),
-          prefixStyle: TextStyle(
-              color: ColorConstants.black,
-              fontWeight: FontWeight.normal,
-              fontSize: 14,
-              letterSpacing: 0.5,
-              fontFamily: 'Poppins'),
-          suffixStyle: TextStyle(
-              color: ColorConstants.black,
-              fontWeight: FontWeight.normal,
-              fontSize: 14,
-              letterSpacing: 0.5,
-              fontFamily: 'Poppins'),
-          labelText: labelText,
-          filled: true,
-          fillColor: enabled ? Colors.white : Colors.grey[200],
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            borderSide: BorderSide(
-              color: ColorConstants.mainColor,
+          decoration: InputDecoration(
+            labelStyle: TextStyle(
+                fontWeight: FontWeight.normal,
+                fontSize: 14,
+                letterSpacing: 0.5,
+                color: ColorConstants.black,
+                fontFamily: 'Poppins'),
+            prefixStyle: TextStyle(
+                color: ColorConstants.black,
+                fontWeight: FontWeight.normal,
+                fontSize: 14,
+                letterSpacing: 0.5,
+                fontFamily: 'Poppins'),
+            suffixStyle: TextStyle(
+                color: ColorConstants.black,
+                fontWeight: FontWeight.normal,
+                fontSize: 14,
+                letterSpacing: 0.5,
+                fontFamily: 'Poppins'),
+            labelText: labelText,
+            filled: true,
+            fillColor: enabled ? Colors.white : Colors.grey[200],
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: BorderSide(
+                color: ColorConstants.mainColor,
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: BorderSide(
+                color: ColorConstants.mainColor,
+              ),
+            ),
+            disabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: BorderSide(
+                color: ColorConstants.mainColor,
+              ),
             ),
           ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            borderSide: BorderSide(
-              color: ColorConstants.mainColor,
-            ),
-          ),
-          disabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            borderSide: BorderSide(
-              color: ColorConstants.mainColor,
-            ),
-          ),
-        )),
+        ),
         enabled: enabled,
         selectedItem: selectedItem,
         items: (filter, infiniteScrollProps) => listItem,
         onChanged: onChanged,
-        // showSearchBox: true,
+        popupProps: PopupProps.menu(
+          constraints: BoxConstraints(
+            maxHeight: itemCount < 5 ? maxPopupHeight : 250,
+          ),
+        ),
       ),
     );
   }
