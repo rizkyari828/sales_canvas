@@ -89,7 +89,7 @@ class ProspekV2AddView extends GetView<ProspekV2AddController> {
                     labelText: "Status Pekerjaan",
                     onChanged: (value) async {
                       controller.statusPekerjaan.value = value;
-                      for (var f in controller.listGender) {
+                      for (var f in controller.listStatusPekerjaan) {
                         if (f.nama == value) {
                           controller.statusPekerjaanId.value = f.id ?? 0;
                         }

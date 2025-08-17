@@ -122,6 +122,20 @@ class ProspekV2AddController extends BaseController {
     sourceOrderValue.value = detail.value.sourceOrderValue ?? '';
 
     status.value = detail.value.statusProspectValue ?? '';
+    statusPekerjaanId.value = int.parse(detail.value.statusPekerjaanId ?? '0');
+    statusPekerjaan.value = detail.value.statusPekerjaanValue ?? '';
+
+    ageController.text = detail.value.age ?? '';
+    idGender.value = detail.value.gender ?? '';
+    if (idGender.value == '') {
+      genderValue.value = '';
+    } else {
+      if (idGender.value == 'L') {
+        genderValue.value = 'Laki-Laki';
+      } else {
+        genderValue.value = 'Perempuan';
+      }
+    }
 
     // Disable input jika status tertentu
     if (detail.value.sourceOrderValue.toString().toLowerCase() ==
@@ -174,7 +188,10 @@ class ProspekV2AddController extends BaseController {
         idMediaCommunication.value == 0 ||
         dateFu.text.isEmpty ||
         noteCommunication.text.isEmpty ||
-        idSource.value == 0) {
+        idSource.value == 0 ||
+        genderValue.value == '' ||
+        ageController.text.isEmpty ||
+        statusPekerjaanId == 0) {
       showInputError.value = true;
       EasyLoading.showError('Semua field wajib diisi');
       return;
@@ -257,58 +274,15 @@ class ProspekV2AddController extends BaseController {
       listMinatProduct.add(element);
     }
 
-    // listStatusPekerjaan.add(
-    //     MasterData2(id: 1, nama: 'Karyawan Swasta', flag: 'status_pekerjaan'));
-    // listStatusPekerjaan.add(MasterData2(
-    //     id: 2, nama: 'Pegawai Negeri Sipil (PNS)', flag: 'status_pekerjaan'));
-    // listStatusPekerjaan
-    //     .add(MasterData2(id: 3, nama: 'TNI / Polri', flag: 'status_pekerjaan'));
-    // listStatusPekerjaan
-    //     .add(MasterData2(id: 4, nama: 'Wirausaha', flag: 'status_pekerjaan'));
-    // listStatusPekerjaan
-    //     .add(MasterData2(id: 5, nama: 'Freelancer', flag: 'status_pekerjaan'));
-    // listStatusPekerjaan
-    //     .add(MasterData2(id: 6, nama: 'Mahasiswa', flag: 'status_pekerjaan'));
-    // listStatusPekerjaan
-    //     .add(MasterData2(id: 7, nama: 'Pelajar', flag: 'status_pekerjaan'));
-    // listStatusPekerjaan.add(
-    //     MasterData2(id: 8, nama: 'Ibu Rumah Tangga', flag: 'status_pekerjaan'));
-    // listStatusPekerjaan.add(
-    //     MasterData2(id: 9, nama: 'Tidak Bekerja', flag: 'status_pekerjaan'));
-    // listStatusPekerjaan
-    //     .add(MasterData2(id: 10, nama: 'Pensiunan', flag: 'status_pekerjaan'));
-
     masterData.clear();
     final resListStatusPekerjaan =
         await apiRepository.getMasterData2('Status Kerja Leads');
     if (resListStatusPekerjaan!.data != null) {
-      masterData.value = resListStatusPekerjaan!.data!;
+      masterData.value = resListStatusPekerjaan.data!;
       for (var element in masterData) {
         listStatusPekerjaan.add(element);
       }
     }
-    // } else {
-    //   listStatusPekerjaan.add(MasterData2(
-    //       id: 1, nama: 'Karyawan Swasta', flag: 'status_pekerjaan'));
-    //   listStatusPekerjaan.add(MasterData2(
-    //       id: 2, nama: 'Pegawai Negeri Sipil (PNS)', flag: 'status_pekerjaan'));
-    //   listStatusPekerjaan.add(
-    //       MasterData2(id: 3, nama: 'TNI / Polri', flag: 'status_pekerjaan'));
-    //   listStatusPekerjaan
-    //       .add(MasterData2(id: 4, nama: 'Wirausaha', flag: 'status_pekerjaan'));
-    //   listStatusPekerjaan.add(
-    //       MasterData2(id: 5, nama: 'Freelancer', flag: 'status_pekerjaan'));
-    //   listStatusPekerjaan
-    //       .add(MasterData2(id: 6, nama: 'Mahasiswa', flag: 'status_pekerjaan'));
-    //   listStatusPekerjaan
-    //       .add(MasterData2(id: 7, nama: 'Pelajar', flag: 'status_pekerjaan'));
-    //   listStatusPekerjaan.add(MasterData2(
-    //       id: 8, nama: 'Ibu Rumah Tangga', flag: 'status_pekerjaan'));
-    //   listStatusPekerjaan.add(
-    //       MasterData2(id: 9, nama: 'Tidak Bekerja', flag: 'status_pekerjaan'));
-    //   listStatusPekerjaan.add(
-    //       MasterData2(id: 10, nama: 'Pensiunan', flag: 'status_pekerjaan'));
-    // }
   }
 
   void changeStatus(String value, String type) {

@@ -55,6 +55,9 @@ class DataLead {
   String? statusLead;
   int? idLead;
   int? idStatusLead;
+  String? statusPekerjaanId;
+  String? gender;
+  String? age, statusPekerjaanValue;
   List<Foto>? foto;
 
   DataLead({
@@ -70,6 +73,10 @@ class DataLead {
     this.statusLead,
     this.idStatusLead,
     this.idLead,
+    this.age,
+    this.gender,
+    this.statusPekerjaanId,
+    this.statusPekerjaanValue,
     this.foto,
   });
 
@@ -86,6 +93,10 @@ class DataLead {
         statusLead: json["status_leads"],
         idStatusLead: json["id_status_leads"],
         idLead: json["id_leads"],
+        gender: json["jenis_kelamin"],
+        age: json["umur"],
+        statusPekerjaanId: json["status_pekerjaan_id"],
+        statusPekerjaanValue: json["status_pekerjaan_value"],
         foto: json["Foto"] == null
             ? []
             : List<Foto>.from(json["Foto"]!.map((x) => Foto.fromJson(x))),
@@ -104,6 +115,10 @@ class DataLead {
         "status_leads": statusLead,
         "id_status_lead": idStatusLead,
         "id_leads": idLead,
+        'jenis_kelamin': gender,
+        'age': age,
+        'status_pekerjaan_id': statusPekerjaanId,
+        'status_pekerjaan_value': statusPekerjaanValue,
         "Foto": foto == null
             ? []
             : List<dynamic>.from(foto!.map((x) => x.toJson())),

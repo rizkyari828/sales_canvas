@@ -80,6 +80,18 @@ class LeadsDetailView extends GetView<LeadsDetailController> {
                           value: controller.detail.value.nama.toString()),
                       SizedBox(height: 10.0),
                       CommonWidget.labelExpanded(
+                          label: 'Umur',
+                          value: controller.detail.value.age.toString()),
+                      SizedBox(height: 10.0),
+                      CommonWidget.labelExpanded(
+                          label: 'Jenis Kelamin',
+                          value: controller.detail.value.gender.toString() == ''
+                              ? ''
+                              : controller.detail.value.gender.toString() == 'L'
+                                  ? 'Laki-Laki'
+                                  : 'Perempuan'),
+                      SizedBox(height: 10.0),
+                      CommonWidget.labelExpanded(
                           label: 'Email',
                           value: controller.detail.value.email.toString()),
                       SizedBox(height: 10.0),
@@ -90,6 +102,11 @@ class LeadsDetailView extends GetView<LeadsDetailController> {
                       // CommonWidget.labelExpanded(
                       //     label: 'Alamat',
                       //     value: controller.detail.value.alamat.toString()),
+                      SizedBox(height: 10.0),
+                      CommonWidget.labelExpanded(
+                          label: 'Status Pekerjaan',
+                          value: controller.detail.value.statusPekerjaanValue
+                              .toString()),
                       SizedBox(height: 10.0),
                       // CommonWidget.labelExpanded(
                       //     label: 'Titik Kordinat',
