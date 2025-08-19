@@ -37,7 +37,7 @@ class StoreView extends GetView<StoreListController> {
       onRefresh: controller.onRefresh,
       onLoading: controller.onLoading,
       child: ListView.builder(
-        itemCount: controller.listStore.length,
+        itemCount: controller.listKunjungan.length,
         itemBuilder: (context, i) => Column(
           children: [
             i == 0
@@ -69,21 +69,21 @@ class StoreView extends GetView<StoreListController> {
             InkWell(
               onTap: () {
                 controller.goToDetailPages(
-                    id: controller.listStore[i].tokoId.toString(),
-                    type: controller.listStore[i].typList.toString(),
-                    storeName: controller.listStore[i].namaToko ?? '',
+                    id: controller.listKunjungan[i].tokoId.toString(),
+                    type: controller.listKunjungan[i].typList.toString(),
+                    storeName: controller.listKunjungan[i].namaToko ?? '',
                     statusKunjungan:
-                        controller.listStore[i].statusKunjungan ?? '');
+                        controller.listKunjungan[i].statusKunjungan ?? '');
               },
               child: customStockExpandedCard(
-                  name: controller.listStore[i].namaToko ?? '',
-                  photo: controller.listStore[i].pathToko ?? '',
-                  type: controller.listStore[i].typList == '1'
+                  name: controller.listKunjungan[i].namaToko ?? '',
+                  photo: controller.listKunjungan[i].pathToko ?? '',
+                  type: controller.listKunjungan[i].typList == '1'
                       ? 'Kunjungan Terjadwal'
                       : 'Kunjungan Tidak Terjadwal',
-                  address: controller.listStore[i].alamatToko ?? '',
+                  address: controller.listKunjungan[i].alamatToko ?? '',
                   statusKunjungan:
-                      controller.listStore[i].statusKunjungan ?? ''),
+                      controller.listKunjungan[i].statusKunjungan ?? ''),
             ),
           ],
         ),
