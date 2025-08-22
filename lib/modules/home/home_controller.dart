@@ -974,13 +974,13 @@ class HomeController extends BaseController {
         'onPressed': () => goToStorePages('kunjungan'),
         'color': Colors.indigo,
       },
-      {
-        'show': menuKunjungan.value,
-        'icon': Icons.store,
-        'title': 'Non Kunjungan',
-        'onPressed': () => goToStorePages('non kunjungan'),
-        'color': Colors.indigo,
-      },
+      // {
+      //   'show': menuKunjungan.value,
+      //   'icon': Icons.store,
+      //   'title': 'Non Kunjungan',
+      //   'onPressed': () => goToStorePages('non kunjungan'),
+      //   'color': Colors.indigo,
+      // },
       {
         'show': menuLeads.value,
         'icon': Icons.search_rounded,

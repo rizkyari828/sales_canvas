@@ -45,9 +45,9 @@ class LeadsView extends GetView<LeadsListController> {
       child: CustomScrollView(
         slivers: [
           // Header filter tabs
-          SliverToBoxAdapter(
-            child: _FilterTabsBar(controller: c),
-          ),
+          // SliverToBoxAdapter(
+          //   child: _FilterTabsBar(controller: c),
+          // ),
 
           // List items
           SliverList(
