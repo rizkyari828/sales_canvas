@@ -44,17 +44,17 @@ class FaceRecognitionWiget {
                         buttonText: 'SIMPAN',
                         width: sw * .4,
                         onPressed: () async {
-                          final face = controller
-                              .lastDetectedFace; // getter di controller
+                          // final face = controller
+                          //     .lastDetectedFace; // getter di controller
 
-                          if (face == null) {
-                            Get.snackbar('Gagal', 'Wajah tidak terdeteksi');
-                            return;
-                          }
-                          if (!(face.wellPositioned)) {
-                            Get.snackbar('Gagal', 'Posisi wajah belum benar');
-                            return;
-                          }
+                          // if (face == null) {
+                          //   Get.snackbar('Gagal', 'Wajah tidak terdeteksi');
+                          //   return;
+                          // }
+                          // if (!(face.wellPositioned)) {
+                          //   Get.snackbar('Gagal', 'Posisi wajah belum benar');
+                          //   return;
+                          // }
 
                           await controller.faceCameraController
                               .startImageStream();
