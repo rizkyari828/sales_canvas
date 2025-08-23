@@ -58,7 +58,11 @@ class FaceRecognitionWiget {
 
                           await controller.faceCameraController
                               .startImageStream();
-                          controller.submit(status);
+                          if (status == 'Clock Out') {
+                            controller.submitOut(status);
+                          } else {
+                            controller.submit(status);
+                          }
                         },
                       ),
                     ],

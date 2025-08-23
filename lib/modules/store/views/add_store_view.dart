@@ -63,7 +63,11 @@ class AddStoreView extends GetView<StoreAddController> {
                       labelText: "Aktivitas Kunjungan",
                       onChanged: (value) async {
                         controller.agenda.value = value;
-                        controller.agendaId.value = value;
+                        for (var f in controller.listAgenda) {
+                          if (f.nama == value) {
+                            controller.agendaId.value = f.id.toString();
+                          }
+                        }
                         controller.changeStatus(value);
                       },
                     ),
@@ -77,7 +81,11 @@ class AddStoreView extends GetView<StoreAddController> {
                       labelText: "Status Kunjungan",
                       onChanged: (value) async {
                         controller.status.value = value;
-                        controller.statusId.value = value;
+                        for (var f in controller.listStatus) {
+                          if (f.nama == value) {
+                            controller.statusId.value = f.id.toString();
+                          }
+                        }
                         controller.changeStatus(value);
                       },
                     ),
