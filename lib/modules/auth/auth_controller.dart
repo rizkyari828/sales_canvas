@@ -71,9 +71,10 @@ class AuthController extends GetxController {
 
           if (menus != null) {
             prefs.setBool('menu_kunjungan', menus.kunjungan ?? false);
+            prefs.setBool('menu_non_kunjungan', menus.nonkunjungan ?? false);
             prefs.setBool('menu_leads', menus.leads ?? false);
             prefs.setBool('menu_prospek', menus.prospek ?? false);
-            prefs.setBool('menu_agent', menus.agent ?? false);
+            // prefs.setBool('menu_agent', menus.agent ?? false);
             prefs.setBool('menu_benefit', menus.benefit ?? false);
             prefs.setBool('menu_lembur', menus.lembur ?? false);
             prefs.setBool('menu_cuti', menus.cuti ?? false);

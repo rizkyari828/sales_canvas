@@ -13,47 +13,85 @@ class StoreListController extends BaseController {
   StoreListController({required ApiRepository apiRepository})
       : super(apiRepository: apiRepository);
 
-  var listStore = <DataStore>[].obs;
-  RxString groupName = "".obs;
-  RxString groupId = "".obs;
-  RxString userId = "".obs;
-  RxString token = "".obs;
+  final listKunjungan = <DataStore>[].obs;
+  final listNonKunjungan = <DataStore>[].obs;
 
-  RxInt page = 1.obs;
-  RefreshController refreshController =
+  final RxString groupName = "".obs;
+  final RxString groupId = "".obs;
+  final RxString userId = "".obs;
+  final RxString token = "".obs;
+
+  final RxString typePage = ''.obs; // 'kunjungan' | 'non kunjungan'
+  final RxInt page = 1.obs;
+
+  final RefreshController refreshController =
       RefreshController(initialRefresh: false);
 
   var detailDashboard = DashbooardKunjunganData().obs;
 
+  // === Cache key helpers ===
+  static const String _cachePrefixKunjungan = 'cached_items_kunjungan_page_';
+  static const String _cachePrefixNonKunjungan =
+      'cached_items_non_kunjungan_page_';
+
+  String _cacheKey(int page, String type) => type == 'kunjungan'
+      ? '$_cachePrefixKunjungan$page'
+      : '$_cachePrefixNonKunjungan$page';
+
+  final storage = GetStorage();
+
+  // === Navigation ===
   void goToKunjunganPages() {
-    Get.toNamed(
-      Routes.RESULT_KUNJUNGAN,
-    );
+    Get.toNamed(Routes.RESULT_KUNJUNGAN);
   }
 
-  void onLoading() async {
-    page.value = page.value + 1;
-
-    // monitor network fetch
-    await Future.delayed(Duration(milliseconds: 1000));
-    getStore(page.value);
-    refreshController.loadComplete();
+  void goToDetailPages({
+    String id = "",
+    String type = '',
+    String storeName = '',
+    String statusKunjungan = '',
+  }) {
+    Get.toNamed(Routes.DETAIL_STORE, arguments: {
+      'id': id,
+      'type': type,
+      'storeName': storeName,
+      'status_kunjungan': statusKunjungan,
+    });
   }
 
+  Future<void> goToAddPages() async {
+    final result = await Get.toNamed(Routes.ADD_STORE);
+    if (result == true) {
+      if (typePage.value == 'kunjungan') {
+        listKunjungan.clear();
+      } else {
+        listNonKunjungan.clear();
+      }
+      page.value = 1;
+      getStore(page.value);
+    }
+  }
+
+  // === Lifecycle ===
   @override
   void onInit() {
     super.onInit();
+    final args = Get.arguments;
+    if (args is Map && args['type'] is String) {
+      typePage.value = args['type'];
+    }
   }
 
   @override
   void onReady() {
     super.onReady();
-    loadUsers();
-    getStore(page.value);
+    loadUsers().then((_) {
+      getStore(page.value); // sekarang typePage sudah terisi
+    });
   }
 
-  loadUsers() async {
-    var prefs = Get.find<SharedPreferences>();
+  Future<void> loadUsers() async {
+    final prefs = Get.find<SharedPreferences>();
     groupName.value = prefs.getString('groupName') ?? "";
     groupId.value = prefs.getString('groupId') ?? "";
     token.value = prefs.getString('token') ?? "";
@@ -65,86 +103,99 @@ class StoreListController extends BaseController {
     super.onClose();
   }
 
-  final storage = GetStorage();
-
-  void getStore(page) async {
-    try {
-      final res = await apiRepository.listStore(
-          page: page, data: UserIdRequest(id: userId.value));
-
-      if (res != null && res.data != null) {
-        // Ubah objek DataStore ke JSON sebelum simpan
-        final jsonList = res.data!.map((e) => e.toJson()).toList();
-        storage.write('cached_items_page_$page', jsonList);
-
-        listStore.addAll(res.data!);
-      } else {
-        _loadFromCache(page);
-      }
-    } catch (e) {
-      // Gagal fetch, ambil dari cache
-      _loadFromCache(page);
-    }
-  }
-
-  void _loadFromCache(int page) {
-    final cachedData = storage.read('cached_items_page_$page');
-
-    if (cachedData != null) {
-      listStore.addAll(List<DataStore>.from(
-        (cachedData as List).map((e) => DataStore.fromJson(e)),
-      ));
-    }
+  // === Paging ===
+  Future<void> onLoading() async {
+    page.value = page.value + 1;
+    await Future.delayed(const Duration(milliseconds: 300));
+    getStore(page.value);
+    refreshController.loadComplete();
   }
 
   Future<void> onRefresh() async {
-    await Future.delayed(Duration(milliseconds: 1000));
-    listStore.clear();
+    await Future.delayed(const Duration(milliseconds: 300));
     page.value = 1;
 
+    final type = typePage.value;
+    if (type == 'kunjungan') {
+      listKunjungan.clear();
+    } else {
+      listNonKunjungan.clear();
+    }
+
     if (isConnectedToInternetWidget.value == false) {
-      clearCachedPages(prefix: 'cached_store_page_');
+      clearCachedPages(
+        prefix: type == 'kunjungan'
+            ? _cachePrefixKunjungan
+            : _cachePrefixNonKunjungan,
+      );
     }
 
     getStore(page.value);
     refreshController.refreshCompleted();
   }
 
-  void clearCachedPages({String prefix = 'cached_store_page_'}) {
-    final keys = storage.getKeys();
-    final pageKeys =
-        keys.where((k) => k is String && k.startsWith(prefix)).toList();
+  void clearCachedPages({required String prefix}) {
+    // pastikan Iterable-nya sudah bertipe String
+    final Iterable<String> stringKeys = storage.getKeys().whereType<String>();
+
+    final List<String> pageKeys =
+        stringKeys.where((k) => k.startsWith(prefix)).toList();
 
     for (final key in pageKeys) {
       storage.remove(key);
     }
   }
 
-  void goToDetailPages(
-      {String id = "",
-      String type = '',
-      String storeName = '',
-      String statusKunjungan = ''}) {
-    Get.toNamed(Routes.DETAIL_STORE, arguments: {
-      'id': id,
-      'type': type,
-      'storeName': storeName,
-      'status_kunjungan': statusKunjungan
-    });
-  }
+  // === Data ===
+  void getStore(int page) async {
+    final type = typePage.value; // 'kunjungan' atau 'non kunjungan'
+    try {
+      // KIRIM type ke API agar response beda sesuai tipe
+      final res = await apiRepository.listStore(
+        page: page,
+        data: UserIdRequest(id: userId.value, type: type),
+      );
 
-  void goToAddPages() async {
-    var result = await Get.toNamed(Routes.ADD_STORE);
-    if (result == true) {
-      listStore.clear();
-      page.value = 1;
-      getStore(page.value);
+      final hasData = res != null && res.data != null && res.data!.isNotEmpty;
+
+      if (hasData) {
+        // Simpan cache per tipe
+        final jsonList = res!.data!.map((e) => e.toJson()).toList();
+        storage.write(_cacheKey(page, type), jsonList);
+
+        // Tambahkan ke list yang benar
+        if (type == 'kunjungan') {
+          listKunjungan.addAll(res.data!);
+        } else {
+          listNonKunjungan.addAll(res.data!);
+        }
+      } else {
+        _loadFromCache(page, type);
+      }
+    } catch (_) {
+      _loadFromCache(page, type);
     }
   }
 
-  void getDataDashboard() async {
+  void _loadFromCache(int page, String type) {
+    final cachedData = storage.read(_cacheKey(page, type));
+    if (cachedData == null) return;
+
+    final items = List<DataStore>.from(
+      (cachedData as List).map((e) => DataStore.fromJson(e)),
+    );
+
+    if (type == 'kunjungan') {
+      listKunjungan.addAll(items);
+    } else {
+      listNonKunjungan.addAll(items);
+    }
+  }
+
+  Future<void> getDataDashboard() async {
     final res = await apiRepository.getDashboardKunjungan(userId.value);
-    print(res!.data!);
-    detailDashboard.value = res.data!.first;
+    if (res?.data != null && res!.data!.isNotEmpty) {
+      detailDashboard.value = res.data!.first;
+    }
   }
 }

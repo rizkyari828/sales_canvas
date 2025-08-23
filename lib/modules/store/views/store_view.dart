@@ -14,7 +14,9 @@ class StoreView extends GetView<StoreListController> {
     double scaleWidth = MediaQuery.of(context).size.width / 360;
     return Obx(() => Scaffold(
         appBar: CustomAppBarWithNetwork(
-          title: 'Kunjungan',
+          title: controller.typePage.value == 'kunjungan'
+              ? 'Kunjungan'
+              : 'Non Kunjungan',
           networkStatus: controller.qualityNetwork,
           addButton: ApprovalFlow.addButtonApproval(
               controller: controller, onPressed: controller.goToAddPages),
@@ -29,61 +31,67 @@ class StoreView extends GetView<StoreListController> {
   }
 
   SmartRefresher _getItems(StoreListController controller) {
+    final bool isKunjungan = controller.typePage.value == 'kunjungan';
+    final items =
+        isKunjungan ? controller.listKunjungan : controller.listNonKunjungan;
+
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: false,
-      header: WaterDropHeader(),
+      header: const WaterDropHeader(),
       controller: controller.refreshController,
       onRefresh: controller.onRefresh,
       onLoading: controller.onLoading,
       child: ListView.builder(
-        itemCount: controller.listStore.length,
+        itemCount: items.length,
         itemBuilder: (context, i) => Column(
           children: [
-            i == 0
-                ? Column(
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                              child: pendingTask(
-                                  '${controller.detailDashboard.value.dailyActualProgress ?? 0}',
-                                  'Kunjungan hari ini')),
-                          Expanded(
-                              child: pendingTask(
-                                  '${controller.detailDashboard.value.monthlyActualAttendance ?? 0}',
-                                  'Kunjungan bulan ini')),
-                          SizedBox(width: 20),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 20.0, right: 20, bottom: 10, top: 10),
-                        child: Divider(
-                          color: ColorConstants.borderColor,
-                        ),
-                      ),
-                    ],
-                  )
-                : SizedBox(),
+            if (i == 0) ...[
+              Row(
+                children: [
+                  Expanded(
+                    child: pendingTask(
+                      '${controller.detailDashboard.value.dailyActualProgress ?? 0}',
+                      'Kunjungan hari ini',
+                    ),
+                  ),
+                  Expanded(
+                    child: pendingTask(
+                      '${controller.detailDashboard.value.monthlyActualAttendance ?? 0}',
+                      'Kunjungan bulan ini',
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 20.0, right: 20, bottom: 10, top: 10),
+                child: Divider(color: ColorConstants.borderColor),
+              ),
+            ],
             InkWell(
               onTap: () {
                 controller.goToDetailPages(
-                    id: controller.listStore[i].tokoId.toString(),
-                    type: controller.listStore[i].typList.toString(),
-                    storeName: controller.listStore[i].namaToko ?? '',
-                    statusKunjungan:
-                        controller.listStore[i].statusKunjungan ?? '');
+                  id: items[i].tokoId.toString(),
+                  type: items[i].typList.toString(),
+                  storeName: items[i].namaToko ?? '',
+                  statusKunjungan: items[i].statusKunjungan ?? '',
+                );
               },
               child: customStockExpandedCard(
-                  name: controller.listStore[i].namaToko ?? '',
-                  photo: controller.listStore[i].pathToko ?? '',
-                  type: controller.listStore[i].typList == '1'
-                      ? 'Kunjungan Terjadwal'
-                      : 'Kunjungan Tidak Terjadwal',
-                  address: controller.listStore[i].alamatToko ?? '',
-                  statusKunjungan:
-                      controller.listStore[i].statusKunjungan ?? ''),
+                name: items[i].namaToko ?? '',
+                photo: items[i].pathToko ?? '',
+                type: isKunjungan
+                    ? (items[i].typList == '1'
+                        ? 'Kunjungan Terjadwal'
+                        : 'Kunjungan Tidak Terjadwal')
+                    : (items[i].typList == '1'
+                        ? 'Terjadwal'
+                        : 'Tidak Terjadwal'),
+                address: items[i].alamatToko ?? '',
+                statusKunjungan: items[i].statusKunjungan ?? '',
+              ),
             ),
           ],
         ),

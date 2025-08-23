@@ -95,59 +95,74 @@ class HomeController extends BaseController {
 
   double position = 0;
 
+  // Satu list untuk tampilan home (gabungan kedua tipe)
   var listStore = <DataStore>[].obs;
+
   RxString groupName = "".obs;
   RxString groupId = "".obs;
+  RxString userId = "".obs; // (kalau sebelumnya ada di prefs)
 
+  // Page lama (kompat)
   RxInt page = 1.obs;
+  // Page per tipe
+  final RxInt pageKunjungan = 1.obs;
+  final RxInt pageNonKunjungan = 1.obs;
+
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
 
   var detailDashboard = DashbooardData().obs;
 
+  // Cache key helpers
+  static const String _cachePrefixKunjungan = 'cached_items_kunjungan_page_';
+  static const String _cachePrefixNonKunjungan =
+      'cached_items_non_kunjungan_page_';
+
+  String _cacheKey(int page, String type) => type == 'kunjungan'
+      ? '$_cachePrefixKunjungan$page'
+      : '$_cachePrefixNonKunjungan$page';
+
   void goToKunjunganPages() {
-    Get.toNamed(
-      Routes.RESULT_KUNJUNGAN,
-    );
+    Get.toNamed(Routes.RESULT_KUNJUNGAN);
   }
 
   void onLoading() async {
-    page.value = page.value + 1;
+    // naikin page masing-masing tipe
+    pageKunjungan.value = pageKunjungan.value + 1;
+    pageNonKunjungan.value = pageNonKunjungan.value + 1;
 
-    // monitor network fetch
-    await Future.delayed(Duration(milliseconds: 1000));
-    getStore(page.value);
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    // ambil kedua tipe
+    getStore(pageKunjungan.value, type: 'kunjungan');
+    getStore(pageNonKunjungan.value, type: 'non kunjungan');
+
     refreshController.loadComplete();
   }
 
   @override
   void onReady() {
     super.onReady();
-    // if (isConnectedToInternetWidget.value == false) {
     determinePosition();
     getDataEvent(1);
     getDataBenefit();
-    getStore(page.value);
+
+    // ambil dua tipe (halaman 1)
+    page.value = 1;
+    pageKunjungan.value = 1;
+    pageNonKunjungan.value = 1;
+    getStore(1, type: 'kunjungan');
+    getStore(1, type: 'non kunjungan');
+
     getDataDashboard();
   }
 
   @override
   void onInit() async {
     super.onInit();
-    // getReviewRate();
     mainTab = MainTab();
     discoverTab = DiscoverTab();
     meTab = MeTab();
-
-    // FirebaseMessaging messaging = FirebaseMessaging.instance;
-
-    // messaging.getToken().then((value) {
-    //   print("token FCM Home ${value}");
-    //   submitToken(value);
-    // });
-    // Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-    //   _handleCheckConnectivity(result);
-    // });
 
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
       if (message.data.containsKey('type')) {
@@ -159,15 +174,6 @@ class HomeController extends BaseController {
           Get.toNamed(Routes.PROSPEK);
         } else if (message.data['type'] == 'task') {
           Get.toNamed(Routes.HOME);
-          // getCurrentIndex(MainTabs.inbox);
-          // if (groupId.value == '3' ||
-          //     groupId.value == '4' ||
-          //     groupId.value == '2') {
-          //   switchTab(1);
-          // } else {
-          //   switchTab(2);
-          // }
-          // return 1;
         } else {
           Get.toNamed(Routes.HOME);
         }
@@ -178,82 +184,46 @@ class HomeController extends BaseController {
   void callDialog() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await showDialog<String>(
-          context: context,
-          builder: (BuildContext context) => new RatingDialog(
-                initialRating: 1.0,
-                title: CommonWidget.minHeadText(
-                  text: 'Berikan Review Anda',
-                  align: TextAlign.center,
-                ),
-                message:
-                    CommonWidget.subtitleText(text: showRate.value.note ?? ''),
-                // your app's logo?
-                image: Container(
-                  child: Image.asset(
-                    'assets/images/logo.png',
-                    height: MediaQuery.of(context).size.height * .1,
-                    // width: MediaQuery.of(context).size.width * .1,
-                    fit: BoxFit.fill,
-                  ),
-                ),
-                submitButtonText: 'Submit',
-                commentHint: 'Masukkan komentar',
-                onCancelled: () => print('cancelled'),
-                onSubmitted: (response) {
-                  submitReview(
-                      rate: response.rating.round(), note: response.comment);
-                  print(
-                      'rating: ${response.rating}, comment: ${response.comment}');
-                },
-              ));
+        context: context,
+        builder: (BuildContext context) => RatingDialog(
+          initialRating: 1.0,
+          title: CommonWidget.minHeadText(
+            text: 'Berikan Review Anda',
+            align: TextAlign.center,
+          ),
+          message: CommonWidget.subtitleText(text: showRate.value.note ?? ''),
+          image: Container(
+            child: Image.asset(
+              'assets/images/logo.png',
+              height: MediaQuery.of(context).size.height * .1,
+              fit: BoxFit.fill,
+            ),
+          ),
+          submitButtonText: 'Submit',
+          commentHint: 'Masukkan komentar',
+          onCancelled: () => print('cancelled'),
+          onSubmitted: (response) {
+            submitReview(
+              rate: response.rating.round(),
+              note: response.comment,
+            );
+            print('rating: ${response.rating}, comment: ${response.comment}');
+          },
+        ),
+      );
     });
   }
 
   void signout() async {
     EasyLoading.show(status: 'loading..');
-    await Future.delayed(Duration(milliseconds: 3000));
+    await Future.delayed(const Duration(milliseconds: 3000));
     var storage = Get.find<SharedPreferences>();
     try {
-      if (storage.getString(StorageConstants.token) != null) {
-        //   final res = await apiRepository.logout(LogoutRequest(
-        //     username: storage.getString('simId'),
-        //   ));
-        //   if (res?.message == "Logout Success") {
-        //     storage.clear();
-
-        //     // NavigatorHelper.popLastScreens(popCount: 1);
-        //     goToLoginPages();
-        //     EasyLoading.dismiss();
-        //   } else {
-        //     Get.snackbar(
-        //       "Error",
-        //       "Logout Failed",
-        //       icon: Icon(Icons.person, color: Colors.white),
-        //       snackPosition: SnackPosition.TOP,
-        //       backgroundColor: Colors.red,
-        //       borderRadius: 20,
-        //       margin: EdgeInsets.all(15),
-        //       colorText: Colors.white,
-        //       duration: Duration(seconds: 4),
-        //       isDismissible: true,
-        //       //dismissDirection: SnackDismissDirection.HORIZONTAL,
-        //       forwardAnimationCurve: Curves.easeOutBack,
-        //     );
-        //     EasyLoading.dismiss();
-        //   }
-        storage.clear();
-        // NavigatorHelper.popLastScreens(popCount: 1);
-        goToLoginPages();
-        EasyLoading.dismiss();
-      } else {
-        storage.clear();
-        // NavigatorHelper.popLastScreens(popCount: 1);
-        goToLoginPages();
-        EasyLoading.dismiss();
-      }
+      storage.clear();
+      goToLoginPages();
+      EasyLoading.dismiss();
     } catch (e) {
       storage.clear();
-      // NavigatorHelper.popLastScreens(popCount: 1);
       goToLoginPages();
       EasyLoading.dismiss();
     }
@@ -271,7 +241,6 @@ class HomeController extends BaseController {
             maxHeight: maxHeight,
             imageQuality: quality,
           );
-
           imageFileList.addAll(pickedFileList!);
         } catch (e) {
           pickImageError = e;
@@ -287,7 +256,6 @@ class HomeController extends BaseController {
             maxHeight: maxHeight,
             imageQuality: quality,
           );
-
           _imageFile = pickedFile;
         } catch (e) {
           pickImageError = e;
@@ -302,37 +270,22 @@ class HomeController extends BaseController {
 
   void switchTab(index) {
     if (tipeUser.value == '1') {
-      var tab = _getCurrentTab(index);
-      currentTab.value = tab;
+      currentTab.value = _getCurrentTab(index);
     } else {
-      var tab = _getCurrentTabTipe2(index);
-      currentTab.value = tab;
+      currentTab.value = _getCurrentTabTipe2(index);
     }
   }
 
   int getCurrentIndex(MainTabs tab) {
-    if (tipeUser.value == "1") {
-      switch (tab) {
-        case MainTabs.home:
-          return 0;
-        case MainTabs.discover:
-          return 1;
-        case MainTabs.me:
-          return 2;
-        default:
-          return 0;
-      }
-    } else {
-      switch (tab) {
-        case MainTabs.home:
-          return 0;
-        case MainTabs.discover:
-          return 1;
-        case MainTabs.me:
-          return 2;
-        default:
-          return 0;
-      }
+    switch (tab) {
+      case MainTabs.home:
+        return 0;
+      case MainTabs.discover:
+        return 1;
+      case MainTabs.me:
+        return 2;
+      default:
+        return 0;
     }
   }
 
@@ -371,18 +324,16 @@ class HomeController extends BaseController {
       Get.snackbar(
         "Error",
         "Location services are disabled.",
-        icon: Icon(Icons.person, color: Colors.white),
+        icon: const Icon(Icons.person, color: Colors.white),
         snackPosition: SnackPosition.TOP,
         backgroundColor: Colors.red,
         borderRadius: 20,
-        margin: EdgeInsets.all(15),
+        margin: const EdgeInsets.all(15),
         colorText: Colors.white,
-        duration: Duration(seconds: 4),
+        duration: const Duration(seconds: 4),
         isDismissible: true,
-        //dismissDirection: SnackDismissDirection.HORIZONTAL,
         forwardAnimationCurve: Curves.easeOutBack,
       );
-
       return Future.error('Location services are disabled.');
     }
 
@@ -393,18 +344,16 @@ class HomeController extends BaseController {
         Get.snackbar(
           "Error",
           "Location permissions are denied",
-          icon: Icon(Icons.person, color: Colors.white),
+          icon: const Icon(Icons.person, color: Colors.white),
           snackPosition: SnackPosition.TOP,
           backgroundColor: Colors.red,
           borderRadius: 20,
-          margin: EdgeInsets.all(15),
+          margin: const EdgeInsets.all(15),
           colorText: Colors.white,
-          duration: Duration(seconds: 4),
+          duration: const Duration(seconds: 4),
           isDismissible: true,
-          //dismissDirection: SnackDismissDirection.HORIZONTAL,
           forwardAnimationCurve: Curves.easeOutBack,
         );
-        print("Location permissions are denied");
         return Future.error('Location permissions are denied');
       }
     }
@@ -413,19 +362,16 @@ class HomeController extends BaseController {
       Get.snackbar(
         "Error",
         "Location permissions are permanently denied, we cannot request permissions.",
-        icon: Icon(Icons.person, color: Colors.white),
+        icon: const Icon(Icons.person, color: Colors.white),
         snackPosition: SnackPosition.TOP,
         backgroundColor: Colors.red,
         borderRadius: 20,
-        margin: EdgeInsets.all(15),
+        margin: const EdgeInsets.all(15),
         colorText: Colors.white,
-        duration: Duration(seconds: 4),
+        duration: const Duration(seconds: 4),
         isDismissible: true,
-        //dismissDirection: SnackDismissDirection.HORIZONTAL,
         forwardAnimationCurve: Curves.easeOutBack,
       );
-      print(
-          "Location permissions are permanently denied, we cannot request permissions.");
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
@@ -433,9 +379,9 @@ class HomeController extends BaseController {
     final position = await _geolocatorPlatform.getCurrentPosition();
     myLocation = LatLng(position.latitude, position.longitude);
     markers.add(Marker(
-        markerId: MarkerId('SomeId'),
+        markerId: const MarkerId('SomeId'),
         position: LatLng(position.latitude, position.longitude),
-        infoWindow: InfoWindow(title: 'My Location')));
+        infoWindow: const InfoWindow(title: 'My Location')));
 
     final prefs = Get.find<SharedPreferences>();
     if (prefs.getString('token') != null) {
@@ -462,9 +408,6 @@ class HomeController extends BaseController {
       showRate.value = res.data ?? ShowReviewRateData();
       showRateDialog.value = true;
       callDialog();
-      print('need review');
-    } else {
-      print('Token update failed');
     }
   }
 
@@ -473,7 +416,6 @@ class HomeController extends BaseController {
         await apiRepository.submitRate(SubmitRate(rate: rate, note: note));
     if (res!.error == false) {
       EasyLoading.showSuccess('Berhasil disimpan');
-      // Get.back();
     } else {
       EasyLoading.showError('Gagal disimpan');
     }
@@ -485,10 +427,8 @@ class HomeController extends BaseController {
     for (var itemBefore in imageFileList) {
       var mimeType = lookupMimeType(itemBefore.path);
       var bytesBefore = await Io.File(itemBefore.path).readAsBytes();
-      String img64 = 'data:' +
-          mimeType.toString() +
-          ';base64,' +
-          base64Encode(bytesBefore);
+      String img64 =
+          'data:${mimeType.toString()};base64,${base64Encode(bytesBefore)}';
       _afterBase64.add(img64);
     }
 
@@ -517,8 +457,11 @@ class HomeController extends BaseController {
     Get.toNamed(Routes.LEAVE);
   }
 
-  void goToStorePages() {
-    Get.toNamed(Routes.STORE);
+  void goToStorePages(String type) {
+    Get.toNamed(
+      Routes.STORE,
+      arguments: {'type': type},
+    );
   }
 
   void goToOvertimePages() {
@@ -564,101 +507,94 @@ class HomeController extends BaseController {
 
   void goToProspekDialogPages() {
     Get.bottomSheet(
-        Container(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(25.0),
-                child: Column(
-                  children: [
-                    CommonWidget.rowHeight(),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 10.0),
-                        child: CommonWidget.minHeadText(text: 'Detail Prospek'),
+      Container(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(25.0),
+              child: Column(
+                children: [
+                  CommonWidget.rowHeight(),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: CommonWidget.minHeadText(text: 'Detail Prospek'),
+                    ),
+                  ),
+                  CommonWidget.rowHeight(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      InkWell(
+                        onTap: () =>
+                            goToLemburPages(previousMonthInt, "old", ''),
+                        child: _monthMenu(
+                            monthText: 'Bulan Lalu'.toUpperCase(),
+                            day:
+                                '${benefitDashboard.value?.jumlahBulanLalu ?? '0'}',
+                            month: previousMonth.value),
                       ),
-                    ),
-                    CommonWidget.rowHeight(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        InkWell(
-                          onTap: () =>
-                              goToLemburPages(previousMonthInt, "old", ''),
-                          child: _monthMenu(
-                              monthText: 'Bulan Lalu'.toUpperCase(),
-                              day:
-                                  '${benefitDashboard.value?.jumlahBulanLalu ?? '0'}',
-                              month: previousMonth.value),
-                        ),
-                        InkWell(
-                          onTap: () => goToLemburPages(monthInt, "now", ''),
-                          child: _monthMenu(
-                              monthText: 'Bulan Ini'.toUpperCase(),
-                              day:
-                                  '${benefitDashboard.value?.jumlahBulanIni ?? '0'}',
-                              month: month.value),
-                        ),
-                      ],
-                    ),
-                    CommonWidget.rowHeight(),
-                    _statusTaskBar(),
-                  ],
-                ),
+                      InkWell(
+                        onTap: () => goToLemburPages(monthInt, "now", ''),
+                        child: _monthMenu(
+                            monthText: 'Bulan Ini'.toUpperCase(),
+                            day:
+                                '${benefitDashboard.value?.jumlahBulanIni ?? '0'}',
+                            month: month.value),
+                      ),
+                    ],
+                  ),
+                  CommonWidget.rowHeight(),
+                  _statusTaskBar(),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-        elevation: 20.0,
-        enableDrag: false,
-        backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
+      ),
+      elevation: 20.0,
+      enableDrag: false,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
           topLeft: Radius.circular(30.0),
           topRight: Radius.circular(30.0),
-        )));
+        ),
+      ),
+    );
   }
 
   Widget _monthMenu({monthText, day, month}) {
     final sw = SizeConfig().screenWidth;
     return Container(
-        width: sw / 2.5,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10.0),
-          border: Border.all(width: 2.0, color: ColorConstants.borderColor),
-          // boxShadow: [
-          //   BoxShadow(
-          //     color: CommonWidget.setOpacity(Colors.black, 0.3),
-          //     blurRadius: 20.0,
-          //     spreadRadius: 4.0,
-          //     offset: Offset(
-          //       -10.0,
-          //       10.0,
-          //     ),
-          //   ),
-          // ],
-        ),
-        child: Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Column(children: [
-              CommonWidget.bodyText(text: monthText),
-              CommonWidget.rowHeight(),
-              Container(
-                decoration: new BoxDecoration(
-                  color: Colors.green,
-                  shape: BoxShape.circle,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: CommonWidget.headText(text: day, color: Colors.white),
-                ),
-              ),
-              CommonWidget.rowHeight(height: 8.0),
-              CommonWidget.bodyText(text: month),
-              CommonWidget.rowHeight(),
-            ])));
+      width: sw / 2.5,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10.0),
+        border: Border.all(width: 2.0, color: ColorConstants.borderColor),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Column(children: [
+          CommonWidget.bodyText(text: monthText),
+          CommonWidget.rowHeight(),
+          Container(
+            decoration: const BoxDecoration(
+              color: Colors.green,
+              shape: BoxShape.circle,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: CommonWidget.headText(text: day, color: Colors.white),
+            ),
+          ),
+          CommonWidget.rowHeight(height: 8.0),
+          CommonWidget.bodyText(text: month),
+          CommonWidget.rowHeight(),
+        ]),
+      ),
+    );
   }
 
   Widget _statusTaskBar() {
@@ -669,17 +605,6 @@ class HomeController extends BaseController {
           color: Colors.white,
           borderRadius: BorderRadius.circular(10.0),
           border: Border.all(width: 2.0, color: ColorConstants.borderColor),
-          // boxShadow: [
-          //   BoxShadow(
-          //     color: CommonWidget.setOpacity(Colors.black, 0.3),
-          //     blurRadius: 20.0,
-          //     spreadRadius: 4.0,
-          //     offset: Offset(
-          //       -10.0,
-          //       10.0,
-          //     ),
-          //   ),
-          // ],
         ),
         height: SizeConfig().screenHeight / 9,
         width: SizeConfig().screenWidth,
@@ -696,7 +621,7 @@ class HomeController extends BaseController {
               padding: const EdgeInsets.only(left: 5.0),
               child: ListTile(
                 leading: Container(
-                  decoration: new BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: ColorConstants.mainColor,
                     shape: BoxShape.circle,
                   ),
@@ -743,53 +668,54 @@ class HomeController extends BaseController {
     if (isConnectedToInternet.value) {
       if (box.read('barang') != null) {
         Get.defaultDialog(
-            title: "SIMPAN PRODUCT",
-            content: CommonWidget.subtitleText(
-                text: "Simpan data product yang belum/gagal tersimpan?",
-                textAlign: TextAlign.center),
-            textConfirm: 'OK',
-            textCancel: 'CANCLE',
-            onConfirm: () {
-              Get.back();
-              submitBarang();
-              // Get.toNamed(Routes.STORE);
-            },
-            onCancel: () {
-              Get.back();
-            });
+          title: "SIMPAN PRODUCT",
+          content: CommonWidget.subtitleText(
+            text: "Simpan data product yang belum/gagal tersimpan?",
+            textAlign: TextAlign.center,
+          ),
+          textConfirm: 'OK',
+          textCancel: 'CANCLE',
+          onConfirm: () {
+            Get.back();
+            submitBarang();
+          },
+          onCancel: () {
+            Get.back();
+          },
+        );
       } else {
         Get.defaultDialog(
-            title: "PRODUK KOSONG",
-            content: CommonWidget.subtitleText(
-                text:
-                    "Semua product sudah tersimpan, tidak ada data yang belum/gagal dikirim",
-                textAlign: TextAlign.center),
-            textConfirm: 'OK',
-            onConfirm: () {
-              Get.back();
-            });
-      }
-    } else {
-      Get.defaultDialog(
-          title: "INTERNET TERPUTUS",
+          title: "PRODUK KOSONG",
           content: CommonWidget.subtitleText(
-              text:
-                  "Koneksi anda masih belum terhubung, silahkan periksa kembali",
-              textAlign: TextAlign.center),
+            text:
+                "Semua product sudah tersimpan, tidak ada data yang belum/gagal dikirim",
+            textAlign: TextAlign.center,
+          ),
           textConfirm: 'OK',
           onConfirm: () {
             Get.back();
-          });
+          },
+        );
+      }
+    } else {
+      Get.defaultDialog(
+        title: "INTERNET TERPUTUS",
+        content: CommonWidget.subtitleText(
+          text: "Koneksi anda masih belum terhubung, silahkan periksa kembali",
+          textAlign: TextAlign.center,
+        ),
+        textConfirm: 'OK',
+        onConfirm: () {
+          Get.back();
+        },
+      );
     }
   }
 
   Future<void> submitBarang() async {
     print(box.read('barang'));
     QtyUpdateRequest qty = box.read('barang');
-    final res = await apiRepository.decreaseQtyItems(
-      qty,
-    );
-
+    final res = await apiRepository.decreaseQtyItems(qty);
     if (res!.error == false) {
       EasyLoading.showSuccess('Berhasil disimpan');
       EasyLoading.dismiss();
@@ -798,7 +724,6 @@ class HomeController extends BaseController {
       EasyLoading.showError('Gagal disimpan');
       EasyLoading.dismiss();
     }
-    // print(box.read('barang4'));
   }
 
   void goToKuisionerPages() {
@@ -807,12 +732,6 @@ class HomeController extends BaseController {
 
   void goToTaskListPages() {
     Get.toNamed(Routes.HOME);
-    // getCurrentIndex(MainTabs.inbox);
-    // if (groupId.value == '3' || groupId.value == '4' || groupId.value == '2') {
-    //   switchTab(1);
-    // } else {
-    //   switchTab(2);
-    // }
   }
 
   void goToDetailEventPages({String id = ""}) {
@@ -830,46 +749,76 @@ class HomeController extends BaseController {
     benefitDashboard.value = res?.data!.first;
   }
 
-  void getStore(page) async {
-    try {
-      final res = await apiRepository.listStore(
-          page: page, data: UserIdRequest(id: userId.value));
+  // ---------------------------
+  //        STORE (HOME)
+  // ---------------------------
 
-      if (res != null && res.data?.length != 0) {
-        // Ubah objek DataStore ke JSON sebelum simpan
-        final jsonList = res.data?.map((e) => e.toJson()).toList();
-        box.write('cached_items_page_$page', jsonList);
-        if (jsonList?.length != 0) {
-          listStore.addAll(res.data!);
-        } else {
-          _loadFromCache(page);
-        }
-      } else {
-        _loadFromCache(page);
-      }
-    } catch (e) {
-      // Gagal fetch, ambil dari cache
-      _loadFromCache(page);
+  // panggilan lama getStore(page) tetap jalan → ambil dua tipe & merge
+  void getStore(int page, {String? type}) async {
+    if (type == null) {
+      await Future.wait([
+        _getStoreByType(pageKunjungan.value, 'kunjungan'),
+        _getStoreByType(pageNonKunjungan.value, 'non kunjungan'),
+      ]);
+    } else {
+      await _getStoreByType(page, type);
     }
   }
 
-  void _loadFromCache(int page) {
-    final cachedData = box.read('cached_items_page_$page');
+  Future<void> _getStoreByType(int page, String type) async {
+    try {
+      // >>> DI SINI bedanya: kirim type ke request <<<
+      final res = await apiRepository.listStore(
+        page: page,
+        data: UserIdRequest(id: userId.value, type: type),
+      );
 
-    if (cachedData.length != 0) {
-      listStore.addAll(List<DataStore>.from(
-        (cachedData as List).map((e) => DataStore.fromJson(e)),
-      ));
-    } else {
-      listStore.add(DataStore(tokoId: 0));
+      final hasData = res != null && res.data != null && res.data!.isNotEmpty;
+
+      if (hasData) {
+        final jsonList = res!.data!.map((e) => e.toJson()).toList();
+        box.write(_cacheKey(page, type), jsonList);
+
+        listStore.addAll(res.data!);
+        return;
+      }
+
+      _loadFromCache(page, type);
+    } catch (_) {
+      _loadFromCache(page, type);
+    }
+  }
+
+  void _loadFromCache(int page, String type) {
+    final cachedData = box.read(_cacheKey(page, type));
+    if (cachedData is List && cachedData.isNotEmpty) {
+      final items = <DataStore>[];
+      for (final e in cachedData) {
+        try {
+          items.add(DataStore.fromJson(e));
+        } catch (_) {
+          // skip item corrupt
+        }
+      }
+      if (items.isNotEmpty) {
+        listStore.addAll(items);
+      }
     }
   }
 
   Future<void> onRefresh() async {
-    await Future.delayed(Duration(milliseconds: 1000));
+    await Future.delayed(const Duration(milliseconds: 300));
+
     listStore.clear();
-    page.value = 1;
-    getStore(page.value);
+    page.value = 1; // kompat
+    pageKunjungan.value = 1;
+    pageNonKunjungan.value = 1;
+
+    await Future.wait([
+      _getStoreByType(1, 'kunjungan'),
+      _getStoreByType(1, 'non kunjungan'),
+    ]);
+
     loadUsers();
     refreshController.refreshCompleted();
   }
@@ -917,7 +866,7 @@ class HomeController extends BaseController {
                       Colors.lightGreen, onSelected),
                 ],
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -927,7 +876,7 @@ class HomeController extends BaseController {
                       Icons.sentiment_dissatisfied, Colors.orange, onSelected),
                 ],
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -984,14 +933,12 @@ class HomeController extends BaseController {
     if (lastShown != today) {
       Future.delayed(Duration.zero, () {
         showMoodDialog(context, (selectedMood) {
-          // Simpan mood jika perlu
           print('Mood dipilih: $selectedMood');
           submitDialogMood(selectedMood);
         });
       });
       storage.write('lastMoodDialogDate', today);
     }
-    // storage.remove('lastMoodDialogDate');
   }
 
   void submitDialogMood(String value) async {
@@ -1024,7 +971,14 @@ class HomeController extends BaseController {
         'show': menuKunjungan.value,
         'icon': Icons.store,
         'title': 'Kunjungan',
-        'onPressed': goToStorePages,
+        'onPressed': () => goToStorePages('kunjungan'),
+        'color': Colors.indigo,
+      },
+      {
+        'show': menuKunjungan.value,
+        'icon': Icons.store,
+        'title': 'Non Kunjungan',
+        'onPressed': () => goToStorePages('non kunjungan'),
         'color': Colors.indigo,
       },
       {
@@ -1041,13 +995,6 @@ class HomeController extends BaseController {
         'onPressed': goToProspekV2,
         'color': Colors.indigo,
       },
-      // {
-      //   'show': menuAgent.value,
-      //   'icon': Icons.person_2_rounded,
-      //   'title': 'My Agent',
-      //   'onPressed': goToAgentPages,
-      //   'color': Colors.indigo,
-      // },
       {
         'show': menuBenefit.value,
         'icon': Icons.attach_money_rounded,

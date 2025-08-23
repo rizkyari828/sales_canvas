@@ -78,9 +78,10 @@ class DataLogin {
             ? Menus.fromJson(json["menus"])
             : Menus(
                 kunjungan: true,
+                nonkunjungan: true,
                 leads: true,
                 prospek: true,
-                agent: true,
+                // agent: true,
                 benefit: false,
                 lembur: true,
                 cuti: true,
@@ -103,6 +104,7 @@ class DataLogin {
 
 class Menus {
   bool? kunjungan;
+  bool? nonkunjungan;
   bool? leads;
   bool? prospek;
   bool? agent;
@@ -113,6 +115,7 @@ class Menus {
 
   Menus({
     this.kunjungan,
+    this.nonkunjungan,
     this.leads,
     this.prospek,
     this.agent,
