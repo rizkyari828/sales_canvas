@@ -71,7 +71,7 @@ class FaceRecognitionWiget {
               ),
             )
           : SmartFaceCamera(
-              autoDisableCaptureControl: true,
+              autoDisableCaptureControl: false,
               controller: controller.faceCameraController,
               showCameraLensControl: false,
               messageBuilder: (context, face) {

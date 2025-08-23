@@ -125,7 +125,7 @@ class AttendanceController extends FaceRecognitionController {
     }
   }
 
-  void submitOut() async {
+  void submitOut(String type) async {
     final file = faceCameraCapture?.value;
     if (file != null) {
       final res =
