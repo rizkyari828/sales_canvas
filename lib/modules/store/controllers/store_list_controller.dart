@@ -1,5 +1,6 @@
 import 'package:get_storage/get_storage.dart';
 import 'package:sales/api/api_repository.dart';
+import 'package:sales/models/request/dashboard_request.dart';
 import 'package:sales/models/request/user_id_request.dart';
 import 'package:sales/models/response/dashboard/dashboard_kunjungan_response.dart';
 import 'package:sales/models/response/store/list_store.dart';
@@ -18,6 +19,8 @@ class StoreListController extends BaseController {
   RxString groupId = "".obs;
   RxString userId = "".obs;
   RxString token = "".obs;
+  RxInt dailyProgressCount = 0.obs;
+  RxInt montlyProgressCount = 0.obs;
 
   RxInt page = 1.obs;
   RefreshController refreshController =
@@ -58,6 +61,8 @@ class StoreListController extends BaseController {
     groupId.value = prefs.getString('groupId') ?? "";
     token.value = prefs.getString('token') ?? "";
     userId.value = prefs.getString('userId') ?? "";
+
+    getDataDashboard();
   }
 
   @override
@@ -143,8 +148,16 @@ class StoreListController extends BaseController {
   }
 
   void getDataDashboard() async {
-    final res = await apiRepository.getDashboardKunjungan(userId.value);
-    print(res!.data!);
-    detailDashboard.value = res.data!.first;
+    final monthly = await apiRepository.getDashboardKunjungan(
+        DashboardRequest(id: userId.value, type: 'bulan'));
+    if (monthly != null) {
+      montlyProgressCount.value = monthly.data!.first.count ?? 0;
+    }
+
+    final daily = await apiRepository.getDashboardKunjungan(
+        DashboardRequest(id: userId.value, type: 'hari'));
+    if (daily != null) {
+      dailyProgressCount.value = daily.data!.first.count ?? 0;
+    }
   }
 }

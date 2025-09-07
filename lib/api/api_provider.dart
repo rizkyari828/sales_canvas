@@ -10,6 +10,7 @@ import 'package:sales/models/request/cuti/update_approval_request.dart';
 import 'package:sales/models/request/cuti_sales/detail_request_cuti.dart';
 import 'package:sales/models/request/cuti_sales/submit_izin_request.dart';
 import 'package:sales/models/request/cuti_sales/update_approval_request.dart';
+import 'package:sales/models/request/dashboard_request.dart';
 import 'package:sales/models/request/detail_request.dart';
 import 'package:sales/models/request/detail_request_leave.dart';
 import 'package:sales/models/request/id_request.dart';
@@ -396,8 +397,10 @@ class ApiProvider extends BaseProvider {
     return get(path);
   }
 
-  Future<Response> getDashboardKunjungan(String path) {
-    return get(path);
+
+  Future<Response> getDashboardKunjungan(String path, DashboardRequest data) {
+    print(data.toJson());
+    return post(path, data.toJson());
   }
 
   Future<Response> getShowProspekV2(String path, ShowProspectV2Request data) {

@@ -45,21 +45,18 @@ class DashboardKunjunganResponse {
 }
 
 class DashbooardKunjunganData {
-  int? dailyActualProgress;
-  int? monthlyActualAttendance;
+  int? count;
 
   DashbooardKunjunganData({
-    this.dailyActualProgress,
-    this.monthlyActualAttendance,
+    this.count,
   });
 
-  factory DashbooardKunjunganData.fromJson(Map<String, dynamic> json) => DashbooardKunjunganData(
-        dailyActualProgress: json["status_cuti"],
-        monthlyActualAttendance: json["level"],
+  factory DashbooardKunjunganData.fromJson(Map<String, dynamic> json) =>
+      DashbooardKunjunganData(
+        count: json["jumlah"],
       );
 
   Map<String, dynamic> toJson() => {
-        "status_cuti": dailyActualProgress,
-        "level": monthlyActualAttendance,
+        "jumlah": count,
       };
 }

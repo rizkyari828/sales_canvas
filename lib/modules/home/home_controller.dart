@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:get_storage/get_storage.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:sales/models/request/dashboard_request.dart';
 import 'package:sales/models/request/id_request.dart';
 import 'package:sales/models/request/rate/submit_rate_request.dart';
 import 'package:sales/models/request/store/update_qty_request.dart';
@@ -104,6 +105,9 @@ class HomeController extends BaseController {
       RefreshController(initialRefresh: false);
 
   var detailDashboard = DashbooardData().obs;
+
+  RxInt dailyProgressCount = 0.obs;
+  RxInt montlyProgressCount = 0.obs;
 
   void goToKunjunganPages() {
     Get.toNamed(
@@ -1013,9 +1017,17 @@ class HomeController extends BaseController {
   }
 
   void getDataDashboard() async {
-    final res = await apiRepository.getDashboard(userId.value);
-    print(res!.data!);
-    detailDashboard.value = res.data!.first;
+    final monthly = await apiRepository.getDashboardKunjungan(
+        DashboardRequest(id: userId.value, type: 'bulan'));
+    if (monthly != null) {
+      dailyProgressCount.value = monthly.data!.first.count ?? 0;
+    }
+
+    final daily = await apiRepository.getDashboardKunjungan(
+        DashboardRequest(id: userId.value, type: 'hari'));
+    if (daily != null) {
+      montlyProgressCount.value = monthly?.data!.first.count ?? 0;
+    }
   }
 
   List<Map<String, dynamic>> get visibleMenus {

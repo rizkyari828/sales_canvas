@@ -10,6 +10,7 @@ import 'package:sales/models/request/cuti/update_approval_request.dart';
 import 'package:sales/models/request/cuti_sales/detail_request_cuti.dart';
 import 'package:sales/models/request/cuti_sales/submit_izin_request.dart';
 import 'package:sales/models/request/cuti_sales/update_approval_request.dart';
+import 'package:sales/models/request/dashboard_request.dart';
 import 'package:sales/models/request/detail_request.dart';
 import 'package:sales/models/request/detail_request_leave.dart';
 import 'package:sales/models/request/id_request.dart';
@@ -1287,28 +1288,11 @@ class ApiRepository {
     return null;
   }
 
-  Future<DashboardResponse?> getDashboard(String userId) async {
-    try {
-      final res = await apiProvider
-          .getDashboard('/api/listEvent?user_id=' + userId)
-          .timeout(Duration(seconds: timeout));
-      if (res.statusCode == 200 || res.statusCode == 401) {
-        return DashboardResponse.fromJson(res.body);
-      }
-    } on TimeoutException catch (_) {
-      EasyLoading.showError('Connection Timeout. Please try again later');
-      EasyLoading.dismiss();
-    } catch (exception) {
-      print(exception);
-    }
-    return null;
-  }
-
   Future<DashboardKunjunganResponse?> getDashboardKunjungan(
-      String userId) async {
+      DashboardRequest data) async {
     try {
       final res = await apiProvider
-          .getDashboardKunjungan('/api/listEvent?user_id=' + userId)
+          .getDashboardKunjungan('/api/jumlah_kunjungan', data)
           .timeout(Duration(seconds: timeout));
       if (res.statusCode == 200 || res.statusCode == 401) {
         return DashboardKunjunganResponse.fromJson(res.body);
